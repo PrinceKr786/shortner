@@ -20,7 +20,7 @@
         .skin-black .main-sidebar{background-color:#222d32}
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
-        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
         .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
         .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
 
@@ -32,23 +32,20 @@
         .toggle-switch input:checked+.toggle-slider:before{transform:translateX(22px)}
 
         .format-badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:700;color:#fff;margin-left:8px}
-        .format-banner{background:#3c8dbc}
-        .format-social{background:#00a65a}
-        .format-popunder{background:#dd4b39}
-        .format-native{background:#ff851b}
-        .format-smartlink{background:#605ca8}
-        .format-float{background:#00c0ef}
-
-        .preview-box{border:2px dashed #ddd;padding:10px;min-height:60px;background:#f9f9f9;margin-top:8px;text-align:center;overflow:hidden}
-        .preview-box img{max-width:100%;max-height:120px}
-        .key-input{font-family:monospace;font-size:12px}
+        .fmt-banner{background:#3c8dbc}
+        .fmt-social{background:#00a65a}
+        .fmt-popunder{background:#dd4b39}
+        .fmt-native{background:#ff851b}
+        .fmt-smartlink{background:#605ca8}
+        .fmt-float{background:#00c0ef}
+        .fmt-mobile{background:#f39c12}
 
         .ad-card{border:1px solid #e8e8e8;border-radius:6px;padding:18px;margin-bottom:15px;background:#fafafa}
         .ad-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
         .ad-card-header h4{margin:0;font-size:14px}
-        .ad-card-size{color:#999;font-size:12px}
-
+        textarea.code-input{font-family:monospace;font-size:11px;min-height:70px;resize:vertical;width:100%}
         .help-block{font-size:11px;color:#999}
+        .example-code{background:#1a1a2e;color:#43e97b;padding:10px;border-radius:4px;font-family:monospace;font-size:10px;word-break:break-all;margin-top:5px;max-height:80px;overflow:auto}
     </style>
 </head>
 
@@ -102,7 +99,7 @@
 
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Go Page Ad Manager <small>Adsterra ads configure karo</small></h1>
+            <h1>Go Page Ad Manager <small>Adsterra/Popunder ads paste karo</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li class="active">Go Page Ads</li>
@@ -112,8 +109,10 @@
         <section class="content">
 
             <div class="callout callout-info">
-                <h4>Adsterra Integration</h4>
-                <p>Har field me sirf <b>Adsterra Key</b> daalo. Code auto-generate hoga. Custom HTML bhi paste kar sakte ho.</p>
+                <h4>Kaise kaam karta hai?</h4>
+                <p>Har slot me <b>poora Adsterra code</b> paste karo (script + div dono). Save karo. Bas ho gaya!</p>
+                <p><b>Example format:</b></p>
+                <div class="example-code">&lt;script async="async" data-cfasync="false" src="https://pl30764540.profitableratecpmnetwork.com/YOUR_KEY/invoke.js"&gt;&lt;/script&gt;<br>&lt;div id="container-YOUR_KEY"&gt;&lt;/div&gt;</div>
             </div>
 
             <div class="row" style="margin-bottom:15px">
@@ -125,25 +124,39 @@
 
             <form id="go-settings-form">
 
-                <!-- TIMER SETTINGS -->
+                <!-- TIMER -->
                 <div class="box box-warning">
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fa fa-clock-o"></i> Timer Settings</h3>
                     </div>
                     <div class="box-body">
                         <div class="row">
-                            <div class="col-sm-4 form-group">
+                            <div class="col-sm-6 form-group">
                                 <label>Countdown Seconds</label>
                                 <input type="number" min="1" max="60" class="form-control" id="countdown_seconds" value="5">
                             </div>
-                            <div class="col-sm-4 form-group">
-                                <label>reCAPTCHA Site Key</label>
+                            <div class="col-sm-6 form-group" style="margin-bottom:0">
+                                <label>reCAPTCHA Site Key (optional)</label>
                                 <input type="text" class="form-control" id="recaptcha_site_key" placeholder="Optional">
                             </div>
-                            <div class="col-sm-4 form-group" style="margin-bottom:0">
-                                <label>Popunder Key</label>
-                                <input type="text" class="form-control key-input" id="popunder_key" placeholder="Adsterra Popunder Key">
-                                <p class="help-block">Page load pe background popup</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- POPUNDER -->
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-external-link"></i> Popunder <span class="format-badge fmt-popunder">Background Popup</span></h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="ad-card">
+                            <div class="ad-card-header">
+                                <h4>Popunder Ad — Page load pe hidden popup</h4>
+                                <label class="toggle-switch"><input type="checkbox" id="popunder_enabled"><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label>Poora Adsterra Code Paste Karo</label>
+                                <textarea class="form-control code-input" id="popunder_code" placeholder="&lt;script...&gt;&lt;/script&gt;&#10;&lt;div id=&quot;container-...&quot;&gt;&lt;/div&gt;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -152,32 +165,17 @@
                 <!-- TOP BANNER 728x90 -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
-                            <i class="fa fa-image"></i> Top Banner
-                            <span class="format-badge format-banner">728x90</span>
-                        </h3>
+                        <h3 class="box-title"><i class="fa fa-image"></i> Top Banner <span class="format-badge fmt-banner">728x90</span></h3>
                     </div>
                     <div class="box-body">
                         <div class="ad-card">
                             <div class="ad-card-header">
-                                <h4>Banner 728x90 <span class="ad-card-size">(Leaderboard)</span></h4>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="top_banner_enabled">
-                                    <span class="toggle-slider"></span>
-                                </label>
+                                <h4>Banner 728x90 — Page ke top pe</h4>
+                                <label class="toggle-switch"><input type="checkbox" id="top_banner_enabled"><span class="toggle-slider"></span></label>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6 form-group">
-                                    <label>Adsterra Key</label>
-                                    <input type="text" class="form-control key-input" id="top_banner_key"
-                                           placeholder="Adsterra Banner 728x90 Key">
-                                    <p class="help-block">Adsterra se key copy karo → yahan paste karo</p>
-                                </div>
-                                <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                    <label>Custom HTML (optional)</label>
-                                    <textarea class="form-control" id="top_banner_html" rows="2"
-                                              placeholder="Agar Adsterra nahi, toh custom HTML paste karo"></textarea>
-                                </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label>Poora Adsterra Code</label>
+                                <textarea class="form-control code-input" id="top_banner_code" placeholder="Script + div paste karo"></textarea>
                             </div>
                         </div>
                     </div>
@@ -186,42 +184,26 @@
                 <!-- BOTTOM BANNER 728x90 -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
-                            <i class="fa fa-image"></i> Bottom Banner
-                            <span class="format-badge format-banner">728x90</span>
-                        </h3>
+                        <h3 class="box-title"><i class="fa fa-image"></i> Bottom Banner <span class="format-badge fmt-banner">728x90</span></h3>
                     </div>
                     <div class="box-body">
                         <div class="ad-card">
                             <div class="ad-card-header">
-                                <h4>Banner 728x90 <span class="ad-card-size">(Leaderboard)</span></h4>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="bottom_banner_enabled">
-                                    <span class="toggle-slider"></span>
-                                </label>
+                                <h4>Banner 728x90 — Page ke bottom pe</h4>
+                                <label class="toggle-switch"><input type="checkbox" id="bottom_banner_enabled"><span class="toggle-slider"></span></label>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6 form-group">
-                                    <label>Adsterra Key</label>
-                                    <input type="text" class="form-control key-input" id="bottom_banner_key"
-                                           placeholder="Adsterra Banner 728x90 Key">
-                                </div>
-                                <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                    <label>Custom HTML (optional)</label>
-                                    <textarea class="form-control" id="bottom_banner_html" rows="2"></textarea>
-                                </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label>Poora Adsterra Code</label>
+                                <textarea class="form-control code-input" id="bottom_banner_code" placeholder="Script + div paste karo"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- SIDEBAR ADS 300x250 x3 -->
+                <!-- SIDEBAR ADS -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
-                            <i class="fa fa-columns"></i> Sidebar Ads
-                            <span class="format-badge format-banner">300x250</span>
-                        </h3>
+                        <h3 class="box-title"><i class="fa fa-columns"></i> Sidebar Ads <span class="format-badge fmt-banner">300x250</span></h3>
                     </div>
                     <div class="box-body">
                         <div class="row">
@@ -231,14 +213,8 @@
                                         <h4>Sidebar 1</h4>
                                         <label class="toggle-switch"><input type="checkbox" id="sidebar_1_enabled"><span class="toggle-slider"></span></label>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Adsterra Key</label>
-                                        <input type="text" class="form-control key-input" id="sidebar_1_key" placeholder="300x250 Key">
-                                    </div>
-                                    <div class="form-group" style="margin-bottom:0">
-                                        <label>Custom HTML</label>
-                                        <textarea class="form-control" id="sidebar_1_html" rows="2"></textarea>
-                                    </div>
+                                    <label>Adsterra Code</label>
+                                    <textarea class="form-control code-input" id="sidebar_1_code" placeholder="300x250 code"></textarea>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -247,14 +223,8 @@
                                         <h4>Sidebar 2</h4>
                                         <label class="toggle-switch"><input type="checkbox" id="sidebar_2_enabled"><span class="toggle-slider"></span></label>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Adsterra Key</label>
-                                        <input type="text" class="form-control key-input" id="sidebar_2_key" placeholder="300x250 Key">
-                                    </div>
-                                    <div class="form-group" style="margin-bottom:0">
-                                        <label>Custom HTML</label>
-                                        <textarea class="form-control" id="sidebar_2_html" rows="2"></textarea>
-                                    </div>
+                                    <label>Adsterra Code</label>
+                                    <textarea class="form-control code-input" id="sidebar_2_code" placeholder="300x250 code"></textarea>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -263,14 +233,8 @@
                                         <h4>Sidebar 3</h4>
                                         <label class="toggle-switch"><input type="checkbox" id="sidebar_3_enabled"><span class="toggle-slider"></span></label>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Adsterra Key</label>
-                                        <input type="text" class="form-control key-input" id="sidebar_3_key" placeholder="160x600 Key">
-                                    </div>
-                                    <div class="form-group" style="margin-bottom:0">
-                                        <label>Custom HTML</label>
-                                        <textarea class="form-control" id="sidebar_3_html" rows="2"></textarea>
-                                    </div>
+                                    <label>Adsterra Code</label>
+                                    <textarea class="form-control code-input" id="sidebar_3_code" placeholder="160x600 code"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -280,31 +244,25 @@
                 <!-- SOCIAL BAR -->
                 <div class="box box-success">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
-                            <i class="fa fa-hand-pointer-o"></i> Social Bar
-                            <span class="format-badge format-social">Bottom Sticky</span>
-                        </h3>
+                        <h3 class="box-title"><i class="fa fa-hand-pointer-o"></i> Social Bar <span class="format-badge fmt-social">Bottom Sticky</span></h3>
                     </div>
                     <div class="box-body">
                         <div class="ad-card">
                             <div class="ad-card-header">
                                 <h4>Social Bar — Bottom notification bar</h4>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="social_bar_enabled">
-                                    <span class="toggle-slider"></span>
-                                </label>
+                                <label class="toggle-switch"><input type="checkbox" id="social_bar_enabled"><span class="toggle-slider"></span></label>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6 form-group">
-                                    <label>Adsterra Key</label>
-                                    <input type="text" class="form-control key-input" id="social_bar_key"
-                                           placeholder="Adsterra Social Bar Key">
-                                    <p class="help-block">Adsterra Social Bar format ka key</p>
+                                    <label>Adsterra Social Bar Code</label>
+                                    <textarea class="form-control code-input" id="social_bar_code" placeholder="Social Bar ka poora code"></textarea>
                                 </div>
                                 <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                    <label>Custom HTML (optional)</label>
-                                    <textarea class="form-control" id="social_bar_html" rows="2"
-                                              placeholder="Agar custom social bar chahiye toh yahan HTML daalo"></textarea>
+                                    <label>Custom Fallback (agar code nahi hai)</label>
+                                    <div class="row">
+                                        <div class="col-sm-6"><input type="text" class="form-control" id="social_bar_title" placeholder="Title" style="margin-bottom:5px"></div>
+                                        <div class="col-sm-6"><input type="text" class="form-control" id="social_bar_url" placeholder="URL" style="margin-bottom:5px"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -314,43 +272,28 @@
                 <!-- FLOATING ADS -->
                 <div class="box box-danger">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
-                            <i class="fa fa-arrows-h"></i> Floating Side Ads
-                            <span class="format-badge format-float">160x300 / 160x600</span>
-                        </h3>
+                        <h3 class="box-title"><i class="fa fa-arrows-h"></i> Floating Side Ads <span class="format-badge fmt-float">Sides</span></h3>
                     </div>
                     <div class="box-body">
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="ad-card">
                                     <div class="ad-card-header">
-                                        <h4>Left Floating <span class="ad-card-size">(160x300)</span></h4>
+                                        <h4>Left Floating (160x300)</h4>
                                         <label class="toggle-switch"><input type="checkbox" id="floating_left_enabled"><span class="toggle-slider"></span></label>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Adsterra Key</label>
-                                        <input type="text" class="form-control key-input" id="floating_left_key" placeholder="160x300 Key">
-                                    </div>
-                                    <div class="form-group" style="margin-bottom:0">
-                                        <label>Custom HTML</label>
-                                        <textarea class="form-control" id="floating_left_html" rows="2"></textarea>
-                                    </div>
+                                    <label>Adsterra Code</label>
+                                    <textarea class="form-control code-input" id="floating_left_code" placeholder="160x300 code"></textarea>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="ad-card">
                                     <div class="ad-card-header">
-                                        <h4>Right Floating <span class="ad-card-size">(160x600)</span></h4>
+                                        <h4>Right Floating (160x600)</h4>
                                         <label class="toggle-switch"><input type="checkbox" id="floating_right_enabled"><span class="toggle-slider"></span></label>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Adsterra Key</label>
-                                        <input type="text" class="form-control key-input" id="floating_right_key" placeholder="160x600 Key">
-                                    </div>
-                                    <div class="form-group" style="margin-bottom:0">
-                                        <label>Custom HTML</label>
-                                        <textarea class="form-control" id="floating_right_html" rows="2"></textarea>
-                                    </div>
+                                    <label>Adsterra Code</label>
+                                    <textarea class="form-control code-input" id="floating_right_code" placeholder="160x600 code"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -360,30 +303,17 @@
                 <!-- NATIVE BANNER -->
                 <div class="box box-warning">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
-                            <i class="fa fa-newspaper-o"></i> Native Banner
-                            <span class="format-badge format-native">Native</span>
-                        </h3>
+                        <h3 class="box-title"><i class="fa fa-newspaper-o"></i> Native Banner <span class="format-badge fmt-native">Native</span></h3>
                     </div>
                     <div class="box-body">
                         <div class="ad-card">
                             <div class="ad-card-header">
-                                <h4>Native Banner — Content ke saath blend hota hai</h4>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="native_enabled">
-                                    <span class="toggle-slider"></span>
-                                </label>
+                                <h4>Native Banner — Content ke saath blend</h4>
+                                <label class="toggle-switch"><input type="checkbox" id="native_enabled"><span class="toggle-slider"></span></label>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6 form-group">
-                                    <label>Adsterra Key</label>
-                                    <input type="text" class="form-control key-input" id="native_key"
-                                           placeholder="Adsterra Native Banner Key">
-                                </div>
-                                <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                    <label>Custom HTML</label>
-                                    <textarea class="form-control" id="native_html" rows="2"></textarea>
-                                </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label>Adsterra Native Code</label>
+                                <textarea class="form-control code-input" id="native_code" placeholder="Native Banner ka poora code"></textarea>
                             </div>
                         </div>
                     </div>
@@ -392,31 +322,17 @@
                 <!-- SMARTLINK -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
-                            <i class="fa fa-link"></i> Smartlink
-                            <span class="format-badge format-smartlink">Smartlink</span>
-                        </h3>
+                        <h3 class="box-title"><i class="fa fa-link"></i> Smartlink <span class="format-badge fmt-smartlink">Smartlink</span></h3>
                     </div>
                     <div class="box-body">
                         <div class="ad-card">
                             <div class="ad-card-header">
-                                <h4>Smartlink — Direct redirect link</h4>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="smartlink_enabled">
-                                    <span class="toggle-slider"></span>
-                                </label>
+                                <h4>Smartlink — Direct redirect ad</h4>
+                                <label class="toggle-switch"><input type="checkbox" id="smartlink_enabled"><span class="toggle-slider"></span></label>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6 form-group">
-                                    <label>Adsterra Key</label>
-                                    <input type="text" class="form-control key-input" id="smartlink_key"
-                                           placeholder="Adsterra Smartlink Key">
-                                </div>
-                                <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                    <label>Custom URL (optional)</label>
-                                    <input type="url" class="form-control" id="smartlink_url"
-                                           placeholder="https://example.com/offer">
-                                </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label>Adsterra Smartlink Code</label>
+                                <textarea class="form-control code-input" id="smartlink_code" placeholder="Smartlink ka poora code"></textarea>
                             </div>
                         </div>
                     </div>
@@ -425,30 +341,17 @@
                 <!-- MOBILE BANNER 320x50 -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
-                            <i class="fa fa-mobile"></i> Mobile Banner
-                            <span class="format-badge format-banner">320x50</span>
-                        </h3>
+                        <h3 class="box-title"><i class="fa fa-mobile"></i> Mobile Banner <span class="format-badge fmt-mobile">320x50</span></h3>
                     </div>
                     <div class="box-body">
                         <div class="ad-card">
                             <div class="ad-card-header">
                                 <h4>Mobile Banner — Sirf mobile pe dikhega</h4>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="mobile_banner_enabled">
-                                    <span class="toggle-slider"></span>
-                                </label>
+                                <label class="toggle-switch"><input type="checkbox" id="mobile_banner_enabled"><span class="toggle-slider"></span></label>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6 form-group">
-                                    <label>Adsterra Key</label>
-                                    <input type="text" class="form-control key-input" id="mobile_banner_key"
-                                           placeholder="Adsterra 320x50 Key">
-                                </div>
-                                <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                    <label>Custom HTML</label>
-                                    <textarea class="form-control" id="mobile_banner_html" rows="2"></textarea>
-                                </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label>Adsterra Mobile Code</label>
+                                <textarea class="form-control code-input" id="mobile_banner_code" placeholder="320x50 ka poora code"></textarea>
                             </div>
                         </div>
                     </div>
@@ -484,18 +387,19 @@
     const SETTINGS_PATH = "settings/go_page";
 
     const FIELDS = [
-        "countdown_seconds","recaptcha_site_key","popunder_key",
-        "top_banner_enabled","top_banner_key","top_banner_html",
-        "bottom_banner_enabled","bottom_banner_key","bottom_banner_html",
-        "sidebar_1_enabled","sidebar_1_key","sidebar_1_html",
-        "sidebar_2_enabled","sidebar_2_key","sidebar_2_html",
-        "sidebar_3_enabled","sidebar_3_key","sidebar_3_html",
-        "social_bar_enabled","social_bar_key","social_bar_html",
-        "floating_left_enabled","floating_left_key","floating_left_html",
-        "floating_right_enabled","floating_right_key","floating_right_html",
-        "native_enabled","native_key","native_html",
-        "smartlink_enabled","smartlink_key","smartlink_url",
-        "mobile_banner_enabled","mobile_banner_key","mobile_banner_html"
+        "countdown_seconds","recaptcha_site_key",
+        "popunder_enabled","popunder_code",
+        "top_banner_enabled","top_banner_code",
+        "bottom_banner_enabled","bottom_banner_code",
+        "sidebar_1_enabled","sidebar_1_code",
+        "sidebar_2_enabled","sidebar_2_code",
+        "sidebar_3_enabled","sidebar_3_code",
+        "social_bar_enabled","social_bar_code","social_bar_title","social_bar_url",
+        "floating_left_enabled","floating_left_code",
+        "floating_right_enabled","floating_right_code",
+        "native_enabled","native_code",
+        "smartlink_enabled","smartlink_code",
+        "mobile_banner_enabled","mobile_banner_code"
     ];
 
     function getVal(id) {

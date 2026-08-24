@@ -13,14 +13,9 @@
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Poppins',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh;overflow-x:hidden}
 
-        /* ===== TOP BANNER AD (728x90) ===== */
         .top-banner-wrap{background:#111122;padding:10px 0;text-align:center;border-bottom:1px solid #222}
-        .top-banner-slot{display:inline-block;width:728px;max-width:95vw;height:90px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:8px;overflow:hidden;position:relative;border:1px solid #333}
-        .top-banner-slot::after{content:'AD - 728x90';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#555;font-size:.8rem;letter-spacing:.1em}
-        .top-banner-slot img{width:100%;height:100%;object-fit:cover}
-        .top-banner-slot a{display:block;width:100%;height:100%}
+        .top-banner-slot{display:inline-block;width:728px;max-width:95vw;min-height:90px;background:#111122;overflow:hidden}
 
-        /* ===== HEADER ===== */
         .go-header{background:rgba(15,15,26,.95);backdrop-filter:blur(10px);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e1e3a;position:sticky;top:0;z-index:200}
         .go-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
         .go-brand .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1.1rem}
@@ -29,14 +24,11 @@
         .timer-badge{background:linear-gradient(135deg,#667eea,#764ba2);padding:8px 18px;border-radius:25px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:8px}
         .timer-badge .num{font-size:1.3rem}
 
-        /* ===== MAIN LAYOUT ===== */
         .go-main{display:grid;grid-template-columns:1fr 300px;gap:0;min-height:calc(100vh - 120px)}
         @media(max-width:900px){.go-main{grid-template-columns:1fr}}
 
-        /* ===== LEFT: CENTER CONTENT ===== */
         .go-center{padding:30px;display:flex;flex-direction:column;align-items:center;gap:25px}
 
-        /* Interstitial Panel */
         .interstitial-panel{width:100%;max-width:600px;background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:20px;padding:40px 30px;text-align:center;border:1px solid #2a2a4a;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden}
         .interstitial-panel::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(102,126,234,.1),transparent);animation:panelGlow 6s linear infinite}
         @keyframes panelGlow{to{transform:rotate(360deg)}}
@@ -71,66 +63,49 @@
 
         .captcha-note{margin-top:20px;font-size:.75rem;color:#555;line-height:1.5;border-top:1px solid #1e1e3a;padding-top:15px}
 
-        /* ===== VIDEO AD SECTION ===== */
-        .video-ad-section{width:100%;max-width:600px;background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:16px;overflow:hidden;border:1px solid #2a2a4a}
-        .video-ad-header{padding:12px 18px;background:rgba(255,255,255,.03);border-bottom:1px solid #2a2a4a;display:flex;align-items:center;justify-content:space-between}
-        .video-ad-header span{font-size:.8rem;color:#666;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
-        .video-ad-header .ad-badge{background:#667eea;color:#fff;padding:2px 10px;border-radius:10px;font-size:.65rem}
-        .video-player{width:100%;aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
-        .video-player .play-btn{width:70px;height:70px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(5px);transition:all .3s}
-        .video-player:hover .play-btn{background:rgba(102,126,234,.6);transform:scale(1.1)}
-        .video-player .play-btn i{color:#fff;font-size:1.8rem;margin-left:4px}
-        .video-player .vid-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 15px;background:linear-gradient(transparent,rgba(0,0,0,.8));display:flex;align-items:center;justify-content:space-between}
-        .video-player .vid-title{color:#fff;font-size:.8rem;font-weight:500}
-        .video-player .vid-cta{background:#667eea;color:#fff;padding:5px 14px;border-radius:6px;font-size:.7rem;font-weight:600;text-decoration:none}
+        .native-ad-wrap{width:100%;max-width:600px;background:#111122;border-radius:12px;border:1px solid #1e1e3a;overflow:hidden;padding:10px}
+        .smartlink-wrap{width:100%;max-width:600px;text-align:center}
 
-        /* ===== BOTTOM BANNER AD ===== */
-        .bottom-banner-wrap{background:#111122;padding:10px 0;text-align:center;border-top:1px solid #222}
-        .bottom-banner-slot{display:inline-block;width:728px;max-width:95vw;height:90px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:8px;overflow:hidden;position:relative;border:1px solid #333}
-        .bottom-banner-slot::after{content:'AD - 728x90';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#555;font-size:.8rem;letter-spacing:.1em}
-        .bottom-banner-slot img{width:100%;height:100%;object-fit:cover}
-
-        /* ===== RIGHT SIDEBAR ===== */
         .go-sidebar{background:#111122;border-left:1px solid #1e1e3a;padding:20px;display:flex;flex-direction:column;gap:15px;overflow-y:auto}
         @media(max-width:900px){.go-sidebar{display:none}}
 
         .sidebar-ad{background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:12px;overflow:hidden;border:1px solid #2a2a4a}
         .sidebar-ad-header{padding:8px 12px;border-bottom:1px solid #1e1e3a;display:flex;align-items:center;justify-content:space-between}
         .sidebar-ad-header span{font-size:.65rem;color:#555;text-transform:uppercase;letter-spacing:.1em}
-        .sidebar-ad-content{padding:10px;text-align:center}
-        .sidebar-ad-content .ad-placeholder{width:100%;aspect-ratio:300/250;background:linear-gradient(135deg,#1e1e3a,#2a2a4a);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#444;font-size:.75rem}
+        .sidebar-ad-content{padding:10px;text-align:center;min-height:250px}
 
         .sidebar-sticky{position:sticky;bottom:0;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;padding:15px;border:1px solid #2a2a4a;text-align:center}
         .sidebar-sticky .offer-tag{background:linear-gradient(135deg,#fa709a,#fee140);color:#000;padding:3px 12px;border-radius:10px;font-size:.65rem;font-weight:700;display:inline-block;margin-bottom:10px}
         .sidebar-sticky p{color:#888;font-size:.75rem;margin-bottom:10px}
         .sidebar-sticky .btn-offer{display:block;padding:10px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;font-weight:600;font-size:.8rem;cursor:pointer;text-decoration:none}
 
-        /* ===== SOCIAL BAR (Bottom Sticky) ===== */
-        .social-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,26,.97);backdrop-filter:blur(10px);border-top:1px solid #2a2a4a;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;z-index:300;animation:slideUp .5s ease}
+        .social-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,26,.97);backdrop-filter:blur(10px);border-top:1px solid #2a2a4a;padding:0;display:none;align-items:center;justify-content:space-between;z-index:300;animation:slideUp .5s ease}
         @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-        .social-bar .bar-left{display:flex;align-items:center;gap:12px}
+        .social-bar .bar-left{display:flex;align-items:center;gap:12px;padding:12px 20px}
         .social-bar .bar-icon{width:40px;height:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem}
         .social-bar .bar-text .bar-title{color:#fff;font-size:.85rem;font-weight:600}
         .social-bar .bar-text .bar-sub{color:#666;font-size:.7rem}
         .social-bar .bar-cta{padding:10px 22px;background:linear-gradient(135deg,#43e97b,#38f9d7);color:#000;border:none;border-radius:8px;font-weight:700;font-size:.8rem;cursor:pointer;white-space:nowrap;transition:all .3s}
         .social-bar .bar-cta:hover{transform:translateY(-1px)}
-        .social-bar .bar-close{color:#555;cursor:pointer;padding:5px;font-size:1.2rem;margin-left:10px}
+        .social-bar .bar-close{color:#555;cursor:pointer;padding:5px;font-size:1.2rem;margin-left:10px;margin-right:15px}
+        #social-bar-slot{flex:1;overflow:hidden}
 
-        /* ===== FLOATING ADS ===== */
         .float-ad{position:fixed;z-index:250;border-radius:12px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.5);border:1px solid #2a2a4a;animation:floatIn .8s ease}
         @keyframes floatIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
-        .float-ad-left{left:15px;top:50%;transform:translateY(-50%);width:160px}
-        .float-ad-right{right:15px;top:50%;transform:translateY(-50%);width:160px}
-        .float-ad img{width:100%;display:block}
+        .float-ad-left{left:15px;top:50%;transform:translateY(-50%);width:160px;min-height:300px;background:#111122}
+        .float-ad-right{right:15px;top:50%;transform:translateY(-50%);width:160px;min-height:600px;background:#111122}
         @media(max-width:1100px){.float-ad{display:none}}
 
-        /* ===== STATES ===== */
+        .bottom-banner-wrap{background:#111122;padding:10px 0;text-align:center;border-top:1px solid #222}
+        .bottom-banner-slot{display:inline-block;width:728px;max-width:95vw;min-height:90px;background:#111122;overflow:hidden}
+
+        .mobile-banner-wrap{display:none;background:#111122;padding:10px 0;text-align:center;border-top:1px solid #222}
+
         .hidden{display:none !important}
         .err-icon{font-size:3.5rem;margin-bottom:15px;display:block}
         .btn-home{display:inline-block;padding:14px 36px;border-radius:12px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff!important;font-weight:700;font-size:.9rem;text-decoration:none;transition:all .3s}
         .btn-home:hover{transform:translateY(-2px);color:#fff}
 
-        /* ===== FOOTER ===== */
         .go-footer{text-align:center;padding:20px;font-size:.75rem;color:#444;padding-bottom:80px}
         .go-footer strong{color:#667eea}
 
@@ -140,12 +115,12 @@
 </head>
 <body>
 
-    <!-- ===== TOP BANNER AD ===== -->
+    <div id="popunder-slot"></div>
+
     <div class="top-banner-wrap">
         <div class="top-banner-slot" id="top-banner-ad"></div>
     </div>
 
-    <!-- ===== HEADER ===== -->
     <header class="go-header">
         <a class="go-brand" href="../index.html">
             <div class="logo-icon">S</div>
@@ -159,13 +134,9 @@
         </div>
     </header>
 
-    <!-- ===== MAIN LAYOUT ===== -->
     <div class="go-main">
-
-        <!-- LEFT: CENTER -->
         <div class="go-center">
 
-            <!-- LOADING STATE -->
             <div class="interstitial-panel" id="state-loading">
                 <div class="panel-content">
                     <div class="spinner-ring"></div>
@@ -174,7 +145,6 @@
                 </div>
             </div>
 
-            <!-- COUNTDOWN STATE -->
             <div class="interstitial-panel hidden" id="state-countdown">
                 <div class="panel-content">
                     <div class="panel-icon"><i class="fa fa-link"></i></div>
@@ -192,22 +162,9 @@
                 </div>
             </div>
 
-            <!-- VIDEO AD SECTION -->
-            <div class="video-ad-section" id="video-ad-section">
-                <div class="video-ad-header">
-                    <span><i class="fa fa-play-circle"></i> Sponsored Video</span>
-                    <span class="ad-badge">AD</span>
-                </div>
-                <div class="video-player" id="video-player">
-                    <div class="play-btn"><i class="fa fa-play"></i></div>
-                    <div class="vid-overlay">
-                        <span class="vid-title">Watch this interesting video</span>
-                        <a href="#" class="vid-cta" id="video-cta">Learn More</a>
-                    </div>
-                </div>
-            </div>
+            <div class="native-ad-wrap" id="native-ad-slot"></div>
+            <div class="smartlink-wrap" id="smartlink-slot"></div>
 
-            <!-- ERROR STATE -->
             <div class="interstitial-panel hidden" id="state-error">
                 <div class="panel-content">
                     <div class="err-icon">🤔</div>
@@ -217,7 +174,6 @@
                 </div>
             </div>
 
-            <!-- DISABLED STATE -->
             <div class="interstitial-panel hidden" id="state-disabled">
                 <div class="panel-content">
                     <div class="err-icon">🚫</div>
@@ -229,15 +185,14 @@
 
         </div>
 
-        <!-- RIGHT SIDEBAR -->
         <div class="go-sidebar">
             <div class="sidebar-ad">
-                <div class="sidebar-ad-header"><span>Sponsored</span><span class="ad-badge">AD</span></div>
-                <div class="sidebar-ad-content"><div class="ad-placeholder" id="sidebar-ad-1">300x250 Ad</div></div>
+                <div class="sidebar-ad-header"><span>Sponsored</span></div>
+                <div class="sidebar-ad-content" id="sidebar-ad-1"></div>
             </div>
             <div class="sidebar-ad">
-                <div class="sidebar-ad-header"><span>Sponsored</span><span class="ad-badge">AD</span></div>
-                <div class="sidebar-ad-content"><div class="ad-placeholder" id="sidebar-ad-2">300x250 Ad</div></div>
+                <div class="sidebar-ad-header"><span>Sponsored</span></div>
+                <div class="sidebar-ad-content" id="sidebar-ad-2"></div>
             </div>
             <div class="sidebar-sticky">
                 <div class="offer-tag">LIMITED OFFER</div>
@@ -245,31 +200,21 @@
                 <a href="../index.html" class="btn-offer">Abhi Shuru Karo →</a>
             </div>
             <div class="sidebar-ad">
-                <div class="sidebar-ad-header"><span>Also Try</span><span class="ad-badge">AD</span></div>
-                <div class="sidebar-ad-content"><div class="ad-placeholder" id="sidebar-ad-3">300x250 Ad</div></div>
+                <div class="sidebar-ad-header"><span>Also Try</span></div>
+                <div class="sidebar-ad-content" id="sidebar-ad-3"></div>
             </div>
         </div>
-
     </div>
 
-    <!-- ===== MOBILE BANNER (hidden on desktop) ===== -->
-    <div class="bottom-banner-wrap" id="mobile-banner-wrap" style="display:none">
+    <div class="mobile-banner-wrap" id="mobile-banner-wrap">
         <div class="bottom-banner-slot" id="mobile-banner-ad"></div>
     </div>
 
-    <!-- ===== NATIVE AD SLOT ===== -->
-    <div id="native-ad-slot" style="max-width:900px;margin:20px auto;padding:0 20px"></div>
-
-    <!-- ===== SMARTLINK SLOT ===== -->
-    <div id="smartlink-slot" style="text-align:center;padding:10px"></div>
-
-    <!-- ===== BOTTOM BANNER AD ===== -->
     <div class="bottom-banner-wrap">
         <div class="bottom-banner-slot" id="bottom-banner-ad"></div>
     </div>
 
-    <!-- ===== SOCIAL BAR (Bottom Sticky) ===== -->
-    <div class="social-bar" id="social-bar" style="display:none">
+    <div class="social-bar" id="social-bar">
         <div class="bar-left">
             <div class="bar-icon"><i class="fa fa-bullhorn"></i></div>
             <div class="bar-text">
@@ -277,17 +222,16 @@
                 <div class="bar-sub" id="social-bar-sub">Discover amazing deals</div>
             </div>
         </div>
+        <div id="social-bar-slot"></div>
         <button class="bar-cta" id="social-bar-cta">Check Now →</button>
         <span class="bar-close" id="social-bar-close"><i class="fa fa-times"></i></span>
     </div>
 
-    <!-- ===== FLOATING SIDE ADS ===== -->
     <div class="float-ad float-ad-left" id="float-ad-left" style="display:none"></div>
     <div class="float-ad float-ad-right" id="float-ad-right" style="display:none"></div>
 
     <footer class="go-footer">Copyright &copy; <strong>Shortify</strong> — Free Short URL & Earn Money</footer>
 
-    <!-- ===== SCRIPTS ===== -->
     <script src="../vendor/jquery.min.js"></script>
     <script type="module">
         import { db } from "./js/firebase-config.js";
@@ -307,27 +251,16 @@
         var progressBar = document.getElementById("progress-bar");
         var totalSeconds = 5;
 
-        /* ===== SETTINGS LOAD ===== */
         let AD_TIMER = 5;
         let RECAPTCHA_KEY = "";
         try {
-            const gpSnap = await get(ref(db, "settings/go_page"));
-            const gp = gpSnap.exists() ? gpSnap.val() : {};
-            AD_TIMER = parseInt(gp.countdown_seconds) || 5;
-            RECAPTCHA_KEY = gp.recaptcha_site_key || "";
+            const sSnap = await get(child(ref(db), "settings"));
+            const s = sSnap.val() || {};
+            AD_TIMER = parseInt(s.ad_timer_seconds) || 5;
+            RECAPTCHA_KEY = s.recaptcha_site_key || "";
             totalSeconds = AD_TIMER;
         } catch {}
-        if (AD_TIMER <= 0) {
-            try {
-                const sSnap = await get(child(ref(db), "settings"));
-                const s = sSnap.val() || {};
-                AD_TIMER = parseInt(s.ad_timer_seconds) || 5;
-                RECAPTCHA_KEY = RECAPTCHA_KEY || s.recaptcha_site_key || "";
-                totalSeconds = AD_TIMER;
-            } catch {}
-        }
 
-        /* ===== GEO DETECT ===== */
         let myCountry = "";
         try {
             const controller = new AbortController();
@@ -338,7 +271,6 @@
             if (geo && geo.country_code) myCountry = geo.country_code;
         } catch {}
 
-        /* ===== HASH PARSE ===== */
         let mode = "alias", alias = "", targetUrl = "", ownerUid = null, adType = "interstitial";
         const hash = location.hash;
 
@@ -356,61 +288,45 @@
             if (!alias) return showError("Alias missing!", "Koi link specify nahi hui.");
         }
 
-        /* ===== LOAD ADS FROM FIREBASE ===== */
         let GO_PAGE = {};
         try {
             const gpSnap = await get(ref(db, "settings/go_page"));
             if (gpSnap.exists()) GO_PAGE = gpSnap.val() || {};
         } catch {}
 
-        function renderAdsterra(containerId, key, width, height) {
-            if (!key) return;
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            const uid = "adsterra_" + containerId + "_" + Math.random().toString(36).slice(2,8);
-            const html = '<div id="' + uid + '"></div>' +
-                '<script>window.atOptions = { "key": "' + key + '", "format": "iframe", "height": ' + height + ', "width": ' + width + ', "params": {} };<\/script>' +
-                '<script src="https://www.highrevenueformat.com/' + key + '/invoke.js"><\/script>';
-            container.innerHTML = html;
+        function injectCode(container, code) {
+            if (!code || !code.trim()) return false;
+            const tmp = document.createElement("div");
+            tmp.innerHTML = code;
+            const scripts = tmp.querySelectorAll("script");
+            const textNodes = tmp.innerHTML.replace(/<script[\s\S]*?<\/script>/gi, "");
+            container.innerHTML = textNodes;
+            scripts.forEach(function(old) {
+                const s = document.createElement("script");
+                if (old.src) {
+                    s.src = old.src;
+                    s.async = true;
+                    s.onerror = function() { console.warn("Ad script load failed:", old.src); };
+                } else {
+                    s.textContent = old.textContent;
+                }
+                container.appendChild(s);
+            });
+            return true;
         }
 
-        function renderAdsterraScript(key) {
-            if (!key) return "";
-            return '<script>window.atOptions = { "key": "' + key + '", "format": "iframe", "height": 250, "width": 300, "params": {} };<\/script>' +
-                   '<script src="https://www.highrevenueformat.com/' + key + '/invoke.js"><\/script>';
-        }
-
-        function renderPopunder(key) {
-            if (!key) return;
-            const s = document.createElement("script");
-            s.src = "https://www.highrevenueformat.com/" + key + "/invoke.js";
-            window.atOptions = { key: key, format: "iframe", height: 0, width: 0, params: {} };
-            document.head.appendChild(s);
-        }
-
-        function renderNative(key, containerId) {
-            if (!key) return;
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            container.innerHTML = '<script>window.atOptions = { "key": "' + key + '", "format": "native", "height": 250, "width": 300, "params": {} };<\/script>' +
-                '<script src="https://www.highrevenueformat.com/' + key + '/invoke.js"><\/script>';
-        }
-
-        function renderSmartlink(key, containerId) {
-            if (!key) return;
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            container.innerHTML = '<script>window.atOptions = { "key": "' + key + '", "format": "redirect", "height": 1, "width": 1, "params": {} };<\/script>' +
-                '<script src="https://www.highrevenueformat.com/' + key + '/invoke.js"><\/script>';
+        function renderEl(elId, code) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            return injectCode(el, code);
         }
 
         async function loadAllAds() {
-            const gp = GO_PAGE;
-            const hasAny = gp.top_banner_enabled || gp.bottom_banner_enabled || gp.sidebar_1_enabled || gp.social_bar_enabled || gp.floating_left_enabled || gp.floating_right_enabled || gp.native_enabled || gp.smartlink_enabled || gp.mobile_banner_enabled;
-
-            if (gp.popunder_key) {
-                renderPopunder(gp.popunder_key);
-            }
+            var gp = GO_PAGE;
+            var hasAny = gp.popunder_enabled || gp.top_banner_enabled || gp.bottom_banner_enabled ||
+                         gp.sidebar_1_enabled || gp.sidebar_2_enabled || gp.sidebar_3_enabled ||
+                         gp.social_bar_enabled || gp.floating_left_enabled || gp.floating_right_enabled ||
+                         gp.native_enabled || gp.smartlink_enabled || gp.mobile_banner_enabled;
 
             if (!hasAny) {
                 try {
@@ -458,109 +374,65 @@
                 return;
             }
 
-            if (gp.top_banner_enabled) {
-                if (gp.top_banner_key) {
-                    renderAdsterra("top-banner-ad", gp.top_banner_key, 728, 90);
-                } else if (gp.top_banner_html) {
-                    document.getElementById("top-banner-ad").innerHTML = gp.top_banner_html;
-                }
+            if (gp.popunder_enabled && gp.popunder_code) {
+                injectCode(document.getElementById("popunder-slot"), gp.popunder_code);
             }
-            if (gp.bottom_banner_enabled) {
-                if (gp.bottom_banner_key) {
-                    renderAdsterra("bottom-banner-ad", gp.bottom_banner_key, 728, 90);
-                } else if (gp.bottom_banner_html) {
-                    document.getElementById("bottom-banner-ad").innerHTML = gp.bottom_banner_html;
-                }
+            if (gp.top_banner_enabled && gp.top_banner_code) {
+                renderEl("top-banner-ad", gp.top_banner_code);
             }
-            if (gp.sidebar_1_enabled) {
-                if (gp.sidebar_1_key) {
-                    renderAdsterra("sidebar-ad-1", gp.sidebar_1_key, 300, 250);
-                } else if (gp.sidebar_1_html) {
-                    document.getElementById("sidebar-ad-1").innerHTML = gp.sidebar_1_html;
-                } else {
-                    renderDefaultSidebar("sidebar-ad-1");
-                }
-            } else {
+            if (gp.bottom_banner_enabled && gp.bottom_banner_code) {
+                renderEl("bottom-banner-ad", gp.bottom_banner_code);
+            }
+            if (gp.sidebar_1_enabled && gp.sidebar_1_code) {
+                renderEl("sidebar-ad-1", gp.sidebar_1_code);
+            } else if (!gp.sidebar_1_enabled) {
                 renderDefaultSidebar("sidebar-ad-1");
             }
-            if (gp.sidebar_2_enabled) {
-                if (gp.sidebar_2_key) {
-                    renderAdsterra("sidebar-ad-2", gp.sidebar_2_key, 300, 250);
-                } else if (gp.sidebar_2_html) {
-                    document.getElementById("sidebar-ad-2").innerHTML = gp.sidebar_2_html;
-                } else {
-                    renderDefaultSidebar("sidebar-ad-2");
-                }
-            } else {
+            if (gp.sidebar_2_enabled && gp.sidebar_2_code) {
+                renderEl("sidebar-ad-2", gp.sidebar_2_code);
+            } else if (!gp.sidebar_2_enabled) {
                 renderDefaultSidebar("sidebar-ad-2");
             }
-            if (gp.sidebar_3_enabled) {
-                if (gp.sidebar_3_key) {
-                    renderAdsterra("sidebar-ad-3", gp.sidebar_3_key, 160, 600);
-                } else if (gp.sidebar_3_html) {
-                    document.getElementById("sidebar-ad-3").innerHTML = gp.sidebar_3_html;
-                } else {
-                    renderDefaultSidebar("sidebar-ad-3");
-                }
-            } else {
+            if (gp.sidebar_3_enabled && gp.sidebar_3_code) {
+                renderEl("sidebar-ad-3", gp.sidebar_3_code);
+            } else if (!gp.sidebar_3_enabled) {
                 renderDefaultSidebar("sidebar-ad-3");
             }
-            if (gp.social_bar_enabled) {
-                if (gp.social_bar_key) {
-                    const sb = document.getElementById("social-bar");
-                    sb.innerHTML = '<div id="adsterra-socialbar"></div>';
-                    const s = document.createElement("script");
-                    s.src = "https://www.highrevenueformat.com/" + gp.social_bar_key + "/invoke.js";
-                    document.body.appendChild(s);
-                    setTimeout(() => { sb.style.display = "flex"; }, 2000);
-                } else if (gp.social_bar_html) {
-                    showCustomSocialBar(gp.social_bar_html);
-                } else if (gp.social_bar_title) {
-                    showSocialBar(gp.social_bar_title, gp.social_bar_url || "#");
-                }
+            if (gp.social_bar_enabled && gp.social_bar_code) {
+                injectCode(document.getElementById("social-bar-slot"), gp.social_bar_code);
+                setTimeout(function() { document.getElementById("social-bar").style.display = "flex"; }, 2000);
+            } else if (gp.social_bar_enabled && gp.social_bar_title) {
+                showSocialBar(gp.social_bar_title, gp.social_bar_url || "#");
             }
-            if (gp.floating_left_enabled) {
-                if (gp.floating_left_key) {
-                    renderAdsterra("float-ad-left", gp.floating_left_key, 160, 300);
-                    document.getElementById("float-ad-left").style.display = "block";
-                } else if (gp.floating_left_html) {
-                    const fl = document.getElementById("float-ad-left");
-                    fl.innerHTML = gp.floating_left_html;
-                    fl.style.display = "block";
-                }
+            if (gp.floating_left_enabled && gp.floating_left_code) {
+                injectCode(document.getElementById("float-ad-left"), gp.floating_left_code);
+                document.getElementById("float-ad-left").style.display = "block";
             }
-            if (gp.floating_right_enabled) {
-                if (gp.floating_right_key) {
-                    renderAdsterra("float-ad-right", gp.floating_right_key, 160, 600);
-                    document.getElementById("float-ad-right").style.display = "block";
-                } else if (gp.floating_right_html) {
-                    const fr = document.getElementById("float-ad-right");
-                    fr.innerHTML = gp.floating_right_html;
-                    fr.style.display = "block";
-                }
+            if (gp.floating_right_enabled && gp.floating_right_code) {
+                injectCode(document.getElementById("float-ad-right"), gp.floating_right_code);
+                document.getElementById("float-ad-right").style.display = "block";
             }
-            if (gp.native_enabled && gp.native_key) {
-                renderNative(gp.native_key, "native-ad-slot");
+            if (gp.native_enabled && gp.native_code) {
+                renderEl("native-ad-slot", gp.native_code);
+            } else {
+                document.getElementById("native-ad-slot").style.display = "none";
             }
-            if (gp.smartlink_enabled && gp.smartlink_key) {
-                renderSmartlink(gp.smartlink_key, "smartlink-slot");
+            if (gp.smartlink_enabled && gp.smartlink_code) {
+                renderEl("smartlink-slot", gp.smartlink_code);
+            } else {
+                document.getElementById("smartlink-slot").style.display = "none";
             }
-            if (gp.mobile_banner_enabled) {
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (gp.mobile_banner_enabled && gp.mobile_banner_code) {
+                var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
                 if (isMobile) {
-                    if (gp.mobile_banner_key) {
-                        renderAdsterra("mobile-banner-ad", gp.mobile_banner_key, 320, 50);
-                        document.getElementById("mobile-banner-wrap").style.display = "block";
-                    } else if (gp.mobile_banner_html) {
-                        document.getElementById("mobile-banner-ad").innerHTML = gp.mobile_banner_html;
-                        document.getElementById("mobile-banner-wrap").style.display = "block";
-                    }
+                    renderEl("mobile-banner-ad", gp.mobile_banner_code);
+                    document.getElementById("mobile-banner-wrap").style.display = "block";
                 }
             }
         }
 
         function renderImageAd(elId, ad, height) {
-            const el = document.getElementById(elId);
+            var el = document.getElementById(elId);
             if (!el || !ad.image_url) return;
             el.style.background = "none";
             el.style.height = height + "px";
@@ -569,35 +441,29 @@
         }
 
         function renderFloatAd(elId, ad) {
-            const el = document.getElementById(elId);
+            var el = document.getElementById(elId);
             el.innerHTML = '<a href="' + ad.target_url + '" target="_blank"><img src="' + ad.image_url + '" style="width:100%;border-radius:12px"></a>';
             el.style.display = "block";
             trackImpression(ad.id);
         }
 
         function renderDefaultSidebar(elId) {
-            const el = document.getElementById(elId);
-            if (el) el.innerHTML = '<div style="padding:20px;text-align:center"><i class="fa fa-bullhorn" style="font-size:2rem;color:#667eea;margin-bottom:10px;display:block"></div>';
+            var el = document.getElementById(elId);
+            if (el) el.innerHTML = '<div style="padding:20px;text-align:center"><i class="fa fa-bullhorn" style="font-size:2rem;color:#667eea;margin-bottom:10px;display:block"></i><div style="color:#667eea;font-weight:700;font-size:.85rem">Advertise Here</div><div style="color:#555;font-size:.7rem;margin-top:5px">300x250 space</div></div>';
         }
 
         function showDefaultSidebarAds() {
             ["sidebar-ad-1","sidebar-ad-2","sidebar-ad-3"].forEach(renderDefaultSidebar);
         }
 
-        function showCustomSocialBar(html) {
-            const bar = document.getElementById("social-bar");
-            bar.innerHTML = html + '<span class="bar-close" id="social-bar-close"><i class="fa fa-times"></i></span>';
-            setTimeout(() => { bar.style.display = "flex"; }, 2000);
-            document.getElementById("social-bar-close").onclick = () => { bar.style.display = "none"; };
-        }
-
         function showSocialBar(title, url) {
-            const bar = document.getElementById("social-bar");
+            var bar = document.getElementById("social-bar");
             document.getElementById("social-bar-title").textContent = title;
             document.getElementById("social-bar-sub").textContent = url;
-            document.getElementById("social-bar-cta").onclick = () => window.open(url, "_blank");
-            setTimeout(() => { bar.style.display = "flex"; }, 2000);
-            document.getElementById("social-bar-close").onclick = () => { bar.style.display = "none"; };
+            document.getElementById("social-bar-slot").style.display = "none";
+            document.getElementById("social-bar-cta").style.display = "inline-block";
+            document.getElementById("social-bar-cta").onclick = function() { window.open(url, "_blank"); };
+            setTimeout(function() { bar.style.display = "flex"; }, 2000);
         }
 
         function trackImpression(adId) {
@@ -605,13 +471,11 @@
         }
 
         function safeUrl(u) {
-            try { const x = new URL(u); return (x.protocol === "http:" || x.protocol === "https:") ? u : null; }
+            try { var x = new URL(u); return (x.protocol === "http:" || x.protocol === "https:") ? u : null; }
             catch { return null; }
         }
 
-        /* ===== LOAD DATA + ADS ===== */
         let remaining = AD_TIMER;
-        let bannerCode = null;
 
         if (mode === "alias") {
             try {
@@ -643,7 +507,6 @@
             $error.classList.remove("hidden");
         }
 
-        /* ===== AD FLOW ===== */
         async function startAdFlow() {
             try { $destUrl.textContent = new URL(targetUrl).hostname; }
             catch { $destUrl.textContent = targetUrl; }
@@ -663,7 +526,6 @@
             else enableSkip();
         }
 
-        /* ===== COUNTDOWN ===== */
         function tickCountdown() {
             $num.style.display = "block";
             $num.textContent = remaining;
@@ -692,25 +554,25 @@
             if (RECAPTCHA_KEY && !captchaRendered) {
                 $skip.disabled = true;
                 $skip.innerHTML = '<i class="fa fa-shield"></i> Captcha verify karo...';
-                const box = document.createElement("div");
+                var box = document.createElement("div");
                 box.id = "captcha-box";
                 box.style.marginBottom = "14px";
                 $skip.parentNode.insertBefore(box, $skip);
                 if (!document.getElementById("grec-script")) {
-                    window.___grcb = () => {};
-                    const sc = document.createElement("script");
+                    window.___grcb = function() {};
+                    var sc = document.createElement("script");
                     sc.id = "grec-script";
                     sc.src = "https://www.google.com/recaptcha/api.js?onload=___grcb&render=explicit";
                     document.head.appendChild(sc);
                 }
-                const iv = setInterval(() => {
+                var iv = setInterval(function() {
                     if (!window.grecaptcha) return;
                     clearInterval(iv);
                     try {
                         window.grecaptcha.render("captcha-box", {
                             sitekey: RECAPTCHA_KEY,
-                            callback: () => { $skip.disabled = false; $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad →'; },
-                            "expired-callback": () => { $skip.disabled = true; }
+                            callback: function() { $skip.disabled = false; $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad →'; },
+                            "expired-callback": function() { $skip.disabled = true; }
                         });
                         captchaRendered = true;
                     } catch (e) { console.error(e); }
@@ -722,9 +584,8 @@
             $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad →';
         }
 
-        /* ===== SKIP -> CREDIT + REDIRECT ===== */
         let processed = false;
-        $skip.addEventListener("click", async () => {
+        $skip.addEventListener("click", async function() {
             if (processed) return;
             processed = true;
             $skip.disabled = true;
@@ -791,7 +652,7 @@
                 } catch {}
 
                 $skip.innerHTML = '<i class="fa fa-paper-plane"></i> Ja rahe ho...';
-                setTimeout(() => { window.location.href = targetUrl; }, 500);
+                setTimeout(function() { window.location.href = targetUrl; }, 500);
             } catch (err) {
                 console.error("Credit error:", err);
                 window.location.href = targetUrl;
