@@ -458,7 +458,12 @@
             $loading.classList.add("hidden");
             $count.classList.remove("hidden");
 
-            if (remaining > 0) tickCountdown();
+            if (remaining > 0) {
+                tickCountdown();
+                var _cdTimer = setInterval(function() {
+                    if (tickCountdown()) clearInterval(_cdTimer);
+                }, 1000);
+            }
             else enableSkip();
         }
 
@@ -546,20 +551,20 @@
             $num.style.display = "block";
             $num.textContent = remaining;
             document.getElementById("wait-text").textContent =
-                `${remaining} second${remaining !== 1 ? "s" : ""}`;
+                remaining + " second" + (remaining !== 1 ? "s" : "");
 
-            // Progress bar animate
             if (progressBar) {
-                const pct = ((totalSeconds - remaining) / totalSeconds) * 100;
+                var pct = ((totalSeconds - remaining) / totalSeconds) * 100;
                 progressBar.style.width = pct + "%";
             }
 
             if (remaining <= 0) {
                 if (progressBar) progressBar.style.width = "100%";
-                enableSkip(); return;
+                enableSkip();
+                return true;
             }
             remaining--;
-            setTimeout(tickCountdown, 1000);
+            return false;
         }
 
         let captchaRendered = false;
