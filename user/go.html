@@ -2,285 +2,302 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Redirecting... - Shortify</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="icon" href="../favicon.ico">
     <script>if(self!==top){top.location=self.location;}</script>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Poppins',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh;overflow-x:hidden}
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+        body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#060611;color:#e4e4e7;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden}
 
-        .top-banner-wrap{background:#111122;padding:10px 0;text-align:center;border-bottom:1px solid #222}
-        .top-banner-slot{display:inline-block;width:728px;max-width:95vw;min-height:90px;background:#111122;overflow:hidden}
+        /* ===== AD SLOTS (simple wrappers) ===== */
+        .ad-slot-top{width:100%;text-align:center;background:#0c0c1d;border-bottom:1px solid rgba(255,255,255,.04);min-height:0;overflow:hidden}
+        .ad-slot-top .inner{display:inline-block;width:728px;max-width:100%;min-height:90px}
+        .ad-slot-bottom{width:100%;text-align:center;background:#0c0c1d;border-top:1px solid rgba(255,255,255,.04);min-height:0;overflow:hidden;padding-bottom:80px}
+        .ad-slot-bottom .inner{display:inline-block;width:728px;max-width:100%;min-height:90px}
+        .ad-slot-mobile{display:none;width:100%;text-align:center;background:#0c0c1d;border-top:1px solid rgba(255,255,255,.04)}
 
-        .go-header{background:rgba(15,15,26,.95);backdrop-filter:blur(10px);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e1e3a;position:sticky;top:0;z-index:200}
-        .go-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-        .go-brand .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1.1rem}
-        .go-brand span{font-size:1.3rem;font-weight:800;color:#fff}
-        .go-tagline{color:#666;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
-        .timer-badge{background:linear-gradient(135deg,#667eea,#764ba2);padding:8px 18px;border-radius:25px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:8px}
-        .timer-badge .num{font-size:1.3rem}
+        /* ===== HEADER ===== */
+        .hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(6,6,17,.85);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.05)}
+        .hdr-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+        .hdr-logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.85rem;box-shadow:0 0 20px rgba(99,102,241,.3)}
+        .hdr-brand h1{font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:-.02em}
+        .hdr-pill{display:flex;align-items:center;gap:6px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.2);padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:600;color:#a5b4fc}
+        .hdr-pill .t{color:#fff;font-variant-numeric:tabular-nums;min-width:18px;text-align:center}
+        @media(max-width:640px){.hdr-brand h1{font-size:.95rem}.hdr-pill{padding:5px 10px;font-size:.75rem}}
 
-        .go-main{display:grid;grid-template-columns:1fr 300px;gap:0;min-height:calc(100vh - 120px)}
-        @media(max-width:900px){.go-main{grid-template-columns:1fr}}
+        /* ===== MAIN GRID ===== */
+        .main{flex:1;display:grid;grid-template-columns:1fr 320px;gap:0;min-height:0}
+        @media(max-width:960px){.main{grid-template-columns:1fr}}
 
-        .go-center{padding:30px;display:flex;flex-direction:column;align-items:center;gap:25px}
+        /* ===== CENTER COLUMN ===== */
+        .center{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:20px}
 
-        .interstitial-panel{width:100%;max-width:600px;background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:20px;padding:40px 30px;text-align:center;border:1px solid #2a2a4a;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden}
-        .interstitial-panel::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(102,126,234,.1),transparent);animation:panelGlow 6s linear infinite}
-        @keyframes panelGlow{to{transform:rotate(360deg)}}
-        .interstitial-panel .panel-content{position:relative;z-index:1}
+        /* ===== CARD ===== */
+        .card{position:relative;width:100%;max-width:480px;background:linear-gradient(145deg,rgba(20,20,40,.8),rgba(15,15,35,.9));border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:36px 28px 32px;text-align:center;overflow:hidden}
+        .card::before{content:'';position:absolute;inset:-1px;border-radius:20px;padding:1px;background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(139,92,246,.1),transparent);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
 
-        .panel-icon{width:80px;height:80px;margin:0 auto 20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(102,126,234,.4);animation:iconPulse 2s ease-in-out infinite}
-        @keyframes iconPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-        .panel-icon i{font-size:2rem;color:#fff}
+        /* glow orbs */
+        .card::after{content:'';position:absolute;top:-60%;left:-30%;width:160%;height:120%;background:radial-gradient(ellipse at center,rgba(99,102,241,.06),transparent 60%);pointer-events:none;animation:orbFloat 8s ease-in-out infinite alternate}
+        @keyframes orbFloat{0%{transform:translate(0,0)}100%{transform:translate(10%,5%)}}
 
-        .spinner-ring{width:80px;height:80px;margin:0 auto 20px;border:5px solid #2a2a4a;border-top-color:#667eea;border-radius:50%;animation:gospin .7s linear infinite}
-        @keyframes gospin{to{transform:rotate(360deg)}}
+        .card>*{position:relative;z-index:1}
 
-        #count-num{font-size:5rem;font-weight:900;background:linear-gradient(135deg,#667eea,#43e97b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:10px;display:none;font-family:'Poppins',sans-serif}
-        .go-title{font-size:1.2rem;font-weight:600;color:#e2e8f0;margin-bottom:8px}
-        .go-sub{color:#8892a6;font-size:.85rem;margin-bottom:25px;line-height:1.6}
+        /* spinner */
+        .spin{width:56px;height:56px;margin:0 auto 20px;border-radius:50%;border:3px solid rgba(99,102,241,.15);border-top-color:#6366f1;animation:sp .7s linear infinite}
+        @keyframes sp{to{transform:rotate(360deg)}}
 
-        .progress-wrap{height:6px;background:#2a2a4a;border-radius:3px;margin:0 auto 25px;max-width:400px;overflow:hidden}
-        .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#667eea,#43e97b);border-radius:3px;transition:width 1s linear;box-shadow:0 0 12px rgba(102,126,234,.5)}
+        /* icon */
+        .ico{width:56px;height:56px;margin:0 auto 18px;border-radius:16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(99,102,241,.35);animation:icoPulse 3s ease-in-out infinite}
+        @keyframes icoPulse{0%,100%{box-shadow:0 8px 32px rgba(99,102,241,.35)}50%{box-shadow:0 8px 48px rgba(99,102,241,.5)}}
+        .ico i{font-size:1.5rem;color:#fff}
 
-        .dest-box{background:rgba(255,255,255,.05);border:1px solid #2a2a4a;border-radius:12px;padding:18px;font-size:.85rem;color:#8892a6;margin-bottom:25px;text-align:left;position:relative}
-        .dest-box::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#667eea,#43e97b);border-radius:4px 0 0 4px}
-        .dest-box i{color:#667eea;margin-right:8px}
-        .dest-box strong{display:block;color:#e2e8f0;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-weight:700}
-        .dest-box span{font-family:monospace;color:#a0aec0;font-size:.8rem}
+        /* countdown */
+        .cd-num{font-size:4.5rem;font-weight:900;line-height:1;margin-bottom:4px;background:linear-gradient(135deg,#818cf8,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:none;font-variant-numeric:tabular-nums}
+        .cd-title{font-size:1.05rem;font-weight:600;color:#e4e4e7;margin-bottom:6px}
+        .cd-sub{font-size:.82rem;color:#71717a;margin-bottom:22px;line-height:1.5}
 
-        .skip-btn{display:none;width:100%;max-width:400px;padding:18px;background:linear-gradient(135deg,#43e97b,#38f9d7);color:#000;border:none;border-radius:12px;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 8px 30px rgba(67,233,123,.3);position:relative;overflow:hidden}
-        .skip-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-25deg);transition:left .6s}
-        .skip-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 40px rgba(67,233,123,.4)}
-        .skip-btn:hover:not(:disabled)::before{left:200%}
-        .skip-btn:disabled{opacity:.4;cursor:not-allowed}
-        .skip-btn i{margin-right:8px}
+        /* progress */
+        .prog{height:4px;background:rgba(255,255,255,.06);border-radius:4px;margin:0 auto 22px;max-width:320px;overflow:hidden}
+        .prog-bar{height:100%;width:0%;background:linear-gradient(90deg,#6366f1,#34d399);border-radius:4px;transition:width 1s linear}
 
-        .captcha-note{margin-top:20px;font-size:.75rem;color:#555;line-height:1.5;border-top:1px solid #1e1e3a;padding-top:15px}
+        /* dest box */
+        .dest{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px 16px;text-align:left;margin-bottom:22px}
+        .dest-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#52525b;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+        .dest-label i{color:#6366f1;font-size:.75rem}
+        .dest-url{font-size:.82rem;color:#a1a1aa;font-family:'SF Mono',Consolas,monospace;word-break:break-all;line-height:1.4}
 
-        .native-ad-wrap{width:100%;max-width:600px;background:#111122;border-radius:12px;border:1px solid #1e1e3a;overflow:hidden;padding:10px}
-        .smartlink-wrap{width:100%;max-width:600px;text-align:center}
+        /* skip button */
+        .skip{width:100%;max-width:320px;padding:16px;border:none;border-radius:14px;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;display:none}
+        .skip.waiting{background:rgba(255,255,255,.06);color:#52525b;cursor:not-allowed}
+        .skip.ready{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;box-shadow:0 8px 32px rgba(99,102,241,.4)}
+        .skip.ready:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(99,102,241,.5)}
+        .skip.ready:active{transform:translateY(0)}
+        .skip i{margin-right:8px}
 
-        .go-sidebar{background:#111122;border-left:1px solid #1e1e3a;padding:20px;display:flex;flex-direction:column;gap:15px;overflow-y:auto}
-        @media(max-width:900px){.go-sidebar{display:none}}
+        .fine{font-size:.7rem;color:#3f3f46;margin-top:18px;line-height:1.5}
 
-        .sidebar-ad{background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:12px;overflow:hidden;border:1px solid #2a2a4a}
-        .sidebar-ad-header{padding:8px 12px;border-bottom:1px solid #1e1e3a;display:flex;align-items:center;justify-content:space-between}
-        .sidebar-ad-header span{font-size:.65rem;color:#555;text-transform:uppercase;letter-spacing:.1em}
-        .sidebar-ad-content{padding:10px;text-align:center;min-height:250px}
+        /* native + smartlink slots */
+        .native-slot{width:100%;max-width:480px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.04);background:#0c0c1d}
+        .smartlink-slot{width:100%;max-width:480px;text-align:center}
 
-        .sidebar-sticky{position:sticky;bottom:0;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;padding:15px;border:1px solid #2a2a4a;text-align:center}
-        .sidebar-sticky .offer-tag{background:linear-gradient(135deg,#fa709a,#fee140);color:#000;padding:3px 12px;border-radius:10px;font-size:.65rem;font-weight:700;display:inline-block;margin-bottom:10px}
-        .sidebar-sticky p{color:#888;font-size:.75rem;margin-bottom:10px}
-        .sidebar-sticky .btn-offer{display:block;padding:10px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;font-weight:600;font-size:.8rem;cursor:pointer;text-decoration:none}
+        /* error / disabled */
+        .err-ico{font-size:3rem;margin-bottom:14px}
+        .home-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:14px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:700;font-size:.9rem;text-decoration:none;transition:all .25s;margin-top:8px}
+        .home-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(99,102,241,.4);color:#fff}
 
-        .social-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,26,.97);backdrop-filter:blur(10px);border-top:1px solid #2a2a4a;padding:0;display:none;align-items:center;justify-content:space-between;z-index:300;animation:slideUp .5s ease}
-        @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-        .social-bar .bar-left{display:flex;align-items:center;gap:12px;padding:12px 20px}
-        .social-bar .bar-icon{width:40px;height:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem}
-        .social-bar .bar-text .bar-title{color:#fff;font-size:.85rem;font-weight:600}
-        .social-bar .bar-text .bar-sub{color:#666;font-size:.7rem}
-        .social-bar .bar-cta{padding:10px 22px;background:linear-gradient(135deg,#43e97b,#38f9d7);color:#000;border:none;border-radius:8px;font-weight:700;font-size:.8rem;cursor:pointer;white-space:nowrap;transition:all .3s}
-        .social-bar .bar-cta:hover{transform:translateY(-1px)}
-        .social-bar .bar-close{color:#555;cursor:pointer;padding:5px;font-size:1.2rem;margin-left:10px;margin-right:15px}
-        #social-bar-slot{flex:1;overflow:hidden}
+        /* ===== SIDEBAR ===== */
+        .side{background:#0a0a1a;border-left:1px solid rgba(255,255,255,.04);padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
+        @media(max-width:960px){.side{display:none}}
+        .side-ad{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:14px;overflow:hidden}
+        .side-ad-hdr{padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.03)}
+        .side-ad-hdr span{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:#3f3f46;font-weight:600}
+        .side-ad-hdr .tag{background:rgba(99,102,241,.15);color:#818cf8;padding:2px 8px;border-radius:6px;font-size:.55rem;font-weight:700}
+        .side-ad-body{min-height:250px;padding:8px;display:flex;align-items:center;justify-content:center}
+        .side-offer{background:linear-gradient(145deg,rgba(99,102,241,.08),rgba(139,92,246,.05));border:1px solid rgba(99,102,241,.12);border-radius:14px;padding:18px;text-align:center}
+        .side-offer .badge{display:inline-block;background:linear-gradient(135deg,#f59e0b,#f97316);color:#000;padding:3px 12px;border-radius:8px;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+        .side-offer p{font-size:.78rem;color:#71717a;margin-bottom:12px;line-height:1.5}
+        .side-offer a{display:block;padding:10px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:700;font-size:.8rem;text-decoration:none;transition:all .2s}
+        .side-offer a:hover{transform:translateY(-1px)}
 
-        .float-ad{position:fixed;z-index:250;border-radius:12px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.5);border:1px solid #2a2a4a;animation:floatIn .8s ease}
-        @keyframes floatIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
-        .float-ad-left{left:15px;top:50%;transform:translateY(-50%);width:160px;min-height:300px;background:#111122}
-        .float-ad-right{right:15px;top:50%;transform:translateY(-50%);width:160px;min-height:600px;background:#111122}
-        @media(max-width:1100px){.float-ad{display:none}}
+        /* ===== SOCIAL BAR ===== */
+        .sbar{position:fixed;bottom:0;left:0;right:0;display:none;z-index:200;animation:sbarUp .4s ease}
+        @keyframes sbarUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+        .sbar-inner{width:100%;background:rgba(10,10,26,.95);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);padding:10px 16px;display:flex;align-items:center;gap:12px}
+        .sbar-icon{width:36px;height:36px;min-width:36px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9rem}
+        .sbar-text{flex:1;min-width:0}
+        .sbar-text strong{display:block;font-size:.82rem;color:#e4e4e7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .sbar-text small{font-size:.7rem;color:#52525b}
+        .sbar-cta{padding:8px 18px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:700;font-size:.78rem;border:none;cursor:pointer;white-space:nowrap;transition:all .2s}
+        .sbar-cta:hover{transform:translateY(-1px)}
+        .sbar-close{color:#3f3f46;cursor:pointer;padding:4px;font-size:1rem;border:none;background:none}
+        #sbar-custom{flex:1;overflow:hidden}
 
-        .bottom-banner-wrap{background:#111122;padding:10px 0;text-align:center;border-top:1px solid #222}
-        .bottom-banner-slot{display:inline-block;width:728px;max-width:95vw;min-height:90px;background:#111122;overflow:hidden}
+        /* ===== FLOATING ADS ===== */
+        .float{position:fixed;z-index:150;border-radius:14px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.5);background:#0c0c1d;border:1px solid rgba(255,255,255,.04);animation:fadeIn .6s ease}
+        @keyframes fadeIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+        .float-l{left:12px;top:50%;transform:translateY(-50%);width:160px}
+        .float-r{right:12px;top:50%;transform:translateY(-50%);width:160px}
+        @media(max-width:1100px){.float{display:none!important}}
+        @media(max-width:960px){.float{display:none!important}}
 
-        .mobile-banner-wrap{display:none;background:#111122;padding:10px 0;text-align:center;border-top:1px solid #222}
+        /* ===== FOOTER ===== */
+        .ftr{text-align:center;padding:16px;font-size:.7rem;color:#27272a;padding-bottom:100px}
+        .ftr strong{color:#6366f1}
 
-        .hidden{display:none !important}
-        .err-icon{font-size:3.5rem;margin-bottom:15px;display:block}
-        .btn-home{display:inline-block;padding:14px 36px;border-radius:12px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff!important;font-weight:700;font-size:.9rem;text-decoration:none;transition:all .3s}
-        .btn-home:hover{transform:translateY(-2px);color:#fff}
+        /* ===== UTILITIES ===== */
+        .hide{display:none!important}
 
-        .go-footer{text-align:center;padding:20px;font-size:.75rem;color:#444;padding-bottom:80px}
-        .go-footer strong{color:#667eea}
-
-        @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-        @media(max-width:600px){.go-center{padding:15px}.interstitial-panel{padding:30px 20px}#count-num{font-size:3.5rem}}
+        @media(max-width:640px){
+            .center{padding:20px 14px}
+            .card{padding:28px 20px 24px;border-radius:16px}
+            .cd-num{font-size:3.5rem}
+            .skip{max-width:280px;padding:14px;font-size:.9rem}
+            .dest-url{font-size:.75rem}
+        }
+        @media(prefers-reduced-motion:reduce){*{animation-duration:0s!important;transition-duration:0s!important}}
     </style>
 </head>
 <body>
 
     <div id="popunder-slot"></div>
 
-    <div class="top-banner-wrap">
-        <div class="top-banner-slot" id="top-banner-ad"></div>
-    </div>
+    <div class="ad-slot-top"><div class="inner" id="top-banner-ad"></div></div>
 
-    <header class="go-header">
-        <a class="go-brand" href="../index.html">
-            <div class="logo-icon">S</div>
-            <span>Shortify</span>
+    <header class="hdr">
+        <a class="hdr-brand" href="../index.html">
+            <div class="hdr-logo">S</div>
+            <h1>Shortify</h1>
         </a>
-        <div class="go-tagline">Shorten URLs & Earn Money</div>
-        <div class="timer-badge" id="timer-badge">
+        <div class="hdr-pill">
             <i class="fa fa-clock-o"></i>
-            <span class="num" id="timer-num">--</span>
+            <span class="t" id="timer-num">--</span>
             <span>sec</span>
         </div>
     </header>
 
-    <div class="go-main">
-        <div class="go-center">
+    <div class="main">
+        <div class="center">
 
-            <div class="interstitial-panel" id="state-loading">
-                <div class="panel-content">
-                    <div class="spinner-ring"></div>
-                    <div class="go-title">Aapki link taiyaar ho rahi hai...</div>
-                    <div class="go-sub">Ek second ruko</div>
-                </div>
+            <!-- LOADING -->
+            <div class="card" id="state-loading">
+                <div class="spin"></div>
+                <div class="cd-title">Link taiyaar ho rahi hai...</div>
+                <div class="cd-sub">Ek second ruko</div>
             </div>
 
-            <div class="interstitial-panel hidden" id="state-countdown">
-                <div class="panel-content">
-                    <div class="panel-icon"><i class="fa fa-link"></i></div>
-                    <div id="count-num">5</div>
-                    <div class="go-title" id="count-title">Aapki link taiyaar ho rahi hai</div>
-                    <div class="go-sub">Niche button <span id="wait-text">5 seconds</span> me enable ho jayega</div>
-                    <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
-                    <div class="dest-box">
-                        <strong><i class="fa fa-external-link"></i>Aap ja rahe ho yahan:</strong>
-                        <span id="dest-url"></span>
-                    </div>
-                    <button class="skip-btn" id="skip-btn" disabled>
-                        <i class="fa fa-arrow-right"></i> Please wait...</button>
-                    <div class="captcha-note">Continue karne se tum destination site pe jaoge. Is free tool ko use karne ke liye thanks!</div>
+            <!-- COUNTDOWN -->
+            <div class="card hide" id="state-countdown">
+                <div class="ico"><i class="fa fa-link"></i></div>
+                <div class="cd-num" id="count-num">5</div>
+                <div class="cd-title">Aapki link ready ho rahi hai</div>
+                <div class="cd-sub">Niche button <span id="wait-text">5 seconds</span> me enable hoga</div>
+                <div class="prog"><div class="prog-bar" id="progress-bar"></div></div>
+                <div class="dest">
+                    <div class="dest-label"><i class="fa fa-external-link"></i>Destination</div>
+                    <div class="dest-url" id="dest-url"></div>
                 </div>
+                <button class="skip waiting" id="skip-btn" disabled>
+                    <i class="fa fa-hourglass-half"></i> Please wait...
+                </button>
+                <div class="fine">Continue karne se aap destination site pe jaoge. Thanks for using Shortify!</div>
             </div>
 
-            <div class="native-ad-wrap" id="native-ad-slot"></div>
-            <div class="smartlink-wrap" id="smartlink-slot"></div>
+            <!-- NATIVE + SMARTLINK -->
+            <div class="native-slot" id="native-ad-slot"></div>
+            <div class="smartlink-slot" id="smartlink-slot"></div>
 
-            <div class="interstitial-panel hidden" id="state-error">
-                <div class="panel-content">
-                    <div class="err-icon">🤔</div>
-                    <div class="go-title" id="error-title">Link nahi mili!</div>
-                    <div class="go-sub" id="error-sub">Ye link delete ho gayi ya kabhi thi hi nahi.</div>
-                    <a href="../index.html" class="btn-home">Shortify Home Pe Chalo</a>
-                </div>
+            <!-- ERROR -->
+            <div class="card hide" id="state-error">
+                <div class="err-ico">Link nahi mili!</div>
+                <div class="cd-title" id="error-title">Error</div>
+                <div class="cd-sub" id="error-sub"></div>
+                <a href="../index.html" class="home-btn"><i class="fa fa-home"></i> Home</a>
             </div>
 
-            <div class="interstitial-panel hidden" id="state-disabled">
-                <div class="panel-content">
-                    <div class="err-icon">🚫</div>
-                    <div class="go-title">Ye link band kar di gayi hai</div>
-                    <div class="go-sub">Owner ne ya admin ne isko disable kiya hai.</div>
-                    <a href="../index.html" class="btn-home">Shortify Home Pe Chalo</a>
-                </div>
+            <!-- DISABLED -->
+            <div class="card hide" id="state-disabled">
+                <div class="err-ico">Link disabled!</div>
+                <div class="cd-title">Ye link band hai</div>
+                <div class="cd-sub">Owner ne isko disable kiya hai.</div>
+                <a href="../index.html" class="home-btn"><i class="fa fa-home"></i> Home</a>
             </div>
 
         </div>
 
-        <div class="go-sidebar">
-            <div class="sidebar-ad">
-                <div class="sidebar-ad-header"><span>Sponsored</span></div>
-                <div class="sidebar-ad-content" id="sidebar-ad-1"></div>
+        <div class="side">
+            <div class="side-ad">
+                <div class="side-ad-hdr"><span>Sponsored</span><span class="tag">AD</span></div>
+                <div class="side-ad-body" id="sidebar-ad-1"></div>
             </div>
-            <div class="sidebar-ad">
-                <div class="sidebar-ad-header"><span>Sponsored</span></div>
-                <div class="sidebar-ad-content" id="sidebar-ad-2"></div>
+            <div class="side-ad">
+                <div class="side-ad-hdr"><span>Sponsored</span><span class="tag">AD</span></div>
+                <div class="side-ad-body" id="sidebar-ad-2"></div>
             </div>
-            <div class="sidebar-sticky">
-                <div class="offer-tag">LIMITED OFFER</div>
-                <p>Apna URL shortener banao aur paisa kamao!</p>
-                <a href="../index.html" class="btn-offer">Abhi Shuru Karo →</a>
+            <div class="side-offer">
+                <div class="badge">Limited Time</div>
+                <p>Shortify se paisa kamao — free URL shortener!</p>
+                <a href="../index.html">Abhi Shuru Karo →</a>
             </div>
-            <div class="sidebar-ad">
-                <div class="sidebar-ad-header"><span>Also Try</span></div>
-                <div class="sidebar-ad-content" id="sidebar-ad-3"></div>
+            <div class="side-ad">
+                <div class="side-ad-hdr"><span>More</span><span class="tag">AD</span></div>
+                <div class="side-ad-body" id="sidebar-ad-3"></div>
             </div>
+        </div>
+    </div>
+
+    <div class="ad-slot-mobile" id="mobile-banner-wrap"><div class="inner" id="mobile-banner-ad"></div></div>
+    <div class="ad-slot-bottom"><div class="inner" id="bottom-banner-ad"></div></div>
+
+    <div class="sbar" id="social-bar">
+        <div class="sbar-inner">
+            <div class="sbar-icon"><i class="fa fa-bullhorn"></i></div>
+            <div class="sbar-text">
+                <strong id="social-bar-title">Special Offer!</strong>
+                <small id="social-bar-sub">Discover amazing deals</small>
+            </div>
+            <div id="sbar-custom"></div>
+            <button class="sbar-cta" id="social-bar-cta">Check Now</button>
+            <button class="sbar-close" id="social-bar-close"><i class="fa fa-times"></i></button>
         </div>
     </div>
 
-    <div class="mobile-banner-wrap" id="mobile-banner-wrap">
-        <div class="bottom-banner-slot" id="mobile-banner-ad"></div>
-    </div>
+    <div class="float float-l" id="float-ad-left" style="display:none"></div>
+    <div class="float float-r" id="float-ad-right" style="display:none"></div>
 
-    <div class="bottom-banner-wrap">
-        <div class="bottom-banner-slot" id="bottom-banner-ad"></div>
-    </div>
-
-    <div class="social-bar" id="social-bar">
-        <div class="bar-left">
-            <div class="bar-icon"><i class="fa fa-bullhorn"></i></div>
-            <div class="bar-text">
-                <div class="bar-title" id="social-bar-title">Special Offer!</div>
-                <div class="bar-sub" id="social-bar-sub">Discover amazing deals</div>
-            </div>
-        </div>
-        <div id="social-bar-slot"></div>
-        <button class="bar-cta" id="social-bar-cta">Check Now →</button>
-        <span class="bar-close" id="social-bar-close"><i class="fa fa-times"></i></span>
-    </div>
-
-    <div class="float-ad float-ad-left" id="float-ad-left" style="display:none"></div>
-    <div class="float-ad float-ad-right" id="float-ad-right" style="display:none"></div>
-
-    <footer class="go-footer">Copyright &copy; <strong>Shortify</strong> — Free Short URL & Earn Money</footer>
+    <footer class="ftr">Copyright &copy; <strong>Shortify</strong> — Shorten URLs & Earn Money</footer>
 
     <script src="../vendor/jquery.min.js"></script>
     <script type="module">
         import { db } from "./js/firebase-config.js";
         import { SITE_URL } from "./js/app.js";
-        import { ref, get, child, runTransaction, update }
+        import { ref, get, child, runTransaction }
             from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         (async function() {
 
-        const $loading  = document.getElementById("state-loading");
-        const $count    = document.getElementById("state-countdown");
-        const $error    = document.getElementById("state-error");
-        const $disabled = document.getElementById("state-disabled");
-        const $num      = document.getElementById("count-num");
-        const $skip     = document.getElementById("skip-btn");
-        const $destUrl  = document.getElementById("dest-url");
+        var $loading  = document.getElementById("state-loading");
+        var $count    = document.getElementById("state-countdown");
+        var $error    = document.getElementById("state-error");
+        var $disabled = document.getElementById("state-disabled");
+        var $num      = document.getElementById("count-num");
+        var $skip     = document.getElementById("skip-btn");
+        var $destUrl  = document.getElementById("dest-url");
         var progressBar = document.getElementById("progress-bar");
         var totalSeconds = 5;
 
-        let AD_TIMER = 5;
-        let RECAPTCHA_KEY = "";
+        var AD_TIMER = 5;
+        var RECAPTCHA_KEY = "";
         try {
-            const sSnap = await get(child(ref(db), "settings"));
-            const s = sSnap.val() || {};
+            var sSnap = await get(child(ref(db), "settings"));
+            var s = sSnap.val() || {};
             AD_TIMER = parseInt(s.ad_timer_seconds) || 5;
             RECAPTCHA_KEY = s.recaptcha_site_key || "";
             totalSeconds = AD_TIMER;
-        } catch {}
+        } catch(e) {}
 
-        let myCountry = "";
+        var myCountry = "";
         try {
-            const controller = new AbortController();
-            const tid = setTimeout(() => controller.abort(), 5000);
-            const geo = await fetch("https://ipwho.is/", { signal: controller.signal })
-                .then(r => r.json()).catch(() => null);
+            var ctrl = new AbortController();
+            var tid = setTimeout(function() { ctrl.abort(); }, 5000);
+            var geo = await fetch("https://ipwho.is/", { signal: ctrl.signal }).then(function(r){return r.json()}).catch(function(){return null});
             clearTimeout(tid);
             if (geo && geo.country_code) myCountry = geo.country_code;
-        } catch {}
+        } catch(e) {}
 
-        let mode = "alias", alias = "", targetUrl = "", ownerUid = null, adType = "interstitial";
-        const hash = location.hash;
+        var mode = "alias", alias = "", targetUrl = "", ownerUid = null, adType = "interstitial";
+        var hash = location.hash;
 
         if (hash.startsWith("#?")) {
-            const p = new URLSearchParams(hash.substring(2));
-            try { targetUrl = p.get("u") || ""; } catch { targetUrl = ""; }
+            var p = new URLSearchParams(hash.substring(2));
+            try { targetUrl = p.get("u") || ""; } catch(e) { targetUrl = ""; }
             ownerUid = p.get("o") || null;
-            adType = ["interstitial","banner","none"].includes(p.get("t")) ? p.get("t") : "interstitial";
-            let okUrl = false;
-            try { okUrl = !!new URL(targetUrl); } catch {}
+            adType = ["interstitial","banner","none"].indexOf(p.get("t")) >= 0 ? p.get("t") : "interstitial";
+            var okUrl = false;
+            try { okUrl = !!new URL(targetUrl); } catch(e) {}
             if (!okUrl) return showError("Invalid link!", "Is redirect link me valid destination nahi hai.");
             mode = "pass";
         } else {
@@ -288,25 +305,24 @@
             if (!alias) return showError("Alias missing!", "Koi link specify nahi hui.");
         }
 
-        let GO_PAGE = {};
+        var GO_PAGE = {};
         try {
-            const gpSnap = await get(ref(db, "settings/go_page"));
+            var gpSnap = await get(ref(db), "settings/go_page"));
             if (gpSnap.exists()) GO_PAGE = gpSnap.val() || {};
-        } catch {}
+        } catch(e) {}
 
         function injectCode(container, code) {
             if (!code || !code.trim()) return false;
-            const tmp = document.createElement("div");
+            var tmp = document.createElement("div");
             tmp.innerHTML = code;
-            const scripts = tmp.querySelectorAll("script");
-            const textNodes = tmp.innerHTML.replace(/<script[\s\S]*?<\/script>/gi, "");
-            container.innerHTML = textNodes;
+            var scripts = tmp.querySelectorAll("script");
+            var staticHtml = tmp.innerHTML.replace(/<script[\s\S]*?<\/script>/gi, "");
+            container.innerHTML = staticHtml;
             scripts.forEach(function(old) {
-                const s = document.createElement("script");
+                var s = document.createElement("script");
                 if (old.src) {
                     s.src = old.src;
                     s.async = true;
-                    s.onerror = function() { console.warn("Ad script load failed:", old.src); };
                 } else {
                     s.textContent = old.textContent;
                 }
@@ -316,7 +332,7 @@
         }
 
         function renderEl(elId, code) {
-            const el = document.getElementById(elId);
+            var el = document.getElementById(elId);
             if (!el) return;
             return injectCode(el, code);
         }
@@ -330,13 +346,13 @@
 
             if (!hasAny) {
                 try {
-                    const adsSnap = await get(ref(db, "ads"));
-                    const pool = [];
-                    adsSnap.forEach(c => {
-                        const a = c.val();
+                    var adsSnap = await get(ref(db, "ads"));
+                    var pool = [];
+                    adsSnap.forEach(function(c) {
+                        var a = c.val();
                         if (a.status === "active" && safeUrl(a.target_url) &&
                             (Number(a.served_views) || 0) < (Number(a.package_views) || 0)) {
-                            pool.push({ id: c.key, ...a });
+                            pool.push({ id: c.key, url: a.target_url, image_url: a.image_url, title: a.title, ad_type: a.ad_type });
                         }
                     });
 
@@ -346,24 +362,19 @@
                         return;
                     }
 
-                    const bannerAds = pool.filter(a => a.ad_type === "banner" || a.image_url);
+                    var bannerAds = pool.filter(function(a) { return a.ad_type === "banner" || a.image_url; });
                     if (bannerAds.length > 0) {
                         renderImageAd("top-banner-ad", bannerAds[0], 90);
                         renderImageAd("bottom-banner-ad", bannerAds[bannerAds.length > 1 ? 1 : 0], 90);
-                        bannerAds.slice(0, 3).forEach((a, i) => {
+                        bannerAds.slice(0, 3).forEach(function(a, i) {
                             renderImageAd("sidebar-ad-" + (i + 1), a, 250);
                         });
                     }
 
                     if (pool.length > 0) {
-                        const socialAd = pool[Math.floor(Math.random() * pool.length)];
-                        showSocialBar(socialAd.title || "Special Offer!", socialAd.target_url);
+                        var socialAd = pool[Math.floor(Math.random() * pool.length)];
+                        showSocialBar(socialAd.title || "Special Offer!", socialAd.url);
                         trackImpression(socialAd.id);
-                    }
-
-                    if (pool.length > 0) {
-                        const floatAd = pool[Math.floor(Math.random() * pool.length)];
-                        if (floatAd.image_url) renderFloatAd("float-ad-left", floatAd);
                     }
 
                 } catch (err) {
@@ -374,33 +385,21 @@
                 return;
             }
 
-            if (gp.popunder_enabled && gp.popunder_code) {
-                injectCode(document.getElementById("popunder-slot"), gp.popunder_code);
-            }
-            if (gp.top_banner_enabled && gp.top_banner_code) {
-                renderEl("top-banner-ad", gp.top_banner_code);
-            }
-            if (gp.bottom_banner_enabled && gp.bottom_banner_code) {
-                renderEl("bottom-banner-ad", gp.bottom_banner_code);
-            }
-            if (gp.sidebar_1_enabled && gp.sidebar_1_code) {
-                renderEl("sidebar-ad-1", gp.sidebar_1_code);
-            } else if (!gp.sidebar_1_enabled) {
-                renderDefaultSidebar("sidebar-ad-1");
-            }
-            if (gp.sidebar_2_enabled && gp.sidebar_2_code) {
-                renderEl("sidebar-ad-2", gp.sidebar_2_code);
-            } else if (!gp.sidebar_2_enabled) {
-                renderDefaultSidebar("sidebar-ad-2");
-            }
-            if (gp.sidebar_3_enabled && gp.sidebar_3_code) {
-                renderEl("sidebar-ad-3", gp.sidebar_3_code);
-            } else if (!gp.sidebar_3_enabled) {
-                renderDefaultSidebar("sidebar-ad-3");
-            }
+            if (gp.popunder_enabled && gp.popunder_code) injectCode(document.getElementById("popunder-slot"), gp.popunder_code);
+            if (gp.top_banner_enabled && gp.top_banner_code) renderEl("top-banner-ad", gp.top_banner_code);
+            if (gp.bottom_banner_enabled && gp.bottom_banner_code) renderEl("bottom-banner-ad", gp.bottom_banner_code);
+            if (gp.sidebar_1_enabled && gp.sidebar_1_code) renderEl("sidebar-ad-1", gp.sidebar_1_code);
+            else if (!gp.sidebar_1_enabled) renderDefaultSidebar("sidebar-ad-1");
+            if (gp.sidebar_2_enabled && gp.sidebar_2_code) renderEl("sidebar-ad-2", gp.sidebar_2_code);
+            else if (!gp.sidebar_2_enabled) renderDefaultSidebar("sidebar-ad-2");
+            if (gp.sidebar_3_enabled && gp.sidebar_3_code) renderEl("sidebar-ad-3", gp.sidebar_3_code);
+            else if (!gp.sidebar_3_enabled) renderDefaultSidebar("sidebar-ad-3");
             if (gp.social_bar_enabled && gp.social_bar_code) {
-                injectCode(document.getElementById("social-bar-slot"), gp.social_bar_code);
-                setTimeout(function() { document.getElementById("social-bar").style.display = "flex"; }, 2000);
+                injectCode(document.getElementById("sbar-custom"), gp.social_bar_code);
+                document.getElementById("social-bar-cta").style.display = "none";
+                document.getElementById("social-bar-title").style.display = "none";
+                document.getElementById("social-bar-sub").style.display = "none";
+                setTimeout(function() { document.getElementById("social-bar").style.display = "block"; }, 2000);
             } else if (gp.social_bar_enabled && gp.social_bar_title) {
                 showSocialBar(gp.social_bar_title, gp.social_bar_url || "#");
             }
@@ -412,44 +411,29 @@
                 injectCode(document.getElementById("float-ad-right"), gp.floating_right_code);
                 document.getElementById("float-ad-right").style.display = "block";
             }
-            if (gp.native_enabled && gp.native_code) {
-                renderEl("native-ad-slot", gp.native_code);
-            } else {
-                document.getElementById("native-ad-slot").style.display = "none";
-            }
-            if (gp.smartlink_enabled && gp.smartlink_code) {
-                renderEl("smartlink-slot", gp.smartlink_code);
-            } else {
-                document.getElementById("smartlink-slot").style.display = "none";
-            }
+            if (gp.native_enabled && gp.native_code) renderEl("native-ad-slot", gp.native_code);
+            else document.getElementById("native-ad-slot").style.display = "none";
+            if (gp.smartlink_enabled && gp.smartlink_code) renderEl("smartlink-slot", gp.smartlink_code);
+            else document.getElementById("smartlink-slot").style.display = "none";
             if (gp.mobile_banner_enabled && gp.mobile_banner_code) {
-                var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                if (isMobile) {
+                if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
                     renderEl("mobile-banner-ad", gp.mobile_banner_code);
                     document.getElementById("mobile-banner-wrap").style.display = "block";
                 }
             }
         }
 
-        function renderImageAd(elId, ad, height) {
+        function renderImageAd(elId, ad, h) {
             var el = document.getElementById(elId);
             if (!el || !ad.image_url) return;
-            el.style.background = "none";
-            el.style.height = height + "px";
-            el.innerHTML = '<a href="' + ad.target_url + '" target="_blank" rel="noopener"><img src="' + ad.image_url + '" style="width:100%;height:100%;object-fit:cover;border-radius:8px" alt="' + (ad.title || "Ad") + '"></a>';
-            trackImpression(ad.id);
-        }
-
-        function renderFloatAd(elId, ad) {
-            var el = document.getElementById(elId);
-            el.innerHTML = '<a href="' + ad.target_url + '" target="_blank"><img src="' + ad.image_url + '" style="width:100%;border-radius:12px"></a>';
-            el.style.display = "block";
+            el.style.minHeight = h + "px";
+            el.innerHTML = '<a href="' + ad.url + '" target="_blank"><img src="' + ad.image_url + '" style="width:100%;height:' + h + 'px;object-fit:cover;border-radius:8px;display:block" alt="Ad"></a>';
             trackImpression(ad.id);
         }
 
         function renderDefaultSidebar(elId) {
             var el = document.getElementById(elId);
-            if (el) el.innerHTML = '<div style="padding:20px;text-align:center"><i class="fa fa-bullhorn" style="font-size:2rem;color:#667eea;margin-bottom:10px;display:block"></i><div style="color:#667eea;font-weight:700;font-size:.85rem">Advertise Here</div><div style="color:#555;font-size:.7rem;margin-top:5px">300x250 space</div></div>';
+            if (el) el.innerHTML = '<div style="text-align:center;padding:20px"><div style="width:48px;height:48px;margin:0 auto 12px;border-radius:12px;background:rgba(99,102,241,.1);display:flex;align-items:center;justify-content:center"><i class="fa fa-bullhorn" style="color:#6366f1;font-size:1.2rem"></i></div><div style="font-size:.82rem;font-weight:600;color:#a1a1aa">Advertise Here</div><div style="font-size:.7rem;color:#3f3f46;margin-top:4px">300x250 space</div></div>';
         }
 
         function showDefaultSidebarAds() {
@@ -457,34 +441,33 @@
         }
 
         function showSocialBar(title, url) {
-            var bar = document.getElementById("social-bar");
             document.getElementById("social-bar-title").textContent = title;
             document.getElementById("social-bar-sub").textContent = url;
-            document.getElementById("social-bar-slot").style.display = "none";
+            document.getElementById("sbar-custom").style.display = "none";
             document.getElementById("social-bar-cta").style.display = "inline-block";
             document.getElementById("social-bar-cta").onclick = function() { window.open(url, "_blank"); };
-            setTimeout(function() { bar.style.display = "flex"; }, 2000);
+            setTimeout(function() { document.getElementById("social-bar").style.display = "block"; }, 2000);
         }
 
         function trackImpression(adId) {
-            runTransaction(ref(db, "ads/" + adId + "/served_views"), cur => (cur || 0) + 1).catch(() => {});
+            runTransaction(ref(db, "ads/" + adId + "/served_views"), function(cur) { return (cur || 0) + 1; }).catch(function() {});
         }
 
         function safeUrl(u) {
             try { var x = new URL(u); return (x.protocol === "http:" || x.protocol === "https:") ? u : null; }
-            catch { return null; }
+            catch(e) { return null; }
         }
 
-        let remaining = AD_TIMER;
+        var remaining = AD_TIMER;
 
         if (mode === "alias") {
             try {
-                const snap = await get(ref(db, "aliases/" + alias));
+                var snap = await get(ref(db, "aliases/" + alias));
                 if (!snap.exists()) return showError("Link nahi mili!", alias + " naam ki koi short link database me nahi hai.");
-                const linkData = snap.val();
+                var linkData = snap.val();
                 if (linkData.status === "hidden") {
-                    $loading.classList.add("hidden");
-                    $disabled.classList.remove("hidden");
+                    $loading.classList.add("hide");
+                    $disabled.classList.remove("hide");
                     return;
                 }
                 targetUrl = linkData.url;
@@ -501,29 +484,29 @@
         loadAllAds();
 
         function showError(title, sub) {
-            $loading.classList.add("hidden");
+            $loading.classList.add("hide");
             document.getElementById("error-title").textContent = title;
             document.getElementById("error-sub").textContent = sub;
-            $error.classList.remove("hidden");
+            $error.classList.remove("hide");
         }
 
-        async function startAdFlow() {
+        function startAdFlow() {
             try { $destUrl.textContent = new URL(targetUrl).hostname; }
-            catch { $destUrl.textContent = targetUrl; }
+            catch(e) { $destUrl.textContent = targetUrl; }
 
-            if (adType === "banner") { remaining = 0; }
-            else if (adType === "none") { remaining = 0; }
+            if (adType === "banner" || adType === "none") remaining = 0;
 
-            $loading.classList.add("hidden");
-            $count.classList.remove("hidden");
+            $loading.classList.add("hide");
+            $count.classList.remove("hide");
 
             if (remaining > 0) {
                 tickCountdown();
-                var _cdTimer = setInterval(function() {
-                    if (tickCountdown()) clearInterval(_cdTimer);
+                var cdTimer = setInterval(function() {
+                    if (tickCountdown()) clearInterval(cdTimer);
                 }, 1000);
+            } else {
+                enableSkip();
             }
-            else enableSkip();
         }
 
         function tickCountdown() {
@@ -531,10 +514,7 @@
             $num.textContent = remaining;
             document.getElementById("timer-num").textContent = remaining;
             document.getElementById("wait-text").textContent = remaining + " second" + (remaining !== 1 ? "s" : "");
-            if (progressBar) {
-                var pct = ((totalSeconds - remaining) / totalSeconds) * 100;
-                progressBar.style.width = pct + "%";
-            }
+            if (progressBar) progressBar.style.width = ((totalSeconds - remaining) / totalSeconds * 100) + "%";
             if (remaining <= 0) {
                 if (progressBar) progressBar.style.width = "100%";
                 enableSkip();
@@ -544,16 +524,19 @@
             return false;
         }
 
-        let captchaRendered = false;
+        var captchaRendered = false;
 
         function enableSkip() {
             $num.style.display = "none";
             document.getElementById("wait-text").textContent = "";
-            document.getElementById("timer-badge").style.background = "linear-gradient(135deg,#43e97b,#38f9d7)";
+            document.querySelector(".hdr-pill").style.background = "rgba(52,211,153,.15)";
+            document.querySelector(".hdr-pill").style.borderColor = "rgba(52,211,153,.2)";
+            document.querySelector(".hdr-pill").style.color = "#34d399";
 
             if (RECAPTCHA_KEY && !captchaRendered) {
                 $skip.disabled = true;
                 $skip.innerHTML = '<i class="fa fa-shield"></i> Captcha verify karo...';
+                $skip.style.display = "block";
                 var box = document.createElement("div");
                 box.id = "captcha-box";
                 box.style.marginBottom = "14px";
@@ -571,92 +554,102 @@
                     try {
                         window.grecaptcha.render("captcha-box", {
                             sitekey: RECAPTCHA_KEY,
-                            callback: function() { $skip.disabled = false; $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad →'; },
+                            callback: function() {
+                                $skip.disabled = false;
+                                $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad →';
+                                $skip.className = "skip ready";
+                            },
                             "expired-callback": function() { $skip.disabled = true; }
                         });
                         captchaRendered = true;
-                    } catch (e) { console.error(e); }
+                    } catch(e) { console.error(e); }
                 }, 300);
                 return;
             }
 
+            $skip.style.display = "block";
             $skip.disabled = false;
             $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad →';
+            $skip.className = "skip ready";
         }
 
-        let processed = false;
+        var processed = false;
         $skip.addEventListener("click", async function() {
             if (processed) return;
             processed = true;
             $skip.disabled = true;
-            $skip.innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Ho raha hai...';
+            $skip.innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Redirecting...';
 
             try {
                 if (mode === "alias") {
-                    try { await runTransaction(ref(db, "aliases/" + alias + "/clicks"), cur => (cur || 0) + 1); }
-                    catch (e) { console.error("Clicks failed:", e); }
+                    try { await runTransaction(ref(db, "aliases/" + alias + "/clicks"), function(c) { return (c || 0) + 1; }); }
+                    catch(e) { console.error("Clicks failed:", e); }
                 }
-                try { await runTransaction(ref(db, "stats/total_clicks"), cur => (cur || 0) + 1); }
-                catch (e) { console.error("Stats failed:", e); }
+                try { await runTransaction(ref(db, "stats/total_clicks"), function(c) { return (c || 0) + 1; }); }
+                catch(e) { console.error("Stats failed:", e); }
 
-                let credited = 0;
+                var credited = 0;
                 if (ownerUid) {
-                    let rates = { interstitial: 8, banner: 3, none: 1 };
+                    var rates = { interstitial: 8, banner: 3, none: 1 };
                     try {
-                        const dSnap = await get(child(ref(db), "earning_rates/default"));
-                        if (dSnap.exists()) rates = { ...rates, ...dSnap.val() };
-                    } catch {}
+                        var dSnap = await get(child(ref(db), "earning_rates/default"));
+                        if (dSnap.exists()) { var dv = dSnap.val(); for(var k in dv) rates[k] = dv[k]; }
+                    } catch(e) {}
                     if (myCountry) {
                         try {
-                            const cSnap = await get(child(ref(db), "earning_rates/countries/" + myCountry));
-                            if (cSnap.exists()) rates = { ...rates, ...cSnap.val() };
-                        } catch {}
+                            var cSnap = await get(child(ref(db), "earning_rates/countries/" + myCountry));
+                            if (cSnap.exists()) { var cv = cSnap.val(); for(var k2 in cv) rates[k2] = cv[k2]; }
+                        } catch(e) {}
                     }
-                    const rate = rates[adType] ?? rates.interstitial ?? 5;
-                    let earn = Number(rate) / 1000;
+                    var rate = rates[adType] !== undefined ? rates[adType] : (rates.interstitial || 5);
+                    var earn = Number(rate) / 1000;
                     try {
-                        const mSnap = await get(child(ref(db), "users/" + ownerUid + "/membership"));
-                        const m = mSnap.val();
+                        var mSnap = await get(child(ref(db), "users/" + ownerUid + "/membership"));
+                        var m = mSnap.val();
                         if (m && m.plan_id && (Number(m.expires_at) || 0) > Date.now()) {
-                            const pSnap = await get(child(ref(db), "plans/" + m.plan_id + "/multiplier"));
+                            var pSnap = await get(child(ref(db), "plans/" + m.plan_id + "/multiplier"));
                             earn *= (Number(pSnap.val()) || 1);
                         }
-                    } catch {}
+                    } catch(e) {}
                     credited = earn;
                     if (earn > 0) {
-                        await runTransaction(ref(db, "users/" + ownerUid + "/wallet_money"), cur => (cur || 0) + earn);
-                        const dayKey = new Date().toISOString().slice(0, 10);
-                        runTransaction(ref(db, "users/" + ownerUid + "/daily/" + dayKey), cur => (cur || 0) + earn);
+                        await runTransaction(ref(db, "users/" + ownerUid + "/wallet_money"), function(c) { return (c || 0) + earn; });
+                        var dayKey = new Date().toISOString().slice(0, 10);
+                        runTransaction(ref(db, "users/" + ownerUid + "/daily/" + dayKey), function(c) { return (c || 0) + earn; });
                         try {
-                            const ownerSnap = await get(child(ref(db), "users/" + ownerUid));
-                            const owner = ownerSnap.val() || {};
+                            var ownerSnap = await get(child(ref(db), "users/" + ownerUid));
+                            var owner = ownerSnap.val() || {};
                             if (owner.referred_by) {
-                                const pctSnap = await get(child(ref(db), "settings/referral_commission"));
-                                const pct = Number(pctSnap.val()) || 20;
-                                const codeSnap = await get(child(ref(db), "refcodes/" + owner.referred_by));
-                                const referrerUid = codeSnap.val();
+                                var pctSnap = await get(child(ref(db), "settings/referral_commission"));
+                                var pct = Number(pctSnap.val()) || 20;
+                                var codeSnap = await get(child(ref(db), "refcodes/" + owner.referred_by));
+                                var referrerUid = codeSnap.val();
                                 if (referrerUid && referrerUid !== ownerUid) {
-                                    const bonus = earn * (pct / 100);
-                                    runTransaction(ref(db, "users/" + referrerUid + "/wallet_money"), cur => (cur || 0) + bonus);
-                                    runTransaction(ref(db, "users/" + referrerUid + "/referral_earnings"), cur => (cur || 0) + bonus);
+                                    var bonus = earn * (pct / 100);
+                                    runTransaction(ref(db, "users/" + referrerUid + "/wallet_money"), function(c) { return (c || 0) + bonus; });
+                                    runTransaction(ref(db, "users/" + referrerUid + "/referral_earnings"), function(c) { return (c || 0) + bonus; });
                                 }
                             }
-                        } catch {}
+                        } catch(e) {}
                     }
                 }
                 try {
-                    const dayKey = new Date().toISOString().slice(0, 10);
-                    runTransaction(ref(db, "stats/daily/" + dayKey + "/clicks"), cur => (cur || 0) + 1);
-                    runTransaction(ref(db, "stats/daily/" + dayKey + "/earnings"), cur => (cur || 0) + credited);
-                    if (myCountry) runTransaction(ref(db, "stats/country/" + myCountry + "/clicks"), cur => (cur || 0) + 1);
-                } catch {}
+                    var dayKey2 = new Date().toISOString().slice(0, 10);
+                    runTransaction(ref(db, "stats/daily/" + dayKey2 + "/clicks"), function(c) { return (c || 0) + 1; });
+                    runTransaction(ref(db, "stats/daily/" + dayKey2 + "/earnings"), function(c) { return (c || 0) + credited; });
+                    if (myCountry) runTransaction(ref(db, "stats/country/" + myCountry + "/clicks"), function(c) { return (c || 0) + 1; });
+                } catch(e) {}
 
                 $skip.innerHTML = '<i class="fa fa-paper-plane"></i> Ja rahe ho...';
                 setTimeout(function() { window.location.href = targetUrl; }, 500);
-            } catch (err) {
+            } catch(err) {
                 console.error("Credit error:", err);
                 window.location.href = targetUrl;
             }
+        });
+
+        document.getElementById("social-bar-close").addEventListener("click", function() {
+            document.getElementById("social-bar").style.display = "none";
         });
 
         })();
