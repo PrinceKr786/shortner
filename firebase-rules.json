@@ -1,0 +1,45 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'",
+        ".write": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+      }
+    },
+    "aliases": {
+      ".read": true,
+      ".write": "auth.uid != null",
+      ".indexOn": ["uid"]
+    },
+    "clicks": {
+      "$alias": {
+        ".read": true,
+        ".write": "auth.uid != null"
+      }
+    },
+    "transactions": {
+      "$uid": {
+        ".read": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'",
+        ".write": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+      }
+    },
+    "campaigns": {
+      "$uid": {
+        ".read": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'",
+        ".write": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+      }
+    },
+    "settings": {
+      ".read": true,
+      ".write": "auth.uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+    },
+    "plans": {
+      ".read": true,
+      ".write": "auth.uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+    },
+    "ads": {
+      ".read": true,
+      ".write": "auth.uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+    }
+  }
+}

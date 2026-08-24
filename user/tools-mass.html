@@ -311,7 +311,7 @@
 
                 runTransaction(ref(db, "stats/total_links"), c => (c || 0) + 1);
 
-                const shortUrl = SITE_URL + "#" + alias;
+                const shortUrl = SITE_URL + "user/go.html#" + alias;
                 doneUrls.push({ longUrl, shortUrl });
                 made++;
             }

@@ -428,7 +428,7 @@
         emptyMsg.classList.add("hidden");
 
         tbody.innerHTML = list.map((l) => {
-            const shortUrl = SITE_URL + "#" + l.alias;
+            const shortUrl = SITE_URL + "user/go.html#" + l.alias;
             const isHidden = l.status === "hidden";
             return `
                 <tr>
