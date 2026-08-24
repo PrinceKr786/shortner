@@ -32,6 +32,18 @@
     <link rel="stylesheet" href="theme/css/front.css">
     <link rel="stylesheet" href="theme/css/app.css">
     <link rel="icon" href="favicon.ico">
+
+    <!-- Redirect old short links (#alias) to go.html -->
+    <script>
+        (function() {
+            var hash = window.location.hash;
+            if (hash && hash.length > 1 && !window.location.pathname.endsWith('go.html')) {
+                // Remove leading # and redirect to go.html
+                var alias = hash.substring(1);
+                window.location.replace('user/go.html#' + alias);
+            }
+        })();
+    </script>
 </head>
 
 <body id="page-top" class="index home">
