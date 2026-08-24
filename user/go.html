@@ -1,324 +1,291 @@
 <!DOCTYPE html>
-<!-- ============================================================
-     FILE   : user/go.html
-     KAAM   : INTERSTITIAL AD PAGE - YE ADLINKFLY KA SABSE
-              ICONIC PAGE HAI (Links/view_interstitial.ctp)!
-              Ab bilkul waisa hi dikhta hai.
-
-     FLOW A (alias mode):   go.html#aB3xK9
-       Firebase se aliases/{alias} padhta hai, ad_type ke hisaab
-       se countdown/banner dikhata hai, skip pe earnings credit
-       karke destination pe bhej deta hai.
-
-     FLOW B (passthrough):  go.html#?u=<enc>&o=<ownerUid>&t=<type>
-       Ye js/fullpage.js se aata hai (user ki website ke auto-
-       shortened links). Koi alias lookup nahi hota - seedha
-       owner ko credit hota hai aur redirect.
-
-     SKIP PE HOTA HAI:
-       a) clicks +1 (atomic, sirf alias mode)
-       b) stats/total_clicks +1
-       c) owner wallet += rate/1000  (earning_rates/default)
-       d) refcodes/{referred_by} -> referrer ko commission%
-          + referral_earnings counter
-
-     SECURITY NOTE:
-       Client-side hai (testing phase). Live business ke liye
-       same logic Cloudflare Worker me jayega - README dekho.
-     ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirecting... - Shortify</title>
-
-    <link href="//fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto+Slab:400,700" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../theme/css/app.css">
     <link rel="icon" href="../favicon.ico">
-
-    <!-- FRAME BUSTER - koi iframe me na band sake -->
-    <script type="text/javascript">
-        if (self !== top) { top.location = self.location; }
-    </script>
-
+    <script>if(self!==top){top.location=self.location;}</script>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Poppins',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh;overflow-x:hidden}
 
-        body {
-            font-family:'Montserrat','Source Sans Pro',sans-serif;
-            background:linear-gradient(135deg, #f5f7fa 0%, #eef1f5 100%);
-            min-height:100vh; display:flex; flex-direction:column;
-        }
+        /* ===== TOP BANNER AD (728x90) ===== */
+        .top-banner-wrap{background:#111122;padding:10px 0;text-align:center;border-bottom:1px solid #222}
+        .top-banner-slot{display:inline-block;width:728px;max-width:95vw;height:90px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:8px;overflow:hidden;position:relative;border:1px solid #333}
+        .top-banner-slot::after{content:'AD - 728x90';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#555;font-size:.8rem;letter-spacing:.1em}
+        .top-banner-slot img{width:100%;height:100%;object-fit:cover}
+        .top-banner-slot a{display:block;width:100%;height:100%}
 
-        /* ================= TOP BAR (site branding) ================= */
-        .go-header {
-            background:#fff;
-            border-bottom:1px solid #e4e9f0;
-            padding:14px 24px;
-            display:flex; align-items:center; justify-content:space-between;
-            box-shadow:0 1px 3px rgba(30,40,60,.04);
-            position:sticky; top:0; z-index:100;
-        }
-        .go-brand {
-            display:flex; align-items:center; gap:12px;
-            text-decoration:none;
-        }
-        .go-brand img { height:38px; filter:drop-shadow(0 2px 4px rgba(41,128,243,.15)); }
-        .go-brand span {
-            font-family:'Roboto Slab',serif;
-            font-size:1.35rem; font-weight:700;
-            background:linear-gradient(135deg, #2980f3 0%, #5a6b84 100%);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-            background-clip:text;
-        }
-        .go-tagline {
-            color:#8492a6; font-size:.75rem; letter-spacing:.08em;
-            text-transform:uppercase; font-weight:600;
-        }
-        @media (max-width:600px){ .go-tagline{display:none} }
+        /* ===== HEADER ===== */
+        .go-header{background:rgba(15,15,26,.95);backdrop-filter:blur(10px);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e1e3a;position:sticky;top:0;z-index:200}
+        .go-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+        .go-brand .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1.1rem}
+        .go-brand span{font-size:1.3rem;font-weight:800;color:#fff}
+        .go-tagline{color:#666;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+        .timer-badge{background:linear-gradient(135deg,#667eea,#764ba2);padding:8px 18px;border-radius:25px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:8px}
+        .timer-badge .num{font-size:1.3rem}
 
-        /* ================= AD SPACES ================= */
-        .ad-space {
-            background:linear-gradient(90deg, #f8f9fb 0%, #eef1f5 100%);
-            border-bottom:1px solid #e4e9f0;
-            min-height:90px;
-            display:flex; align-items:center; justify-content:center;
-            overflow:hidden;
-        }
-        .ad-space:empty::after {
-            content:"Advertisement";
-            color:#aab4c3; font-size:.75rem; letter-spacing:.15em;
-            text-transform:uppercase; font-weight:600;
-        }
+        /* ===== MAIN LAYOUT ===== */
+        .go-main{display:grid;grid-template-columns:1fr 300px;gap:0;min-height:calc(100vh - 120px)}
+        @media(max-width:900px){.go-main{grid-template-columns:1fr}}
 
-        /* ================= CENTER PANEL ================= */
-        .go-center {
-            flex:1; display:flex; align-items:center;
-            justify-content:center; padding:40px 20px;
-        }
-        .go-panel {
-            width:100%; max-width:520px;
-            background:#fff;
-            border-radius:12px;
-            padding:48px 40px;
-            text-align:center;
-            box-shadow:0 8px 32px rgba(30,40,60,.08), 0 2px 8px rgba(30,40,60,.04);
-            border:1px solid #eef1f5;
-        }
+        /* ===== LEFT: CENTER CONTENT ===== */
+        .go-center{padding:30px;display:flex;flex-direction:column;align-items:center;gap:25px}
 
-        /* Logo/icon in panel */
-        .panel-icon {
-            width:72px; height:72px; margin:0 auto 28px;
-            background:linear-gradient(135deg, #2980f3 0%, #1a6bd9 100%);
-            border-radius:50%; display:flex; align-items:center; justify-content:center;
-            box-shadow:0 8px 24px rgba(41,128,243,.3);
-        }
-        .panel-icon i { font-size:2.2rem; color:#fff; }
+        /* Interstitial Panel */
+        .interstitial-panel{width:100%;max-width:600px;background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:20px;padding:40px 30px;text-align:center;border:1px solid #2a2a4a;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden}
+        .interstitial-panel::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(102,126,234,.1),transparent);animation:panelGlow 6s linear infinite}
+        @keyframes panelGlow{to{transform:rotate(360deg)}}
+        .interstitial-panel .panel-content{position:relative;z-index:1}
 
-        .spinner-ring {
-            width:74px; height:74px; margin:6px auto 24px;
-            border:6px solid #e3ecfb; border-top-color:#2980f3;
-            border-radius:50%; animation:gospin .8s linear infinite;
-        }
-        @keyframes gospin { to { transform:rotate(360deg); } }
+        .panel-icon{width:80px;height:80px;margin:0 auto 20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(102,126,234,.4);animation:iconPulse 2s ease-in-out infinite}
+        @keyframes iconPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        .panel-icon i{font-size:2rem;color:#fff}
 
-        /* Countdown number with pulse animation */
-        #count-num {
-            font-size:4rem; font-weight:800;
-            background:linear-gradient(135deg, #2980f3 0%, #00a65a 100%);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-            background-clip:text;
-            line-height:1; margin-bottom:8px; display:none;
-            font-family:'Roboto Slab',serif;
-            animation:countPulse 1s ease-in-out infinite;
-        }
-        @keyframes countPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+        .spinner-ring{width:80px;height:80px;margin:0 auto 20px;border:5px solid #2a2a4a;border-top-color:#667eea;border-radius:50%;animation:gospin .7s linear infinite}
+        @keyframes gospin{to{transform:rotate(360deg)}}
 
-        .go-title { font-size:1.15rem; font-weight:700; color:#2d3748;
-            margin-bottom:8px; }
-        .go-sub   { color:#8492a6; font-size:.9rem; margin-bottom:30px; line-height:1.5; }
+        #count-num{font-size:5rem;font-weight:900;background:linear-gradient(135deg,#667eea,#43e97b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:10px;display:none;font-family:'Poppins',sans-serif}
+        .go-title{font-size:1.2rem;font-weight:600;color:#e2e8f0;margin-bottom:8px}
+        .go-sub{color:#8892a6;font-size:.85rem;margin-bottom:25px;line-height:1.6}
 
-        /* Progress bar */
-        .progress-wrap {
-            height:6px; background:#eef1f5; border-radius:3px;
-            margin:0 auto 30px; max-width:320px; overflow:hidden;
-        }
-        .progress-bar {
-            height:100%; width:0%;
-            background:linear-gradient(90deg, #2980f3 0%, #00a65a 100%);
-            border-radius:3px; transition:width .95s linear;
-            box-shadow:0 0 12px rgba(41,128,243,.4);
-        }
+        .progress-wrap{height:6px;background:#2a2a4a;border-radius:3px;margin:0 auto 25px;max-width:400px;overflow:hidden}
+        .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#667eea,#43e97b);border-radius:3px;transition:width 1s linear;box-shadow:0 0 12px rgba(102,126,234,.5)}
 
-        /* Destination preview - card style */
-        .dest-box {
-            background:linear-gradient(135deg, #fafbfc 0%, #f0f2f5 100%);
-            border:1px solid #e4e9f0; border-radius:10px;
-            padding:20px 22px; font-size:.88rem; color:#4a5a6a;
-            margin-bottom:32px; word-break:break-all; text-align:left;
-            box-shadow:inset 0 1px 3px rgba(30,40,60,.03);
-            position:relative; overflow:hidden;
-        }
-        .dest-box::before {
-            content:""; position:absolute; left:0; top:0; bottom:0; width:4px;
-            background:linear-gradient(180deg, #2980f3 0%, #00a65a 100%);
-        }
-        .dest-box i { color:#2980f3; margin-right:8px; font-size:1.1em; }
-        .dest-box strong { display:block; color:#2d3748; font-size:.7rem;
-            text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px; font-weight:700; }
-        .dest-box span { font-family:'Monospace','Consolas',monospace; font-size:.85rem; color:#3d4a5a; }
+        .dest-box{background:rgba(255,255,255,.05);border:1px solid #2a2a4a;border-radius:12px;padding:18px;font-size:.85rem;color:#8892a6;margin-bottom:25px;text-align:left;position:relative}
+        .dest-box::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#667eea,#43e97b);border-radius:4px 0 0 4px}
+        .dest-box i{color:#667eea;margin-right:8px}
+        .dest-box strong{display:block;color:#e2e8f0;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-weight:700}
+        .dest-box span{font-family:monospace;color:#a0aec0;font-size:.8rem}
 
-        /* SKIP BUTTON - AdLinkFly ka iconic green with shine */
-        .skip-btn {
-            display:none; width:100%; max-width:360px; padding:18px 24px;
-            background:linear-gradient(135deg, #00a65a 0%, #008d4c 100%);
-            color:#fff; border:none; border-radius:6px;
-            font-family:'Montserrat',sans-serif;
-            font-size:1rem; font-weight:700; letter-spacing:.04em;
-            cursor:pointer; text-transform:uppercase;
-            transition:all .2s ease;
-            box-shadow:0 4px 16px rgba(0,166,90,.35);
-            position:relative; overflow:hidden;
-        }
-        .skip-btn::before {
-            content:""; position:absolute; top:0; left:-100%; width:100%; height:100%;
-            background:linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
-            transform:skewX(-25deg); transition:left .5s ease;
-        }
-        .skip-btn:hover:not(:disabled) {
-            background:linear-gradient(135deg, #008d4c 0%, #007a43 100%);
-            transform:translateY(-2px);
-            box-shadow:0 8px 24px rgba(0,166,90,.45);
-        }
-        .skip-btn:hover:not(:disabled)::before { left:200%; }
-        .skip-btn:active:not(:disabled) { transform:translateY(0); }
-        .skip-btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
-        .skip-btn i { margin-right:8px; font-size:1.1em; }
+        .skip-btn{display:none;width:100%;max-width:400px;padding:18px;background:linear-gradient(135deg,#43e97b,#38f9d7);color:#000;border:none;border-radius:12px;font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .3s;box-shadow:0 8px 30px rgba(67,233,123,.3);position:relative;overflow:hidden}
+        .skip-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-25deg);transition:left .6s}
+        .skip-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 40px rgba(67,233,123,.4)}
+        .skip-btn:hover:not(:disabled)::before{left:200%}
+        .skip-btn:disabled{opacity:.4;cursor:not-allowed}
+        .skip-btn i{margin-right:8px}
 
-        .captcha-note {
-            margin-top:24px; font-size:.75rem; color:#98a4b5; line-height:1.5;
-            border-top:1px solid #edf1f5; padding-top:16px;
-        }
+        .captcha-note{margin-top:20px;font-size:.75rem;color:#555;line-height:1.5;border-top:1px solid #1e1e3a;padding-top:15px}
 
-        /* Error states */
-        .err-icon { font-size:3.5rem; margin-bottom:18px; display:block; }
-        .hidden { display:none !important; }
-        .btn-home {
-            display:inline-block; padding:14px 36px; border-radius:6px;
-            background:linear-gradient(135deg, #2980f3 0%, #1a6bd9 100%);
-            color:#fff !important; font-weight:700;
-            font-size:.9rem; text-transform:uppercase; letter-spacing:.05em;
-            box-shadow:0 4px 16px rgba(41,128,243,.3);
-            transition:all .2s ease; text-decoration:none;
-        }
-        .btn-home:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(41,128,243,.4); }
+        /* ===== VIDEO AD SECTION ===== */
+        .video-ad-section{width:100%;max-width:600px;background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:16px;overflow:hidden;border:1px solid #2a2a4a}
+        .video-ad-header{padding:12px 18px;background:rgba(255,255,255,.03);border-bottom:1px solid #2a2a4a;display:flex;align-items:center;justify-content:space-between}
+        .video-ad-header span{font-size:.8rem;color:#666;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+        .video-ad-header .ad-badge{background:#667eea;color:#fff;padding:2px 10px;border-radius:10px;font-size:.65rem}
+        .video-player{width:100%;aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
+        .video-player .play-btn{width:70px;height:70px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(5px);transition:all .3s}
+        .video-player:hover .play-btn{background:rgba(102,126,234,.6);transform:scale(1.1)}
+        .video-player .play-btn i{color:#fff;font-size:1.8rem;margin-left:4px}
+        .video-player .vid-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 15px;background:linear-gradient(transparent,rgba(0,0,0,.8));display:flex;align-items:center;justify-content:space-between}
+        .video-player .vid-title{color:#fff;font-size:.8rem;font-weight:500}
+        .video-player .vid-cta{background:#667eea;color:#fff;padding:5px 14px;border-radius:6px;font-size:.7rem;font-weight:600;text-decoration:none}
 
-        footer {
-            text-align:center; padding:24px; font-size:.78rem; color:#98a4b5;
-        }
-        footer strong { color:#2980f3; font-weight:700; }
+        /* ===== BOTTOM BANNER AD ===== */
+        .bottom-banner-wrap{background:#111122;padding:10px 0;text-align:center;border-top:1px solid #222}
+        .bottom-banner-slot{display:inline-block;width:728px;max-width:95vw;height:90px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:8px;overflow:hidden;position:relative;border:1px solid #333}
+        .bottom-banner-slot::after{content:'AD - 728x90';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#555;font-size:.8rem;letter-spacing:.1em}
+        .bottom-banner-slot img{width:100%;height:100%;object-fit:cover}
 
-        /* Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            .spinner-ring, #count-num, .progress-bar, .skip-btn::before { animation:none !important; transition:none !important; }
-        }
+        /* ===== RIGHT SIDEBAR ===== */
+        .go-sidebar{background:#111122;border-left:1px solid #1e1e3a;padding:20px;display:flex;flex-direction:column;gap:15px;overflow-y:auto}
+        @media(max-width:900px){.go-sidebar{display:none}}
+
+        .sidebar-ad{background:linear-gradient(145deg,#1a1a2e,#16213e);border-radius:12px;overflow:hidden;border:1px solid #2a2a4a}
+        .sidebar-ad-header{padding:8px 12px;border-bottom:1px solid #1e1e3a;display:flex;align-items:center;justify-content:space-between}
+        .sidebar-ad-header span{font-size:.65rem;color:#555;text-transform:uppercase;letter-spacing:.1em}
+        .sidebar-ad-content{padding:10px;text-align:center}
+        .sidebar-ad-content .ad-placeholder{width:100%;aspect-ratio:300/250;background:linear-gradient(135deg,#1e1e3a,#2a2a4a);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#444;font-size:.75rem}
+
+        .sidebar-sticky{position:sticky;bottom:0;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;padding:15px;border:1px solid #2a2a4a;text-align:center}
+        .sidebar-sticky .offer-tag{background:linear-gradient(135deg,#fa709a,#fee140);color:#000;padding:3px 12px;border-radius:10px;font-size:.65rem;font-weight:700;display:inline-block;margin-bottom:10px}
+        .sidebar-sticky p{color:#888;font-size:.75rem;margin-bottom:10px}
+        .sidebar-sticky .btn-offer{display:block;padding:10px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;font-weight:600;font-size:.8rem;cursor:pointer;text-decoration:none}
+
+        /* ===== SOCIAL BAR (Bottom Sticky) ===== */
+        .social-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,26,.97);backdrop-filter:blur(10px);border-top:1px solid #2a2a4a;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;z-index:300;animation:slideUp .5s ease}
+        @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+        .social-bar .bar-left{display:flex;align-items:center;gap:12px}
+        .social-bar .bar-icon{width:40px;height:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem}
+        .social-bar .bar-text .bar-title{color:#fff;font-size:.85rem;font-weight:600}
+        .social-bar .bar-text .bar-sub{color:#666;font-size:.7rem}
+        .social-bar .bar-cta{padding:10px 22px;background:linear-gradient(135deg,#43e97b,#38f9d7);color:#000;border:none;border-radius:8px;font-weight:700;font-size:.8rem;cursor:pointer;white-space:nowrap;transition:all .3s}
+        .social-bar .bar-cta:hover{transform:translateY(-1px)}
+        .social-bar .bar-close{color:#555;cursor:pointer;padding:5px;font-size:1.2rem;margin-left:10px}
+
+        /* ===== FLOATING ADS ===== */
+        .float-ad{position:fixed;z-index:250;border-radius:12px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.5);border:1px solid #2a2a4a;animation:floatIn .8s ease}
+        @keyframes floatIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+        .float-ad-left{left:15px;top:50%;transform:translateY(-50%);width:160px}
+        .float-ad-right{right:15px;top:50%;transform:translateY(-50%);width:160px}
+        .float-ad img{width:100%;display:block}
+        @media(max-width:1100px){.float-ad{display:none}}
+
+        /* ===== STATES ===== */
+        .hidden{display:none !important}
+        .err-icon{font-size:3.5rem;margin-bottom:15px;display:block}
+        .btn-home{display:inline-block;padding:14px 36px;border-radius:12px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff!important;font-weight:700;font-size:.9rem;text-decoration:none;transition:all .3s}
+        .btn-home:hover{transform:translateY(-2px);color:#fff}
+
+        /* ===== FOOTER ===== */
+        .go-footer{text-align:center;padding:20px;font-size:.75rem;color:#444;padding-bottom:80px}
+        .go-footer strong{color:#667eea}
+
+        @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+        @media(max-width:600px){.go-center{padding:15px}.interstitial-panel{padding:30px 20px}#count-num{font-size:3.5rem}}
     </style>
 </head>
-
 <body>
 
-    <!-- ================= TOP BAR ================= -->
+    <!-- ===== TOP BANNER AD ===== -->
+    <div class="top-banner-wrap">
+        <div class="top-banner-slot" id="top-banner-ad"></div>
+    </div>
+
+    <!-- ===== HEADER ===== -->
     <header class="go-header">
         <a class="go-brand" href="../index.html">
-            <img src="../assets/logo.png" alt="Shortify">
+            <div class="logo-icon">S</div>
             <span>Shortify</span>
         </a>
-        <div class="go-tagline">Shorten URLs &amp; Earn Money</div>
+        <div class="go-tagline">Shorten URLs & Earn Money</div>
+        <div class="timer-badge" id="timer-badge">
+            <i class="fa fa-clock-o"></i>
+            <span class="num" id="timer-num">--</span>
+            <span>sec</span>
+        </div>
     </header>
 
-    <!-- Banner ad slot (banner-type links ke liye) -->
-    <div class="ad-space" id="banner-ad-slot"></div>
+    <!-- ===== MAIN LAYOUT ===== -->
+    <div class="go-main">
 
-    <!-- ================= CENTER ================= -->
-    <main class="go-center">
+        <!-- LEFT: CENTER -->
+        <div class="go-center">
 
-        <!-- ===== LOADING STATE ===== -->
-        <div class="go-panel" id="state-loading">
-            <div class="spinner-ring"></div>
-            <div class="go-title">Aapki link taiyaar ho rahi hai...</div>
-            <div class="go-sub">Ek second ruko</div>
-        </div>
-
-        <!-- ===== COUNTDOWN STATE ===== -->
-        <div class="go-panel hidden" id="state-countdown">
-            <div class="panel-icon"><i class="fa fa-link"></i></div>
-            <div id="count-num">5</div>
-            <div class="go-title" id="count-title">
-                Aapki link taiyaar ho rahi hai</div>
-            <div class="go-sub">
-                Niche button <span id="wait-text">5 seconds</span> me
-                enable ho jayega</div>
-
-            <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
-
-            <div class="dest-box">
-                <strong><i class="fa fa-external-link"></i>Aap ja rahe ho yahan:</strong>
-                <span id="dest-url"></span>
+            <!-- LOADING STATE -->
+            <div class="interstitial-panel" id="state-loading">
+                <div class="panel-content">
+                    <div class="spinner-ring"></div>
+                    <div class="go-title">Aapki link taiyaar ho rahi hai...</div>
+                    <div class="go-sub">Ek second ruko</div>
+                </div>
             </div>
 
-            <button class="skip-btn" id="skip-btn" disabled>
-                <i class="fa fa-arrow-right"></i> Please wait...</button>
+            <!-- COUNTDOWN STATE -->
+            <div class="interstitial-panel hidden" id="state-countdown">
+                <div class="panel-content">
+                    <div class="panel-icon"><i class="fa fa-link"></i></div>
+                    <div id="count-num">5</div>
+                    <div class="go-title" id="count-title">Aapki link taiyaar ho rahi hai</div>
+                    <div class="go-sub">Niche button <span id="wait-text">5 seconds</span> me enable ho jayega</div>
+                    <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+                    <div class="dest-box">
+                        <strong><i class="fa fa-external-link"></i>Aap ja rahe ho yahan:</strong>
+                        <span id="dest-url"></span>
+                    </div>
+                    <button class="skip-btn" id="skip-btn" disabled>
+                        <i class="fa fa-arrow-right"></i> Please wait...</button>
+                    <div class="captcha-note">Continue karne se tum destination site pe jaoge. Is free tool ko use karne ke liye thanks!</div>
+                </div>
+            </div>
 
-            <div class="captcha-note">
-                Continue karne se tum destination site pe jaoge.
-                Is free tool ko use karne ke liye thanks!
+            <!-- VIDEO AD SECTION -->
+            <div class="video-ad-section" id="video-ad-section">
+                <div class="video-ad-header">
+                    <span><i class="fa fa-play-circle"></i> Sponsored Video</span>
+                    <span class="ad-badge">AD</span>
+                </div>
+                <div class="video-player" id="video-player">
+                    <div class="play-btn"><i class="fa fa-play"></i></div>
+                    <div class="vid-overlay">
+                        <span class="vid-title">Watch this interesting video</span>
+                        <a href="#" class="vid-cta" id="video-cta">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ERROR STATE -->
+            <div class="interstitial-panel hidden" id="state-error">
+                <div class="panel-content">
+                    <div class="err-icon">🤔</div>
+                    <div class="go-title" id="error-title">Link nahi mili!</div>
+                    <div class="go-sub" id="error-sub">Ye link delete ho gayi ya kabhi thi hi nahi.</div>
+                    <a href="../index.html" class="btn-home">Shortify Home Pe Chalo</a>
+                </div>
+            </div>
+
+            <!-- DISABLED STATE -->
+            <div class="interstitial-panel hidden" id="state-disabled">
+                <div class="panel-content">
+                    <div class="err-icon">🚫</div>
+                    <div class="go-title">Ye link band kar di gayi hai</div>
+                    <div class="go-sub">Owner ne ya admin ne isko disable kiya hai.</div>
+                    <a href="../index.html" class="btn-home">Shortify Home Pe Chalo</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div class="go-sidebar">
+            <div class="sidebar-ad">
+                <div class="sidebar-ad-header"><span>Sponsored</span><span class="ad-badge">AD</span></div>
+                <div class="sidebar-ad-content"><div class="ad-placeholder" id="sidebar-ad-1">300x250 Ad</div></div>
+            </div>
+            <div class="sidebar-ad">
+                <div class="sidebar-ad-header"><span>Sponsored</span><span class="ad-badge">AD</span></div>
+                <div class="sidebar-ad-content"><div class="ad-placeholder" id="sidebar-ad-2">300x250 Ad</div></div>
+            </div>
+            <div class="sidebar-sticky">
+                <div class="offer-tag">LIMITED OFFER</div>
+                <p>Apna URL shortener banao aur paisa kamao!</p>
+                <a href="../index.html" class="btn-offer">Abhi Shuru Karo →</a>
+            </div>
+            <div class="sidebar-ad">
+                <div class="sidebar-ad-header"><span>Also Try</span><span class="ad-badge">AD</span></div>
+                <div class="sidebar-ad-content"><div class="ad-placeholder" id="sidebar-ad-3">300x250 Ad</div></div>
             </div>
         </div>
 
-        <!-- ===== ERROR STATE ===== -->
-        <div class="go-panel hidden" id="state-error">
-            <div class="err-icon">&#129300;</div>
-            <div class="go-title" id="error-title">Link nahi mili!</div>
-            <div class="go-sub" id="error-sub">
-                Ye link delete ho gayi ya kabhi thi hi nahi.</div>
-            <a href="../index.html" class="btn-home">
-                Shortify Home Pe Chalo</a>
+    </div>
+
+    <!-- ===== BOTTOM BANNER AD ===== -->
+    <div class="bottom-banner-wrap">
+        <div class="bottom-banner-slot" id="bottom-banner-ad"></div>
+    </div>
+
+    <!-- ===== SOCIAL BAR (Bottom Sticky) ===== -->
+    <div class="social-bar" id="social-bar" style="display:none">
+        <div class="bar-left">
+            <div class="bar-icon"><i class="fa fa-bullhorn"></i></div>
+            <div class="bar-text">
+                <div class="bar-title" id="social-bar-title">Special Offer!</div>
+                <div class="bar-sub" id="social-bar-sub">Discover amazing deals</div>
+            </div>
         </div>
+        <button class="bar-cta" id="social-bar-cta">Check Now →</button>
+        <span class="bar-close" id="social-bar-close"><i class="fa fa-times"></i></span>
+    </div>
 
-        <!-- ===== DISABLED/HIDDEN LINK STATE ===== -->
-        <div class="go-panel hidden" id="state-disabled">
-            <div class="err-icon">&#128683;</div>
-            <div class="go-title">Ye link band kar di gayi hai</div>
-            <div class="go-sub">Owner ne ya admin ne isko disable kiya hai.</div>
-            <a href="../index.html" class="btn-home">
-                Shortify Home Pe Chalo</a>
-        </div>
+    <!-- ===== FLOATING SIDE ADS ===== -->
+    <div class="float-ad float-ad-left" id="float-ad-left" style="display:none"></div>
+    <div class="float-ad float-ad-right" id="float-ad-right" style="display:none"></div>
 
-    </main>
+    <footer class="go-footer">Copyright &copy; <strong>Shortify</strong> — Free Short URL & Earn Money</footer>
 
-    <footer>
-        Copyright &copy; <strong>Shortify</strong> &mdash;
-        Free Short URL &amp; Earn Money
-    </footer>
-
-
-    <!-- ============================================================
-         SCRIPTS - Pura redirect engine logic
-         ============================================================ -->
+    <!-- ===== SCRIPTS ===== -->
     <script src="../vendor/jquery.min.js"></script>
     <script type="module">
         import { db } from "./js/firebase-config.js";
         import { SITE_URL } from "./js/app.js";
-        import {
-            ref, get, child, runTransaction, update
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { ref, get, child, runTransaction, update }
+            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         (async function() {
 
-        /* ---------- DOM refs ---------- */
         const $loading  = document.getElementById("state-loading");
         const $count    = document.getElementById("state-countdown");
         const $error    = document.getElementById("state-error");
@@ -329,107 +296,190 @@
         var progressBar = document.getElementById("progress-bar");
         var totalSeconds = 5;
 
-        /* ============================================================
-           SETTINGS LOAD - ad timer + recaptcha key (admin settings se)
-           ============================================================ */
+        /* ===== SETTINGS LOAD ===== */
         let AD_TIMER = 5;
         let RECAPTCHA_KEY = "";
-
         try {
             const sSnap = await get(child(ref(db), "settings"));
             const s = sSnap.val() || {};
             AD_TIMER = parseInt(s.ad_timer_seconds) || 5;
             RECAPTCHA_KEY = s.recaptcha_site_key || "";
             totalSeconds = AD_TIMER;
-        } catch { /* defaults chalega */ }
+        } catch {}
 
-        /* ============================================================
-           GEO COUNTRY DETECT - free API se visitor ka country
-           (country-wise CPM rates ke liye). Fail ho to "" - tab
-           default rate lagega.
-           ============================================================ */
+        /* ===== GEO DETECT ===== */
         let myCountry = "";
-
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            const tid = setTimeout(() => controller.abort(), 5000);
             const geo = await fetch("https://ipwho.is/", { signal: controller.signal })
-                .then((r) => r.json()).catch(() => null);
-            clearTimeout(timeoutId);
+                .then(r => r.json()).catch(() => null);
+            clearTimeout(tid);
             if (geo && geo.country_code) myCountry = geo.country_code;
         } catch {}
 
-        /* ============================================================
-           STEP 1: HASH PARSE KARO
-             alias mode      : #aB3xK9
-             passthrough mode: #?u=<enc>&o=<uid>&t=<type>
-           ============================================================ */
-        let mode      = "alias";
-        let alias     = "";
-        let targetUrl = "";
-        let ownerUid  = null;
-        let adType    = "interstitial";
-
+        /* ===== HASH PARSE ===== */
+        let mode = "alias", alias = "", targetUrl = "", ownerUid = null, adType = "interstitial";
         const hash = location.hash;
 
         if (hash.startsWith("#?")) {
-            // ---------- PASSTHROUGH MODE ----------
             const p = new URLSearchParams(hash.substring(2));
             try { targetUrl = p.get("u") || ""; } catch { targetUrl = ""; }
             ownerUid = p.get("o") || null;
-            adType   = ["interstitial", "banner", "none"].includes(p.get("t"))
-                       ? p.get("t") : "interstitial";
-
+            adType = ["interstitial","banner","none"].includes(p.get("t")) ? p.get("t") : "interstitial";
             let okUrl = false;
             try { okUrl = !!new URL(targetUrl); } catch {}
-            if (!okUrl) return showError("Invalid link!",
-                "Is redirect link me valid destination nahi hai.");
+            if (!okUrl) return showError("Invalid link!", "Is redirect link me valid destination nahi hai.");
             mode = "pass";
-
         } else {
-            // ---------- ALIAS MODE ----------
-            alias = hash.replace("#", "").trim() ||
-                    new URLSearchParams(location.search).get("u") || "";
+            alias = hash.replace("#", "").trim() || new URLSearchParams(location.search).get("u") || "";
+            if (!alias) return showError("Alias missing!", "Koi link specify nahi hui.");
+        }
 
-            if (!alias) {
-                return showError("Alias missing!", "Koi link specify nahi hui.");
+        /* ===== LOAD ADS FROM FIREBASE ===== */
+        async function loadAllAds() {
+            try {
+                const adsSnap = await get(ref(db, "ads"));
+                const pool = [];
+                adsSnap.forEach(c => {
+                    const a = c.val();
+                    if (a.status === "active" && safeUrl(a.target_url) &&
+                        (Number(a.served_views) || 0) < (Number(a.package_views) || 0)) {
+                        pool.push({ id: c.key, ...a });
+                    }
+                });
+
+                if (pool.length === 0) {
+                    try {
+                        const s = await get(child(ref(db), "settings/banner_ad_code"));
+                        if (s.exists()) {
+                            document.getElementById("top-banner-ad").innerHTML = s.val();
+                            document.getElementById("bottom-banner-ad").innerHTML = s.val();
+                        }
+                    } catch {}
+                    showDefaultSidebarAds();
+                    showSocialBar("Shortify se paisa kamao!", "Free URL shortener");
+                    return;
+                }
+
+                const bannerAds = pool.filter(a => a.ad_type === "banner" || a.image_url);
+                const interstitialAds = pool.filter(a => a.ad_type === "interstitial" || !a.image_url);
+
+                if (bannerAds.length > 0) {
+                    const topAd = bannerAds[Math.floor(Math.random() * bannerAds.length)];
+                    renderImageAd("top-banner-ad", topAd, 90);
+                    const botAd = bannerAds[Math.floor(Math.random() * bannerAds.length)];
+                    renderImageAd("bottom-banner-ad", botAd, 90);
+                    if (bannerAds.length > 1) {
+                        const sideAd = bannerAds.find(a => a._id !== topAd._id) || bannerAds[0];
+                        renderImageAd("sidebar-ad-1", sideAd, 250);
+                    }
+                    if (bannerAds.length > 2) {
+                        renderImageAd("sidebar-ad-2", bannerAds[2 % bannerAds.length], 250);
+                    }
+                    if (bannerAds.length > 3) {
+                        renderImageAd("sidebar-ad-3", bannerAds[3 % bannerAds.length], 250);
+                    }
+                } else {
+                    showDefaultSidebarAds();
+                }
+
+                if (interstitialAds.length > 0) {
+                    const vidAd = interstitialAds[0];
+                    if (vidAd.image_url) {
+                        const vp = document.getElementById("video-player");
+                        vp.style.backgroundImage = "url(" + vidAd.image_url + ")";
+                        vp.style.backgroundSize = "cover";
+                        vp.style.backgroundPosition = "center";
+                        document.getElementById("video-cta").href = vidAd.target_url;
+                        document.getElementById("video-cta").target = "_blank";
+                        trackImpression(vidAd.id);
+                    }
+                }
+
+                if (pool.length > 0) {
+                    const socialAd = pool[Math.floor(Math.random() * pool.length)];
+                    showSocialBar(socialAd.title || "Special Offer!", socialAd.target_url);
+                    trackImpression(socialAd.id);
+                }
+
+                if (pool.length > 2) {
+                    const floatAd = pool[Math.floor(Math.random() * pool.length)];
+                    if (floatAd.image_url) {
+                        const fl = document.getElementById("float-ad-left");
+                        fl.innerHTML = '<a href="' + floatAd.target_url + '" target="_blank"><img src="' + floatAd.image_url + '" style="width:100%;border-radius:12px"></a>';
+                        fl.style.display = "block";
+                        trackImpression(floatAd.id);
+                    }
+                }
+
+            } catch (err) {
+                console.error("Ad load error:", err);
+                showDefaultSidebarAds();
+                showSocialBar("Shortify se paisa kamao!", "Free URL shortener");
             }
         }
 
-        /* ============================================================
-           STEP 2: DATA LAO (sirf alias mode)
-           ============================================================ */
+        function renderImageAd(elId, ad, height) {
+            const el = document.getElementById(elId);
+            if (!el || !ad.image_url) return;
+            el.style.background = "none";
+            el.style.height = height + "px";
+            el.innerHTML = '<a href="' + ad.target_url + '" target="_blank" rel="noopener"><img src="' + ad.image_url + '" style="width:100%;height:100%;object-fit:cover;border-radius:8px" alt="' + (ad.title || "Ad") + '"></a>';
+            trackImpression(ad.id);
+        }
+
+        function showDefaultSidebarAds() {
+            ["sidebar-ad-1","sidebar-ad-2","sidebar-ad-3"].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = '<div style="padding:20px;text-align:center"><i class="fa fa-bullhorn" style="font-size:2rem;color:#667eea;margin-bottom:10px;display:block"></i><div style="color:#667eea;font-weight:700;font-size:.85rem">Advertise Here</div><div style="color:#555;font-size:.7rem;margin-top:5px">300x250 space available</div></div>';
+            });
+        }
+
+        function showSocialBar(title, url) {
+            const bar = document.getElementById("social-bar");
+            document.getElementById("social-bar-title").textContent = title;
+            document.getElementById("social-bar-sub").textContent = url;
+            document.getElementById("social-bar-cta").onclick = () => window.open(url, "_blank");
+            setTimeout(() => { bar.style.display = "flex"; }, 2000);
+            document.getElementById("social-bar-close").onclick = () => { bar.style.display = "none"; };
+        }
+
+        function trackImpression(adId) {
+            runTransaction(ref(db, "ads/" + adId + "/served_views"), cur => (cur || 0) + 1).catch(() => {});
+        }
+
+        function safeUrl(u) {
+            try { const x = new URL(u); return (x.protocol === "http:" || x.protocol === "https:") ? u : null; }
+            catch { return null; }
+        }
+
+        /* ===== LOAD DATA + ADS ===== */
         let remaining = AD_TIMER;
         let bannerCode = null;
 
         if (mode === "alias") {
             try {
-                const snap = await get(ref(db, `aliases/${alias}`));
-
-                if (!snap.exists()) {
-                    return showError("Link nahi mili!",
-                        `"${alias}" naam ki koi short link database me nahi hai.`);
-                }
-
+                const snap = await get(ref(db, "aliases/" + alias));
+                if (!snap.exists()) return showError("Link nahi mili!", alias + " naam ki koi short link database me nahi hai.");
                 const linkData = snap.val();
-
                 if (linkData.status === "hidden") {
                     $loading.classList.add("hidden");
                     $disabled.classList.remove("hidden");
-                    throw { silent: true };
+                    return;
                 }
-
                 targetUrl = linkData.url;
-                ownerUid  = (linkData.uid !== "guest") ? linkData.uid : null;
-                adType    = linkData.ad_type || "interstitial";
+                ownerUid = (linkData.uid !== "guest") ? linkData.uid : null;
+                adType = linkData.ad_type || "interstitial";
                 startAdFlow();
-
             } catch (err) {
                 if (!err || !err.silent) showError("Database error!", err.message);
             }
         } else {
             startAdFlow();
         }
+
+        loadAllAds();
 
         function showError(title, sub) {
             $loading.classList.add("hidden");
@@ -438,25 +488,13 @@
             $error.classList.remove("hidden");
         }
 
-
-        /* ============================================================
-           STEP 3: AD TYPE KE HISAAB SE FLOW
-             interstitial -> 5s countdown
-             banner       -> top banner + turant ready
-             none         -> turant ready
-           ============================================================ */
+        /* ===== AD FLOW ===== */
         async function startAdFlow() {
-
-            // Destination preview (XSS-safe: textContent)
             try { $destUrl.textContent = new URL(targetUrl).hostname; }
             catch { $destUrl.textContent = targetUrl; }
 
-            if (adType === "banner") {
-                remaining = 0;
-                await serveBannerAd();
-            } else if (adType === "none") {
-                remaining = 0;
-            }
+            if (adType === "banner") { remaining = 0; }
+            else if (adType === "none") { remaining = 0; }
 
             $loading.classList.add("hidden");
             $count.classList.remove("hidden");
@@ -470,95 +508,16 @@
             else enableSkip();
         }
 
-        /* ============================================================
-           BANNER AD SERVE - pehle PAID campaigns (ads node) rotate
-           hote hain, koi nahi mila to admin ka khud ka code
-           (settings/banner_ad_code) dikhta hai.
-
-           IMPRESSION TRACKING: har dikhane pe served_views +1 (atomic).
-           Package pura hone par status khud "completed" ho jata hai.
-           (Advertiser URL validate karte hain - javascript: links band)
-           ============================================================ */
-        function safeUrl(u) {
-            try {
-                const x = new URL(u);
-                return (x.protocol === "http:" || x.protocol === "https:")
-                    ? u : null;
-            } catch { return null; }
-        }
-
-        async function serveBannerAd() {
-            const slot = document.getElementById("banner-ad-slot");
-
-            // ---------- 1) Paid campaigns ----------
-            try {
-                const adsSnap = await get(ref(db, "ads"));
-                const pool = [];
-
-                adsSnap.forEach((c) => {
-                    const a = c.val();
-                    if (a.status === "active" &&
-                        safeUrl(a.target_url) &&
-                        (Number(a.served_views) || 0) <
-                            (Number(a.package_views) || 0)) {
-                        pool.push({ id: c.key, ...a });
-                    }
-                });
-
-                if (pool.length > 0) {
-                    const ad = pool[Math.floor(Math.random() * pool.length)];
-
-                    // DOM-safe render (XSS se bachne ke liye innerHTML nahi)
-                    const link = document.createElement("a");
-                    link.href = ad.target_url;
-                    link.target = "_blank";
-                    link.rel = "noopener";
-                    const img = document.createElement("img");
-                    img.src = ad.image_url;
-                    img.alt = ad.title || "Advertisement";
-                    img.style.maxHeight = "88px";
-                    link.appendChild(img);
-                    slot.innerHTML = "";
-                    slot.appendChild(link);
-
-                    // Impression count (atomic transaction)
-                    const res = await runTransaction(
-                        ref(db, `ads/${ad.id}/served_views`),
-                        (cur) => (cur || 0) + 1);
-                    const servedNow = res.snapshot ? res.snapshot.val() : res;
-
-                    // Package pura? -> completed mark karo
-                    if (Number(servedNow) >= (Number(ad.package_views) || 0)) {
-                        update(ref(db, `ads/${ad.id}`), {
-                            status: "completed",
-                            processed_at: Date.now()
-                        });
-                    }
-                    return;
-                }
-            } catch { /* campaign fail -> fallback */ }
-
-            // ---------- 2) Fallback: admin ka apna code ----------
-            try {
-                const s = await get(child(ref(db),
-                    "settings/banner_ad_code"));
-                if (s.exists()) slot.innerHTML = s.val();   // trusted admin
-            } catch { /* optional */ }
-        }
-
-        /* ---------- Countdown timer ---------- */
-
+        /* ===== COUNTDOWN ===== */
         function tickCountdown() {
             $num.style.display = "block";
             $num.textContent = remaining;
-            document.getElementById("wait-text").textContent =
-                remaining + " second" + (remaining !== 1 ? "s" : "");
-
+            document.getElementById("timer-num").textContent = remaining;
+            document.getElementById("wait-text").textContent = remaining + " second" + (remaining !== 1 ? "s" : "");
             if (progressBar) {
                 var pct = ((totalSeconds - remaining) / totalSeconds) * 100;
                 progressBar.style.width = pct + "%";
             }
-
             if (remaining <= 0) {
                 if (progressBar) progressBar.style.width = "100%";
                 enableSkip();
@@ -573,46 +532,30 @@
         function enableSkip() {
             $num.style.display = "none";
             document.getElementById("wait-text").textContent = "";
+            document.getElementById("timer-badge").style.background = "linear-gradient(135deg,#43e97b,#38f9d7)";
 
-            /* ---------- reCAPTCHA GATE ----------
-               Admin ne site key dali hai to pehle widget render hogi,
-               verify hone ke baad hi Skip button khulega. */
             if (RECAPTCHA_KEY && !captchaRendered) {
                 $skip.disabled = true;
-                $skip.innerHTML =
-                    '<i class="fa fa-shield"></i> Captcha verify karo...';
-
-                // Widget ka container skip button se pehle daalo
+                $skip.innerHTML = '<i class="fa fa-shield"></i> Captcha verify karo...';
                 const box = document.createElement("div");
                 box.id = "captcha-box";
                 box.style.marginBottom = "14px";
                 $skip.parentNode.insertBefore(box, $skip);
-
-                // Google script ek hi baar load karo
                 if (!document.getElementById("grec-script")) {
                     window.___grcb = () => {};
                     const sc = document.createElement("script");
                     sc.id = "grec-script";
-                    sc.src = "https://www.google.com/recaptcha/api.js" +
-                             "?onload=___grcb&render=explicit";
+                    sc.src = "https://www.google.com/recaptcha/api.js?onload=___grcb&render=explicit";
                     document.head.appendChild(sc);
                 }
-
-                // Script load hoke widget render karo (poll karte raho)
                 const iv = setInterval(() => {
                     if (!window.grecaptcha) return;
                     clearInterval(iv);
                     try {
                         window.grecaptcha.render("captcha-box", {
                             sitekey: RECAPTCHA_KEY,
-                            callback: () => {          // success
-                                $skip.disabled = false;
-                                $skip.innerHTML =
-                                    '<i class="fa fa-arrow-right"></i> Skip Ad';
-                            },
-                            "expired-callback": () => { // expire ho gaya
-                                $skip.disabled = true;
-                            }
+                            callback: () => { $skip.disabled = false; $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad →'; },
+                            "expired-callback": () => { $skip.disabled = true; }
                         });
                         captchaRendered = true;
                     } catch (e) { console.error(e); }
@@ -621,158 +564,86 @@
             }
 
             $skip.disabled = false;
-            $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad';
+            $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad →';
         }
 
-
-        /* ============================================================
-           STEP 4: SKIP DABAYA -> CREDIT + REDIRECT
-             a) clicks +1 (atomic, alias mode only)
-             b) stats/total_clicks +1
-             c) owner wallet += rate/1000 (+ referral commission)
-             d) destination pe redirect
-           ============================================================ */
-        let processed = false;   // double-click protection
-
+        /* ===== SKIP -> CREDIT + REDIRECT ===== */
+        let processed = false;
         $skip.addEventListener("click", async () => {
             if (processed) return;
             processed = true;
             $skip.disabled = true;
-            $skip.innerHTML =
-                '<i class="fa fa-circle-o-notch fa-spin"></i> Ho raha hai...';
+            $skip.innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Ho raha hai...';
 
             try {
-                // (a) CLICKS + STATS
                 if (mode === "alias") {
-                    try {
-                        await runTransaction(ref(db, `aliases/${alias}/clicks`),
-                            (cur) => (cur || 0) + 1);
-                    } catch (e) { console.error("Clicks transaction failed:", e); }
+                    try { await runTransaction(ref(db, "aliases/" + alias + "/clicks"), cur => (cur || 0) + 1); }
+                    catch (e) { console.error("Clicks failed:", e); }
                 }
-                try {
-                    await runTransaction(ref(db, "stats/total_clicks"),
-                        (cur) => (cur || 0) + 1);
-                } catch (e) { console.error("Stats transaction failed:", e); }
+                try { await runTransaction(ref(db, "stats/total_clicks"), cur => (cur || 0) + 1); }
+                catch (e) { console.error("Stats failed:", e); }
 
-                // (c) OWNER EARNINGS
-                let credited = 0;   // kitna owner ko mila (stats ke liye)
-
+                let credited = 0;
                 if (ownerUid) {
-                    /* ---------- RATE RESOLUTION ----------
-                       1) earning_rates/default        (fallback)
-                       2) earning_rates/countries/IN   (visitor country override)
-                       3) plans/{id}/multiplier        (owner ka active membership)
-                       */
                     let rates = { interstitial: 8, banner: 3, none: 1 };
-
                     try {
-                        const dSnap = await get(child(ref(db),
-                            `earning_rates/default`));
-                        if (dSnap.exists()) {
-                            rates = { ...rates, ...dSnap.val() };
-                        }
+                        const dSnap = await get(child(ref(db), "earning_rates/default"));
+                        if (dSnap.exists()) rates = { ...rates, ...dSnap.val() };
                     } catch {}
-
-                    // Visitor ke country ki rate? (geo se mila)
                     if (myCountry) {
                         try {
-                            const cSnap = await get(child(ref(db),
-                                `earning_rates/countries/${myCountry}`));
-                            if (cSnap.exists()) {
-                                rates = { ...rates, ...cSnap.val() };
+                            const cSnap = await get(child(ref(db), "earning_rates/countries/" + myCountry));
+                            if (cSnap.exists()) rates = { ...rates, ...cSnap.val() };
+                        } catch {}
+                    }
+                    const rate = rates[adType] ?? rates.interstitial ?? 5;
+                    let earn = Number(rate) / 1000;
+                    try {
+                        const mSnap = await get(child(ref(db), "users/" + ownerUid + "/membership"));
+                        const m = mSnap.val();
+                        if (m && m.plan_id && (Number(m.expires_at) || 0) > Date.now()) {
+                            const pSnap = await get(child(ref(db), "plans/" + m.plan_id + "/multiplier"));
+                            earn *= (Number(pSnap.val()) || 1);
+                        }
+                    } catch {}
+                    credited = earn;
+                    if (earn > 0) {
+                        await runTransaction(ref(db, "users/" + ownerUid + "/wallet_money"), cur => (cur || 0) + earn);
+                        const dayKey = new Date().toISOString().slice(0, 10);
+                        runTransaction(ref(db, "users/" + ownerUid + "/daily/" + dayKey), cur => (cur || 0) + earn);
+                        try {
+                            const ownerSnap = await get(child(ref(db), "users/" + ownerUid));
+                            const owner = ownerSnap.val() || {};
+                            if (owner.referred_by) {
+                                const pctSnap = await get(child(ref(db), "settings/referral_commission"));
+                                const pct = Number(pctSnap.val()) || 20;
+                                const codeSnap = await get(child(ref(db), "refcodes/" + owner.referred_by));
+                                const referrerUid = codeSnap.val();
+                                if (referrerUid && referrerUid !== ownerUid) {
+                                    const bonus = earn * (pct / 100);
+                                    runTransaction(ref(db, "users/" + referrerUid + "/wallet_money"), cur => (cur || 0) + bonus);
+                                    runTransaction(ref(db, "users/" + referrerUid + "/referral_earnings"), cur => (cur || 0) + bonus);
+                                }
                             }
                         } catch {}
                     }
-
-                    const rate = rates[adType] ?? rates.interstitial ?? 5;
-                    let earn = Number(rate) / 1000;   // per-view amount
-
-                    // MEMBERSHIP MULTIPLIER - owner ka active plan?
-                    try {
-                        const mSnap = await get(child(ref(db),
-                            `users/${ownerUid}/membership`));
-                        const m = mSnap.val();
-
-                        if (m && m.plan_id &&
-                            (Number(m.expires_at) || 0) > Date.now()) {
-                            const pSnap = await get(child(ref(db),
-                                `plans/${m.plan_id}/multiplier`));
-                            earn *= (Number(pSnap.val()) || 1);
-                        }
-                    } catch { /* multiplier optional */ }
-
-                    credited = earn;
-
-                    if (earn > 0) {
-                        await runTransaction(
-                            ref(db, `users/${ownerUid}/wallet_money`),
-                            (cur) => (cur || 0) + earn);
-
-                        // USER DAILY EARNINGS (user dashboard chart ke liye)
-                        const dayKey =
-                            new Date().toISOString().slice(0, 10);
-                        runTransaction(
-                            ref(db, `users/${ownerUid}/daily/${dayKey}`),
-                            (cur) => (cur || 0) + earn);
-
-                        // REFERRAL COMMISSION (default 20%)
-                        try {
-                            const ownerSnap = await get(child(ref(db),
-                                `users/${ownerUid}`));
-                            const owner = ownerSnap.val() || {};
-
-                            if (owner.referred_by) {
-                                const pctSnap = await get(child(ref(db),
-                                    `settings/referral_commission`));
-                                const pct = Number(pctSnap.val()) || 20;
-
-                                const codeSnap = await get(child(ref(db),
-                                    `refcodes/${owner.referred_by}`));
-                                const referrerUid = codeSnap.val();
-
-                                if (referrerUid && referrerUid !== ownerUid) {
-                                    const bonus = earn * (pct / 100);
-                                    runTransaction(
-                                        ref(db, `users/${referrerUid}/wallet_money`),
-                                        (cur) => (cur || 0) + bonus);
-                                    runTransaction(
-                                        ref(db, `users/${referrerUid}/referral_earnings`),
-                                        (cur) => (cur || 0) + bonus);
-                                }
-                            }
-                        } catch { /* referral optional */ }
-                    }
                 }
-
-                // (d) GLOBAL DAILY + COUNTRY STATS (admin charts ke liye)
                 try {
                     const dayKey = new Date().toISOString().slice(0, 10);
-                    runTransaction(
-                        ref(db, `stats/daily/${dayKey}/clicks`),
-                        (cur) => (cur || 0) + 1);
-                    runTransaction(
-                        ref(db, `stats/daily/${dayKey}/earnings`),
-                        (cur) => (cur || 0) + credited);
-                    if (myCountry) {
-                        runTransaction(
-                            ref(db, `stats/country/${myCountry}/clicks`),
-                            (cur) => (cur || 0) + 1);
-                    }
+                    runTransaction(ref(db, "stats/daily/" + dayKey + "/clicks"), cur => (cur || 0) + 1);
+                    runTransaction(ref(db, "stats/daily/" + dayKey + "/earnings"), cur => (cur || 0) + credited);
+                    if (myCountry) runTransaction(ref(db, "stats/country/" + myCountry + "/clicks"), cur => (cur || 0) + 1);
                 } catch {}
 
-                // (e) REDIRECT!
-                $skip.innerHTML =
-                    '<i class="fa fa-paper-plane"></i> Ja rahe ho...';
+                $skip.innerHTML = '<i class="fa fa-paper-plane"></i> Ja rahe ho...';
                 setTimeout(() => { window.location.href = targetUrl; }, 500);
-
             } catch (err) {
-                // Credit fail ho to bhi user ko aage bhejo
                 console.error("Credit error:", err);
                 window.location.href = targetUrl;
             }
         });
+
         })();
     </script>
-
 </body>
 </html>
