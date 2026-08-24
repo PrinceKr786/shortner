@@ -326,6 +326,8 @@
         const $num      = document.getElementById("count-num");
         const $skip     = document.getElementById("skip-btn");
         const $destUrl  = document.getElementById("dest-url");
+        var progressBar = document.getElementById("progress-bar");
+        var totalSeconds = 5;
 
         /* ============================================================
            SETTINGS LOAD - ad timer + recaptcha key (admin settings se)
@@ -338,6 +340,7 @@
             const s = sSnap.val() || {};
             AD_TIMER = parseInt(s.ad_timer_seconds) || 5;
             RECAPTCHA_KEY = s.recaptcha_site_key || "";
+            totalSeconds = AD_TIMER;
         } catch { /* defaults chalega */ }
 
         /* ============================================================
@@ -349,7 +352,7 @@
 
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3000);
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
             const geo = await fetch("https://ipwho.is/", { signal: controller.signal })
                 .then((r) => r.json()).catch(() => null);
             clearTimeout(timeoutId);
@@ -544,8 +547,6 @@
         }
 
         /* ---------- Countdown timer ---------- */
-        let progressBar = document.getElementById("progress-bar");
-        let totalSeconds = AD_TIMER;
 
         function tickCountdown() {
             $num.style.display = "block";
