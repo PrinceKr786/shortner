@@ -139,12 +139,8 @@
 
                 <div class="interstitial-ad" id="ad-interstitial-bottom"></div>
 
-                <div class="dest">
-                    <div class="dest-label"><i class="fa fa-external-link"></i>Destination</div>
-                    <div class="dest-url" id="dest-url"></div>
-                </div>
                 <button class="skip waiting" id="skip-btn" disabled><i class="fa fa-hourglass-half"></i> Please wait...</button>
-                <div class="fine">Continue karne se aap destination site pe jaoge.</div>
+                <div class="fine">Sab steps complete karo — link milegi!</div>
             </div>
 
             <div class="native-slot" id="ad-native"></div>
@@ -206,7 +202,6 @@
         var $disabled = document.getElementById("state-disabled");
         var $num = document.getElementById("count-num");
         var $skip = document.getElementById("skip-btn");
-        var $destUrl = document.getElementById("dest-url");
         var progressBar = document.getElementById("progress-bar");
         var totalSeconds = 15;
 
@@ -398,9 +393,6 @@
         }
 
         function startAdFlow() {
-            try { $destUrl.textContent = new URL(targetUrl).hostname; }
-            catch(e) { $destUrl.textContent = targetUrl; }
-
             $loading.classList.add("hide");
             $count.classList.remove("hide");
 
