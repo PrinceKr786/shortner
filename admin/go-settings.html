@@ -212,41 +212,85 @@
                     </div>
                 </div>
 
+                <!-- INTERSTITIAL ADS (Center Card) -->
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-window-maximize"></i> Interstitial Ads <span class="format-badge fmt-popunder">Center Card</span></h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="callout callout-warning">
+                            <p><b>Ye sabse IMPORTANT ads hain!</b> Countdown ke upar aur neeche dikhte hain. Har step pe fresh load hote hain = har impression count hota hai.</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="ad-card">
+                                    <div class="ad-card-header">
+                                        <h4>Interstitial Top (Countdown ke upar)</h4>
+                                        <label class="toggle-switch"><input type="checkbox" id="interstitial_enabled"><span class="toggle-slider"></span></label>
+                                    </div>
+                                    <label>Adsterra Code (300x250 ya 336x280)</label>
+                                    <textarea class="form-control code-input" id="interstitial_code" placeholder="Center me dikhega — sabse bada ad"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="ad-card">
+                                    <div class="ad-card-header">
+                                        <h4>Interstitial Bottom (Countdown ke neeche)</h4>
+                                        <label class="toggle-switch"><input type="checkbox" id="interstitial_bottom_enabled"><span class="toggle-slider"></span></label>
+                                    </div>
+                                    <label>Adsterra Code (300x250 ya 336x280)</label>
+                                    <textarea class="form-control code-input" id="interstitial_bottom_code" placeholder="Destination box ke upar dikhega"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- SIDEBAR ADS -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-columns"></i> Sidebar Ads <span class="format-badge fmt-banner">300x250</span></h3>
+                        <h3 class="box-title"><i class="fa fa-columns"></i> Sidebar Ads <span class="format-badge fmt-banner">300x250 x4</span></h3>
                     </div>
                     <div class="box-body">
                         <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="ad-card">
                                     <div class="ad-card-header">
                                         <h4>Sidebar 1</h4>
                                         <label class="toggle-switch"><input type="checkbox" id="sidebar_1_enabled"><span class="toggle-slider"></span></label>
                                     </div>
                                     <label>Adsterra Code</label>
-                                    <textarea class="form-control code-input" id="sidebar_1_code" placeholder="300x250 code"></textarea>
+                                    <textarea class="form-control code-input" id="sidebar_1_code" placeholder="300x250"></textarea>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="ad-card">
                                     <div class="ad-card-header">
                                         <h4>Sidebar 2</h4>
                                         <label class="toggle-switch"><input type="checkbox" id="sidebar_2_enabled"><span class="toggle-slider"></span></label>
                                     </div>
                                     <label>Adsterra Code</label>
-                                    <textarea class="form-control code-input" id="sidebar_2_code" placeholder="300x250 code"></textarea>
+                                    <textarea class="form-control code-input" id="sidebar_2_code" placeholder="300x250"></textarea>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="ad-card">
                                     <div class="ad-card-header">
                                         <h4>Sidebar 3</h4>
                                         <label class="toggle-switch"><input type="checkbox" id="sidebar_3_enabled"><span class="toggle-slider"></span></label>
                                     </div>
                                     <label>Adsterra Code</label>
-                                    <textarea class="form-control code-input" id="sidebar_3_code" placeholder="160x600 code"></textarea>
+                                    <textarea class="form-control code-input" id="sidebar_3_code" placeholder="300x250"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="ad-card">
+                                    <div class="ad-card-header">
+                                        <h4>Sidebar 4</h4>
+                                        <label class="toggle-switch"><input type="checkbox" id="sidebar_4_enabled"><span class="toggle-slider"></span></label>
+                                    </div>
+                                    <label>Adsterra Code</label>
+                                    <textarea class="form-control code-input" id="sidebar_4_code" placeholder="300x250"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -403,9 +447,12 @@
         "popunder_enabled","popunder_code",
         "top_banner_enabled","top_banner_code",
         "bottom_banner_enabled","bottom_banner_code",
+        "interstitial_enabled","interstitial_code",
+        "interstitial_bottom_enabled","interstitial_bottom_code",
         "sidebar_1_enabled","sidebar_1_code",
         "sidebar_2_enabled","sidebar_2_code",
         "sidebar_3_enabled","sidebar_3_code",
+        "sidebar_4_enabled","sidebar_4_code",
         "social_bar_enabled","social_bar_code","social_bar_title","social_bar_url",
         "floating_left_enabled","floating_left_code",
         "floating_right_enabled","floating_right_code",
