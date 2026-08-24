@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : user/tools-quick.html
+     KAAM   : QUICK LINK TOOL - AdLinkFly ke Tools/quick.ctp
+              jaisa. Ek URL dalo, turant short link paao.
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quick Link - Shortify</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="member-dashboard hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="../index.html" class="logo">
+            <span class="logo-mini"><b>S</b></span>
+            <span class="logo-lg"><b>Shortify</b></span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p><span id="dropdown-name">...</span><br>
+                                    <small>Member since <span id="member-since">-</span></small></p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left"><a href="profile.html" class="btn btn-default btn-flat">Profile</a></div>
+                                <div class="pull-right"><a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <button type="button"
+                    class="btn btn-block btn-social btn-github btn-lg shorten-button"
+                    data-toggle="modal" data-target="#shorten-modal">
+                <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
+            </button>
+            <br>
+            <ul class="sidebar-menu">
+                <li>
+                    <a><i class="fa fa-credit-card text-aqua"></i>
+                        <span><b>Money Wallet</b><br>
+                            &#8377;<span id="wallet-balance">0.00</span></span></a>
+                </li>
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i>
+                        <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html">All Links</a></li>
+                        <li><a href="links-hidden.html">Hidden Links</a></li>
+                    </ul>
+                </li>
+                <li><a href="withdraw.html"><i class="fa fa-dollar"></i> <span>Withdraw</span></a></li>
+
+                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
+
+                <li><a href="advertise.html"><i class="fa fa-bullhorn text-aqua"></i> <span>Advertise</span></a></li>
+                <li class="treeview active">
+                    <a href="#"><i class="fa fa-wrench"></i>
+                        <span>Tools</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu menu-open" style="display:block">
+                        <li class="active"><a href="tools-quick.html">Quick Link</a></li>
+                        <li><a href="tools-mass.html">Mass Shrinker</a></li>
+                        <li><a href="tools-fullpage.html">Full Page Script</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
+                    </ul>
+                </li>
+                <li><a href="referrals.html"><i class="fa fa-exchange"></i> <span>Referrals</span></a></li>
+                <li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Quick Link <small>Ek click me short link</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li>Tools</li>
+                <li class="active">Quick Link</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-bolt"></i> Quick Shorten</h3>
+                </div>
+
+                <form id="quick-form">
+                    <div class="box-body">
+
+                        <div class="form-group">
+                            <label>URL</label>
+                            <input type="url" class="form-control input-lg"
+                                   id="url-input" placeholder="https://example.com/..."
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Custom Alias <small>(optional)</small></label>
+                            <input type="text" class="form-control" id="alias-input"
+                                   maxlength="30" placeholder="sirf letters/numbers/dash">
+                        </div>
+
+                        <div class="alert alert-danger hidden" id="error-box"></div>
+                        <div class="callout callout-success hidden" id="result-box">
+                            <h4><i class="fa fa-check"></i> Link Ready!</h4>
+                            <a href="#" id="result-link" target="_blank"
+                               style="font-size:1.15rem;font-weight:bold;word-break:break-all"></a>
+                            <button type="button" class="btn btn-default btn-xs pull-right"
+                                    id="copy-btn"><i class="fa fa-clipboard"></i> Copy</button>
+                        </div>
+
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary btn-flat"
+                                id="shorten-btn">
+                            <i class="fa fa-paper-plane"></i> Shorten Now</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+<!-- New Shorten Link Modal -->
+<div class="modal fade" id="shorten-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-paper-plane"></i> New Shorten Link</h4>
+            </div>
+            <form id="modal-shorten-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Destination URL</label>
+                        <input type="url" class="form-control" id="modal-url-input"
+                               placeholder="https://example.com/lambi-url" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Custom Alias <small>(optional)</small></label>
+                        <input type="text" class="form-control" id="modal-alias-input"
+                               maxlength="30" placeholder="sirf letters/numbers/dash">
+                    </div>
+                    <div class="alert alert-danger hidden" id="modal-error"></div>
+                    <div class="alert alert-success hidden" id="modal-result">
+                        Link ready! <a href="#" id="modal-result-link" target="_blank"
+                           style="word-break:break-all;font-weight:bold"></a>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                id="modal-copy"><i class="fa fa-clipboard"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="modal-submit">
+                        <i class="fa fa-paper-plane"></i> Shorten</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireLogin, fillUserHeader, wireLogout, initShortenModal,
+        showToast, isValidUrl, generateAlias, SITE_URL
+    } from "./js/app.js";
+    import { ref, get, set, runTransaction }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireLogin();
+    await fillUserHeader(me);
+    wireLogout();
+    initShortenModal(me);
+
+    document.getElementById("quick-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const errBox = document.getElementById("error-box");
+        const resBox = document.getElementById("result-box");
+        errBox.classList.add("hidden");
+        resBox.classList.add("hidden");
+
+        const longUrl = document.getElementById("url-input").value.trim();
+        const custom = document.getElementById("alias-input").value.trim();
+        const btn = document.getElementById("shorten-btn");
+
+        if (!isValidUrl(longUrl)) {
+            errBox.textContent = "Valid URL dalo (http/https).";
+            errBox.classList.remove("hidden");
+            return;
+        }
+
+        btn.disabled = true;
+
+        try {
+            let alias = custom || generateAlias();
+
+            if (custom) {
+                if (await get(ref(db, `aliases/${custom}`)).then(s => s.exists())) {
+                    throw new Error(`"${custom}" pehle le liya gaya hai.`);
+                }
+            } else {
+                for (let i = 0; i < 5; i++) {
+                    if (!(await get(ref(db, `aliases/${alias}`)).then(s => s.exists()))) break;
+                    alias = generateAlias();
+                }
+            }
+
+            await set(ref(db, `aliases/${alias}`), {
+                url: longUrl,
+                title: new URL(longUrl).hostname,
+                uid: me.uid,
+                clicks: 0,
+                status: "active",
+                created_at: Date.now()
+            });
+
+            runTransaction(ref(db, "stats/total_links"), c => (c || 0) + 1);
+
+            const shortUrl = SITE_URL + "#" + alias;
+            const rl = document.getElementById("result-link");
+            rl.href = shortUrl;
+            rl.textContent = shortUrl;
+            resBox.classList.remove("hidden");
+
+        } catch (err) {
+            errBox.textContent = err.message;
+            errBox.classList.remove("hidden");
+        } finally {
+            btn.disabled = false;
+        }
+    });
+
+    document.getElementById("copy-btn").addEventListener("click", async () => {
+        await navigator.clipboard.writeText(
+            document.getElementById("result-link").textContent).catch(() => {});
+        showToast("Copy ho gaya!", "success");
+    });
+</script>
+
+</body>
+</html>

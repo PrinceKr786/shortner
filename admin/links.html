@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/links.html
+     KAAM   : ALL LINKS MANAGEMENT - AdLinkFly ke admin Links
+              page jaisa:
+                - Site ki SAARI short links ki table
+                - Search (alias/title/url)
+                - Link disable/enable karna
+                - Link delete karna
+                - Owner ka naam dikhana
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Links - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+
+                <li><a href="users.html"><i class="fa fa-users"></i> <span>Users</span></a></li>
+
+                <li class="active"><a href="links.html">
+                    <i class="fa fa-link"></i> <span>All Links</span></a></li>
+
+                <li><a href="withdrawals.html"><i class="fa fa-money"></i>
+                    <span>Withdrawals</span></a></li>
+
+                <li><a href="rates.html"><i class="fa fa-line-chart"></i>
+                    <span>CPM Rates</span></a></li>
+
+                <li><a href="plans.html"><i class="fa fa-diamond"></i>
+                    <span>Membership Plans</span></a></li>
+
+                <li><a href="ads.html"><i class="fa fa-bullhorn"></i>
+                    <span>Advertising</span></a></li>
+
+                <li><a href="settings.html"><i class="fa fa-gears"></i>
+                    <span>Settings</span></a></li>
+
+                <li><a href="#" id="sidebar-logout">
+                    <i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>All Links <small id="links-count-label">0 total</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">All Links</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-link"></i> Short Links</h3>
+                    <div class="box-tools" style="width:240px">
+                        <input type="text" class="form-control input-sm"
+                               id="search-input"
+                               placeholder="Alias / URL / owner search...">
+                    </div>
+                </div>
+
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:110px">Alias</th>
+                                <th>Destination</th>
+                                <th>Owner</th>
+                                <th>Type</th>
+                                <th>Clicks</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th style="width:120px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="links-body">
+                            <tr><td colspan="8" class="text-center">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        showToast, escapeHtml, formatDate, formatNumber, SITE_URL
+    } from "./js/app.js";
+    import { ref, get, update, remove }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    let allLinks = [];
+
+    /* ============================================================
+       LINKS + USERS LOAD KARO (owner naam ke liye users chahiye)
+       ============================================================ */
+    const [linksSnap, usersSnap] = await Promise.all([
+        get(ref(db, "aliases")),
+        get(ref(db, "users"))
+    ]);
+
+    const userNameMap = {};
+    if (usersSnap.exists()) {
+        usersSnap.forEach((c) => {
+            const u = c.val();
+            userNameMap[c.key] = u.name || u.email || "Unknown";
+        });
+    }
+
+    if (linksSnap.exists()) {
+        linksSnap.forEach((c) => {
+            allLinks.push({ alias: c.key, ...c.val() });
+        });
+    }
+    // Naye links pehle
+    allLinks.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+    document.getElementById("links-count-label").textContent =
+        `${formatNumber(allLinks.length)} total`;
+
+    /* ============================================================
+       TABLE RENDER
+       ============================================================ */
+    function render(filter = "") {
+        const f = filter.toLowerCase();
+        const rows = allLinks.filter(l =>
+            !f ||
+            l.alias.toLowerCase().includes(f) ||
+            (l.url || "").toLowerCase().includes(f) ||
+            (l.title || "").toLowerCase().includes(f) ||
+            (userNameMap[l.uid] || "").toLowerCase().includes(f));
+
+        const tbody = document.getElementById("links-body");
+
+        if (rows.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">
+                ${f ? "Koi match nahi mila." : "Abhi koi link nahi bana."}</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = rows.map((l) => {
+            const typeLabel = {
+                interstitial: '<span class="label label-primary">Interstitial</span>',
+                banner:       '<span class="label label-info">Banner</span>',
+                none:         '<span class="label label-default">No Ads</span>'
+            }[l.ad_type] || '<span class="label label-default">-</span>';
+
+            return `<tr data-alias="${escapeHtml(l.alias)}">
+                <td><b>${escapeHtml(l.alias)}</b></td>
+                <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;
+                           white-space:nowrap"
+                    title="${escapeHtml(l.url)}">${escapeHtml(l.title || l.url)}</td>
+                <td>${escapeHtml(userNameMap[l.uid] ||
+                        (l.uid === "guest" ? "Guest" : "Unknown"))}</td>
+                <td>${typeLabel}</td>
+                <td>${formatNumber(l.clicks)}</td>
+                <td>${formatDate(l.created_at)}</td>
+                <td>${l.status === "hidden"
+                    ? '<span class="label label-danger">Hidden</span>'
+                    : '<span class="label label-success">Active</span>'}</td>
+                <td>
+                    <a class="btn btn-default btn-xs" target="_blank"
+                       href="${SITE_URL}#${l.alias}" title="Open short link">
+                        <i class="fa fa-external-link"></i></a>
+                    <button class="btn btn-warning btn-xs act-hide"
+                            title="${l.status === "hidden" ? "Show" : "Hide"}">
+                        <i class="fa ${l.status === "hidden"
+                            ? "fa-eye" : "fa-eye-slash"}"></i></button>
+                    <button class="btn btn-danger btn-xs act-delete"
+                            title="Delete forever">
+                        <i class="fa fa-trash"></i></button>
+                </td>
+            </tr>`;
+        }).join("");
+    }
+
+    render();
+    document.getElementById("search-input").addEventListener("input", (e) => {
+        render(e.target.value.trim());
+    });
+
+    /* ============================================================
+       ACTIONS
+       ============================================================ */
+    document.getElementById("links-body").addEventListener("click", async (e) => {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+
+        const alias = btn.closest("tr").dataset.alias;
+        const link = allLinks.find(l => l.alias === alias);
+        if (!link) return;
+
+        /* ---------- HIDE / SHOW ---------- */
+        if (btn.classList.contains("act-hide")) {
+            const newStatus = link.status === "hidden" ? "active" : "hidden";
+
+            try {
+                await update(ref(db, `aliases/${alias}`), { status: newStatus });
+                link.status = newStatus;
+                showToast(newStatus === "hidden"
+                    ? "Link hide kar di." : "Link wapas live hai.", "success");
+                render(document.getElementById("search-input").value.trim());
+            } catch (err) {
+                showToast("Fail: " + err.message, "error");
+            }
+        }
+
+        /* ---------- DELETE ---------- */
+        if (btn.classList.contains("act-delete")) {
+            if (!confirm(`"${alias}" ko HAMESHA ke liye delete karein?`)) return;
+
+            try {
+                await remove(ref(db, `aliases/${alias}`));
+                allLinks = allLinks.filter(l => l.alias !== alias);
+                document.getElementById("links-count-label").textContent =
+                    `${formatNumber(allLinks.length)} total`;
+                showToast("Link delete ho gayi.", "success");
+                render(document.getElementById("search-input").value.trim());
+            } catch (err) {
+                showToast("Fail: " + err.message, "error");
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/users.html
+     KAAM   : USER MANAGEMENT - AdLinkFly ke admin Users page
+              jaisa:
+                - Saare users ki table (search ke saath)
+                - Wallet balance dikhana / adjust karna
+                - Account disable/enable karna
+                - User ka profile data delete karna
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+
+                <li class="active"><a href="users.html">
+                    <i class="fa fa-users"></i> <span>Users</span></a></li>
+
+                <li><a href="links.html"><i class="fa fa-link"></i> <span>All Links</span></a></li>
+
+                <li><a href="withdrawals.html"><i class="fa fa-money"></i>
+                    <span>Withdrawals</span></a></li>
+
+                <li><a href="rates.html"><i class="fa fa-line-chart"></i>
+                    <span>CPM Rates</span></a></li>
+
+                <li><a href="plans.html"><i class="fa fa-diamond"></i>
+                    <span>Membership Plans</span></a></li>
+
+                <li><a href="ads.html"><i class="fa fa-bullhorn"></i>
+                    <span>Advertising</span></a></li>
+
+                <li><a href="settings.html"><i class="fa fa-gears"></i>
+                    <span>Settings</span></a></li>
+
+                <li><a href="#" id="sidebar-logout">
+                    <i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Users <small id="user-count-label">0 registered</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Users</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-users"></i> Registered Users</h3>
+                    <div class="box-tools" style="width:240px">
+                        <input type="text" class="form-control input-sm"
+                               id="search-input"
+                               placeholder="Naam ya email search karo...">
+                    </div>
+                </div>
+
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Wallet</th>
+                                <th>Withdrawn</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th style="width:190px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-body">
+                            <tr><td colspan="7" class="text-center">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+<!-- ============ WALLET ADJUST MODAL ============ -->
+<div class="modal fade" id="wallet-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Wallet Adjust - <span id="wm-name"></span></h4>
+            </div>
+            <div class="box-body" style="padding:16px">
+                <p>Abhi balance: <b id="wm-current"></b></p>
+                <div class="form-group">
+                    <label>Amount (&#8377;)</label>
+                    <input type="number" step="0.01" class="form-control"
+                           id="wm-amount" placeholder="jaise 50 ya -25">
+                </div>
+                <p class="help-block">Positive = jodo, negative = ghatado.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary"
+                        id="wm-save-btn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        showToast, escapeHtml, formatDate, formatMoney, formatNumber
+    } from "./js/app.js";
+    import { ref, get, update, remove }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    let allUsers = [];      // { _uid, name, email, wallet_money, ... }
+
+    /* ============================================================
+       USERS LOAD KARO + LINKS COUNT
+       ============================================================ */
+    const [usersSnap, linksSnap] = await Promise.all([
+        get(ref(db, "users")),
+        get(ref(db, "aliases"))
+    ]);
+
+    // Har user ke kitne links hain (ek hi scan me)
+    const linkCounts = {};
+    if (linksSnap.exists()) {
+        linksSnap.forEach((c) => {
+            const uid = c.val().uid;
+            if (uid) linkCounts[uid] = (linkCounts[uid] || 0) + 1;
+        });
+    }
+
+    if (usersSnap.exists()) {
+        usersSnap.forEach((c) => {
+            allUsers.push({ _uid: c.key, _links: linkCounts[c.key] || 0, ...c.val() });
+        });
+    }
+    allUsers.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+    document.getElementById("user-count-label").textContent =
+        `${formatNumber(allUsers.length)} registered`;
+
+    /* ============================================================
+       TABLE RENDER (search filter ke saath)
+       ============================================================ */
+    function render(filter = "") {
+        const f = filter.toLowerCase();
+        const rows = allUsers.filter(u =>
+            !f ||
+            (u.name || "").toLowerCase().includes(f) ||
+            (u.email || "").toLowerCase().includes(f));
+
+        const tbody = document.getElementById("users-body");
+
+        if (rows.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">
+                ${f ? "Koi match nahi mila." : "Koi user nahi hai."}</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = rows.map((u) => `
+            <tr data-uid="${u._uid}">
+                <td>
+                    <img src="https://ui-avatars.com/api/?size=40&background=222d32&color=fff&name=${encodeURIComponent((u.name || "U")[0])}"
+                         style="width:26px;height:26px;border-radius:50%">
+                    ${u.role === "admin"
+                        ? '<i class="fa fa-shield text-yellow" title="Admin"></i> ' : ""}
+                    ${escapeHtml(u.name || "-")}
+                    ${u._uid === me.uid ? '<small class="text-muted">(you)</small>' : ""}
+                </td>
+                <td>${escapeHtml(u.email || "-")}</td>
+                <td><b>${formatMoney(u.wallet_money)}</b></td>
+                <td>${formatMoney(u.total_withdrawn)}</td>
+                <td>${formatDate(u.created_at)}</td>
+                <td>${u.disabled
+                    ? '<span class="label label-danger">Disabled</span>'
+                    : '<span class="label label-success">Active</span>'}</td>
+                <td>
+                    <button class="btn btn-default btn-xs act-wallet"
+                            title="Wallet adjust"><i class="fa fa-inr"></i></button>
+                    <button class="btn btn-warning btn-xs act-disable"
+                            title="${u.disabled ? "Enable" : "Disable"} account">
+                        <i class="fa ${u.disabled ? "fa-check-circle" : "fa-ban"}"></i></button>
+                    <button class="btn btn-danger btn-xs act-delete"
+                            title="Profile delete"><i class="fa fa-trash"></i></button>
+                </td>
+            </tr>`).join("");
+    }
+
+    render();
+    document.getElementById("search-input").addEventListener("input", (e) => {
+        render(e.target.value.trim());
+    });
+
+
+    /* ============================================================
+       ACTIONS (event delegation)
+       ============================================================ */
+    let activeUser = null;
+
+    document.getElementById("users-body").addEventListener("click", async (e) => {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+        const tr = btn.closest("tr");
+        const uid = tr.dataset.uid;
+        activeUser = allUsers.find(u => u._uid === uid);
+        if (!activeUser) return;
+
+        /* ---------- WALLET ADJUST ---------- */
+        if (btn.classList.contains("act-wallet")) {
+            document.getElementById("wm-name").textContent =
+                activeUser.name || activeUser.email;
+            document.getElementById("wm-current").textContent =
+                formatMoney(activeUser.wallet_money);
+            document.getElementById("wm-amount").value = "";
+            $("#wallet-modal").modal("show");
+        }
+
+        /* ---------- DISABLE / ENABLE ---------- */
+        if (btn.classList.contains("act-disable")) {
+            const newState = !activeUser.disabled;
+            if (!confirm(newState
+                ? `"${activeUser.name}" ka account BAND kar do?`
+                : `"${activeUser.name}" ka account wapas chalu kar do?`)) return;
+
+            try {
+                await update(ref(db, `users/${uid}`), { disabled: newState });
+                activeUser.disabled = newState;
+                showToast(newState ? "Account band kar diya." : "Account chalu ho gaya.",
+                    newState ? "warning" : "success");
+                render(document.getElementById("search-input").value.trim());
+            } catch (err) {
+                showToast("Fail: " + err.message, "error");
+            }
+        }
+
+        /* ---------- DELETE PROFILE DATA ---------- */
+        if (btn.classList.contains("act-delete")) {
+            // Note: Firebase Auth account delete backend se hota hai
+            // (client sirf database entry hata sakta hai)
+            if (!confirm(`"${activeUser.name}" ka DATABASE PROFILE delete karein?\n\n` +
+                "(Login account Firebase Auth me rahega - wo Cloudflare Worker se hota hai.)"))
+                return;
+
+            try {
+                await remove(ref(db, `users/${uid}`));
+                if (activeUser.referral_code) {
+                    remove(ref(db, `refcodes/${activeUser.referral_code}`));
+                }
+                allUsers = allUsers.filter(u => u._uid !== uid);
+                showToast("Profile data delete ho gaya.", "success");
+                render(document.getElementById("search-input").value.trim());
+            } catch (err) {
+                showToast("Fail: " + err.message, "error");
+            }
+        }
+    });
+
+    /* ---------- WALLET MODAL SAVE ---------- */
+    document.getElementById("wm-save-btn").addEventListener("click", async () => {
+        const amt = parseFloat(document.getElementById("wm-amount").value);
+        if (isNaN(amt)) { showToast("Valid amount dalo.", "warning"); return; }
+
+        try {
+            await update(ref(db, `users/${activeUser._uid}`), {
+                wallet_money: (Number(activeUser.wallet_money) || 0) + amt
+            });
+            activeUser.wallet_money = (Number(activeUser.wallet_money) || 0) + amt;
+
+            $("#wallet-modal").modal("hide");
+            showToast(`${formatMoney(Math.abs(amt))} ${amt >= 0 ? "add" : "minus"} ho gaya.`,
+                "success");
+            render(document.getElementById("search-input").value.trim());
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        }
+    });
+</script>
+
+</body>
+</html>

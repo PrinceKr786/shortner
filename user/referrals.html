@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : user/referrals.html
+     KAAM   : REFERRALS - AdLinkFly ke Member/Users/referrals.ctp
+              jaisa:
+                - Referral link + share buttons
+                - Referral earnings info-box
+                - Team members table (live)
+     FLOW   : Signup waqt ?ref=CODE se joote log referrals/
+              {mera-uid} node me save hote hain.
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Referrals - Shortify</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="member-dashboard hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="../index.html" class="logo">
+            <span class="logo-mini"><b>S</b></span>
+            <span class="logo-lg"><b>Shortify</b></span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="User Image">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="User Image">
+                                <p><span id="dropdown-name">...</span><br>
+                                    <small>Member since <span id="member-since">-</span></small></p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left"><a href="profile.html" class="btn btn-default btn-flat">Profile</a></div>
+                                <div class="pull-right"><a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <button type="button"
+                    class="btn btn-block btn-social btn-github btn-lg shorten-button"
+                    data-toggle="modal" data-target="#shorten-modal">
+                <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
+            </button>
+            <br>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a><i class="fa fa-credit-card text-aqua"></i>
+                        <span><b>Money Wallet</b><br>
+                            &#8377;<span id="wallet-balance">0.00</span></span></a>
+                </li>
+
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i>
+                        <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html">All Links</a></li>
+                        <li><a href="links-hidden.html">Hidden Links</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="withdraw.html"><i class="fa fa-dollar"></i> <span>Withdraw</span></a></li>
+
+                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
+
+                <li><a href="advertise.html"><i class="fa fa-bullhorn text-aqua"></i> <span>Advertise</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-wrench"></i>
+                        <span>Tools</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="tools-quick.html">Quick Link</a></li>
+                        <li><a href="tools-mass.html">Mass Shrinker</a></li>
+                        <li><a href="tools-fullpage.html">Full Page Script</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
+                    </ul>
+                </li>
+
+                <li class="active"><a href="referrals.html"><i class="fa fa-exchange"></i> <span>Referrals</span></a></li>
+                <li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Referrals <small>20% lifetime commission</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Referrals</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- ======== INFO BOXES ======== -->
+            <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-green"><i class="fa fa-exchange"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Referral Earnings</span>
+                            <span class="info-box-number" id="ref-earnings">&#8377;0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Referred Users</span>
+                            <span class="info-box-number" id="ref-count">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-yellow"><i class="fa fa-percent"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Commission Rate</span>
+                            <span class="info-box-number" id="comm-rate">20%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== REFERRAL LINK BOX ======== -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-share-alt"></i> Your Referral Link</h3>
+                    <span class="label label-info pull-right"
+                          id="ref-code-label">Code: ...</span>
+                </div>
+                <div class="box-body">
+
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" id="ref-link-input" readonly>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-flat"
+                                    id="copy-ref-btn"><i class="fa fa-clipboard"></i> Copy</button>
+                        </span>
+                    </div>
+
+                    <hr>
+
+                    <div class="row text-center">
+                        <div class="col-sm-4">
+                            <button type="button" class="btn btn-block btn-social btn-whatsapp share-btn"
+                                    data-network="whatsapp" style="background:#25d366;color:#fff">
+                                <i class="fa fa-whatsapp"></i> WhatsApp pe Share Karo
+                            </button>
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="button" class="btn btn-block btn-social btn-facebook share-btn"
+                                    data-network="facebook" style="background:#3b5998;color:#fff">
+                                <i class="fa fa-facebook"></i> Facebook pe Share Karo
+                            </button>
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="button" class="btn btn-block btn-social btn-twitter share-btn"
+                                    data-network="twitter" style="background:#55acee;color:#fff">
+                                <i class="fa fa-twitter"></i> Twitter pe Share Karo
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="help-block" style="margin-top:14px">
+                        <i class="fa fa-lightbulb-o text-yellow"></i>
+                        Is link se signup karne wala user HAMESHA aapki team me
+                        rahega aur unki har kamai ka <strong id="comm-inline">20%</strong>
+                        aapko milega — bina kuch kiye!
+                    </p>
+                </div>
+            </div>
+
+            <!-- ======== TEAM TABLE ======== -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-users"></i> Your Team Members</h3>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody id="team-body">
+                            <tr><td colspan="3" class="text-center">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+<!-- New Shorten Link Modal -->
+<div class="modal fade" id="shorten-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-paper-plane"></i> New Shorten Link</h4>
+            </div>
+            <form id="modal-shorten-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Destination URL</label>
+                        <input type="url" class="form-control" id="modal-url-input"
+                               placeholder="https://example.com/lambi-url" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Custom Alias <small>(optional)</small></label>
+                        <input type="text" class="form-control" id="modal-alias-input"
+                               maxlength="30" placeholder="sirf letters/numbers/dash">
+                    </div>
+                    <div class="alert alert-danger hidden" id="modal-error"></div>
+                    <div class="alert alert-success hidden" id="modal-result">
+                        Link ready! <a href="#" id="modal-result-link" target="_blank"
+                           style="word-break:break-all;font-weight:bold"></a>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                id="modal-copy"><i class="fa fa-clipboard"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="modal-submit">
+                        <i class="fa fa-paper-plane"></i> Shorten</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireLogin, fillUserHeader, wireLogout, initShortenModal,
+        showToast, SITE_URL, formatDate
+    } from "./js/app.js";
+    import { ref, get, onValue }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireLogin();
+    await fillUserHeader(me);
+    wireLogout();
+    initShortenModal(me);
+
+    /* ============================================================
+       REFERRAL CODE - profile me nahi hai to abhi bana do
+       (purane users ke liye)
+       ============================================================ */
+    let myCode = me.referral_code;
+    if (!myCode) {
+        const clean = (me.name || "USER").replace(/[^a-zA-Z]/g, "")
+            .toUpperCase().substring(0, 6).padEnd(4, "X");
+        myCode = clean + Math.floor(Math.random() * 9000 + 1000);
+
+        const { update } = await import(
+            "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+        await update(ref(db, `users/${me.uid}`), { referral_code: myCode });
+    }
+
+    const refUrl = `${SITE_URL}user/signup.html?ref=${myCode}`;
+    document.getElementById("ref-link-input").value = refUrl;
+    document.getElementById("ref-code-label").textContent = "Code: " + myCode;
+
+    /* ---------- Commission rate ---------- */
+    try {
+        const s = await get(ref(db, "settings/referral_commission"));
+        const pct = Number(s.val()) || 20;
+        document.getElementById("comm-rate").textContent = pct + "%";
+        document.getElementById("comm-inline").textContent = pct + "%";
+    } catch {}
+
+    /* ---------- Referral earnings counter ---------- */
+    try {
+        const re = await get(ref(db, `users/${me.uid}/referral_earnings`));
+        document.getElementById("ref-earnings").innerHTML =
+            "&#8377;" + (Number(re.val()) || 0).toFixed(2);
+    } catch {}
+
+    /* ============================================================
+       TEAM LIST (live) - referrals/{mera-uid} node se
+       ============================================================ */
+    onValue(ref(db, `referrals/${me.uid}`), (snapshot) => {
+        const tbody = document.getElementById("team-body");
+        const list = [];
+        snapshot.forEach((c) => list.push(c.val()));
+
+        document.getElementById("ref-count").textContent = list.length;
+
+        if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">
+                Abhi koi nahi juda. Apna referral link share karo!</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = list.map((u, i) => `
+            <tr>
+                <td>${list.length - i}</td>
+                <td><i class="fa fa-user text-muted"></i> ${u.name || "?"}</td>
+                <td>${formatDate(u.joined_at)}</td>
+            </tr>`).reverse().join("");
+    });
+
+    /* ---------- Copy button ---------- */
+    document.getElementById("copy-ref-btn").addEventListener("click", async () => {
+        await navigator.clipboard.writeText(refUrl).catch(() => {});
+        showToast("Referral link copy ho gaya!", "success");
+    });
+
+    /* ---------- Social share buttons ---------- */
+    document.querySelectorAll(".share-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const msg =
+                `Shortify pe free links short karo aur PAISA kamao! ` +
+                `Mera referral link use karo: ${refUrl}`;
+            const net = btn.dataset.network;
+            let url;
+            if (net === "whatsapp") {
+                url = "https://wa.me/?text=" + encodeURIComponent(msg);
+            } else if (net === "facebook") {
+                url = "https://www.facebook.com/sharer/sharer.php?u=" +
+                      encodeURIComponent(refUrl);
+            } else {
+                url = "https://twitter.com/intent/tweet?text=" +
+                      encodeURIComponent(msg);
+            }
+            window.open(url, "_blank", "width=600,height=450");
+        });
+    });
+</script>
+
+</body>
+</html>

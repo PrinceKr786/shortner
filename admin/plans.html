@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/plans.html
+     KAAM   : MEMBERSHIP PLANS - AdLinkFly ke "Membership Plans"
+              jaisa. Admin yahan paid plans banata hai:
+                - Plan ka naam/price/days
+                - Rate Multiplier (jaise 2.0 = double CPM)
+              User side se request aane pe admin approve karta hai
+              (withdrawals.html jaisa flow membership_requests me).
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Membership Plans - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+
+                <li><a href="users.html"><i class="fa fa-users"></i> <span>Users</span></a></li>
+
+                <li><a href="links.html"><i class="fa fa-link"></i> <span>All Links</span></a></li>
+
+                <li><a href="withdrawals.html"><i class="fa fa-money"></i>
+                    <span>Withdrawals</span></a></li>
+
+                <li><a href="rates.html"><i class="fa fa-line-chart"></i>
+                    <span>CPM Rates</span></a></li>
+
+                <li class="active"><a href="plans.html"><i class="fa fa-diamond"></i>
+                    <span>Membership Plans</span></a></li>
+
+                <li><a href="ads.html"><i class="fa fa-bullhorn"></i>
+                    <span>Advertising</span></a></li>
+
+                <li><a href="settings.html"><i class="fa fa-gears"></i>
+                    <span>Settings</span></a></li>
+
+                <li><a href="#" id="sidebar-logout">
+                    <i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Membership Plans <small>Paid subscriptions</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Membership Plans</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- ======== ADD PLAN BOX ======== -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-plus-circle"></i>
+                        Naya Plan Banao</h3>
+                </div>
+
+                <form id="plan-form">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-3 form-group">
+                                <label>Plan Name</label>
+                                <input type="text" class="form-control"
+                                       id="plan-name-input" maxlength="30"
+                                       placeholder="e.g. Gold Member" required>
+                            </div>
+                            <div class="col-sm-2 form-group">
+                                <label>Price (&#8377;)</label>
+                                <input type="number" step="0.01" min="0"
+                                       class="form-control" id="plan-price-input"
+                                       placeholder="199" required>
+                            </div>
+                            <div class="col-sm-2 form-group">
+                                <label>Days Valid</label>
+                                <input type="number" min="1"
+                                       class="form-control" id="plan-days-input"
+                                       placeholder="30" required>
+                            </div>
+                            <div class="col-sm-2 form-group">
+                                <label>Rate Multiplier</label>
+                                <input type="number" step="0.1" min="0.1"
+                                       class="form-control" id="plan-mult-input"
+                                       placeholder="2" value="2" required>
+                                <p class="help-block">2 = double CPM</p>
+                            </div>
+                            <div class="col-sm-3 form-group">
+                                <label>Icon (Font Awesome)</label>
+                                <input type="text" class="form-control"
+                                       id="plan-icon-input" placeholder="diamond"
+                                       value="diamond">
+                                <p class="help-block">fa fa-XXX</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary btn-flat">
+                            <i class="fa fa-save"></i> Save Plan</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ======== PLANS LIST ======== -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-diamond"></i> Saare Plans</h3>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Plan</th><th>Price</th><th>Validity</th>
+                                <th>Multiplier</th><th style="width:90px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plans-body">
+                            <tr><td colspan="5" class="text-center text-muted">
+                                Abhi koi plan nahi.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ======== PENDING REQUESTS ======== -->
+            <div class="box box-warning">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-clock-o"></i>
+                        Membership Requests</h3>
+                    <small class="pull-right" style="padding-top:6px">
+                        User paisa bhej ke request bhejta hai - verify karke
+                        Approve dabao</small>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr><th>User</th><th>Plan</th><th>Price</th>
+                                <th>Date</th><th>Status</th>
+                                <th style="width:200px">Actions</th></tr>
+                        </thead>
+                        <tbody id="req-body">
+                            <tr><td colspan="6" class="text-center text-muted">
+                                Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        showToast, escapeHtml, formatDate, formatMoney
+    } from "./js/app.js";
+    import { ref, get, push, set, update, remove, onValue }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       PLANS CRUD
+       ============================================================ */
+    async function renderPlans() {
+        const snap = await get(ref(db, "plans"));
+        const tbody = document.getElementById("plans-body");
+
+        if (!snap.exists()) {
+            tbody.innerHTML = `<tr><td colspan="5"
+                class="text-center text-muted">Abhi koi plan nahi bana.</td></tr>`;
+            return;
+        }
+
+        let rows = "";
+        snap.forEach((c) => {
+            const p = c.val();
+            rows += `<tr data-id="${c.key}">
+                <td><i class="fa fa-${escapeHtml(p.icon || "diamond")} text-yellow"></i>
+                    <b>${escapeHtml(p.name)}</b></td>
+                <td>${formatMoney(p.price)}</td>
+                <td>${Number(p.days)} days</td>
+                <td><span class="label label-success">${p.multiplier}x</span></td>
+                <td><button class="btn btn-danger btn-xs plan-del"
+                    title="Delete"><i class="fa fa-trash"></i></button></td>
+            </tr>`;
+        });
+        tbody.innerHTML = rows;
+    }
+    renderPlans();
+
+    document.getElementById("plan-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        try {
+            await push(ref(db, "plans"), {
+                name: document.getElementById("plan-name-input").value.trim(),
+                price: parseFloat(
+                    document.getElementById("plan-price-input").value) || 0,
+                days: parseInt(
+                    document.getElementById("plan-days-input").value) || 30,
+                multiplier: parseFloat(
+                    document.getElementById("plan-mult-input").value) || 1,
+                icon: document.getElementById("plan-icon-input").value.trim()
+                      || "diamond",
+                created_at: Date.now()
+            });
+            e.target.reset();
+            document.getElementById("plan-mult-input").value = "2";
+            document.getElementById("plan-icon-input").value = "diamond";
+            showToast("Plan save ho gaya!", "success");
+            renderPlans();
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        }
+    });
+
+    document.getElementById("plans-body").addEventListener("click", async (e) => {
+        const btn = e.target.closest(".plan-del");
+        if (!btn) return;
+        if (!confirm("Ye plan delete karein?")) return;
+
+        await remove(ref(db, `plans/${btn.closest("tr").dataset.id}`));
+        showToast("Plan delete ho gaya.", "success");
+        renderPlans();
+    });
+
+    /* ============================================================
+       MEMBERSHIP REQUESTS (live) - Approve/Reject
+       ============================================================ */
+    onValue(ref(db, "membership_requests"), async (snap) => {
+        const list = [];
+        snap.forEach((c) => list.push({ _id: c.key, ...c.val() }));
+        list.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+        // Users ke naam ke liye
+        const usersSnap = await get(ref(db, "users"));
+        const names = {};
+        usersSnap.forEach((c) => {
+            names[c.key] = c.val().name || c.val().email || "?";
+        });
+
+        const tbody = document.getElementById("req-body");
+        if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6"
+                class="text-center text-muted">Koi request nahi.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = list.map((r) => `
+            <tr>
+                <td>${escapeHtml(names[r.uid] || r.email || "Unknown")}</td>
+                <td>${escapeHtml(r.plan_name)}</td>
+                <td>${formatMoney(r.price)}</td>
+                <td>${formatDate(r.created_at)}</td>
+                <td>${r.status === "approved"
+                        ? '<span class="label label-success">Approved</span>'
+                        : r.status === "rejected"
+                            ? '<span class="label label-danger">Rejected</span>'
+                            : '<span class="label label-warning">Pending</span>'}
+                </td>
+                <td>${r.status === "pending" ? `
+                    <button class="btn btn-success btn-xs mr-approve"
+                            data-id="${r._id}" data-uid="${r.uid}"
+                            data-plan="${r.plan_id}" data-planname="${escapeHtml(r.plan_name)}"
+                            data-days="${r.days}">
+                        <i class="fa fa-check"></i> Approve</button>
+                    <button class="btn btn-danger btn-xs mr-reject"
+                            data-id="${r._id}">
+                        <i class="fa fa-times"></i> Reject</button>`
+                    : '<small class="text-muted">-</small>'}
+                </td>
+            </tr>`).join("");
+    });
+
+    document.getElementById("req-body").addEventListener("click", async (e) => {
+        const appBtn = e.target.closest(".mr-approve");
+        const rejBtn = e.target.closest(".mr-reject");
+        if (!appBtn && !rejBtn) return;
+
+        /* ---------- APPROVE: membership activate ---------- */
+        if (appBtn) {
+            const uid = appBtn.dataset.uid;
+            const expiresAt = Date.now() +
+                (parseInt(appBtn.dataset.days) || 30) * 86400000;
+
+            if (!confirm(`${appBtn.dataset.planname} activate karein ` +
+                `${formatDate(expiresAt)} tak?`)) return;
+
+            try {
+                // User ko membership de do
+                await update(ref(db, `users/${uid}/membership`), {
+                    plan_id: appBtn.dataset.plan,
+                    name: appBtn.dataset.planname,
+                    multiplier: null,   // go.html plan node se padhega
+                    expires_at: expiresAt
+                });
+                // Request approved mark karo
+                await update(ref(db, `membership_requests/${appBtn.dataset.id}`),
+                    { status: "approved", processed_at: Date.now() });
+
+                showToast("Membership activate ho gayi!", "success");
+            } catch (err) {
+                showToast("Fail: " + err.message, "error");
+            }
+        }
+
+        /* ---------- REJECT ---------- */
+        if (rejBtn) {
+            if (!confirm("Request reject karein?")) return;
+            await update(ref(db, `membership_requests/${rejBtn.dataset.id}`),
+                { status: "rejected", processed_at: Date.now() });
+            showToast("Reject ho gaya.", "warning");
+        }
+    });
+</script>
+
+</body>
+</html>

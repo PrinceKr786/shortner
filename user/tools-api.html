@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : user/tools-api.html
+     KAAM   : DEVELOPERS API - AdLinkFly ke Tools/api.ctp jaisa
+              documentation page:
+                - Personal API key dikhata hai (auto-generate)
+                - Endpoint/params/response docs
+                - PHP/cURL + JS example code
+     NOTE   : /api endpoint Cloudflare Worker se chalta hai
+              (README dekho) - Worker deploy hone tak examples
+              sirf reference hain.
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Developers API - Shortify</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+
+    <style>
+        pre.code-sample {
+            background:#1e282c; color:#a6e22e; padding:14px;
+            border-radius:4px; font-size:.82rem;
+            white-space:pre-wrap; word-break:break-all;
+        }
+        table.api-doc td:first-child { font-family:monospace; color:#c7254e; }
+    </style>
+</head>
+
+<body class="member-dashboard hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="../index.html" class="logo">
+            <span class="logo-mini"><b>S</b></span>
+            <span class="logo-lg"><b>Shortify</b></span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p><span id="dropdown-name">...</span><br>
+                                    <small>Member since <span id="member-since">-</span></small></p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left"><a href="profile.html" class="btn btn-default btn-flat">Profile</a></div>
+                                <div class="pull-right"><a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <button type="button"
+                    class="btn btn-block btn-social btn-github btn-lg shorten-button"
+                    data-toggle="modal" data-target="#shorten-modal">
+                <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
+            </button>
+            <br>
+            <ul class="sidebar-menu">
+                <li>
+                    <a><i class="fa fa-credit-card text-aqua"></i>
+                        <span><b>Money Wallet</b><br>
+                            &#8377;<span id="wallet-balance">0.00</span></span></a>
+                </li>
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i>
+                        <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html">All Links</a></li>
+                        <li><a href="links-hidden.html">Hidden Links</a></li>
+                    </ul>
+                </li>
+                <li><a href="withdraw.html"><i class="fa fa-dollar"></i> <span>Withdraw</span></a></li>
+
+                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
+
+                <li><a href="advertise.html"><i class="fa fa-bullhorn text-aqua"></i> <span>Advertise</span></a></li>
+                <li class="treeview active">
+                    <a href="#"><i class="fa fa-wrench"></i>
+                        <span>Tools</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu menu-open" style="display:block">
+                        <li><a href="tools-quick.html">Quick Link</a></li>
+                        <li><a href="tools-mass.html">Mass Shrinker</a></li>
+                        <li><a href="tools-fullpage.html">Full Page Script</a></li>
+                        <li class="active"><a href="tools-api.html">Developers API</a></li>
+                    </ul>
+                </li>
+                <li><a href="referrals.html"><i class="fa fa-exchange"></i> <span>Referrals</span></a></li>
+                <li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Developers API <small>Apne apps se link banao</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li>Tools</li>
+                <li class="active">Developers API</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- ===== API KEY ===== -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-key"></i> Your API Key</h3>
+                </div>
+                <div class="box-body">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" id="api-key-input" readonly>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-flat"
+                                    id="copy-key-btn"><i class="fa fa-clipboard"></i> Copy</button>
+                            <button type="button" class="btn btn-warning btn-flat"
+                                    id="regen-key-btn"><i class="fa fa-refresh"></i> Regenerate</button>
+                        </span>
+                    </div>
+                    <p class="help-block" style="margin-top:10px">
+                        Ye key apni API requests me use karo.
+                        Regenerate karne se purani key turant band ho jayegi.</p>
+                </div>
+            </div>
+
+            <!-- ===== ENDPOINT DOC ===== -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-plug"></i> Endpoint</h3>
+                </div>
+                <div class="box-body">
+
+                    <pre class="code-sample" id="endpoint-sample">Loading...</pre>
+
+                    <table class="table api-doc table-striped">
+                        <thead><tr><th style="width:130px">Parameter</th><th>Description</th></tr></thead>
+                        <tbody>
+                            <tr><td>api</td><td>Aapki API key (required)</td></tr>
+                            <tr><td>url</td><td>Jo URL short karna hai (required, URL-encoded)</td></tr>
+                            <tr><td>alias</td><td>Custom alias (optional). Agar already le liya ho to error milega.</td></tr>
+                            <tr><td>format</td><td><b>text</b> = sirf short link plain text me milega (default json)</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Success Response</h4>
+                    <pre class="code-sample">{
+  "status": "success",
+  "shortened": "https://YOUR-SITE.github.io/#aB3xK9",
+}</pre>
+
+                    <h4>Error Response</h4>
+                    <pre class="code-sample">{
+  "status": "error",
+  "error": "Please enter a valid url",
+  "code": 0
+}</pre>
+
+                </div>
+            </div>
+
+            <!-- ===== EXAMPLES ===== -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-code"></i> Example Code</h3>
+                </div>
+                <div class="box-body">
+
+                    <h4>PHP (cURL)</h4>
+                    <pre class="code-sample">$api_url = file_get_contents("API-ENDPOINT?api=YOUR_KEY&amp;url=" . urlencode($long_url));
+$data = json_decode($api_url, TRUE);
+echo $data["shortened"];</pre>
+
+                    <h4>JavaScript (fetch)</h4>
+                    <pre class="code-sample">const res = await fetch("API-ENDPOINT?api=YOUR_KEY&amp;url=" +
+                         encodeURIComponent("https://example.com"));
+const data = await res.json();
+console.log(data.shortened);</pre>
+
+                    <div class="callout callout-info" style="margin-bottom:0">
+                        <i class="fa fa-info-circle"></i> Rate limit:
+                        har key se max <b>5 requests/second</b>.
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+<!-- New Shorten Link Modal -->
+<div class="modal fade" id="shorten-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-paper-plane"></i> New Shorten Link</h4>
+            </div>
+            <form id="modal-shorten-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Destination URL</label>
+                        <input type="url" class="form-control" id="modal-url-input"
+                               placeholder="https://example.com/lambi-url" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Custom Alias <small>(optional)</small></label>
+                        <input type="text" class="form-control" id="modal-alias-input"
+                               maxlength="30" placeholder="sirf letters/numbers/dash">
+                    </div>
+                    <div class="alert alert-danger hidden" id="modal-error"></div>
+                    <div class="alert alert-success hidden" id="modal-result">
+                        Link ready! <a href="#" id="modal-result-link" target="_blank"
+                           style="word-break:break-all;font-weight:bold"></a>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                id="modal-copy"><i class="fa fa-clipboard"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="modal-submit">
+                        <i class="fa fa-paper-plane"></i> Shorten</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireLogin, fillUserHeader, wireLogout, initShortenModal,
+        showToast, SITE_URL
+    } from "./js/app.js";
+    import { ref, get, set }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireLogin();
+    await fillUserHeader(me);
+    wireLogout();
+    initShortenModal(me);
+
+    /* ============================================================
+       API KEY - nahi hai to abhi generate karo
+       ============================================================ */
+    let apiKey = me.api_key;
+    if (!apiKey) {
+        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        apiKey = "";
+        for (let i = 0; i < 24; i++) {
+            apiKey += chars[Math.floor(Math.random() * chars.length)];
+        }
+        await set(ref(db, `users/${me.uid}/api_key`), apiKey);
+    }
+    document.getElementById("api-key-input").value = apiKey;
+
+    /* ---------- Endpoint sample live bharna ---------- */
+    document.getElementById("endpoint-sample").textContent =
+        `GET ${SITE_URL}api?api=${apiKey}&url=LONG-URL`;
+    document.querySelectorAll(".code-sample").forEach(pre => {
+        pre.innerHTML = pre.innerHTML
+            .replaceAll("API-ENDPOINT", `${SITE_URL}api`)
+            .replaceAll("YOUR_KEY", apiKey);
+    });
+
+    /* ---------- Copy / Regenerate ---------- */
+    document.getElementById("copy-key-btn").addEventListener("click", async () => {
+        await navigator.clipboard.writeText(apiKey).catch(() => {});
+        showToast("API key copy ho gayi!", "success");
+    });
+
+    document.getElementById("regen-key-btn").addEventListener("click", async () => {
+        if (!confirm("Purani key band ho jayegi. Pakka nayi banau?")) return;
+
+        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        let nk = "";
+        for (let i = 0; i < 24; i++) {
+            nk += chars[Math.floor(Math.random() * chars.length)];
+        }
+        await set(ref(db, `users/${me.uid}/api_key`), nk);
+        document.getElementById("api-key-input").value = nk;
+        location.reload();
+    });
+</script>
+
+</body>
+</html>

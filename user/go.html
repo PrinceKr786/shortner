@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : user/go.html
+     KAAM   : INTERSTITIAL AD PAGE - YE ADLINKFLY KA SABSE
+              ICONIC PAGE HAI (Links/view_interstitial.ctp)!
+              Ab bilkul waisa hi dikhta hai.
+
+     FLOW A (alias mode):   go.html#aB3xK9
+       Firebase se aliases/{alias} padhta hai, ad_type ke hisaab
+       se countdown/banner dikhata hai, skip pe earnings credit
+       karke destination pe bhej deta hai.
+
+     FLOW B (passthrough):  go.html#?u=<enc>&o=<ownerUid>&t=<type>
+       Ye js/fullpage.js se aata hai (user ki website ke auto-
+       shortened links). Koi alias lookup nahi hota - seedha
+       owner ko credit hota hai aur redirect.
+
+     SKIP PE HOTA HAI:
+       a) clicks +1 (atomic, sirf alias mode)
+       b) stats/total_clicks +1
+       c) owner wallet += rate/1000  (earning_rates/default)
+       d) refcodes/{referred_by} -> referrer ko commission%
+          + referral_earnings counter
+
+     SECURITY NOTE:
+       Client-side hai (testing phase). Live business ke liye
+       same logic Cloudflare Worker me jayega - README dekho.
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting... - Shortify</title>
+
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto+Slab:400,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+
+    <!-- FRAME BUSTER - koi iframe me na band sake -->
+    <script type="text/javascript">
+        if (self !== top) { top.location = self.location; }
+    </script>
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family:'Montserrat','Source Sans Pro',sans-serif;
+            background:#f4f6f9;
+            min-height:100vh; display:flex; flex-direction:column;
+        }
+
+        /* ================= TOP BAR (site branding) ================= */
+        .go-header {
+            background:#fff;
+            border-bottom:1px solid #e4e9f0;
+            padding:12px 20px;
+            display:flex; align-items:center; justify-content:space-between;
+        }
+        .go-brand {
+            display:flex; align-items:center; gap:10px;
+            text-decoration:none;
+        }
+        .go-brand img { height:34px; }
+        .go-brand span {
+            font-family:'Roboto Slab',serif;
+            font-size:1.25rem; font-weight:700; color:#2980f3;
+        }
+        .go-tagline {
+            color:#8492a6; font-size:.78rem; letter-spacing:.06em;
+            text-transform:uppercase;
+        }
+        @media (max-width:600px){ .go-tagline{display:none} }
+
+        /* ================= AD SPACES ================= */
+        .ad-space {
+            background:#eef1f5;
+            border-bottom:1px solid #e4e9f0;
+            min-height:90px;
+            display:flex; align-items:center; justify-content:center;
+            overflow:hidden;
+        }
+        .ad-space:empty::after {
+            content:"Advertisement";
+            color:#aab4c3; font-size:.8rem; letter-spacing:.15em;
+            text-transform:uppercase;
+        }
+
+        /* ================= CENTER PANEL ================= */
+        .go-center {
+            flex:1; display:flex; align-items:flex-start;
+            justify-content:center; padding:34px 16px;
+        }
+        .go-panel {
+            width:100%; max-width:480px;
+            background:#fff;
+            border-radius:6px;
+            padding:38px 34px;
+            text-align:center;
+            box-shadow:0 2px 12px rgba(30,40,60,.08);
+        }
+
+        .spinner-ring {
+            width:74px; height:74px; margin:6px auto 24px;
+            border:6px solid #e3ecfb; border-top-color:#2980f3;
+            border-radius:50%; animation:gospin .8s linear infinite;
+        }
+        @keyframes gospin { to { transform:rotate(360deg); } }
+
+        /* Bada countdown number (AdLinkFly jaisa) */
+        #count-num {
+            font-size:3.4rem; font-weight:700; color:#2980f3;
+            line-height:1; margin-bottom:14px; display:none;
+            font-family:'Roboto Slab',serif;
+        }
+
+        .go-title { font-size:1.05rem; font-weight:700; color:#2d3748;
+            margin-bottom:6px; }
+        .go-sub   { color:#8492a6; font-size:.86rem; margin-bottom:26px; }
+
+        /* Destination preview */
+        .dest-box {
+            background:#f7f9fc; border:1px dashed #d5dde8; border-radius:5px;
+            padding:11px 14px; font-size:.82rem; color:#5a6b84;
+            margin-bottom:28px; word-break:break-all; text-align:left;
+        }
+        .dest-box i { color:#2980f3; margin-right:6px; }
+        .dest-box strong { display:block; color:#2d3748; font-size:.72rem;
+            text-transform:uppercase; letter-spacing:.08em; margin-bottom:3px; }
+
+        /* SKIP BUTTON - AdLinkFly ka iconic green */
+        .skip-btn {
+            display:none; width:100%; padding:15px 18px;
+            background:#00a65a; color:#fff; border:none; border-radius:4px;
+            font-family:'Montserrat',sans-serif;
+            font-size:.95rem; font-weight:700; letter-spacing:.03em;
+            cursor:pointer; text-transform:uppercase;
+            transition:background .15s ease;
+        }
+        .skip-btn:hover:not(:disabled) { background:#008d4c; }
+        .skip-btn:disabled { opacity:.55; cursor:not-allowed; }
+
+        .captcha-note {
+            margin-top:20px; font-size:.72rem; color:#98a4b5;
+            border-top:1px solid #edf1f5; padding-top:14px;
+        }
+
+        /* Error states */
+        .err-icon { font-size:3rem; margin-bottom:14px; }
+        .hidden { display:none !important; }
+        .btn-home {
+            display:inline-block; padding:12px 30px; border-radius:4px;
+            background:#2980f3; color:#fff !important; font-weight:700;
+            font-size:.85rem; text-transform:uppercase; letter-spacing:.04em;
+        }
+
+        footer {
+            text-align:center; padding:18px; font-size:.76rem; color:#98a4b5;
+        }
+        footer strong { color:#2980f3; }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= TOP BAR ================= -->
+    <header class="go-header">
+        <a class="go-brand" href="../index.html">
+            <img src="../assets/logo.png" alt="Shortify">
+            <span>Shortify</span>
+        </a>
+        <div class="go-tagline">Shorten URLs &amp; Earn Money</div>
+    </header>
+
+    <!-- Banner ad slot (banner-type links ke liye) -->
+    <div class="ad-space" id="banner-ad-slot"></div>
+
+    <!-- ================= CENTER ================= -->
+    <main class="go-center">
+
+        <!-- ===== LOADING STATE ===== -->
+        <div class="go-panel" id="state-loading">
+            <div class="spinner-ring"></div>
+            <div class="go-title">Aapki link taiyaar ho rahi hai...</div>
+            <div class="go-sub">Ek second ruko</div>
+        </div>
+
+        <!-- ===== COUNTDOWN STATE ===== -->
+        <div class="go-panel hidden" id="state-countdown">
+            <div id="count-num">5</div>
+            <div class="go-title" id="count-title">
+                Aapki link taiyaar ho rahi hai</div>
+            <div class="go-sub">
+                Niche button <span id="wait-text">5 seconds</span> me
+                enable ho jayega</div>
+
+            <div class="dest-box">
+                <strong><i class="fa fa-external-link"></i>Aap ja rahe ho yahan:</strong>
+                <span id="dest-url"></span>
+            </div>
+
+            <button class="skip-btn" id="skip-btn" disabled>
+                Please wait...</button>
+
+            <div class="captcha-note">
+                Continue karne se tum destination site pe jaoge.
+                Is free tool ko use karne ke liye thanks!
+            </div>
+        </div>
+
+        <!-- ===== ERROR STATE ===== -->
+        <div class="go-panel hidden" id="state-error">
+            <div class="err-icon">&#129300;</div>
+            <div class="go-title" id="error-title">Link nahi mili!</div>
+            <div class="go-sub" id="error-sub">
+                Ye link delete ho gayi ya kabhi thi hi nahi.</div>
+            <a href="../index.html" class="btn-home">
+                Shortify Home Pe Chalo</a>
+        </div>
+
+        <!-- ===== DISABLED/HIDDEN LINK STATE ===== -->
+        <div class="go-panel hidden" id="state-disabled">
+            <div class="err-icon">&#128683;</div>
+            <div class="go-title">Ye link band kar di gayi hai</div>
+            <div class="go-sub">Owner ne ya admin ne isko disable kiya hai.</div>
+            <a href="../index.html" class="btn-home">
+                Shortify Home Pe Chalo</a>
+        </div>
+
+    </main>
+
+    <footer>
+        Copyright &copy; <strong>Shortify</strong> &mdash;
+        Free Short URL &amp; Earn Money
+    </footer>
+
+
+    <!-- ============================================================
+         SCRIPTS - Pura redirect engine logic
+         ============================================================ -->
+    <script src="../vendor/jquery.min.js"></script>
+    <script type="module">
+        import { db } from "./js/firebase-config.js";
+        import { SITE_URL } from "./js/app.js";
+        import {
+            ref, get, child, runTransaction
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        /* ---------- DOM refs ---------- */
+        const $loading  = document.getElementById("state-loading");
+        const $count    = document.getElementById("state-countdown");
+        const $error    = document.getElementById("state-error");
+        const $disabled = document.getElementById("state-disabled");
+        const $num      = document.getElementById("count-num");
+        const $skip     = document.getElementById("skip-btn");
+        const $destUrl  = document.getElementById("dest-url");
+
+        /* ============================================================
+           SETTINGS LOAD - ad timer + recaptcha key (admin settings se)
+           ============================================================ */
+        let AD_TIMER = 5;
+        let RECAPTCHA_KEY = "";
+
+        try {
+            const sSnap = await get(child(ref(db), "settings"));
+            const s = sSnap.val() || {};
+            AD_TIMER = parseInt(s.ad_timer_seconds) || 5;
+            RECAPTCHA_KEY = s.recaptcha_site_key || "";
+        } catch { /* defaults chalega */ }
+
+        /* ============================================================
+           GEO COUNTRY DETECT - free API se visitor ka country
+           (country-wise CPM rates ke liye). Fail ho to "" - tab
+           default rate lagega.
+           ============================================================ */
+        let myCountry = "";
+
+        try {
+            const geo = await fetch("https://ipwho.is/")
+                .then((r) => r.json()).catch(() => null);
+            if (geo && geo.country_code) myCountry = geo.country_code;
+        } catch {}
+
+        /* ============================================================
+           STEP 1: HASH PARSE KARO
+             alias mode      : #aB3xK9
+             passthrough mode: #?u=<enc>&o=<uid>&t=<type>
+           ============================================================ */
+        let mode      = "alias";
+        let alias     = "";
+        let targetUrl = "";
+        let ownerUid  = null;
+        let adType    = "interstitial";
+
+        const hash = location.hash;
+
+        if (hash.startsWith("#?")) {
+            // ---------- PASSTHROUGH MODE ----------
+            const p = new URLSearchParams(hash.substring(2));
+            try { targetUrl = p.get("u") || ""; } catch { targetUrl = ""; }
+            ownerUid = p.get("o") || null;
+            adType   = ["interstitial", "banner", "none"].includes(p.get("t"))
+                       ? p.get("t") : "interstitial";
+
+            let okUrl = false;
+            try { okUrl = !!new URL(targetUrl); } catch {}
+            if (!okUrl) return showError("Invalid link!",
+                "Is redirect link me valid destination nahi hai.");
+            mode = "pass";
+
+        } else {
+            // ---------- ALIAS MODE ----------
+            alias = hash.replace("#", "").trim() ||
+                    new URLSearchParams(location.search).get("u") || "";
+
+            if (!alias) {
+                return showError("Alias missing!", "Koi link specify nahi hui.");
+            }
+        }
+
+        /* ============================================================
+           STEP 2: DATA LAO (sirf alias mode)
+           ============================================================ */
+        let remaining = AD_TIMER;
+        let bannerCode = null;
+
+        if (mode === "alias") {
+            try {
+                const snap = await get(ref(db, `aliases/${alias}`));
+
+                if (!snap.exists()) {
+                    return showError("Link nahi mili!",
+                        `"${alias}" naam ki koi short link database me nahi hai.`);
+                }
+
+                const linkData = snap.val();
+
+                if (linkData.status === "hidden") {
+                    $loading.classList.add("hidden");
+                    $disabled.classList.remove("hidden");
+                    throw { silent: true };
+                }
+
+                targetUrl = linkData.url;
+                ownerUid  = (linkData.uid !== "guest") ? linkData.uid : null;
+                adType    = linkData.ad_type || "interstitial";
+                startAdFlow();
+
+            } catch (err) {
+                if (!err || !err.silent) showError("Database error!", err.message);
+            }
+        } else {
+            startAdFlow();
+        }
+
+        function showError(title, sub) {
+            $loading.classList.add("hidden");
+            document.getElementById("error-title").textContent = title;
+            document.getElementById("error-sub").textContent = sub;
+            $error.classList.remove("hidden");
+        }
+
+
+        /* ============================================================
+           STEP 3: AD TYPE KE HISAAB SE FLOW
+             interstitial -> 5s countdown
+             banner       -> top banner + turant ready
+             none         -> turant ready
+           ============================================================ */
+        async function startAdFlow() {
+
+            // Destination preview (XSS-safe: textContent)
+            try { $destUrl.textContent = new URL(targetUrl).hostname; }
+            catch { $destUrl.textContent = targetUrl; }
+
+            if (adType === "banner") {
+                remaining = 0;
+                await serveBannerAd();
+            } else if (adType === "none") {
+                remaining = 0;
+            }
+
+            $loading.classList.add("hidden");
+            $count.classList.remove("hidden");
+
+            if (remaining > 0) tickCountdown();
+            else enableSkip();
+        }
+
+        /* ============================================================
+           BANNER AD SERVE - pehle PAID campaigns (ads node) rotate
+           hote hain, koi nahi mila to admin ka khud ka code
+           (settings/banner_ad_code) dikhta hai.
+
+           IMPRESSION TRACKING: har dikhane pe served_views +1 (atomic).
+           Package pura hone par status khud "completed" ho jata hai.
+           (Advertiser URL validate karte hain - javascript: links band)
+           ============================================================ */
+        function safeUrl(u) {
+            try {
+                const x = new URL(u);
+                return (x.protocol === "http:" || x.protocol === "https:")
+                    ? u : null;
+            } catch { return null; }
+        }
+
+        async function serveBannerAd() {
+            const slot = document.getElementById("banner-ad-slot");
+
+            // ---------- 1) Paid campaigns ----------
+            try {
+                const adsSnap = await get(ref(db, "ads"));
+                const pool = [];
+
+                adsSnap.forEach((c) => {
+                    const a = c.val();
+                    if (a.status === "active" &&
+                        safeUrl(a.target_url) &&
+                        (Number(a.served_views) || 0) <
+                            (Number(a.package_views) || 0)) {
+                        pool.push({ id: c.key, ...a });
+                    }
+                });
+
+                if (pool.length > 0) {
+                    const ad = pool[Math.floor(Math.random() * pool.length)];
+
+                    // DOM-safe render (XSS se bachne ke liye innerHTML nahi)
+                    const link = document.createElement("a");
+                    link.href = ad.target_url;
+                    link.target = "_blank";
+                    link.rel = "noopener";
+                    const img = document.createElement("img");
+                    img.src = ad.image_url;
+                    img.alt = ad.title || "Advertisement";
+                    img.style.maxHeight = "88px";
+                    link.appendChild(img);
+                    slot.innerHTML = "";
+                    slot.appendChild(link);
+
+                    // Impression count (atomic transaction)
+                    const res = await runTransaction(
+                        ref(db, `ads/${ad.id}/served_views`),
+                        (cur) => (cur || 0) + 1);
+                    const servedNow = res.snapshot ? res.snapshot.val() : res;
+
+                    // Package pura? -> completed mark karo
+                    if (Number(servedNow) >= (Number(ad.package_views) || 0)) {
+                        update(ref(db, `ads/${ad.id}`), {
+                            status: "completed",
+                            processed_at: Date.now()
+                        });
+                    }
+                    return;
+                }
+            } catch { /* campaign fail -> fallback */ }
+
+            // ---------- 2) Fallback: admin ka apna code ----------
+            try {
+                const s = await get(child(ref(db),
+                    "settings/banner_ad_code"));
+                if (s.exists()) slot.innerHTML = s.val();   // trusted admin
+            } catch { /* optional */ }
+        }
+
+        /* ---------- Countdown timer ---------- */
+        function tickCountdown() {
+            $num.style.display = "block";
+            $num.textContent = remaining;
+            document.getElementById("wait-text").textContent =
+                `${remaining} second${remaining !== 1 ? "s" : ""}`;
+
+            if (remaining <= 0) { enableSkip(); return; }
+            remaining--;
+            setTimeout(tickCountdown, 1000);
+        }
+
+        let captchaRendered = false;
+
+        function enableSkip() {
+            $num.style.display = "none";
+            document.getElementById("wait-text").textContent = "";
+
+            /* ---------- reCAPTCHA GATE ----------
+               Admin ne site key dali hai to pehle widget render hogi,
+               verify hone ke baad hi Skip button khulega. */
+            if (RECAPTCHA_KEY && !captchaRendered) {
+                $skip.disabled = true;
+                $skip.innerHTML =
+                    '<i class="fa fa-shield"></i> Captcha verify karo...';
+
+                // Widget ka container skip button se pehle daalo
+                const box = document.createElement("div");
+                box.id = "captcha-box";
+                box.style.marginBottom = "14px";
+                $skip.parentNode.insertBefore(box, $skip);
+
+                // Google script ek hi baar load karo
+                if (!document.getElementById("grec-script")) {
+                    window.___grcb = () => {};
+                    const sc = document.createElement("script");
+                    sc.id = "grec-script";
+                    sc.src = "https://www.google.com/recaptcha/api.js" +
+                             "?onload=___grcb&render=explicit";
+                    document.head.appendChild(sc);
+                }
+
+                // Script load hoke widget render karo (poll karte raho)
+                const iv = setInterval(() => {
+                    if (!window.grecaptcha) return;
+                    clearInterval(iv);
+                    try {
+                        window.grecaptcha.render("captcha-box", {
+                            sitekey: RECAPTCHA_KEY,
+                            callback: () => {          // success
+                                $skip.disabled = false;
+                                $skip.innerHTML =
+                                    '<i class="fa fa-arrow-right"></i> Skip Ad';
+                            },
+                            "expired-callback": () => { // expire ho gaya
+                                $skip.disabled = true;
+                            }
+                        });
+                        captchaRendered = true;
+                    } catch (e) { console.error(e); }
+                }, 300);
+                return;
+            }
+
+            $skip.disabled = false;
+            $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad';
+        }
+
+
+        /* ============================================================
+           STEP 4: SKIP DABAYA -> CREDIT + REDIRECT
+             a) clicks +1 (atomic, alias mode only)
+             b) stats/total_clicks +1
+             c) owner wallet += rate/1000 (+ referral commission)
+             d) destination pe redirect
+           ============================================================ */
+        let processed = false;   // double-click protection
+
+        $skip.addEventListener("click", async () => {
+            if (processed) return;
+            processed = true;
+            $skip.disabled = true;
+            $skip.innerHTML =
+                '<i class="fa fa-circle-o-notch fa-spin"></i> Ho raha hai...';
+
+            try {
+                // (a) CLICKS + STATS
+                if (mode === "alias") {
+                    await runTransaction(ref(db, `aliases/${alias}/clicks`),
+                        (cur) => (cur || 0) + 1);
+                }
+                runTransaction(ref(db, "stats/total_clicks"),
+                    (cur) => (cur || 0) + 1);
+
+                // (c) OWNER EARNINGS
+                let credited = 0;   // kitna owner ko mila (stats ke liye)
+
+                if (ownerUid) {
+                    /* ---------- RATE RESOLUTION ----------
+                       1) earning_rates/default        (fallback)
+                       2) earning_rates/countries/IN   (visitor country override)
+                       3) plans/{id}/multiplier        (owner ka active membership)
+                       */
+                    let rates = { interstitial: 8, banner: 3, none: 1 };
+
+                    try {
+                        const dSnap = await get(child(ref(db),
+                            `earning_rates/default`));
+                        if (dSnap.exists()) {
+                            rates = { ...rates, ...dSnap.val() };
+                        }
+                    } catch {}
+
+                    // Visitor ke country ki rate? (geo se mila)
+                    if (myCountry) {
+                        try {
+                            const cSnap = await get(child(ref(db),
+                                `earning_rates/countries/${myCountry}`));
+                            if (cSnap.exists()) {
+                                rates = { ...rates, ...cSnap.val() };
+                            }
+                        } catch {}
+                    }
+
+                    const rate = rates[adType] ?? rates.interstitial ?? 5;
+                    let earn = Number(rate) / 1000;   // per-view amount
+
+                    // MEMBERSHIP MULTIPLIER - owner ka active plan?
+                    try {
+                        const mSnap = await get(child(ref(db),
+                            `users/${ownerUid}/membership`));
+                        const m = mSnap.val();
+
+                        if (m && m.plan_id &&
+                            (Number(m.expires_at) || 0) > Date.now()) {
+                            const pSnap = await get(child(ref(db),
+                                `plans/${m.plan_id}/multiplier`));
+                            earn *= (Number(pSnap.val()) || 1);
+                        }
+                    } catch { /* multiplier optional */ }
+
+                    credited = earn;
+
+                    if (earn > 0) {
+                        await runTransaction(
+                            ref(db, `users/${ownerUid}/wallet_money`),
+                            (cur) => (cur || 0) + earn);
+
+                        // USER DAILY EARNINGS (user dashboard chart ke liye)
+                        const dayKey =
+                            new Date().toISOString().slice(0, 10);
+                        runTransaction(
+                            ref(db, `users/${ownerUid}/daily/${dayKey}`),
+                            (cur) => (cur || 0) + earn);
+
+                        // REFERRAL COMMISSION (default 20%)
+                        try {
+                            const ownerSnap = await get(child(ref(db),
+                                `users/${ownerUid}`));
+                            const owner = ownerSnap.val() || {};
+
+                            if (owner.referred_by) {
+                                const pctSnap = await get(child(ref(db),
+                                    `settings/referral_commission`));
+                                const pct = Number(pctSnap.val()) || 20;
+
+                                const codeSnap = await get(child(ref(db),
+                                    `refcodes/${owner.referred_by}`));
+                                const referrerUid = codeSnap.val();
+
+                                if (referrerUid && referrerUid !== ownerUid) {
+                                    const bonus = earn * (pct / 100);
+                                    runTransaction(
+                                        ref(db, `users/${referrerUid}/wallet_money`),
+                                        (cur) => (cur || 0) + bonus);
+                                    runTransaction(
+                                        ref(db, `users/${referrerUid}/referral_earnings`),
+                                        (cur) => (cur || 0) + bonus);
+                                }
+                            }
+                        } catch { /* referral optional */ }
+                    }
+                }
+
+                // (d) GLOBAL DAILY + COUNTRY STATS (admin charts ke liye)
+                try {
+                    const dayKey = new Date().toISOString().slice(0, 10);
+                    runTransaction(
+                        ref(db, `stats/daily/${dayKey}/clicks`),
+                        (cur) => (cur || 0) + 1);
+                    runTransaction(
+                        ref(db, `stats/daily/${dayKey}/earnings`),
+                        (cur) => (cur || 0) + credited);
+                    if (myCountry) {
+                        runTransaction(
+                            ref(db, `stats/country/${myCountry}/clicks`),
+                            (cur) => (cur || 0) + 1);
+                    }
+                } catch {}
+
+                // (e) REDIRECT!
+                $skip.innerHTML =
+                    '<i class="fa fa-paper-plane"></i> Ja rahe ho...';
+                setTimeout(() => { window.location.href = targetUrl; }, 500);
+
+            } catch (err) {
+                // Credit fail ho to bhi user ko aage bhejo
+                console.error("Credit error:", err);
+                window.location.href = targetUrl;
+            }
+        });
+    </script>
+
+</body>
+</html>

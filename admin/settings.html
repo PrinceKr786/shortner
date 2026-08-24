@@ -1,0 +1,400 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/settings.html
+     KAAM   : SITE SETTINGS - AdLinkFly ke admin Settings jaisa.
+              Sab data Firebase "settings/" node me save hota hai:
+                General      : site_name, support_email
+                Homepage     : hero_heading, hero_sub
+                Announcement : announce_title/text/date
+                               (user dashboard ka box isi se aata hai)
+                Toggles      : signup_enabled, maintenance
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+
+                <li><a href="users.html"><i class="fa fa-users"></i> <span>Users</span></a></li>
+
+                <li><a href="links.html"><i class="fa fa-link"></i> <span>All Links</span></a></li>
+
+                <li><a href="withdrawals.html"><i class="fa fa-money"></i>
+                    <span>Withdrawals</span></a></li>
+
+                <li><a href="rates.html"><i class="fa fa-line-chart"></i>
+                    <span>CPM Rates</span></a></li>
+
+                <li><a href="plans.html"><i class="fa fa-diamond"></i>
+                    <span>Membership Plans</span></a></li>
+
+                <li><a href="ads.html"><i class="fa fa-bullhorn"></i>
+                    <span>Advertising</span></a></li>
+
+                <li class="active"><a href="settings.html"><i class="fa fa-gears"></i>
+                    <span>Settings</span></a></li>
+
+                <li><a href="#" id="sidebar-logout">
+                    <i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Site Settings <small>Control Panel</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Settings</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <form id="settings-form">
+
+                <!-- ======== GENERAL ======== -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-globe"></i> General</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label>Site Ka Naam</label>
+                                <input type="text" class="form-control"
+                                       id="set-site-name" maxlength="30">
+                                <p class="help-block">Navbar aur footer me dikhega.</p>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label>Support Email</label>
+                                <input type="email" class="form-control"
+                                       id="set-support-email">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== HOMEPAGE CONTENT ======== -->
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-file-text-o"></i>
+                            Homepage Content</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>Hero Heading</label>
+                            <input type="text" class="form-control"
+                                   id="set-hero-heading" maxlength="120">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0">
+                            <label>Hero Subtitle</label>
+                            <textarea class="form-control" id="set-hero-sub"
+                                      maxlength="250" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== ANNOUNCEMENT ======== -->
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-bullhorn"></i>
+                            Announcement
+                            <small>(users ke dashboard pe box)</small></h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-8 form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control"
+                                       id="set-announce-title" maxlength="100"
+                                       placeholder="e.g. Diwali Bonus!">
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label>Show Box?</label>
+                                <select class="form-control" id="set-announce-enabled">
+                                    <option value="off">OFF - chhupao</option>
+                                    <option value="on">ON - dikhao</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0">
+                            <label>Message</label>
+                            <input type="text" class="form-control"
+                                   id="set-announce-text" maxlength="200"
+                                   placeholder="e.g. Naya feature aa gaya - check karo!">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== FEATURE TOGGLES ======== -->
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-wrench"></i>
+                            Feature Toggles</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label>Naye Signups Allow Karein?</label>
+                                <select class="form-control" id="set-signup-enabled">
+                                    <option value="on">ON - sab join kar sakte hain</option>
+                                    <option value="off">OFF - signup band</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label>Maintenance Mode</label>
+                                <select class="form-control" id="set-maintenance">
+                                    <option value="off">OFF - site normal chal rahi</option>
+                                    <option value="on">ON - maintenance chalu</option>
+                                </select>
+                                <p class="help-block">ON karne pe visitors ko
+                                   "hum wapas aa rahe hain" page dikhega.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== ADVANCED (timer/currency/captcha/social) ======== -->
+                <div class="box box-warning">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-magic"></i>
+                            Advanced (Ads / Currency / Captcha / Social)</h3>
+                    </div>
+                    <div class="box-body">
+
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label>Interstitial Timer (seconds)</label>
+                                <input type="number" min="1" max="60"
+                                       class="form-control" id="set-ad-timer">
+                                <p class="help-block">Skip button kitne second
+                                   me khule. Default 5.</p>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label>Currency Symbol</label>
+                                <input type="text" maxlength="4" class="form-control"
+                                       id="set-currency" placeholder="&#8377; ya $ ya &euro;">
+                                <p class="help-block">Poori site me yahi dikhega.</p>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label>reCAPTCHA Site Key</label>
+                                <input type="text" class="form-control"
+                                       id="set-recaptcha-key"
+                                       placeholder="6Lc... (Google se free milta hai)">
+                                <p class="help-block">Dalo to signup + skip button
+                                   pe captcha lag jayega. Khali = off.</p>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-bottom:0">
+                            <div class="col-sm-6 form-group" style="margin-bottom:0">
+                                <label>Google Login</label>
+                                <select class="form-control" id="set-google-login">
+                                    <option value="off">OFF - sirf email/password</option>
+                                    <option value="on">ON - "Google se Sign In" button dikhega</option>
+                                </select>
+                                <p class="help-block">Pehle Firebase Console →
+                                   Authentication → Sign-in method me Google
+                                   enable karna zaroori hai.</p>
+                            </div>
+                            <div class="col-sm-6 form-group" style="margin-bottom:0">
+                                <label>Facebook Login</label>
+                                <select class="form-control" id="set-facebook-login">
+                                    <option value="off">OFF</option>
+                                    <option value="on">ON - Facebook button dikhega</option>
+                                </select>
+                                <p class="help-block">Console me Facebook App ID +
+                                   provider enable karna hoga.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SAVE -->
+                <button type="submit" class="btn btn-primary btn-flat"
+                        id="save-btn">
+                    <i class="fa fa-save"></i> Sab Settings Save Karo</button>
+
+            </form>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout, showToast
+    } from "./js/app.js";
+    import { ref, get, update }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       CURRENT VALUES LOAD KARO (DB key = settings/{key})
+       ============================================================ */
+    const snap = await get(ref(db, "settings"));
+    const s = snap.val() || {};
+
+    document.getElementById("set-site-name").value = s.site_name || "";
+    document.getElementById("set-support-email").value = s.support_email || "";
+    document.getElementById("set-hero-heading").value = s.hero_heading || "";
+    document.getElementById("set-hero-sub").value = s.hero_sub || "";
+    document.getElementById("set-announce-title").value = s.announce_title || "";
+    document.getElementById("set-announce-text").value = s.announce_text || "";
+    document.getElementById("set-announce-enabled").value =
+        s.announce_enabled === "on" ? "on"
+            : s.announce_text ? "on" : "off";
+    document.getElementById("set-signup-enabled").value =
+        s.signup_enabled === "off" ? "off" : "on";
+    document.getElementById("set-maintenance").value =
+        s.maintenance === "on" ? "on" : "off";
+    document.getElementById("set-ad-timer").value =
+        Number(s.ad_timer_seconds) || 5;
+    document.getElementById("set-currency").value = s.currency_symbol || "\u20B9";
+    document.getElementById("set-recaptcha-key").value = s.recaptcha_site_key || "";
+    document.getElementById("set-google-login").value =
+        s.google_login === "on" ? "on" : "off";
+    document.getElementById("set-facebook-login").value =
+        s.facebook_login === "on" ? "on" : "off";
+
+
+    /* ============================================================
+       SAVE - sab kuch ek update() me chala jata hai
+       ============================================================ */
+    document.getElementById("settings-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById("save-btn");
+        btn.disabled = true;
+
+        const annText =
+            document.getElementById("set-announce-text").value.trim();
+        const annOn =
+            document.getElementById("set-announce-enabled").value === "on";
+
+        try {
+            await update(ref(db, "settings"), {
+                site_name:
+                    document.getElementById("set-site-name").value.trim(),
+                support_email:
+                    document.getElementById("set-support-email").value.trim(),
+                hero_heading:
+                    document.getElementById("set-hero-heading").value.trim(),
+                hero_sub:
+                    document.getElementById("set-hero-sub").value.trim(),
+
+                // Announcement: ON ho aur text ho tabhi date stamp lagao
+                // (dashboard box announce_text dekh ke dikhata hai)
+                announce_enabled: annOn && annText ? "on" : "off",
+                announce_title:
+                    document.getElementById("set-announce-title").value.trim(),
+                announce_text: annText,
+                announce_date: annOn && annText ? Date.now() : null,
+
+                signup_enabled:
+                    document.getElementById("set-signup-enabled").value,
+                maintenance:
+                    document.getElementById("set-maintenance").value,
+
+                ad_timer_seconds:
+                    parseInt(document.getElementById("set-ad-timer").value) || 5,
+                currency_symbol:
+                    document.getElementById("set-currency").value.trim() || "\u20B9",
+                recaptcha_site_key:
+                    document.getElementById("set-recaptcha-key").value.trim(),
+                google_login:
+                    document.getElementById("set-google-login").value,
+                facebook_login:
+                    document.getElementById("set-facebook-login").value
+            });
+
+            showToast("Sab settings save ho gayi!", "success");
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        } finally {
+            btn.disabled = false;
+        }
+    });
+</script>
+
+</body>
+</html>

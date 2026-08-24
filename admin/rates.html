@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/rates.html
+     KAAM   : CPM RATES EDITOR - AdLinkFly ke admin Payout Rates
+              jaisa:
+                - Har ad type ka CPM rate set karna
+                  (earning_rates/default node)
+                - Min payout / referral commission / banner ad code
+                  (settings node)
+              go.html inhi values se users ki kamai calculate
+              karta hai.
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CPM Rates - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+
+                <li><a href="users.html"><i class="fa fa-users"></i> <span>Users</span></a></li>
+
+                <li><a href="links.html"><i class="fa fa-link"></i> <span>All Links</span></a></li>
+
+                <li><a href="withdrawals.html"><i class="fa fa-money"></i>
+                    <span>Withdrawals</span></a></li>
+
+                <li class="active"><a href="rates.html"><i class="fa fa-line-chart"></i>
+                    <span>CPM Rates</span></a></li>
+
+                <li><a href="plans.html"><i class="fa fa-diamond"></i>
+                    <span>Membership Plans</span></a></li>
+
+                <li><a href="ads.html"><i class="fa fa-bullhorn"></i>
+                    <span>Advertising</span></a></li>
+
+                <li><a href="settings.html"><i class="fa fa-gears"></i>
+                    <span>Settings</span></a></li>
+
+                <li><a href="#" id="sidebar-logout">
+                    <i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Payout Rates <small>CPM settings</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">CPM Rates</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- ======== CPM RATES BOX ======== -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-line-chart"></i>
+                        CPM Rates (per 1000 views)</h3>
+                </div>
+
+                <form id="rates-form">
+                    <div class="box-body">
+
+                        <p class="help-block">
+                            Ye rates go.html me har valid view pe use hote hain.
+                            Example: rate 8 = 1000 views pe &#8377;8.
+                        </p>
+
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label><i class="fa fa-window-maximize text-primary"></i>
+                                    Interstitial Ads</label>
+                                <input type="number" step="0.01" min="0"
+                                       class="form-control" id="rate-interstitial">
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label><i class="fa fa-picture-o text-info"></i>
+                                    Banner Ads</label>
+                                <input type="number" step="0.01" min="0"
+                                       class="form-control" id="rate-banner">
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label><i class="fa fa-ban text-danger"></i>
+                                    No Ads</label>
+                                <input type="number" step="0.01" min="0"
+                                       class="form-control" id="rate-none">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary btn-flat"
+                                id="save-rates-btn">
+                            <i class="fa fa-save"></i> Save Rates</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ======== COUNTRY RATES BOX ======== -->
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-globe"></i>
+                        Country-wise Rates <small>(upar wale default ko override karta hai)</small></h3>
+                </div>
+
+                <div class="box-body">
+
+                    <p class="help-block">
+                        Jaise US/UK traffic mehnga hota hai - unke liye zyada rate
+                        dalo. Visitor ka country automatically detect hota hai
+                        (go.html). Yahan na ho to default rate lagega.
+                    </p>
+
+                    <!-- ADD FORM -->
+                    <form id="country-add-form" class="form-inline"
+                          style="margin-bottom:16px">
+                        <input type="text" class="form-control" id="cr-code"
+                               placeholder="Country Code (IN, US...)" maxlength="2"
+                               style="width:170px;text-transform:uppercase" required>
+                        <input type="number" step="0.01" min="0" class="form-control"
+                               id="cr-interstitial" placeholder="Interstitial" required
+                               style="width:120px">
+                        <input type="number" step="0.01" min="0" class="form-control"
+                               id="cr-banner" placeholder="Banner" style="width:100px">
+                        <input type="number" step="0.01" min="0" class="form-control"
+                               id="cr-none" placeholder="No Ads" style="width:100px">
+                        <button type="submit" class="btn btn-info btn-flat">
+                            <i class="fa fa-plus"></i> Add Country</button>
+                    </form>
+
+                    <!-- LIST -->
+                    <table class="table table-striped table-hover"
+                           style="margin-bottom:0">
+                        <thead>
+                            <tr><th>Country</th><th>Interstitial</th><th>Banner</th>
+                                <th>No Ads</th><th style="width:80px"></th></tr>
+                        </thead>
+                        <tbody id="country-body">
+                            <tr><td colspan="5" class="text-center text-muted">
+                                Koi country rate nahi. Sab pe default chalega.</td></tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+            <!-- ======== OTHER SETTINGS BOX ======== -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-sliders"></i>
+                        Payout Settings &amp; Banner Ad</h3>
+                </div>
+
+                <form id="misc-form">
+                    <div class="box-body">
+
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label>Minimum Payout (&#8377;)</label>
+                                <input type="number" step="0.01" min="0"
+                                       class="form-control" id="min-payout-input">
+                                <p class="help-block">Itne balance par hi withdraw
+                                   request ban payegi.</p>
+                            </div>
+
+                            <div class="col-sm-6 form-group">
+                                <label>Referral Commission (%)</label>
+                                <input type="number" step="0.1" min="0" max="100"
+                                       class="form-control" id="ref-comm-input">
+                                <p class="help-block">Referrer ko uske member ki
+                                   kamai ka itna % milega.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Banner Ad Code
+                                <small>(banner-type links ke top slot me)</small></label>
+                            <textarea class="form-control" id="banner-code-input"
+                                      rows="4"
+                                      placeholder='Jaise: <a href="https://ad-network.com/your-id" target="_blank"><img src="https://ad-network.com/banner-728x90.png"></a>'></textarea>
+                            <p class="help-block">Yahan apne ad network ka HTML
+                               code paste karo. Khali chhoda to "Advertisement"
+                               placeholder dikhega.</p>
+                        </div>
+
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary btn-flat"
+                                id="save-misc-btn">
+                            <i class="fa fa-save"></i> Save Settings</button>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout, showToast
+    } from "./js/app.js";
+    import { ref, get, update, remove, set }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       CURRENT VALUES LOAD KARO
+       ============================================================ */
+    const [ratesSnap, settingsSnap] = await Promise.all([
+        get(ref(db, "earning_rates/default")),
+        get(ref(db, "settings"))
+    ]);
+
+    const rates = ratesSnap.val() ||
+                  { interstitial: 8, banner: 3, none: 1 };
+    const st = settingsSnap.val() ||
+               { min_payout: 5, referral_commission: 20 };
+
+    document.getElementById("rate-interstitial").value =
+        Number(rates.interstitial ?? 8);
+    document.getElementById("rate-banner").value =
+        Number(rates.banner ?? 3);
+    document.getElementById("rate-none").value =
+        Number(rates.none ?? 1);
+    document.getElementById("min-payout-input").value =
+        Number(st.min_payout ?? 5);
+    document.getElementById("ref-comm-input").value =
+        Number(st.referral_commission ?? 20);
+    document.getElementById("banner-code-input").value =
+        st.banner_ad_code || "";
+
+
+    /* ============================================================
+       SAVE HANDLERS
+       ============================================================ */
+    document.getElementById("rates-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        try {
+            await update(ref(db, "earning_rates/default"), {
+                interstitial:
+                    parseFloat(document.getElementById("rate-interstitial").value) || 0,
+                banner:
+                    parseFloat(document.getElementById("rate-banner").value) || 0,
+                none:
+                    parseFloat(document.getElementById("rate-none").value) || 0
+            });
+            showToast("CPM rates save ho gaye!", "success");
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        }
+    });
+
+    document.getElementById("misc-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        try {
+            await update(ref(db, "settings"), {
+                min_payout:
+                    parseFloat(document.getElementById("min-payout-input").value) || 0,
+                referral_commission:
+                    parseFloat(document.getElementById("ref-comm-input").value) || 0,
+                banner_ad_code:
+                    document.getElementById("banner-code-input").value.trim()
+            });
+            showToast("Settings save ho gayi!", "success");
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        }
+    });
+
+
+    /* ============================================================
+       COUNTRY-WISE RATES
+       earning_rates/countries/{CC} = {interstitial, banner, none}
+       ============================================================ */
+    const countryBody = document.getElementById("country-body");
+
+    async function renderCountries() {
+        const snap = await get(ref(db, "earning_rates/countries"));
+        if (!snap.exists()) {
+            countryBody.innerHTML = `<tr><td colspan="5"
+                class="text-center text-muted">Koi country rate nahi.
+                Sab pe default chalega.</td></tr>`;
+            return;
+        }
+
+        let rows = "";
+        snap.forEach((c) => {
+            const r = c.val();
+            rows += `<tr data-cc="${c.key}">
+                <td><span class="label label-primary">${c.key}</span></td>
+                <td>${Number(r.interstitial || 0)}</td>
+                <td>${Number(r.banner || 0)}</td>
+                <td>${Number(r.none || 0)}</td>
+                <td><button class="btn btn-danger btn-xs cr-del"
+                        title="Delete"><i class="fa fa-trash"></i></button></td>
+            </tr>`;
+        });
+        countryBody.innerHTML = rows;
+    }
+    renderCountries();
+
+    /* ---------- Add country ---------- */
+    document.getElementById("country-add-form").addEventListener("submit",
+        async (e) => {
+        e.preventDefault();
+
+        const cc = document.getElementById("cr-code").value.trim().toUpperCase();
+        const inter =
+            parseFloat(document.getElementById("cr-interstitial").value);
+        if (!/^[A-Z]{2}$/.test(cc) || isNaN(inter)) {
+            showToast("2-letter country code + interstitial rate dalo.", "warning");
+            return;
+        }
+
+        try {
+            await set(ref(db, `earning_rates/countries/${cc}`), {
+                interstitial: inter,
+                banner: parseFloat(
+                    document.getElementById("cr-banner").value) || 0,
+                none: parseFloat(
+                    document.getElementById("cr-none").value) || 0
+            });
+            e.target.reset();
+            showToast(cc + " rates add ho gaye!", "success");
+            renderCountries();
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        }
+    });
+
+    /* ---------- Delete country ---------- */
+    countryBody.addEventListener("click", async (e) => {
+        const btn = e.target.closest(".cr-del");
+        if (!btn) return;
+
+        const cc = btn.closest("tr").dataset.cc;
+        if (!confirm(cc + " ka rate delete karein? Default wapas lagega.")) return;
+
+        try {
+            await remove(ref(db, `earning_rates/countries/${cc}`));
+            showToast(cc + " delete ho gaya.", "success");
+            renderCountries();
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        }
+    });
+</script>
+
+</body>
+</html>

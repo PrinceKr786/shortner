@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : user/withdraw.html
+     KAAM   : WITHDRAW PAGE - AdLinkFly ke Member/Withdraws/
+              index.ctp jaisa:
+                - Wallet balance info-box
+                - Withdraw request form (amount + method + details)
+                  - Min payout check
+                  - ATOMIC balance deduction (double-spend safe)
+                - Withdrawal history table with status labels
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Withdraw - Shortify</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="member-dashboard hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="../index.html" class="logo">
+            <span class="logo-mini"><b>S</b></span>
+            <span class="logo-lg"><b>Shortify</b></span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="User Image">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="User Image">
+                                <p><span id="dropdown-name">...</span><br>
+                                    <small>Member since <span id="member-since">-</span></small></p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left"><a href="profile.html" class="btn btn-default btn-flat">Profile</a></div>
+                                <div class="pull-right"><a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <button type="button"
+                    class="btn btn-block btn-social btn-github btn-lg shorten-button"
+                    data-toggle="modal" data-target="#shorten-modal">
+                <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
+            </button>
+            <br>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a><i class="fa fa-credit-card text-aqua"></i>
+                        <span><b>Money Wallet</b><br>
+                            &#8377;<span id="wallet-balance">0.00</span></span></a>
+                </li>
+
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i>
+                        <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html">All Links</a></li>
+                        <li><a href="links-hidden.html">Hidden Links</a></li>
+                    </ul>
+                </li>
+
+                <li class="active"><a href="withdraw.html"><i class="fa fa-dollar"></i> <span>Withdraw</span></a></li>
+
+                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
+
+                <li><a href="advertise.html"><i class="fa fa-bullhorn text-aqua"></i> <span>Advertise</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-wrench"></i>
+                        <span>Tools</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="tools-quick.html">Quick Link</a></li>
+                        <li><a href="tools-mass.html">Mass Shrinker</a></li>
+                        <li><a href="tools-fullpage.html">Full Page Script</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="referrals.html"><i class="fa fa-exchange"></i> <span>Referrals</span></a></li>
+                <li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Withdraw <small>Request a payout</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Withdraw</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- ======== WALLET INFO BOX ======== -->
+            <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-green"><i class="fa fa-credit-card"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Wallet Balance</span>
+                            <span class="info-box-number" id="balance-display">&#8377;0.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-yellow"><i class="fa fa-info-circle"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Minimum Payout</span>
+                            <span class="info-box-number" id="min-payout-display">&#8377;100.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-aqua"><i class="fa fa-check-square-o"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Total Withdrawn</span>
+                            <span class="info-box-number" id="total-withdrawn-display">&#8377;0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- ======== REQUEST FORM ======== -->
+                <div class="col-md-5">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-money"></i> New Withdraw Request</h3>
+                        </div>
+
+                        <form id="withdraw-form">
+                            <div class="box-body">
+
+                                <div class="form-group">
+                                    <label>Amount (&#8377;)</label>
+                                    <input type="number" step="0.01" min="1"
+                                           class="form-control" id="amount-input"
+                                           placeholder="e.g. 500" required>
+                                    <p class="help-block" id="amount-hint">
+                                        Minimum &#8377;100 nikal sakte ho.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Payment Method</label>
+                                    <select class="form-control" id="method-select" required>
+                                        <option value="">-- Choose --</option>
+                                        <option value="UPI">UPI</option>
+                                        <option value="Paytm">Paytm Wallet</option>
+                                        <option value="PayPal">PayPal</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Payment Details</label>
+                                    <input type="text" class="form-control"
+                                           id="details-input"
+                                           placeholder="UPI ID / PayPal email / Account number"
+                                           required>
+                                    <p class="help-block">Yahi details pe paisa bheja jayega -
+                                       double check kar lo!</p>
+                                </div>
+
+                            </div>
+
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary btn-flat"
+                                        id="request-btn">
+                                    <i class="fa fa-paper-plane"></i> Request Payout</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ======== HISTORY TABLE ======== -->
+                <div class="col-md-7">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-history"></i> Withdrawal History</h3>
+                        </div>
+
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Method</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-body">
+                                    <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+<!-- New Shorten Link Modal -->
+<div class="modal fade" id="shorten-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-paper-plane"></i> New Shorten Link</h4>
+            </div>
+            <form id="modal-shorten-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Destination URL</label>
+                        <input type="url" class="form-control" id="modal-url-input"
+                               placeholder="https://example.com/lambi-url" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Custom Alias <small>(optional)</small></label>
+                        <input type="text" class="form-control" id="modal-alias-input"
+                               maxlength="30" placeholder="sirf letters/numbers/dash">
+                    </div>
+                    <div class="alert alert-danger hidden" id="modal-error"></div>
+                    <div class="alert alert-success hidden" id="modal-result">
+                        Link ready! <a href="#" id="modal-result-link" target="_blank"
+                           style="word-break:break-all;font-weight:bold"></a>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                id="modal-copy"><i class="fa fa-clipboard"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="modal-submit">
+                        <i class="fa fa-paper-plane"></i> Shorten</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireLogin, fillUserHeader, wireLogout, initShortenModal,
+        showToast, formatMoney, formatDateTime
+    } from "./js/app.js";
+    import {
+        ref, get, push, query, orderByChild, equalTo,
+        runTransaction, onValue
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireLogin();
+    await fillUserHeader(me);
+    wireLogout();
+    initShortenModal(me);
+
+    /* ---------- Top displays bharna ---------- */
+    document.getElementById("balance-display").innerHTML =
+        "&#8377;" + me.wallet_money.toFixed(2);
+    document.getElementById("wallet-balance").textContent =
+        me.wallet_money.toFixed(2);
+    document.getElementById("total-withdrawn-display").innerHTML =
+        "&#8377;" + me.total_withdrawn.toFixed(2);
+
+    /* ---------- Min payout setting load ---------- */
+    let minPayout = 100;
+    try {
+        const s = await get(ref(db, "settings/min_payout"));
+        if (s.val()) minPayout = Number(s.val());
+    } catch {}
+    document.getElementById("min-payout-display").innerHTML =
+        "&#8377;" + minPayout.toFixed(2);
+    document.getElementById("amount-hint").textContent =
+        `Minimum \u20B9${minPayout} nikal sakte ho.`;
+
+    /* ============================================================
+       HISTORY LOAD (live onValue)
+       ============================================================ */
+    const historyQuery = query(
+        ref(db, "withdrawals"),
+        orderByChild("uid"),
+        equalTo(me.uid)
+    );
+
+    onValue(historyQuery, (snapshot) => {
+        const rows = [];
+        const list = [];
+        snapshot.forEach((c) => list.push(c.val()));
+        list.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+        if (list.length === 0) {
+            document.getElementById("history-body").innerHTML =
+                `<tr><td colspan="4" class="text-center text-muted">
+                 Abhi koi withdrawal nahi hui.</td></tr>`;
+            return;
+        }
+
+        for (const w of list) {
+            let label;
+            if (w.status === "completed") label = '<span class="label label-success">Completed</span>';
+            else if (w.status === "rejected") label = '<span class="label label-danger">Rejected</span>';
+            else label = '<span class="label label-warning">Pending</span>';
+
+            rows.push(`
+                <tr>
+                    <td>${formatDateTime(w.created_at)}</td>
+                    <td><strong>&#8377;${Number(w.amount).toFixed(2)}</strong></td>
+                    <td>${w.method || "-"}</td>
+                    <td>${label}</td>
+                </tr>`);
+        }
+        document.getElementById("history-body").innerHTML = rows.join("");
+    });
+
+    /* ============================================================
+       REQUEST SUBMIT - ATOMIC WALLET DEDUCTION
+       runTransaction undefined return kare to operation abort
+       hota hai - isse double-spend impossible hai.
+       ============================================================ */
+    document.getElementById("withdraw-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const amount = Number(document.getElementById("amount-input").value);
+        const method = document.getElementById("method-select").value;
+        const details = document.getElementById("details-input").value.trim();
+
+        // Validations
+        if (!amount || amount <= 0) {
+            showToast("Sahi amount dalo.", "error");
+            return;
+        }
+        if (amount < minPayout) {
+            showToast(`Minimum payout \u20B9${minPayout} hai!`, "error");
+            return;
+        }
+        if (amount > me.wallet_money) {
+            showToast("Wallet me itna paisa nahi hai!", "error");
+            return;
+        }
+        if (!method || !details) {
+            showToast("Method aur details dono zaroori hain.", "error");
+            return;
+        }
+
+        const btn = document.getElementById("request-btn");
+        btn.disabled = true;
+
+        try {
+            /* STEP 1: Wallet se amount ATOMICALLY kaato.
+               Agar balance nahi -> undefined -> Firebase abort karta hai */
+            const walletRef = ref(db, `users/${me.uid}/wallet_money`);
+            const result = await runTransaction(walletRef, (currentBalance) => {
+                currentBalance = Number(currentBalance) || 0;
+                if (currentBalance < amount) return undefined;
+                return currentBalance - amount;
+            });
+
+            if (!result.committed) {
+                throw new Error(
+                    "Wallet balance kam pad gaya tha. Page refresh karke try karo.");
+            }
+
+            /* STEP 2: Request record banao */
+            const wid = push(ref(db, "withdrawals")).key;
+            await set(ref(db, `withdrawals/${wid}`), {
+                uid: me.uid,
+                name: me.name,
+                email: me.email,
+                amount: amount,
+                method: method,
+                payment_details: details,
+                status: "pending",
+                created_at: Date.now(),
+                processed_at: null
+            });
+
+            showToast(`Request bhej di gayi! \u20B9${amount.toFixed(2)} kat gaye wallet se.`, "success");
+
+            // UI update
+            me.wallet_money -= amount;
+            document.getElementById("balance-display").innerHTML =
+                "&#8377;" + me.wallet_money.toFixed(2);
+            document.getElementById("wallet-balance").textContent =
+                me.wallet_money.toFixed(2);
+
+            // Form reset
+            document.getElementById("amount-input").value = "";
+            document.getElementById("details-input").value = "";
+            document.getElementById("method-select").value = "";
+
+        } catch (err) {
+            showToast(err.message, "error");
+        } finally {
+            btn.disabled = false;
+        }
+    });
+</script>
+
+</body>
+</html>

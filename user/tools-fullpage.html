@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : user/tools-fullpage.html
+     KAAM   : FULL PAGE SCRIPT - AdLinkFly ke Tools/full_page.ctp
+              jaisa. User apni website me ek chhota script lagata
+              hai jisse uske saare outgoing links automatic shortify
+              ho jate hain.
+     NOTE   : Generated script js/fullpage.js use karta hai jo
+              links ko go.html#?u=...&o=... format me badalta hai.
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Full Page Script - Shortify</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+
+    <style>
+        pre#generated-code {
+            background:#1e282c; color:#a6e22e; padding:16px;
+            border-radius:4px; font-size:.85rem; white-space:pre-wrap;
+            word-break:break-all; min-height:110px;
+        }
+    </style>
+</head>
+
+<body class="member-dashboard hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="../index.html" class="logo">
+            <span class="logo-mini"><b>S</b></span>
+            <span class="logo-lg"><b>Shortify</b></span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p><span id="dropdown-name">...</span><br>
+                                    <small>Member since <span id="member-since">-</span></small></p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left"><a href="profile.html" class="btn btn-default btn-flat">Profile</a></div>
+                                <div class="pull-right"><a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <button type="button"
+                    class="btn btn-block btn-social btn-github btn-lg shorten-button"
+                    data-toggle="modal" data-target="#shorten-modal">
+                <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
+            </button>
+            <br>
+            <ul class="sidebar-menu">
+                <li>
+                    <a><i class="fa fa-credit-card text-aqua"></i>
+                        <span><b>Money Wallet</b><br>
+                            &#8377;<span id="wallet-balance">0.00</span></span></a>
+                </li>
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i>
+                        <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html">All Links</a></li>
+                        <li><a href="links-hidden.html">Hidden Links</a></li>
+                    </ul>
+                </li>
+                <li><a href="withdraw.html"><i class="fa fa-dollar"></i> <span>Withdraw</span></a></li>
+
+                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
+
+                <li><a href="advertise.html"><i class="fa fa-bullhorn text-aqua"></i> <span>Advertise</span></a></li>
+                <li class="treeview active">
+                    <a href="#"><i class="fa fa-wrench"></i>
+                        <span>Tools</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu menu-open" style="display:block">
+                        <li><a href="tools-quick.html">Quick Link</a></li>
+                        <li><a href="tools-mass.html">Mass Shrinker</a></li>
+                        <li class="active"><a href="tools-fullpage.html">Full Page Script</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
+                    </ul>
+                </li>
+                <li><a href="referrals.html"><i class="fa fa-exchange"></i> <span>Referrals</span></a></li>
+                <li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Full Page Script <small>Automatic link shortener</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li>Tools</li>
+                <li class="active">Full Page Script</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-file-code-o"></i> Script Generator</h3>
+                </div>
+
+                <form id="fp-form">
+                    <div class="box-body">
+
+                        <p class="help-block">
+                            Ye script apni website ke saare outgoing links ko
+                            automatic short links me badal deta hai. Har click se
+                            <strong>aapki kamai</strong> hoti hai!
+                        </p>
+
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label>Ad Type</label>
+                                <select class="form-control" id="ad-type-input">
+                                    <option value="interstitial">Interstitial Ads (highest pay)</option>
+                                    <option value="banner">Banner Ads</option>
+                                    <option value="none">No Ads</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-4 form-group">
+                                <label>Note Domain <small>(optional)</small></label>
+                                <input type="text" class="form-control"
+                                       id="domain-input"
+                                       placeholder="mysite.com">
+                            </div>
+
+                            <div class="col-sm-4 form-group">
+                                <label>Pages <small>(optional)</small></label>
+                                <input type="text" class="form-control"
+                                       id="pages-input"
+                                       placeholder="/blog/,/downloads/">
+                                <p class="help-block" style="margin-bottom:0">
+                                    Khali = sab pages pe chalega.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0">
+                            <label>Your Code</label>
+                            <pre id="generated-code">Generating...</pre>
+                        </div>
+
+                    </div>
+                    <div class="box-footer">
+                        <button type="button" class="btn btn-primary btn-flat"
+                                id="copy-code-btn">
+                            <i class="fa fa-clipboard"></i> Copy Code</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- HOW TO USE -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-question-circle"></i> Kaise Use Karein?</h3>
+                </div>
+                <div class="box-body">
+                    <ol style="line-height:2.2;padding-left:20px">
+                        <li>Upar se apna code copy karo.</li>
+                        <li>Apni website ke har page me,
+                            <code>&lt;/body&gt;</code> se pehle paste karo.</li>
+                        <li>Bas! Ab wahan ke saare external links automatic
+                            short ho jayenge aur clicks ki kamai aapki wallet
+                            me aayegi.</li>
+                    </ol>
+                    <div class="callout callout-info" style="margin-bottom:0">
+                        <i class="fa fa-info-circle"></i> Sirf
+                        <code>http/https</code> wale external links shorten
+                        hote hain — aapke apne domain ke internal links
+                        untouched rehte hain.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+<!-- New Shorten Link Modal -->
+<div class="modal fade" id="shorten-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-paper-plane"></i> New Shorten Link</h4>
+            </div>
+            <form id="modal-shorten-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Destination URL</label>
+                        <input type="url" class="form-control" id="modal-url-input"
+                               placeholder="https://example.com/lambi-url" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Custom Alias <small>(optional)</small></label>
+                        <input type="text" class="form-control" id="modal-alias-input"
+                               maxlength="30" placeholder="sirf letters/numbers/dash">
+                    </div>
+                    <div class="alert alert-danger hidden" id="modal-error"></div>
+                    <div class="alert alert-success hidden" id="modal-result">
+                        Link ready! <a href="#" id="modal-result-link" target="_blank"
+                           style="word-break:break-all;font-weight:bold"></a>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                id="modal-copy"><i class="fa fa-clipboard"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="modal-submit">
+                        <i class="fa fa-paper-plane"></i> Shorten</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import {
+        requireLogin, fillUserHeader, wireLogout, initShortenModal,
+        showToast, SITE_URL
+    } from "./js/app.js";
+
+    const me = await requireLogin();
+    await fillUserHeader(me);
+    wireLogout();
+    initShortenModal(me);
+
+    /* ============================================================
+       CODE GENERATOR - settings change hote hi live update
+       ============================================================ */
+    const adSel  = document.getElementById("ad-type-input");
+    const domIn  = document.getElementById("domain-input");
+    const pagIn  = document.getElementById("pages-input");
+    const codeEl = document.getElementById("generated-code");
+
+    let currentCode = "";
+
+    function buildCode() {
+        const domain = domIn.value.trim() || location.hostname;
+        const cfg = [
+            `      key: "${me.uid}"`,
+            `      api: "${SITE_URL}js/fullpage.js"`,
+            `      note_domain: "${domain}"`,
+            `      ad_type: "${adSel.value}"`
+        ];
+        if (pagIn.value.trim()) {
+            cfg.push(`      pages: [${pagIn.value.trim()
+                .split(",").map(p => `"${p.trim()}"`).join(", ")}]`);
+        }
+
+        currentCode =
+`<!-- Shortify Full Page Script -->
+<script type="text/javascript">
+   var _shortify = {
+${cfg.join(",\n")}
+   };
+<\/script>
+<script src="${SITE_URL}js/fullpage.js"><\/script>`;
+        codeEl.textContent = currentCode;
+    }
+
+    [adSel, domIn, pagIn].forEach(el => el.addEventListener("input", buildCode));
+    buildCode();
+
+    document.getElementById("copy-code-btn").addEventListener("click", async () => {
+        await navigator.clipboard.writeText(currentCode).catch(() => {});
+        showToast("Code copy ho gaya!", "success");
+    });
+</script>
+
+</body>
+</html>

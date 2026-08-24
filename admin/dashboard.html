@@ -1,0 +1,478 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/dashboard.html
+     KAAM   : ADMIN DASHBOARD - AdLinkFly ke Admin/AdminsController
+              dashboard jaisa:
+                - Stats small-boxes (users, links, clicks, pending)
+                - Latest users table
+                - Latest withdrawals table
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li class="active"><a href="dashboard.html">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+
+                <li><a href="users.html"><i class="fa fa-users"></i> <span>Users</span></a></li>
+
+                <li><a href="links.html"><i class="fa fa-link"></i> <span>All Links</span></a></li>
+
+                <li><a href="withdrawals.html"><i class="fa fa-money"></i>
+                    <span>Withdrawals</span>
+                    <small class="label pull-right bg-red" id="menu-pending-badge"
+                           style="display:none">0</small></a></li>
+
+                <li><a href="rates.html"><i class="fa fa-line-chart"></i>
+                    <span>CPM Rates</span></a></li>
+
+                <li><a href="plans.html"><i class="fa fa-diamond"></i>
+                    <span>Membership Plans</span></a></li>
+
+                <li><a href="ads.html"><i class="fa fa-bullhorn"></i>
+                    <span>Advertising</span>
+                    <small class="label pull-right bg-yellow" id="menu-ads-badge"
+                           style="display:none">0</small></a></li>
+
+                <li><a href="settings.html"><i class="fa fa-gears"></i>
+                    <span>Settings</span></a></li>
+
+                <li><a href="#" id="sidebar-logout">
+                    <i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Dashboard <small>Control Panel</small></h1>
+            <ol class="breadcrumb">
+                <li><i class="fa fa-dashboard"></i> Home</li>
+                <li class="active">Dashboard</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- ======== STATS SMALL BOXES ======== -->
+            <div class="row">
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3 id="stat-users">0</h3>
+                            <p>Total Users</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-users"></i></div>
+                        <a href="users.html" class="small-box-footer">
+                            Manage Users <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 id="stat-links">0</h3>
+                            <p>Total Links</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-link"></i></div>
+                        <a href="links.html" class="small-box-footer">
+                            All Links <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3 id="stat-clicks">0</h3>
+                            <p>Total Clicks</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-eye"></i></div>
+                        <a href="#" class="small-box-footer">&nbsp;</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3 id="stat-pending">0</h3>
+                            <p>Pending Payouts</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-money"></i></div>
+                        <a href="withdrawals.html" class="small-box-footer">
+                            Review <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== CHARTS (last 14 days) ======== -->
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-line-chart"></i>
+                                Clicks - Last 14 Days</h3>
+                        </div>
+                        <div class="box-body">
+                            <canvas id="chart-clicks" height="110"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="box box-warning">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-money"></i>
+                                Earnings Paid Out - Last 14 Days</h3>
+                        </div>
+                        <div class="box-body">
+                            <canvas id="chart-earnings" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== TOP COUNTRIES ======== -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-globe"></i>
+                                Traffic by Country</h3>
+                        </div>
+                        <div class="box-body">
+                            <canvas id="chart-countries" height="60"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== LATEST USERS + WITHDRAWALS ======== -->
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-user-plus"></i>
+                                Latest Users</h3>
+                            <a href="users.html" class="btn btn-default btn-xs pull-right">
+                                View All</a>
+                        </div>
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr><th>Name</th><th>Email</th>
+                                        <th>Joined</th><th>Status</th></tr>
+                                </thead>
+                                <tbody id="latest-users-body">
+                                    <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-money"></i>
+                                Latest Withdrawal Requests</h3>
+                            <a href="withdrawals.html" class="btn btn-default btn-xs pull-right">
+                                View All</a>
+                        </div>
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr><th>User</th><th>Amount</th><th>Date</th><th>Status</th></tr>
+                                </thead>
+                                <tbody id="latest-withdrawals-body">
+                                    <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        escapeHtml, formatDate, formatMoney
+    } from "./js/app.js";
+    import { ref, get, onValue }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       STATS COUNTERS
+       ============================================================ */
+    // Users poora node padhna padega (count ke liye)
+    const usersSnap = await get(ref(db, "users"));
+    let userCount = 0;
+    const allUsers = [];
+    if (usersSnap.exists()) {
+        usersSnap.forEach((c) => {
+            userCount++;
+            const u = c.val();
+            u._uid = c.key;
+            allUsers.push(u);
+        });
+    }
+    document.getElementById("stat-users").textContent = userCount;
+
+    // Links/clicks stats node se (live)
+    onValue(ref(db, "stats/total_links"), (s) => {
+        document.getElementById("stat-links").textContent = s.val() || 0;
+    });
+    onValue(ref(db, "stats/total_clicks"), (s) => {
+        document.getElementById("stat-clicks").textContent = s.val() || 0;
+    });
+
+    /* ============================================================
+       WITHDRAWALS - live list (pending badge + latest table)
+       ============================================================ */
+    onValue(ref(db, "withdrawals"), (snap) => {
+        const list = [];
+        snap.forEach((c) => {
+            const w = c.val();
+            w._id = c.key;
+            w._uid = c.key.split("_")[1] || "";
+            list.push(w);
+        });
+        list.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+        const pending = list.filter(w =>
+            !w.status || w.status === "pending").length;
+
+        const badge = document.getElementById("menu-pending-badge");
+        if (pending > 0) {
+            badge.style.display = "";
+            badge.textContent = pending;
+        } else {
+            badge.style.display = "none";
+        }
+        document.getElementById("stat-pending").textContent = pending;
+
+        // Latest 8 dikhao
+        const tbody = document.getElementById("latest-withdrawals-body");
+        if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">
+                Abhi koi request nahi aayi.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = list.slice(0, 8).map((w) => {
+            // User ka naam users list se dhundo
+            const u = allUsers.find(x => x._uid === w._uid);
+            const label = (!w.status || w.status === "pending")
+                ? '<span class="label label-warning">Pending</span>'
+                : (w.status === "completed"
+                    ? '<span class="label label-success">Paid</span>'
+                    : '<span class="label label-danger">Rejected</span>');
+            return `<tr>
+                <td>${u ? escapeHtml(u.name) : escapeHtml(w.name || "Unknown")}</td>
+                <td><b>${formatMoney(w.amount)}</b></td>
+                <td>${formatDate(w.created_at)}</td>
+                <td>${label}</td></tr>`;
+        }).join("");
+    });
+
+    /* ============================================================
+       LATEST USERS TABLE (naye pehle)
+       ============================================================ */
+    allUsers.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+    const ubody = document.getElementById("latest-users-body");
+    if (allUsers.length === 0) {
+        ubody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">
+            Abhi koi user signup nahi hua.</td></tr>`;
+    } else {
+        ubody.innerHTML = allUsers.slice(0, 8).map((u) => `
+            <tr>
+                <td>${escapeHtml(u.name || "-")}</td>
+                <td>${escapeHtml(u.email || "-")}</td>
+                <td>${formatDate(u.created_at)}</td>
+                <td>${u.disabled
+                    ? '<span class="label label-danger">Disabled</span>'
+                    : '<span class="label label-success">Active</span>'}</td>
+            </tr>`).join("");
+    }
+
+    /* ============================================================
+       CHARTS - stats/daily + stats/country nodes se
+       (go.html har click pe yahan data bump karta hai)
+       ============================================================ */
+    // Last 14 din ki date keys banao (purani -> nayi)
+    function lastNDays(n) {
+        const out = [];
+        for (let i = n - 1; i >= 0; i--) {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            out.push({
+                key: d.toISOString().slice(0, 10),
+                label: d.getDate() + "/" + (d.getMonth() + 1)
+            });
+        }
+        return out;
+    }
+
+    try {
+        const [dailySnap, countrySnap] = await Promise.all([
+            get(ref(db, "stats/daily")),
+            get(ref(db, "stats/country"))
+        ]);
+        const daily = dailySnap.val() || {};
+        const countries = countrySnap.val() || {};
+
+        const days = lastNDays(14);
+        const clicksData   = days.map(d => (daily[d.key]?.clicks) || 0);
+        const earningsData = days.map(d =>
+            Math.round((daily[d.key]?.earnings || 0) * 1000) / 1000);
+
+        // ---- Clicks line chart ----
+        new Chart(document.getElementById("chart-clicks"), {
+            type: "line",
+            data: {
+                labels: days.map(d => d.label),
+                datasets: [{
+                    label: "Clicks",
+                    data: clicksData,
+                    borderColor: "#00a65a",
+                    backgroundColor: "rgba(0,166,90,.12)",
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 3
+                }]
+            },
+            options: {
+                legend: { display: false },
+                scales: { yAxes: [{ ticks: { beginAtZero: true,
+                    precision: 0 } }] }
+            }
+        });
+
+        // ---- Earnings bar chart ----
+        new Chart(document.getElementById("chart-earnings"), {
+            type: "bar",
+            data: {
+                labels: days.map(d => d.label),
+                datasets: [{
+                    label: "Earnings",
+                    data: earningsData,
+                    backgroundColor: "#f39c12"
+                }]
+            },
+            options: {
+                legend: { display: false },
+                scales: { yAxes: [{ ticks: { beginAtZero: true }] } }
+            }
+        });
+
+        // ---- Countries horizontal bar ----
+        const cKeys = Object.keys(countries)
+            .sort((a, b) =>
+                ((countries[b].clicks)||0) - ((countries[a].clicks)||0))
+            .slice(0, 8);   // top 8
+
+        new Chart(document.getElementById("chart-countries"), {
+            type: "horizontalBar",
+            data: {
+                labels: cKeys,
+                datasets: [{
+                    label: "Clicks",
+                    data: cKeys.map(k => countries[k].clicks || 0),
+                    backgroundColor: "#00c0ef"
+                }]
+            },
+            options: {
+                legend: { display: false },
+                scales: { xAxes: [{ ticks: { beginAtZero: true,
+                    precision: 0 } }] }
+            }
+        });
+    } catch (e) {
+        console.error("Chart load fail:", e);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/index.html
+     KAAM   : ADMIN LOGIN - AdLinkFly ke Control Panel login jaisa.
+              AdminLTE login-box design. Login ke baad verifyAdmin()
+              double-check hota hai (role + admins node).
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login - Shortify</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition login-page">
+
+    <!-- ==================== LOGIN BOX ==================== -->
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="../index.html"><b>Shortify</b> CP</a>
+        </div>
+
+        <div class="login-box-body">
+            <p class="login-box-msg">Control Panel me sign in karo</p>
+
+            <form id="admin-login-form">
+                <div class="form-group has-feedback">
+                    <input type="email" class="form-control"
+                           id="email-input" placeholder="Email" required>
+                    <span class="fa fa-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control"
+                           id="password-input" placeholder="Password" required>
+                    <span class="fa fa-lock form-control-feedback"></span>
+                </div>
+
+                <div class="alert alert-danger hidden" id="error-box"></div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-flat"
+                        id="login-btn">
+                    <i class="fa fa-sign-in"></i> Sign In</button>
+            </form>
+
+            <br>
+            <a href="../index.html"><i class="fa fa-angle-left"></i> Main site pe wapas jao</a>
+        </div>
+    </div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<script type="module">
+    import { auth } from "./js/firebase-config.js";
+    import { getCurrentUser, verifyAdmin }
+        from "./js/app.js";
+    import { signInWithEmailAndPassword }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    /* ---------- Pehle se logged in admin? -> dashboard bhejo */
+    const existing = await getCurrentUser();
+    if (existing && await verifyAdmin(existing.uid)) {
+        location.replace("dashboard.html");
+    }
+
+    document.getElementById("admin-login-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const errBox = document.getElementById("error-box");
+        const btn = document.getElementById("login-btn");
+        errBox.classList.add("hidden");
+
+        const email = document.getElementById("email-input").value.trim();
+        const password = document.getElementById("password-input").value;
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Checking...';
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+
+            // DOUBLE CHECK: ye sach me admin hai?
+            const u = await getCurrentUser();
+            if (!(await verifyAdmin(u.uid))) {
+                throw new Error("Ye account admin nahi hai. Access denied!");
+            }
+
+            location.href = "dashboard.html";
+
+        } catch (err) {
+            const msgs = {
+                "auth/invalid-email": "Email format galat hai.",
+                "auth/missing-password": "Password khali hai.",
+                "auth/invalid-credential": "Email ya password galat hai - " +
+                    "(ya ye account bana hi nahi. Pehle user/signup.html se signup karo.)",
+                "auth/user-not-found": "Aisa koi account nahi hai.",
+                "auth/wrong-password": "Password galat hai.",
+                "auth/too-many-requests": "Bahut baar try kiya. Thodi der baad."
+            };
+            errBox.textContent = msgs[err.code] || err.message;
+            errBox.classList.remove("hidden");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-sign-in"></i> Sign In';
+        }
+    });
+</script>
+
+</body>
+</html>

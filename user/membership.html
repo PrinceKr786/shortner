@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+   FILE   : user/membership.html
+   KAAM   : Membership plans - bilkul AdLinkFly jaise design.
+            - Plans grid se plan dikhate hain
+            - Current plan dikhata hai
+            - Request button for upgrade
+  ============================================================
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Membership - Shortify</title>
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/skin-blue.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        .pricing-box {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,.12);
+            text-align: center;
+            padding-bottom: 18px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+        .pricing-box.popular { border-top: 3px solid #f39c12; }
+        .pricing-head {
+            background: #f4f6f9;
+            border-radius: 4px 4px 0 0;
+            padding: 22px 10px;
+        }
+        .popular .pricing-head { background: #222d32; color: #fff; }
+        .pricing-title {
+            font-family: 'Roboto Slab', serif;
+            font-size: 17px;
+            font-weight: 700;
+            margin: 0 0 6px;
+        }
+        .pricing-price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #00a65a;
+        }
+        .pricing-price small { font-size: 13px; color: #999; }
+        .pricing-feats {
+            list-style: none;
+            padding: 14px 20px 8px;
+            margin: 0;
+        }
+        .pricing-feats li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            color: #555;
+        }
+        .current-plan-tag {
+            position: absolute;
+            top: 12px; right: 12px;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+<div class="wrapper">
+
+    <!-- ==================== TOP HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b></span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" class="user-image" alt="" id="header-avatar">
+                            <span class="hidden-xs" id="header-name">...</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header" style="height:145px">
+                                <img src="" class="img-circle" alt="" id="dropdown-avatar">
+                                <p id="dropdown-email">
+                                    <small id="member-since"></small>
+                                </p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="profile.html"
+                                       class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== LEFT SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <!-- Money Wallet (wallet_enable wala li) -->
+                <li>
+                    <a><i class="fa fa-credit-card text-aqua"></i>
+                        <span><b>Money Wallet</b><br>
+                            &#8377;<span id="wallet-balance">0.00</span>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="active">
+                    <a href="dashboard.html"><i class="fa fa-dashboard"></i>
+                        <span>Statistics</span></a>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i>
+                        <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html">All Links</a></li>
+                        <li><a href="links-hidden.html">Hidden Links</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="withdraw.html"><i class="fa fa-dollar"></i>
+                        <span>Withdraw</span></a>
+                </li>
+
+                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
+
+                <li><a href="advertise.html"><i class="fa fa-bullhorn text-aqua"></i> <span>Advertise</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-wrench"></i>
+                        <span>Tools</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="tools-quick.html">Quick Link</a></li>
+                        <li><a href="tools-mass.html">Mass Shrinker</a></li>
+                        <li><a href="tools-fullpage.html">Full Page Script</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="referrals.html"><i class="fa fa-exchange"></i>
+                        <span>Referrals</span></a>
+                </li>
+
+                <li>
+                    <a href="profile.html"><i class="fa fa-user"></i>
+                        <span>Profile</span></a>
+                </li>
+
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i>
+                    <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT WRAPPER ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Membership <small>Premium Benefits</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Membership</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- Current membership info -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-diamond text-yellow"></i>
+                        Aapka current plan:
+                        <b id="current-plan-name">Free</b>
+                        <small class="text-muted" id="current-plan-exp"></small>
+                    </h3>
+                </div>
+                <div class="box-body">
+                    <p>Abhi aap Free plan par hain. Request bhej kar upgrade lo aur
+                       earning multiplier pao.</p>
+                </div>
+            </div>
+
+            <div class="callout callout-info">
+                <h4><i class="fa fa-info-circle"></i> Kaise kaam karta hai?</h4>
+                <p>Plan choose karo aur <b>Request</b> dabao. Admin approval ke
+                   baad aapke links se hone wali har earning us plan ke
+                   multiplier se multiply ho jayegi.</p>
+            </div>
+
+            <!-- Plans grid (JS bharta hai) -->
+            <div class="row" id="plans-grid">
+                <div class="col-xs-12 text-center text-muted" style="padding:40px 0">
+                    <i class="fa fa-spinner fa-spin fa-2x"></i>
+                    <p>Loading plans...</p>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        getCurrentUser, requireLogin, fillUserHeader, wireLogout,
+        escapeHtml, formatMoney, showToast
+    } from "./js/app.js";
+    import { ref, get, push }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireLogin();
+    await fillUserHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       CURRENT MEMBERSHIP STATUS
+       ============================================================ */
+    let myMembership = null;
+
+    try {
+        const mSnap = await get(ref(db, `users/${me.uid}/membership`));
+        const m = mSnap.val();
+
+        if (m && m.plan_id &&
+            (Number(m.expires_at) || 0) > Date.now()) {
+            myMembership = m;
+            document.getElementById("current-plan-name").textContent =
+                m.name || "Premium";
+            document.getElementById("current-plan-exp").textContent =
+                "- expires " +
+                new Date(Number(m.expires_at)).toLocaleDateString("en-IN");
+        }
+    } catch { /* free user */ }
+
+    /* ============================================================
+       PLANS GRID RENDER
+       ============================================================ */
+    const grid = document.getElementById("plans-grid");
+
+    try {
+        const pSnap = await get(ref(db, "plans"));
+
+        if (!pSnap.exists()) {
+            grid.innerHTML = `
+                <div class="col-xs-12 text-center text-muted" style="padding:40px 0">
+                    <i class="fa fa-diamond fa-2x"></i>
+                    <p>Abhi koi plans available nahi hain.</p>
+                </div>`;
+        } else {
+            let html = "";
+            pSnap.forEach((c) => {
+                const p = c.val();
+                const isActive =
+                    myMembership && myMembership.plan_id === c.key;
+                html += `
+                    <div class="col-md-4 col-sm-6">
+                        <div class="pricing-box ${Number(p.multiplier) >= 2 ? "popular" : ""}">
+                            ${isActive ? '<span class="label label-success current-plan-tag">ACTIVE</span>' : ""}
+                            <div class="pricing-head">
+                                <h3 class="pricing-title">${escapeHtml(p.name)}</h3>
+                                <div class="pricing-price">${formatMoney(p.price)}
+                                    <small>/ ${escapeHtml(String(p.days || 30))} days</small>
+                                </div>
+                            </div>
+                            <ul class="pricing-feats">
+                                <li><i class="fa fa-times text-muted"></i>
+                                    Earning multiplier
+                                    <b class="text-green">${escapeHtml(String(p.multiplier || 1))}&times;</b></li>
+                                <li><i class="fa fa-check text-green"></i>
+                                    Priority support</li>
+                                <li><i class="fa fa-check text-green"></i>
+                                    Full statistics</li>
+                                <li><i class="fa fa-check text-green"></i>
+                                    API access boost</li>
+                            </ul>
+                            <button class="btn ${isActive ? "btn-success disabled" : "btn-primary"} btn-flat btn-sm req-btn"
+                                    data-id="${c.key}"
+                                    data-name="${escapeHtml(p.name)}"
+                                    data-price="${Number(p.price) || 0}"
+                                    data-days="${Number(p.days) || 30}"
+                                    data-mult="${Number(p.multiplier) || 1}"
+                                    ${isActive ? "disabled" : ""}>
+                                ${isActive ? "Active Hai" : "Request Now"}
+                            </button>
+                        </div>
+                    </div>`;
+            });
+            grid.innerHTML = html;
+
+            /* ---------- REQUEST HANDLERS ---------- */
+            document.querySelectorAll(".req-btn").forEach((btn) => {
+                btn.addEventListener("click", async () => {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending...';
+
+                    try {
+                        await push(ref(db, "membership_requests"), {
+                            uid: me.uid,
+                            name: me.name,
+                            email: me.email,
+                            plan_id: btn.dataset.id,
+                            plan_name: btn.dataset.name,
+                            price: Number(btn.dataset.price),
+                            days: Number(btn.dataset.days),
+                            multiplier: Number(btn.dataset.mult),
+                            status: "pending",
+                            created_at: Date.now()
+                        });
+
+                        showToast("Request bhej di gayi! Admin approval ke " +
+                            "baad plan activate hoga.", "success");
+                        btn.innerHTML = '<i class="fa fa-clock-o"></i> Pending';
+                    } catch (err) {
+                        console.error(err);
+                        showToast("Request fail: " + err.message, "danger");
+                        btn.disabled = false;
+                        btn.textContent = "Request Now";
+                    }
+                });
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        grid.innerHTML = `
+            <div class="col-xs-12 alert alert-danger">
+                Plans load nahi hue: ${escapeHtml(err.message)}</div>`;
+    }
+</script>
+
+</body>
+</html>

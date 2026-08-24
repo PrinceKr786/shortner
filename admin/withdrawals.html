@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/withdrawals.html
+     KAAM   : PAYOUT MANAGEMENT - AdLinkFly ke admin Payments
+              page jaisa (AdminLTE):
+                - Saari withdraw requests live dikhti hain
+                - APPROVE  -> paisa bhejne ke baad mark karo
+                              (total_withdrawn badhega)
+                - REJECT   -> paisa WALLET ME WAPIS refund
+                              (atomic transaction - safe)
+
+     DB NODE: withdrawals/{wid}
+                uid, name, email, amount, method,
+                payment_details, status(pending|completed|rejected),
+                created_at, processed_at
+
+     SECURITY: Reject pe refund runTransaction se hota hai -
+               do admin ek saath reject kare to bhi double
+               refund NAHI hoga.
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Withdrawals - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+
+                <li><a href="users.html"><i class="fa fa-users"></i> <span>Users</span></a></li>
+
+                <li><a href="links.html"><i class="fa fa-link"></i> <span>All Links</span></a></li>
+
+                <li class="active"><a href="withdrawals.html"><i class="fa fa-money"></i>
+                    <span>Withdrawals</span>
+                    <small class="label pull-right bg-red" id="menu-pending-badge"
+                           style="display:none">0</small></a></li>
+
+                <li><a href="rates.html"><i class="fa fa-line-chart"></i>
+                    <span>CPM Rates</span></a></li>
+
+                <li><a href="plans.html"><i class="fa fa-diamond"></i>
+                    <span>Membership Plans</span></a></li>
+
+                <li><a href="ads.html"><i class="fa fa-bullhorn"></i>
+                    <span>Advertising</span></a></li>
+
+                <li><a href="settings.html"><i class="fa fa-gears"></i>
+                    <span>Settings</span></a></li>
+
+                <li><a href="#" id="sidebar-logout">
+                    <i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Withdrawal Requests <small>Payout management</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Withdrawals</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- ======== INFO BOXES ======== -->
+            <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-yellow"><i class="fa fa-hourglass-half"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Pending Requests</span>
+                            <span class="info-box-number" id="stat-pending">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-red"><i class="fa fa-inr"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Pending Amount</span>
+                            <span class="info-box-number" id="stat-pending-amt">&#8377;0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Total Paid</span>
+                            <span class="info-box-number" id="stat-paid">&#8377;0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== FILTER TABS + TABLE ======== -->
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active" id="tab-pending-li">
+                        <a href="#pane-list" data-filter="pending">
+                            <i class="fa fa-hourglass-half"></i> Pending</a></li>
+                    <li id="tab-all-li">
+                        <a href="#pane-list" data-filter="all">
+                            <i class="fa fa-file-text-o"></i> Sabhi</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="pane-list">
+                        <table class="table table-hover table-striped no-margin">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Amount</th>
+                                    <th>Method</th>
+                                    <th>Payment Details</th>
+                                    <th>Status</th>
+                                    <th style="width:230px">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="req-body">
+                                <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        showToast, escapeHtml, formatDate, formatDateTime, formatMoney
+    } from "./js/app.js";
+    import { ref, onValue, update, runTransaction }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       STATE + LIVE DATA LOAD (poora node fetch karke JS me sort -
+       rules me .indexOn ki zaroorat nahi padti)
+       ============================================================ */
+    let allRequests = [];
+    let currentFilter = "pending";
+
+    const reqBody = document.getElementById("req-body");
+
+    onValue(ref(db, "withdrawals"), (snapshot) => {
+        allRequests = [];
+        snapshot.forEach((c) => {
+            allRequests.push({ wid: c.key, ...c.val() });
+        });
+        // Naye pehle
+        allRequests.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+        renderStats();
+        renderTable();
+    });
+
+    /* ============================================================
+       STATS CALCULATE
+       ============================================================ */
+    function renderStats() {
+        let pendCount = 0, pendAmt = 0, totalPaid = 0;
+
+        for (const w of allRequests) {
+            if (w.status === "pending") {
+                pendCount++;
+                pendAmt += Number(w.amount) || 0;
+            }
+            if (w.status === "completed") {
+                totalPaid += Number(w.amount) || 0;
+            }
+        }
+
+        document.getElementById("stat-pending").textContent = pendCount;
+        document.getElementById("stat-pending-amt").textContent =
+            formatMoney(pendAmt);
+        document.getElementById("stat-paid").textContent =
+            formatMoney(totalPaid);
+
+        // Sidebar badge
+        const badge = document.getElementById("menu-pending-badge");
+        if (pendCount > 0) {
+            badge.style.display = "";
+            badge.textContent = pendCount;
+        } else {
+            badge.style.display = "none";
+        }
+    }
+
+    /* ============================================================
+       TABLE RENDER (filter tabs ke hisaab se)
+       ============================================================ */
+    function renderTable() {
+        const list = currentFilter === "pending"
+            ? allRequests.filter(w => w.status === "pending")
+            : allRequests;
+
+        if (list.length === 0) {
+            reqBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">
+                ${currentFilter === "pending"
+                    ? "Koi pending request nahi." : "Abhi koi request nahi aayi."}
+                </td></tr>`;
+            return;
+        }
+
+        reqBody.innerHTML = list.map((w) => `
+            <tr>
+                <td>
+                    <b>${escapeHtml(w.name || "?")}</b><br>
+                    <small class="text-muted">${escapeHtml(w.email || "")}</small>
+                </td>
+                <td style="font-weight:700">${formatMoney(w.amount)}</td>
+                <td>${escapeHtml(w.method || "-")}</td>
+                <td style="max-width:200px;word-break:break-all">
+                    <small>${escapeHtml(w.payment_details || "-")}</small></td>
+                <td>
+                    ${w.status === "completed"
+                        ? '<span class="label label-success">Completed</span>'
+                        : w.status === "rejected"
+                            ? '<span class="label label-danger">Rejected</span>'
+                            : '<span class="label label-warning">Pending</span>'}
+                    <br><small class="text-muted">${
+                        w.processed_at ? formatDate(w.processed_at)
+                                       : formatDate(w.created_at)}</small>
+                </td>
+                <td>
+                    ${w.status === "pending" ? `
+                        <button class="btn btn-success btn-xs act-approve"
+                                data-wid="${w.wid}">
+                            <i class="fa fa-check"></i> Pay Hua</button>
+                        <button class="btn btn-danger btn-xs act-reject"
+                                data-wid="${w.wid}">
+                            <i class="fa fa-times"></i> Reject</button>`
+                    : `<small class="text-muted">${formatDateTime(w.processed_at)}</small>`}
+                </td>
+            </tr>`).join("");
+    }
+
+    /* ---------- Filter tabs ---------- */
+    document.querySelectorAll('[data-filter]').forEach((a) => {
+        a.addEventListener("click", () => {
+            currentFilter = a.dataset.filter;
+            document.getElementById("tab-pending-li").classList.toggle(
+                "active", currentFilter === "pending");
+            document.getElementById("tab-all-li").classList.toggle(
+                "active", currentFilter === "all");
+            renderTable();
+        });
+    });
+
+
+    /* ============================================================
+       ACTION HANDLERS (approve / reject)
+       ============================================================ */
+    reqBody.addEventListener("click", async (e) => {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+
+        const wid = btn.dataset.wid;
+        const req = allRequests.find(r => r.wid === wid);
+        if (!req) return;
+
+        /* ---------- APPROVE: paisa bhej diya hai ---------- */
+        if (btn.classList.contains("act-approve")) {
+            const yes = confirm(
+                `${req.name} ko ${formatMoney(req.amount)} bhej chuke ho?\n` +
+                `Request "Completed" mark hogi.`);
+            if (!yes) return;
+
+            try {
+                await update(ref(db, `withdrawals/${wid}`), {
+                    status: "completed",
+                    processed_at: Date.now()
+                });
+
+                // total_withdrawn atomic increment
+                if (req.uid) {
+                    await runTransaction(
+                        ref(db, `users/${req.uid}/total_withdrawn`),
+                        (cur) => (cur || 0) + Number(req.amount));
+                }
+
+                showToast(`${formatMoney(req.amount)} completed mark ho gaya!`,
+                    "success");
+            } catch (err) {
+                showToast("Fail: " + err.message, "error");
+            }
+        }
+
+        /* ---------- REJECT: wallet me refund (ATOMIC!) ---------- */
+        if (btn.classList.contains("act-reject")) {
+            const yes = confirm(
+                `${req.name} ki request reject karein?\n` +
+                `${formatMoney(req.amount)} uske wallet me WAPIS chala jayega.`);
+            if (!yes) return;
+
+            try {
+                if (!req.uid) throw new Error("User UID nahi mila");
+
+                // STEP 1: Wallet refund ATOMIC transaction se
+                //         (double-reject pe double refund nahi hoga)
+                const result = await runTransaction(
+                    ref(db, `users/${req.uid}/wallet_money`),
+                    (cur) => (cur || 0) + Number(req.amount));
+
+                if (!result.committed) {
+                    throw new Error("Refund commit nahi hua, dobara try karo");
+                }
+
+                // STEP 2: Status update
+                await update(ref(db, `withdrawals/${wid}`), {
+                    status: "rejected",
+                    processed_at: Date.now()
+                });
+
+                showToast(`Refund ho gaya: ${formatMoney(req.amount)} wallet me wapis`,
+                    "success");
+            } catch (err) {
+                showToast("Reject fail: " + err.message, "error");
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

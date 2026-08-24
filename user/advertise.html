@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+   FILE   : user/advertise.html
+   KAAM   : Advertising marketplace - bilkul AdLinkFly jaise.
+            - Banner form submit karo
+            - Package choose karo, price auto calculate
+            - Submit -> ads node (status:"pending")
+  ============================================================
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Advertise - Shortify</title>
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/skin-blue.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+<div class="wrapper">
+
+    <!-- ==================== TOP HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b></span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" class="user-image" alt="" id="header-avatar">
+                            <span class="hidden-xs" id="header-name">...</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header" style="height:145px">
+                                <img src="" class="img-circle" alt="" id="dropdown-avatar">
+                                <p id="dropdown-email">
+                                    <small id="member-since"></small>
+                                </p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="profile.html"
+                                       class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+<!-- ==================== LEFT SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <!-- Money Wallet (wallet_enable wala li) -->
+                <li>
+                    <a><i class="fa fa-credit-card text-aqua"></i>
+                        <span><b>Money Wallet</b><br>
+                            &#8377;<span id="wallet-balance">0.00</span>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="active">
+                    <a href="dashboard.html"><i class="fa fa-dashboard"></i>
+                        <span>Statistics</span></a>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i>
+                        <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html">All Links</a></li>
+                        <li><a href="links-hidden.html">Hidden Links</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="withdraw.html"><i class="fa fa-dollar"></i>
+                        <span>Withdraw</span></a>
+                </li>
+
+                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
+
+                <li><a href="advertise.html"><i class="fa fa-bullhorn text-aqua"></i> <span>Advertise</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-wrench"></i>
+                        <span>Tools</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="tools-quick.html">Quick Link</a></li>
+                        <li><a href="tools-mass.html">Mass Shrinker</a></li>
+                        <li><a href="tools-fullpage.html">Full Page Script</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="referrals.html"><i class="fa fa-exchange"></i>
+                    <span>Referrals</span></a></li>
+
+                <li><a href="profile.html"><i class="fa fa-user"></i>
+                    <span>Profile</span></a></li>
+
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i>
+                    <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT WRAPPER ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Advertise <small>Promote Your Business</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Advertise</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <div class="callout callout-info">
+                <h4><i class="fa fa-bullhorn"></i> Banner Advertising</h4>
+                <p>Aapka 468x60 banner har interstitial page ke top par dikhega.
+                   Submit karne ke baad admin approve karega aur impressions
+                   serve hona shuru ho jayengi.</p>
+            </div>
+
+            <div class="row">
+                <!-- ======== NEW CAMPAIGN FORM ======== -->
+                <div class="col-md-5">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-plus"></i>
+                                New Campaign</h3>
+                        </div>
+                        <form class="form-horizontal" id="campaign-form">
+                            <div class="box-body">
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Title</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control"
+                                               id="ad-title" maxlength="40"
+                                               placeholder="Campaign name" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Image URL</label>
+                                    <div class="col-sm-9">
+                                        <input type="url" class="form-control"
+                                               id="ad-image"
+                                               placeholder="https://.../banner.png" required>
+                                        <small class="text-muted">468x60 recommended</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Target URL</label>
+                                    <div class="col-sm-9">
+                                        <input type="url" class="form-control"
+                                               id="ad-target"
+                                               placeholder="https://yourwebsite.com" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Package</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" id="ad-package">
+                                            <option value="1000">1,000 Impressions</option>
+                                            <option value="5000">5,000 Impressions</option>
+                                            <option value="10000">10,000 Impressions</option>
+                                            <option value="50000">50,000 Impressions</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0">
+                                    <div class="col-sm-offset-3 col-sm-9">
+                                        <div class="well well-sm text-center">
+                                            Estimated Cost:
+                                            <b class="text-green" style="font-size:20px"
+                                               id="cost-display">&#8377;0.00</b>
+                                            <br><small class="text-muted"
+                                               id="rate-note">Rate load ho raha hai...</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary btn-flat pull-right"
+                                        id="submit-btn">
+                                    <i class="fa fa-send"></i> Submit Campaign</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======== MY CAMPAIGNS LIST ======== -->
+                <div class="col-md-7">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-list"></i>
+                                My Campaigns</h3>
+                        </div>
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr><th>Campaign</th><th>Served</th>
+                                        <th>Status</th><th>Created</th></tr>
+                                </thead>
+                                <tbody id="campaigns-body">
+                                    <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        getCurrentUser, requireLogin, fillUserHeader, wireLogout,
+        escapeHtml, formatDate, formatMoney, formatNumber, showToast, isValidUrl
+    } from "./js/app.js";
+    import { ref, get, push, onValue, child }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireLogin();
+    await fillUserHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       RATE LOAD - CPM price = default interstitial rate x 2
+       ============================================================ */
+    let cpmPrice = 16;   // fallback
+
+    try {
+        const rSnap = await get(child(ref(db), "earning_rates/default"));
+        if (rSnap.exists()) {
+            cpmPrice = (Number(rSnap.val().interstitial) || 8) * 2;
+        }
+    } catch {}
+
+    document.getElementById("rate-note").textContent =
+        "Rate: " + formatMoney(cpmPrice) + " / 1000 impressions";
+
+    function updateCost() {
+        const views = Number(document.getElementById("ad-package").value) || 0;
+        document.getElementById("cost-display").innerHTML =
+            "&#8377;" + ((views * cpmPrice) / 1000).toFixed(2);
+    }
+    document.getElementById("ad-package")
+        .addEventListener("change", updateCost);
+    updateCost();
+
+    /* ============================================================
+       SUBMIT CAMPAIGN -> ads/{id} status:"pending"
+       ============================================================ */
+    document.getElementById("campaign-form")
+        .addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const title  = document.getElementById("ad-title").value.trim();
+            const image  = document.getElementById("ad-image").value.trim();
+            const target = document.getElementById("ad-target").value.trim();
+            const views  = Number(
+                document.getElementById("ad-package").value);
+
+            // Validation - http/https hi chalega
+            if (!title || !image || !target) {
+                showToast("Saare fields bharna zaroori hai.", "warning");
+                return;
+            }
+            if (!isValidUrl(image) || !isValidUrl(target)) {
+                showToast("Image/Target URL valid nahi lag raha.", "danger");
+                return;
+            }
+
+            const btn = document.getElementById("submit-btn");
+            btn.disabled = true;
+            btn.innerHTML =
+                '<i class="fa fa-spinner fa-spin"></i> Submitting...';
+
+            try {
+                await push(ref(db, "ads"), {
+                    uid: me.uid,
+                    advertiser_email: me.email,
+                    title: title,
+                    image_url: image,
+                    target_url: target,
+                    package_views: views,
+                    served_views: 0,
+                    cost: (views * cpmPrice) / 1000,
+                    status: "pending",
+                    created_at: Date.now()
+                });
+
+                showToast("Campaign submit ho gaya! Admin approval ke " +
+                    "baad impressions serve hongi.", "success");
+
+                e.target.reset();
+                updateCost();
+            } catch (err) {
+                console.error(err);
+                showToast("Submit fail: " + err.message, "danger");
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-send"></i> Submit Campaign';
+        });
+
+    /* ============================================================
+       MY CAMPAIGNS LIVE LIST (sirf mere)
+       ============================================================ */
+    onValue(ref(db, "ads"), (snap) => {
+        const mine = [];
+        snap.forEach((c) => {
+            const a = c.val();
+            if (a.uid === me.uid) {
+                a._id = c.key;
+                mine.push(a);
+            }
+        });
+        mine.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+        const tbody = document.getElementById("campaigns-body");
+        if (mine.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">
+                Abhi koi campaign nahi - pehla banner submit karo!</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = mine.map((a) => {
+            let label;
+            switch (a.status) {
+                case "active":
+                    label = '<span class="label label-success">Active</span>';
+                    break;
+                case "paused":
+                    label = '<span class="label label-default">Paused</span>';
+                    break;
+                case "completed":
+                    label = '<span class="label label-primary">Completed</span>';
+                    break;
+                case "rejected":
+                    label = '<span class="label label-danger">Rejected</span>';
+                    break;
+                default:
+                    label = '<span class="label label-warning">Pending Review</span>';
+            }
+
+            const served = Number(a.served_views) || 0;
+            const pkg    = Number(a.package_views) || 1;
+            const pct    = Math.min(100, Math.round((served / pkg) * 100));
+
+            return `<tr>
+                <td>
+                    <img src="${escapeHtml(a.image_url)}" alt=""
+                         style="max-height:34px" class="img-thumbnail"><br>
+                    <b>${escapeHtml(a.title)}</b>
+                    <br><small class="text-muted">${formatMoney(a.cost)}</small>
+                </td>
+                <td style="min-width:130px">
+                    ${formatNumber(served)} / ${formatNumber(pkg)}
+                    <div class="progress progress-xs" style="margin:6px 0 0">
+                        <div class="progress-bar progress-bar-aqua"
+                             style="width:${pct}%"></div>
+                    </div>
+                    <small class="text-muted">${pct}%</small>
+                </td>
+                <td>${label}</td>
+                <td>${formatDate(a.created_at)}</td>
+            </tr>`;
+        }).join("");
+    });
+</script>
+
+</body>
+</html>

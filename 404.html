@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : 404.html
+     KAAM   : "Page Not Found" error page.
+              GitHub Pages ise automatically use karta hai jab
+              koi galat URL khola jaye.
+     DESIGN : Standalone (inline CSS) - AdLinkFly jaisa clean look.
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Nahi Mila - Shortify</title>
+
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto+Slab:400,700" rel="stylesheet">
+    <link rel="icon" href="favicon.ico">
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Montserrat',sans-serif;
+            background:#f4f6f9; min-height:100vh;
+            display:flex; align-items:center; justify-content:center;
+            padding:24px;
+        }
+        .card-404 {
+            background:#fff; border-radius:6px; text-align:center;
+            padding:56px 48px; max-width:480px; width:100%;
+            box-shadow:0 2px 12px rgba(30,40,60,.08);
+        }
+        .code-404 {
+            font-family:'Roboto Slab',serif;
+            font-size:5rem; font-weight:700; color:#2980f3; line-height:1;
+        }
+        h1 { font-size:1.15rem; color:#2d3748; margin:18px 0 8px; }
+        p  { color:#8492a6; font-size:.88rem; margin-bottom:28px; }
+        .btn-home {
+            display:inline-block; padding:13px 34px; border-radius:4px;
+            background:#2980f3; color:#fff !important;
+            font-weight:700; font-size:.85rem; text-transform:uppercase;
+            letter-spacing:.04em; text-decoration:none;
+        }
+        .btn-home:hover { background:#1f6fd6; }
+    </style>
+</head>
+
+<body>
+
+    <div class="card-404">
+        <div class="code-404">404</div>
+        <h1>Ye page mila hi nahi...</h1>
+        <p>Shayad kabhi tha hi nahi, ya address galat hai.</p>
+        <a href="/" class="btn-home">&larr; Home Pe Chalo</a>
+    </div>
+
+</body>
+</html>

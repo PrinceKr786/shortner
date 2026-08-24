@@ -1,0 +1,558 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : user/links.html
+     KAAM   : ALL LINKS - AdLinkFly ke member links page jaisa
+              (AdminLTE box + table):
+                - Search box (client-side filter)
+                - Table: Short URL | Title | Views | Date | Actions
+                - Actions: Edit (modal), Hide/Show, Delete
+                - Edit modal: title + destination URL + ad type
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Links - Shortify</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="member-dashboard hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="../index.html" class="logo">
+            <span class="logo-mini"><b>S</b></span>
+            <span class="logo-lg"><b>Shortify</b></span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="User Image">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="User Image">
+                                <p><span id="dropdown-name">...</span><br>
+                                    <small>Member since <span id="member-since">-</span></small></p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left"><a href="profile.html" class="btn btn-default btn-flat">Profile</a></div>
+                                <div class="pull-right"><a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <button type="button"
+                    class="btn btn-block btn-social btn-github btn-lg shorten-button"
+                    data-toggle="modal" data-target="#shorten-modal">
+                <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
+            </button>
+            <br>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a><i class="fa fa-credit-card text-aqua"></i>
+                        <span><b>Money Wallet</b><br>
+                            &#8377;<span id="wallet-balance">0.00</span></span></a>
+                </li>
+
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+
+                <li class="treeview active">
+                    <a href="#"><i class="fa fa-link"></i>
+                        <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu menu-open" style="display:block">
+                        <li class="active"><a href="links.html">All Links</a></li>
+                        <li><a href="links-hidden.html">Hidden Links</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="withdraw.html"><i class="fa fa-dollar"></i> <span>Withdraw</span></a></li>
+
+                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
+
+                <li><a href="advertise.html"><i class="fa fa-bullhorn text-aqua"></i> <span>Advertise</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-wrench"></i>
+                        <span>Tools</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="tools-quick.html">Quick Link</a></li>
+                        <li><a href="tools-mass.html">Mass Shrinker</a></li>
+                        <li><a href="tools-fullpage.html">Full Page Script</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="referrals.html"><i class="fa fa-exchange"></i> <span>Referrals</span></a></li>
+                <li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>All Links <small>Manage your short links</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Manage Links</a></li>
+                <li class="active">All Links</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- Stats mini row -->
+            <div class="row">
+                <div class="col-lg-3 col-xs-6">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-aqua"><i class="fa fa-link"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Total Links</span>
+                            <span class="info-box-number" id="mini-total">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-green"><i class="fa fa-eye"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Total Views</span>
+                            <span class="info-box-number" id="mini-views">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-yellow"><i class="fa fa-check-circle"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Active</span>
+                            <span class="info-box-number" id="mini-active">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-red"><i class="fa fa-eye-slash"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Hidden</span>
+                            <span class="info-box-number" id="mini-hidden">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== LINKS TABLE BOX ======== -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Your Links</h3>
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width:220px">
+                            <input type="text" class="form-control pull-right"
+                                   id="search-input" placeholder="Search...">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default">
+                                    <i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:26%">Short URL</th>
+                                <th style="width:24%">Title / Destination</th>
+                                <th style="width:9%">Views</th>
+                                <th style="width:11%">Date</th>
+                                <th style="width:10%">Status</th>
+                                <th style="width:20%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="links-body">
+                            <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center text-muted hidden"
+                         id="empty-msg" style="padding:30px">
+                        <i class="fa fa-link fa-2x"></i>
+                        <p>Koi link nahi mila. Sidebar se pehla link banao!</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<!-- ======== EDIT LINK MODAL ======== -->
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-pencil"></i> Edit Link
+                    (<span id="edit-alias"></span>)</h4>
+            </div>
+            <form id="edit-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" class="form-control" id="edit-title-input"
+                               maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Destination URL</label>
+                        <input type="url" class="form-control" id="edit-url-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Advert Type</label>
+                        <select class="form-control" id="edit-adtype-select">
+                            <option value="interstitial">Interstitial Ads (highest rates)</option>
+                            <option value="banner">Banner Ads</option>
+                            <option value="none">No Ads</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ======== DELETE CONFIRM MODAL ======== -->
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title text-danger">Delete Link?</h4>
+            </div>
+            <div class="modal-body">
+                <p><strong id="delete-alias"></strong> ko permanently delete karna hai?
+                   Ye wapas NAHI aayega.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-btn">
+                    <i class="fa fa-trash"></i> Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Shorten Link Modal -->
+<div class="modal fade" id="shorten-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-paper-plane"></i> New Shorten Link</h4>
+            </div>
+            <form id="modal-shorten-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Destination URL</label>
+                        <input type="url" class="form-control" id="modal-url-input"
+                               placeholder="https://example.com/lambi-url" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Custom Alias <small>(optional)</small></label>
+                        <input type="text" class="form-control" id="modal-alias-input"
+                               maxlength="30" placeholder="sirf letters/numbers/dash">
+                    </div>
+                    <div class="alert alert-danger hidden" id="modal-error"></div>
+                    <div class="alert alert-success hidden" id="modal-result">
+                        Link ready! <a href="#" id="modal-result-link" target="_blank"
+                           style="word-break:break-all;font-weight:bold"></a>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                id="modal-copy"><i class="fa fa-clipboard"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="modal-submit">
+                        <i class="fa fa-paper-plane"></i> Shorten</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireLogin, fillUserHeader, wireLogout, initShortenModal,
+        showToast, escapeHtml, formatDate, formatNumber,
+        isValidUrl, SITE_URL
+    } from "./js/app.js";
+    import {
+        ref, get, query, orderByChild, equalTo, update, remove
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireLogin();
+    await fillUserHeader(me);
+    wireLogout();
+    initShortenModal(me);
+
+    /* ============================================================
+       LINKS LOAD (live nahi - ek baar load karke local render)
+       ============================================================ */
+    let allLinks = [];
+
+    async function loadLinks() {
+        const q = query(ref(db, "aliases"), orderByChild("uid"), equalTo(me.uid));
+        const snap = await get(q);
+
+        allLinks = [];
+        snap.forEach((c) => {
+            const l = c.val();
+            l.alias = c.key;
+            allLinks.push(l);
+        });
+        allLinks.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+        renderStats();
+        renderTable();
+    }
+
+    function renderStats() {
+        document.getElementById("mini-total").textContent = allLinks.length;
+        let views = 0, hidden = 0;
+        allLinks.forEach(l => {
+            views += Number(l.clicks) || 0;
+            if (l.status === "hidden") hidden++;
+        });
+        document.getElementById("mini-views").textContent = formatNumber(views);
+        document.getElementById("mini-active").textContent = allLinks.length - hidden;
+        document.getElementById("mini-hidden").textContent = hidden;
+    }
+
+    /* ---------- Table render (search filter ke saath) ---------- */
+    let searchTerm = "";
+    let currentFilter = null;   // null = all, "hidden" = sirf hidden
+
+    function renderTable() {
+        const tbody = document.getElementById("links-body");
+        const emptyMsg = document.getElementById("empty-msg");
+
+        let list = allLinks;
+
+        // Hidden-only mode (links-hidden.html is file ko hi use karta hai)
+        if (currentFilter === "hidden") {
+            list = list.filter(l => l.status === "hidden");
+        }
+
+        if (searchTerm) {
+            const s = searchTerm.toLowerCase();
+            list = list.filter(l =>
+                (l.title || "").toLowerCase().includes(s) ||
+                (l.url || "").toLowerCase().includes(s) ||
+                l.alias.toLowerCase().includes(s));
+        }
+
+        if (list.length === 0) {
+            tbody.innerHTML = "";
+            emptyMsg.classList.remove("hidden");
+            return;
+        }
+        emptyMsg.classList.add("hidden");
+
+        tbody.innerHTML = list.map((l) => {
+            const shortUrl = SITE_URL + "#" + l.alias;
+            const isHidden = l.status === "hidden";
+            return `
+                <tr>
+                    <td>
+                        <a href="${escapeHtml(shortUrl)}" target="_blank" rel="nofollow">
+                            ${escapeHtml(shortUrl)}</a>
+                        <button class="btn btn-xs btn-default copy-row-btn"
+                                data-copy="${escapeHtml(shortUrl)}"
+                                title="Copy"><i class="fa fa-clipboard"></i></button>
+                    </td>
+                    <td>
+                        <strong>${escapeHtml(l.title || "-")}</strong><br>
+                        <small class="text-muted"
+                               title="${escapeHtml(l.url)}">${escapeHtml(l.url)}</small>
+                    </td>
+                    <td>${formatNumber(l.clicks)}</td>
+                    <td>${formatDate(l.created_at)}</td>
+                    <td>${isHidden
+                        ? '<span class="label label-danger">Hidden</span>'
+                        : '<span class="label label-success">Active</span>'}</td>
+                    <td>
+                        <button class="btn btn-xs btn-info edit-btn"
+                                data-alias="${escapeHtml(l.alias)}"
+                                title="Edit"><i class="fa fa-pencil"></i></button>
+                        <button class="btn btn-xs btn-warning toggle-btn"
+                                data-alias="${escapeHtml(l.alias)}"
+                                data-status="${l.status}"
+                                title="${isHidden ? 'Show' : 'Hide'}">
+                            <i class="fa ${isHidden ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
+                        <button class="btn btn-xs btn-danger del-btn"
+                                data-alias="${escapeHtml(l.alias)}"
+                                title="Delete"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>`;
+        }).join("");
+    }
+
+    await loadLinks();
+
+    /* ---------- Search ---------- */
+    document.getElementById("search-input").addEventListener("input", (e) => {
+        searchTerm = e.target.value.trim();
+        renderTable();
+    });
+
+    /* ---------- Copy button (event delegation) ---------- */
+    document.getElementById("links-body").addEventListener("click", async (e) => {
+        const btn = e.target.closest(".copy-row-btn");
+        if (!btn) return;
+        await navigator.clipboard.writeText(btn.dataset.copy).catch(() => {});
+        btn.innerHTML = '<i class="fa fa-check"></i>';
+        showToast("Copy ho gaya!", "success");
+        setTimeout(() => { btn.innerHTML = '<i class="fa fa-clipboard"></i>'; }, 1500);
+    });
+
+    /* ---------- Edit modal ---------- */
+    let editAlias = null;
+    document.getElementById("links-body").addEventListener("click", (e) => {
+        const btn = e.target.closest(".edit-btn");
+        if (!btn) return;
+        editAlias = btn.dataset.alias;
+        const link = allLinks.find(l => l.alias === editAlias);
+        if (!link) return;
+
+        document.getElementById("edit-alias").textContent = editAlias;
+        document.getElementById("edit-title-input").value = link.title || "";
+        document.getElementById("edit-url-input").value = link.url || "";
+        document.getElementById("edit-adtype-select").value =
+            ["interstitial","banner","none"].includes(link.ad_type)
+                ? link.ad_type : "interstitial";
+
+        $("#edit-modal").modal("show");
+    });
+
+    document.getElementById("edit-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!editAlias) return;
+
+        const newUrl = document.getElementById("edit-url-input").value.trim();
+        if (!isValidUrl(newUrl)) {
+            showToast("Valid URL dalo!", "error");
+            return;
+        }
+
+        try {
+            await update(ref(db, `aliases/${editAlias}`), {
+                title: document.getElementById("edit-title-input").value.trim(),
+                url: newUrl,
+                ad_type: document.getElementById("edit-adtype-select").value
+            });
+            $("#edit-modal").modal("hide");
+            showToast("Link update ho gaya!", "success");
+            await loadLinks();
+        } catch (err) {
+            showToast("Update fail: " + err.message, "error");
+        }
+    });
+
+    /* ---------- Hide/Show toggle ---------- */
+    document.getElementById("links-body").addEventListener("click", async (e) => {
+        const btn = e.target.closest(".toggle-btn");
+        if (!btn) return;
+        const alias = btn.dataset.alias;
+        const newStatus = btn.dataset.status === "hidden" ? "active" : "hidden";
+        try {
+            await update(ref(db, `aliases/${alias}`), { status: newStatus });
+            showToast(newStatus === "hidden" ? "Link chupa diya" : "Link wapas live", "success");
+            await loadLinks();
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        }
+    });
+
+    /* ---------- Delete flow ---------- */
+    let delAlias = null;
+    document.getElementById("links-body").addEventListener("click", (e) => {
+        const btn = e.target.closest(".del-btn");
+        if (!btn) return;
+        delAlias = btn.dataset.alias;
+        document.getElementById("delete-alias").textContent = delAlias;
+        $("#delete-modal").modal("show");
+    });
+
+    document.getElementById("confirm-delete-btn").addEventListener("click", async () => {
+        if (!delAlias) return;
+        try {
+            await remove(ref(db, `aliases/${delAlias}`));
+            $("#delete-modal").modal("hide");
+            showToast("Link delete ho gaya.", "success");
+            await loadLinks();
+        } catch (err) {
+            showToast("Delete fail: " + err.message, "error");
+        } finally {
+            delAlias = null;
+        }
+    });
+
+    /* ============================================================
+       HIDDEN-LINKS MODE: agar page ka hash #hidden hai to sirf
+       wahi dikhao (links-hidden.html isi file ko iframe/hash
+       pattern se reuse karta hai)
+       ============================================================ */
+    if (location.search.includes("filter=hidden")) {
+        currentFilter = "hidden";
+        renderTable();
+    }
+</script>
+
+</body>
+</html>

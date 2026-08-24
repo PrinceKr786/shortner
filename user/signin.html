@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : user/signin.html
+     KAAM   : SIGN IN PAGE - AdLinkFly ke Auth/Users/signin.ctp
+              jaisa (AdminLTE login-box):
+                - "Sign in to start your session" msg
+                - Username/email + password fields
+                - Remember me checkbox
+                - btn-primary btn-block btn-flat submit
+                - "I forgot my password" + "Register a new membership"
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In - Shortify</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts (member layout wala) -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <!-- ASLI ADLINKFLY CSS -->
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition login-page">
+
+<div class="login-box">
+    <div class="login-logo">
+        <a href="../index.html"><b>Shortify</b></a>
+    </div>
+
+    <div class="login-box-body">
+        <p class="login-box-msg">Sign in to start your session</p>
+
+        <form id="signin-form">
+            <div class="form-group has-feedback">
+                <input type="email" class="form-control" id="email-input"
+                       placeholder="Email address" required autocomplete="email">
+                <span class="fa fa-envelope form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" id="password-input"
+                       placeholder="Password" required autocomplete="current-password">
+                <span class="fa fa-lock form-control-feedback"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-8">
+                    <label>
+                        <input type="checkbox"> Remember me
+                    </label>
+                </div>
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat"
+                            id="signin-btn">Sign In</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Error box -->
+        <div class="alert alert-danger hidden" id="error-box" style="margin-top:12px"></div>
+        <div class="alert alert-success hidden" id="success-box" style="margin-top:12px"></div>
+
+        <!-- ======== SOCIAL LOGIN (settings se on/off hota hai) ======== -->
+        <div class="social-auth-links text-center hidden" id="social-box">
+            <p>- OR -</p>
+            <a href="#" class="btn btn-block btn-social btn-flat"
+               id="google-btn" style="background:#fff;color:#dd4b39;border:1px solid #ddd">
+                <i class="fa fa-google-plus"></i> Sign in using Google
+            </a>
+            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat hidden"
+               id="facebook-btn">
+                <i class="fa fa-facebook"></i> Sign in using Facebook
+            </a>
+        </div>
+
+        <br>
+        <a href="forgot-password.html">I forgot my password</a><br>
+        <a href="signup.html" class="text-center">Register a new membership</a>
+
+    </div>
+    <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+
+<!-- Firebase scripts -->
+<script type="module">
+    import { auth } from "./js/firebase-config.js";
+    import {
+        signInWithEmailAndPassword, signOut,
+        GoogleAuthProvider, FacebookAuthProvider, signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { db } from "./js/firebase-config.js";
+    import { get, ref, child, set, update }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const errBox = document.getElementById("error-box");
+
+    /* ============================================================
+       SOCIAL BUTTONS VISIBILITY (admin settings se)
+       ============================================================ */
+    let GOOGLE_ON = false;
+    let FACEBOOK_ON = false;
+
+    try {
+        const sSnap = await get(child(ref(db), "settings"));
+        const s = sSnap.val() || {};
+        GOOGLE_ON   = s.google_login === "on";
+        FACEBOOK_ON = s.facebook_login === "on";
+    } catch {}
+
+    if (GOOGLE_ON || FACEBOOK_ON) {
+        document.getElementById("social-box").classList.remove("hidden");
+        if (GOOGLE_ON) {
+            document.getElementById("google-btn")
+                .classList.remove("hidden");
+        }
+        if (FACEBOOK_ON) {
+            document.getElementById("facebook-btn")
+                .classList.remove("hidden");
+        }
+    }
+
+    /* ---------- Social sign-in shared logic ---------- */
+    async function socialSignIn(provider) {
+        errBox.classList.add("hidden");
+        try {
+            const cred = await signInWithPopup(auth, provider);
+            const u = cred.user;
+
+            // Disabled check
+            const snap = await get(child(ref(db), `users/${u.uid}`));
+            const profile = snap.val();
+
+            if (profile && profile.disabled) {
+                await signOut(auth);
+                errBox.textContent =
+                    "Aapka account band kar diya gaya hai. Admin se contact karo.";
+                errBox.classList.remove("hidden");
+                return;
+            }
+
+            // FIRST TIME SOCIAL USER? -> DB profile banao
+            if (!profile) {
+                await set(ref(db, `users/${u.uid}`), {
+                    name: u.displayName || "User",
+                    email: u.email,
+                    created_at: Date.now(),
+                    wallet_money: 0,
+                    total_withdrawn: 0,
+                    referral_earnings: 0,
+                    stats: { total_clicks: 0, total_links: 0 }
+                });
+                // Referral capture (signup page jaisa hi)
+                const refCode =
+                    sessionStorage.getItem("shortify_ref") || "";
+                if (refCode) {
+                    await set(ref(db, `referrals/${u.uid}/referred_by`),
+                        refCode);
+                    sessionStorage.removeItem("shortify_ref");
+                }
+            }
+
+            window.location.href = "dashboard.html";
+
+        } catch (err) {
+            console.error(err);
+            errBox.textContent = err.code === "auth/popup-closed-by-user"
+                ? "Popup band kar diya - dobara try karo."
+                : ("Social login fail: " + err.message);
+            errBox.classList.remove("hidden");
+        }
+    }
+
+    document.getElementById("google-btn").addEventListener("click", (e) => {
+        e.preventDefault();
+        socialSignIn(new GoogleAuthProvider());
+    });
+    document.getElementById("facebook-btn").addEventListener("click", (e) => {
+        e.preventDefault();
+        socialSignIn(new FacebookAuthProvider());
+    });
+
+    /* Friendly error messages */
+    function friendlyError(code) {
+        const map = {
+            "auth/invalid-email": "Ye email galat hai.",
+            "auth/user-not-found": "Is email se koi account nahi hai.",
+            "auth/wrong-password": "Password galat hai.",
+            "auth/invalid-credential": "Email ya password galat hai.",
+            "auth/too-many-requests":
+                "Bahut baar try kiya. Thodi der baad koshish karo."
+        };
+        return map[code] || null;
+    }
+
+    /* ---------- Sign In Submit ---------- */
+    document.getElementById("signin-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email-input").value.trim();
+        const pass  = document.getElementById("password-input").value;
+
+        const btn = document.getElementById("signin-btn");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Signing in...';
+
+        try {
+            const cred = await signInWithEmailAndPassword(auth, email, pass);
+            const uid = cred.user.uid;
+
+            // Disabled/banned account check
+            const snap = await get(child(ref(db), `users/${uid}`));
+            const profile = snap.val();
+
+            if (profile && profile.disabled) {
+                await signOut(auth);
+                errBox.textContent =
+                    "Aapka account band kar diya gaya hai. Admin se contact karo.";
+                errBox.classList.remove("hidden");
+                btn.disabled = false;
+                btn.innerHTML = "Sign In";
+                return;
+            }
+
+            // Success -> dashboard
+            window.location.href = "dashboard.html";
+
+        } catch (err) {
+            errBox.textContent =
+                friendlyError(err.code) || ("Login fail: " + err.message);
+            errBox.classList.remove("hidden");
+            btn.disabled = false;
+            btn.innerHTML = "Sign In";
+        }
+    });
+</script>
+
+</body>
+</html>

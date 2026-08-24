@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : index.html
+     KAAM   : HOME PAGE - AdLinkFly ke Pages/home.ctp ka EXACT
+              replica (modern_theme):
+                - nav#mainNav.navbar-default.navbar-fixed-top
+                - header.shorten hero ("Shorten URLs and EARN MONEY")
+                - WHY JOIN US? 9 features (fa-stack circles)
+                - Payout rates tabs table (payout_rates.ctp jaisa)
+                - Fast Growing counters (bg-light-gray section)
+                - Contact Us section
+                - footer (copyright + social-buttons + quicklinks)
+     CSS    : vendor/bootstrap + font-awesome + animate +
+              theme/css/front.css + theme/css/app.css
+              (SAB ADLINKFLY KI ASLI FILES!)
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shortify - Shorten URLs and Earn Money</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Free URL shortener jahan aap links short karke paise kama sakte ho. Highest rates, low minimum payout, referral bonus.">
+
+    <!-- Fonts - AdLinkFly front layout waali hi -->
+    <link href="//fonts.googleapis.com/css?family=Droid+Serif:400,400i,700,700i%7CMontserrat:400,700%7CRoboto+Slab:100,300,400,700" rel="stylesheet">
+
+    <!-- ASLI ADLINKFLY CSS -->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/animate.min.css">
+    <link rel="stylesheet" href="theme/css/front.css">
+    <link rel="stylesheet" href="theme/css/app.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+
+<body id="page-top" class="index home">
+
+<!-- Navigation (front.ctp jaisa) -->
+<nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand logo-image" href="./index.html">
+                <img src="assets/logo.png" alt="Shortify"
+                     style="height:34px;display:inline;margin-top:-6px">
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" id="menu-main">
+                <li class="hidden"><a href="#page-top"></a></li>
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="#payout-rates">Payout Rates</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="./contact.html">Contact Us</a></li>
+                <!-- JS login state ke hisaab se badlega -->
+                <li id="menu-signin"><a href="user/signin.html">Sign In</a></li>
+                <li><a href="user/signup.html"
+                       class="btn btn-primary btn-outline btn-sm"
+                       style="margin:12px 0;padding:6px 12px">Register</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Header (home.ctp ka header.shorten) -->
+<header class="shorten">
+    <div class="container">
+        <div class="intro-text">
+            <div class="intro-lead-in wow zoomIn" data-wow-delay="0.3s">Shorten URLs and</div>
+            <div class="intro-heading wow pulse" data-wow-delay="2.0s">earn money</div>
+            <div class="row wow rotateInUpLeft" data-wow-delay="0.3s">
+                <div class="col-sm-8 col-sm-offset-2">
+
+                    <!-- shorten.ctp element ka exact structure -->
+                    <form id="shorten-form">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="url" class="form-control input-lg"
+                                       id="url-input" placeholder="Your URL Here"
+                                       required autocomplete="off">
+                                <div class="input-group-addon">
+                                    <button type="submit" class="btn-captcha" id="shorten-btn"
+                                            title="Shorten karo">
+                                        <i class="fa fa-paper-plane fasubmit"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Custom alias option -->
+                        <div class="row" id="advanced-options" style="display:none">
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="alias-input"
+                                       placeholder="Custom alias (optional) - sirf letters/numbers/dash"
+                                       maxlength="30" autocomplete="off">
+                                <p class="help-block" id="alias-error"
+                                   style="color:#fff"></p>
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="button" class="btn btn-warning btn-block"
+                                        id="adv-apply">Apply Alias</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="shorten add-link-result" id="result-view"
+                         style="display:none">
+                        <div class="alert alert-success text-center" style="margin-bottom:0">
+                            <i class="fa fa-check-circle"></i>
+                            Aapka short link taiyar hai:<br>
+                            <a href="#" id="result-link" target="_blank"
+                               style="font-size:1.25rem;font-weight:bold;word-break:break-all"></a>
+                            <br><br>
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    id="copy-btn"><i class="fa fa-clipboard"></i> Copy Link</button>
+                            <a href="user/signin.html"
+                               class="btn btn-default btn-sm">Manage Links</a>
+                        </div>
+                    </div>
+
+                    <p class="text-center" style="margin-top:14px;color:rgba(255,255,255,.85)">
+                        <button type="button" class="btn btn-link btn-xs"
+                                id="adv-toggle"
+                                style="color:rgba(255,255,255,.85);text-decoration:underline">
+                            <i class="fa fa-cog"></i> Custom alias set karna hai?
+                        </button>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Services Section - WHY JOIN US? (home.ctp exact) -->
+<section>
+    <div class="container">
+        <div class="row wow bounceIn">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">WHY JOIN US?</h2>
+                <h3 class="section-subheading text-muted">We have defined earning extra money from the comfort of your home.</h3>
+            </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;text-align:center">
+            <div class="col-md-4 wow fadeInUp">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fa fa-question-circle fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">What is Shortify?</h4>
+                <p class="text-muted">Shortify is a completely free tool where you can create short links, which apart from being free, you get paid! So, now you can make money from home, when managing and protecting your links.</p>
+            </div>
+
+            <div class="col-md-4 wow fadeInUp">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fa fa-money fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">How and how much do I earn?</h4>
+                <p class="text-muted">How can you start making money in Shortify? It's just 3 steps: create an account, create a link and post it - for every visit, you earn money. It's just that easy!</p>
+            </div>
+
+            <div class="col-md-4 wow fadeInUp">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">20% Referral Bonus</h4>
+                <p class="text-muted">The Shortify referral program is a great way to spread the word of this great service and to earn even more money with your short links! Refer friends and receive 20% of their earnings for life!</p>
+            </div>
+
+            <div class="col-md-4 wow fadeInUp">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fa fa-tachometer fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">Featured Administration Panel</h4>
+                <p class="text-muted">Control all of the features from the administration panel with a click of a button.</p>
+            </div>
+
+            <div class="col-md-4 wow fadeInUp">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fa fa-bar-chart fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">Detailed Stats</h4>
+                <p class="text-muted">Know your audience. Analyse in detail what brings you the most income and what strategies you should adapt.</p>
+            </div>
+
+            <div class="col-md-4 wow fadeInUp">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fa fa-money fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">Low Minimum Payout</h4>
+                <p class="text-muted">You are required to earn only &#8377;100 before you will be paid. We can pay all users via their PayPal.</p>
+            </div>
+
+            <div class="col-md-4 wow fadeInUp">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fa fa-line-chart fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">Highest Rates</h4>
+                <p class="text-muted">Make the most out of your traffic with our always increasing rates.</p>
+            </div>
+
+            <div class="col-md-4 wow fadeInUp">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fa fa-code fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">API</h4>
+                <p class="text-muted">Shorten links more quickly with easy to use API and bring your creative and advanced ideas to life.</p>
+            </div>
+
+            <div class="col-md-4 wow fadeInUp">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fa fa-life-ring fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">Support</h4>
+                <p class="text-muted">A dedicated support team is ready to help with any questions you may have.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Payout Rates Section (payout_rates.ctp simple mode) -->
+<section id="payout-rates" class="bg-light-gray">
+    <div class="container">
+        <div class="row wow bounceIn">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Payout Rates</h2>
+                <h3 class="section-subheading text-muted">Earnings per 1000 Views</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 payout-rates">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#interstitial" aria-controls="interstitial"
+                           role="tab" data-toggle="tab">Interstitial</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#banner" aria-controls="banner"
+                           role="tab" data-toggle="tab">Banner</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#noads" aria-controls="noads"
+                           role="tab" data-toggle="tab">No Ads</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="interstitial">
+                        <table class="table table-hover table-striped">
+                            <tr>
+                                <th rowspan="2">Package Description / Country</th>
+                                <th colspan="2">Earnings per 1000 Views</th>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;font-weight:bold">Desktop</td>
+                                <td style="text-align:center;font-weight:bold">Mobile / Tablet</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-globe"></i> Worldwide</td>
+                                <td style="text-align:center"><strong id="rate-int-desktop">...</strong></td>
+                                <td style="text-align:center"><strong id="rate-int-mobile">...</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="banner">
+                        <table class="table table-hover table-striped">
+                            <tr>
+                                <th rowspan="2">Package Description / Country</th>
+                                <th colspan="2">Earnings per 1000 Views</th>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;font-weight:bold">Desktop</td>
+                                <td style="text-align:center;font-weight:bold">Mobile / Tablet</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-globe"></i> Worldwide</td>
+                                <td style="text-align:center"><strong id="rate-ban-desktop">...</strong></td>
+                                <td style="text-align:center"><strong id="rate-ban-mobile">...</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="noads">
+                        <table class="table table-hover table-striped">
+                            <tr>
+                                <th rowspan="2">Package Description / Country</th>
+                                <th colspan="2">Earnings per 1000 Views</th>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;font-weight:bold">Desktop</td>
+                                <td style="text-align:center;font-weight:bold">Mobile / Tablet</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-globe"></i> Worldwide</td>
+                                <td style="text-align:center"><strong id="rate-none-desktop">...</strong></td>
+                                <td style="text-align:center"><strong id="rate-none-mobile">...</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section (display-counter) -->
+<section class="bg-light-gray">
+    <div class="container">
+        <div class="row wow bounceIn">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Fast Growing</h2>
+                <h3 class="section-subheading text-muted">Numbers speak for themselves</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4 text-center wow flipInY">
+                <span class="display-counter" id="count-clicks">0</span>
+                <span>Total Clicks</span>
+            </div>
+            <div class="col-sm-4 text-center wow flipInY">
+                <span class="display-counter" id="count-links">0</span>
+                <span>Total URLs</span>
+            </div>
+            <div class="col-sm-4 text-center wow flipInY">
+                <span class="display-counter" id="count-users">0</span>
+                <span>Registered users</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section (step images ke saath) -->
+<section id="how-it-works">
+    <div class="container">
+        <div class="row wow bounceIn">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">How It Works?</h2>
+                <h3 class="section-subheading text-muted">Start earning money in just 3 steps</h3>
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <div class="col-sm-4 wow fadeInLeft">
+                <img src="assets/step1.png" alt="Create an account">
+                <h4 class="service-heading">Create an account</h4>
+                <p class="text-muted">Free signup karo - sirf naam, email aur password chahiye.</p>
+            </div>
+            <div class="col-sm-4 wow fadeInUp">
+                <img src="assets/step2.png" alt="Shorten links">
+                <h4 class="service-heading">Shorten links</h4>
+                <p class="text-muted">Lambi URL paste karo - ek second me short link ready!</p>
+            </div>
+            <div class="col-sm-4 wow fadeInRight">
+                <img src="assets/step3.png" alt="Earn money">
+                <h4 class="service-heading">Earn money</h4>
+                <p class="text-muted">Kahin bhi share karo - har click se paisa wallet me!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section (home.ctp jaisa) -->
+<section id="contact">
+    <div class="container">
+        <div class="row wow bounceIn">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Contact Us</h2>
+                <h3 class="section-subheading text-muted">Get in touch</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="well text-center">
+                    <p>Koi sawal hai? Hume email karo:</p>
+                    <a href="mailto:support@shortify.com" class="btn btn-xl btn-primary">
+                        <i class="fa fa-envelope-o"></i> support@shortify.com</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer (front.ctp exact 3-column) -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <span class="copyright">Copyright &copy; Shortify 2026</span>
+            </div>
+            <div class="col-md-4">
+                <ul class="list-inline social-buttons">
+                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fa fa-whatsapp"></i></a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul class="list-inline quicklinks">
+                    <li><a href="pages/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="pages/terms-of-service.html">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<!-- ============================================================
+     SCRIPTS - jQuery + Bootstrap + WOW (AdLinkFly wale hi)
+     + Firebase module
+     ============================================================ -->
+<script src="vendor/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="vendor/wow.min.js"></script>
+<script src="vendor/clipboard.min.js"></script>
+<script>new WOW().init();</script>
+
+<script type="module">
+    /* ---------- Firebase imports ---------- */
+    import { db } from "./js/firebase-config.js";
+    import {
+        SITE_URL, showToast, isValidUrl, generateAlias, getCurrentUser
+    } from "./js/app.js";
+    import {
+        ref, get, set, runTransaction
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    /* ============================================================
+       MAINTENANCE MODE CHECK - settings/maintenance === "on"
+       to poora site block karo (admin bhi home pe dekhega)
+       ============================================================ */
+    try {
+        const mSnap = await get(ref(db, "settings/maintenance"));
+        if (mSnap.val() === "on") {
+            // Overlay dikhao + baaki code mat chalao
+            document.body.innerHTML = `
+                <div style="position:fixed;top:0;left:0;width:100%;height:100%;
+                    background:#222d32;color:#fff;display:flex;align-items:center;
+                    justify-content:center;z-index:9999;font-family:Arial,sans-serif;
+                    text-align:center;padding:20px">
+                    <div>
+                        <i class="fa fa-wrench" style="font-size:48px;margin-bottom:16px"></i>
+                        <h1>Site Under Maintenance</h1>
+                        <p style="font-size:18px;margin:20px 0;max-width:500px">
+                            Hamari team kuch improvements kar rahi hai.
+                            Jaldi wapas aayenge. Dhanyavaad!</p>
+                        <small>Shortify Team</small>
+                    </div>
+                </div>`;
+            return;  // Stop further execution
+        }
+    } catch { /* fail silently - site open rehta hai */ }
+
+    /* ============================================================
+       SHORT LINK REDIRECT CHECK (#alias -> go page)
+       ============================================================ */
+    const hashAlias = location.hash.replace("#", "").trim();
+    if (hashAlias && /^[a-zA-Z0-9-]{3,30}$/.test(hashAlias)) {
+        location.replace("user/go.html" + location.hash);
+    }
+
+    /* ---------- Navbar: login state ke hisaab se Sign In/Dashboard ---------- */
+    const user = await getCurrentUser();
+    if (user) {
+        document.getElementById("menu-signin").innerHTML =
+            `<a href="user/dashboard.html"><i class="fa fa-dashboard"></i> Dashboard</a>`;
+    }
+
+    /* ============================================================
+       PAYOUT RATES LOAD (earning_rates/default)
+       Desktop/Mobile dono same rate dikhate hain (simple mode)
+       ============================================================ */
+    function price(v) { return "\u20B9" + Number(v || 0).toFixed(2); }
+    try {
+        const snap = await get(ref(db, "earning_rates/default"));
+        const r = snap.val() || { interstitial: 8, banner: 3, none: 1 };
+        document.getElementById("rate-int-desktop").textContent = price(r.interstitial);
+        document.getElementById("rate-int-mobile").textContent = price(r.interstitial);
+        document.getElementById("rate-ban-desktop").textContent = price(r.banner);
+        document.getElementById("rate-ban-mobile").textContent = price(r.banner);
+        document.getElementById("rate-none-desktop").textContent = price(r.none);
+        document.getElementById("rate-none-mobile").textContent = price(r.none);
+    } catch {
+        ["rate-int","rate-ban","rate-none"].forEach((p,i)=>{
+            const v = [8,3,1][i];
+            document.getElementById(p+"-desktop").textContent = price(v);
+            document.getElementById(p+"-mobile").textContent = price(v);
+        });
+    }
+
+    /* ============================================================
+       FAST GROWING COUNTERS (stats/ node)
+       ============================================================ */
+    let stats = { total_clicks: 0, total_links: 0, total_users: 0 };
+    try {
+        const snap = await get(ref(db, "stats"));
+        stats = Object.assign(stats, snap.val() || {});
+    } catch { /* optional */ }
+
+    function countUp(elId, target) {
+        const el = document.getElementById(elId);
+        if (!target || target <= 0) { el.textContent = "0"; return; }
+        const dur = 1500;
+        const start = performance.now();
+        function frame(now) {
+            const p = Math.min((now - start) / dur, 1);
+            el.textContent = Math.floor(target * (1 - Math.pow(1 - p, 3)))
+                .toLocaleString("en-IN");
+            if (p < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+    }
+    countUp("count-clicks", stats.total_clicks);
+    countUp("count-links", stats.total_links);
+    countUp("count-users", stats.total_users);
+
+
+    /* ============================================================
+       SHORTEN FORM (same logic as before)
+       ============================================================ */
+    const form       = document.getElementById("shorten-form");
+    const urlInput   = document.getElementById("url-input");
+    const advOptions = document.getElementById("advanced-options");
+    const aliasInput = document.getElementById("alias-input");
+    const aliasError = document.getElementById("alias-error");
+    const resultView = document.getElementById("result-view");
+    const resultLink = document.getElementById("result-link");
+    const copyBtn    = document.getElementById("copy-btn");
+    const submitBtn  = document.getElementById("shorten-btn");
+
+    let chosenAlias = "";   // Apply Alias button se set hota hai
+
+    document.getElementById("adv-toggle").addEventListener("click", () => {
+        const box = advOptions;
+        box.style.display = box.style.display === "none" ? "flex" : "none";
+    });
+
+    document.getElementById("adv-apply").addEventListener("click", () => {
+        chosenAlias = aliasInput.value.trim();
+        if (chosenAlias && /^[a-zA-Z0-9-]{3,30}$/.test(chosenAlias)) {
+            aliasError.textContent = "";
+            advOptions.style.display = "none";
+            showToast(`Alias "${chosenAlias}" set ho gaya!`, "success");
+        } else {
+            aliasError.textContent =
+                "3-30 characters, sirf letters/numbers/dash allowed.";
+        }
+    });
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const longUrl = urlInput.value.trim();
+        if (!isValidUrl(longUrl)) {
+            showToast("Ye valid URL nahi lag raha! http:// ya https:// hona chahiye.", "error");
+            return;
+        }
+
+        submitBtn.disabled = true;
+
+        try {
+            let alias = chosenAlias || generateAlias();
+
+            if (chosenAlias) {
+                const exists = await get(ref(db, `aliases/${chosenAlias}`));
+                if (exists.exists()) {
+                    throw new Error(`"${chosenAlias}" pehle le liya gaya hai. Dusra try karo.`);
+                }
+            } else {
+                for (let i = 0; i < 5; i++) {
+                    const exists = await get(ref(db, `aliases/${alias}`));
+                    if (!exists.exists()) break;
+                    alias = generateAlias();
+                }
+            }
+
+            await set(ref(db, `aliases/${alias}`), {
+                url: longUrl,
+                title: new URL(longUrl).hostname,
+                uid: user ? user.uid : "guest",
+                clicks: 0,
+                status: "active",
+                created_at: Date.now()
+            });
+
+            runTransaction(ref(db, "stats/total_links"), (cur) => (cur || 0) + 1);
+
+            // Result dikhao (AdLinkFly add-link-result alert style)
+            const shortUrl = SITE_URL + "#" + alias;
+            resultLink.href = shortUrl;
+            resultLink.textContent = shortUrl;
+            resultView.style.display = "block";
+
+            form.reset();
+            chosenAlias = "";
+            showToast("Ho gaya! Link ready hai \uD83C\uDF89", "success");
+
+        } catch (err) {
+            showToast(err.message, "error");
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
+
+    copyBtn.addEventListener("click", async () => {
+        await navigator.clipboard.writeText(resultLink.textContent).catch(() => {});
+        copyBtn.innerHTML = "<i class=\"fa fa-check\"></i> Copied!";
+        setTimeout(() => {
+            copyBtn.innerHTML = "<i class=\"fa fa-clipboard\"></i> Copy Link";
+        }, 2000);
+    });
+</script>
+
+</body>
+</html>
