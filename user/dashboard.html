@@ -1,49 +1,597 @@
 ﻿<!DOCTYPE html>
-<!-- ============================================================
-     FILE   : user/dashboard.html
-     KAAM   : MEMBER DASHBOARD - AdLinkFly ke Member/Users/
-              dashboard.ctp ka replica (AdminLTE skin-blue):
-                - 4 small-box stat cards (yellow/aqua/green/red)
-                - Announcements box (admin ke announcements)
-                - Top 10 Links box (views + earnings)
-     LAYOUT : main-header + main-sidebar + content-wrapper +
-              main-footer (member.ctp ka exact structure)
-     ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Statistics - Shortify</title>
+    <title>Dashboard - Shortify</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="../theme/css/app.css">
     <link rel="icon" href="../favicon.ico">
+    <style>
+        :root {
+            --sk-bg: #0f172a;
+            --sk-surface: #1e293b;
+            --sk-surface2: #334155;
+            --sk-border: rgba(148,163,184,.12);
+            --sk-text: #f1f5f9;
+            --sk-text-dim: #94a3b8;
+            --sk-accent: #3b82f6;
+            --sk-accent-glow: rgba(59,130,246,.35);
+            --sk-green: #10b981;
+            --sk-green-glow: rgba(16,185,129,.3);
+            --sk-yellow: #f59e0b;
+            --sk-yellow-glow: rgba(245,158,11,.3);
+            --sk-red: #ef4444;
+            --sk-red-glow: rgba(239,68,68,.3);
+            --sk-purple: #8b5cf6;
+            --sk-purple-glow: rgba(139,92,246,.3);
+            --sk-pink: #ec4899;
+            --sk-cyan: #06b6d4;
+            --sk-radius: 16px;
+            --sk-radius-sm: 10px;
+            --sk-shadow: 0 8px 32px rgba(0,0,0,.4);
+            --sk-shadow-lg: 0 16px 48px rgba(0,0,0,.5);
+            --sk-glass: rgba(30,41,59,.7);
+            --sk-blur: blur(20px);
+            --sk-transition: all .3s cubic-bezier(.4,0,.2,1);
+        }
 
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Poppins',sans-serif;
+            background:var(--sk-bg);
+            color:var(--sk-text);
+            min-height:100vh;
+            overflow-x:hidden;
+        }
+
+        /* ==================== ANIMATED BG ==================== */
+        .bg-orbs {
+            position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+        }
+        .bg-orbs .orb {
+            position:absolute; border-radius:50%; filter:blur(80px); opacity:.15;
+            animation:orbFloat 20s ease-in-out infinite alternate;
+        }
+        .bg-orbs .orb:nth-child(1) { width:600px; height:600px; background:var(--sk-accent); top:-10%; left:-10%; animation-delay:0s; }
+        .bg-orbs .orb:nth-child(2) { width:500px; height:500px; background:var(--sk-purple); bottom:-10%; right:-10%; animation-delay:-7s; }
+        .bg-orbs .orb:nth-child(3) { width:400px; height:400px; background:var(--sk-green); top:40%; left:50%; animation-delay:-14s; }
+        @keyframes orbFloat {
+            0% { transform:translate(0,0) scale(1); }
+            33% { transform:translate(30px,-50px) scale(1.1); }
+            66% { transform:translate(-20px,30px) scale(.9); }
+            100% { transform:translate(40px,-20px) scale(1.05); }
+        }
+
+        /* ==================== LAYOUT ==================== */
+        .wrapper { position:relative; z-index:1; min-height:100vh; }
+
+        /* ==================== HEADER ==================== */
+        .main-header {
+            background:var(--sk-glass);
+            backdrop-filter:var(--sk-blur);
+            -webkit-backdrop-filter:var(--sk-blur);
+            border-bottom:1px solid var(--sk-border);
+            position:sticky; top:0; z-index:1000;
+            height:64px;
+        }
+        .main-header .logo {
+            background:linear-gradient(135deg,var(--sk-accent),var(--sk-purple));
+            height:64px; line-height:64px;
+            width:64px; text-align:center;
+            font-size:1.4rem; font-weight:800; color:#fff;
+            border-radius:0 16px 16px 0;
+            box-shadow:4px 0 20px var(--sk-accent-glow);
+            transition:var(--sk-transition);
+        }
+        .main-header .logo:hover { width:200px; }
+        .main-header .logo .logo-lg { display:none; }
+        .main-header .logo:hover .logo-lg { display:inline; }
+        .main-header .logo:hover .logo-mini { display:none; }
+        .main-header .logo .logo-mini { display:inline; font-weight:800; }
+        .navbar-static-top {
+            background:transparent; border:none;
+            margin-left:0;
+        }
+        .sidebar-toggle {
+            color:var(--sk-text-dim); padding:20px 16px;
+            transition:var(--sk-transition);
+        }
+        .sidebar-toggle:hover { color:var(--sk-text); background:rgba(255,255,255,.05); }
+
+        /* User dropdown in header */
+        .navbar-custom-menu > .nav > li > a {
+            color:var(--sk-text-dim); padding:20px 16px;
+            transition:var(--sk-transition);
+        }
+        .navbar-custom-menu > .nav > li > a:hover { color:var(--sk-text); }
+        .user-image { border-radius:50%; border:2px solid var(--sk-accent); }
+        .dropdown-menu {
+            background:var(--sk-surface);
+            border:1px solid var(--sk-border);
+            border-radius:var(--sk-radius-sm);
+            box-shadow:var(--sk-shadow-lg);
+            backdrop-filter:var(--sk-blur);
+            margin-top:8px;
+        }
+        .dropdown-menu > li > a { color:var(--sk-text-dim); padding:10px 16px; }
+        .dropdown-menu > li > a:hover { background:rgba(255,255,255,.05); color:var(--sk-text); }
+        .user-header { background:linear-gradient(135deg,var(--sk-accent),var(--sk-purple)); border-radius:var(--sk-radius-sm) var(--sk-radius-sm) 0 0; }
+        .user-header p { color:#fff; }
+        .user-footer .btn { background:var(--sk-surface2); color:var(--sk-text); border:1px solid var(--sk-border); }
+
+        /* ==================== SIDEBAR ==================== */
+        .main-sidebar {
+            background:var(--sk-surface);
+            border-right:1px solid var(--sk-border);
+            width:260px;
+            transition:var(--sk-transition);
+        }
+        .main-sidebar .sidebar {
+            padding:12px;
+        }
+        .sidebar .shorten-button {
+            background:linear-gradient(135deg,var(--sk-accent),var(--sk-purple));
+            border:none; border-radius:var(--sk-radius-sm);
+            padding:14px 20px;
+            font-family:'Poppins',sans-serif;
+            font-weight:600; font-size:.9rem;
+            color:#fff;
+            box-shadow:0 4px 20px var(--sk-accent-glow);
+            transition:var(--sk-transition);
+            margin-bottom:16px;
+            position:relative; overflow:hidden;
+        }
+        .sidebar .shorten-button::before {
+            content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+            transform:skewX(-25deg); transition:left .6s ease;
+        }
+        .sidebar .shorten-button:hover { transform:translateY(-2px); box-shadow:0 8px 30px var(--sk-accent-glow); }
+        .sidebar .shorten-button:hover::before { left:200%; }
+
+        /* Wallet Card */
+        .wallet-card {
+            background:linear-gradient(135deg,#1a1a2e,#16213e);
+            border:1px solid var(--sk-border);
+            border-radius:var(--sk-radius-sm);
+            padding:16px;
+            margin-bottom:16px;
+            position:relative; overflow:hidden;
+        }
+        .wallet-card::before {
+            content:''; position:absolute; top:-50%; right:-50%; width:100%; height:100%;
+            background:radial-gradient(circle,var(--sk-accent-glow) 0%,transparent 70%);
+            opacity:.3;
+        }
+        .wallet-card .wallet-label {
+            font-size:.7rem; text-transform:uppercase; letter-spacing:.1em;
+            color:var(--sk-text-dim); margin-bottom:4px; position:relative;
+        }
+        .wallet-card .wallet-amount {
+            font-size:1.6rem; font-weight:700; color:var(--sk-text); position:relative;
+        }
+        .wallet-card .wallet-amount .currency { color:var(--sk-green); font-size:1rem; margin-right:2px; }
+
+        /* Sidebar menu */
+        .sidebar-menu > li > a {
+            color:var(--sk-text-dim);
+            border-radius:var(--sk-radius-sm);
+            padding:11px 14px;
+            margin-bottom:3px;
+            transition:var(--sk-transition);
+            display:flex; align-items:center; gap:10px;
+            font-size:.85rem; font-weight:500;
+        }
+        .sidebar-menu > li > a:hover {
+            background:rgba(255,255,255,.06);
+            color:var(--sk-text);
+            transform:translateX(4px);
+        }
+        .sidebar-menu > li.active > a {
+            background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(139,92,246,.1));
+            color:var(--sk-accent);
+            box-shadow:inset 0 0 0 1px rgba(59,130,246,.2);
+        }
+        .sidebar-menu > li.active > a i { color:var(--sk-accent); }
+        .sidebar-menu > li > a > i {
+            width:20px; text-align:center; font-size:.95rem;
+            transition:var(--sk-transition);
+        }
+        .sidebar-menu > li > a:hover > i { color:var(--sk-accent); transform:scale(1.15); }
+
+        .treeview-menu {
+            background:rgba(0,0,0,.2);
+            border-radius:var(--sk-radius-sm);
+            margin:2px 0 3px 34px;
+            padding:4px;
+            display:none;
+        }
+        .treeview.open > .treeview-menu { display:block; animation:slideDown .3s ease; }
+        .treeview-menu > li > a {
+            padding:8px 12px; font-size:.8rem;
+            border-radius:6px;
+            color:var(--sk-text-dim);
+            transition:var(--sk-transition);
+        }
+        .treeview-menu > li > a:hover { background:rgba(255,255,255,.05); color:var(--sk-text); }
+
+        @keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+
+        /* ==================== CONTENT ==================== */
+        .content-wrapper {
+            background:transparent;
+            padding:24px;
+            margin-left:260px;
+        }
+
+        /* Page title */
+        .page-title {
+            font-size:1.6rem; font-weight:700; margin-bottom:24px;
+            background:linear-gradient(135deg,var(--sk-text),var(--sk-text-dim));
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            background-clip:text;
+        }
+        .page-title small {
+            font-size:.8rem; font-weight:400;
+            -webkit-text-fill-color:var(--sk-text-dim);
+        }
+
+        /* ==================== STAT CARDS ==================== */
+        .stat-grid {
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:20px;
+            margin-bottom:24px;
+        }
+        @media(max-width:1200px) { .stat-grid { grid-template-columns:repeat(2,1fr); } }
+        @media(max-width:600px) { .stat-grid { grid-template-columns:1fr; } }
+
+        .stat-card {
+            background:var(--sk-glass);
+            backdrop-filter:var(--sk-blur);
+            -webkit-backdrop-filter:var(--sk-blur);
+            border:1px solid var(--sk-border);
+            border-radius:var(--sk-radius);
+            padding:24px;
+            position:relative; overflow:hidden;
+            transition:var(--sk-transition);
+            cursor:default;
+        }
+        .stat-card::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            border-radius:var(--sk-radius) var(--sk-radius) 0 0;
+            transition:var(--sk-transition);
+        }
+        .stat-card:hover {
+            transform:translateY(-4px);
+            box-shadow:var(--sk-shadow);
+            border-color:transparent;
+        }
+        .stat-card.yellow { --card-color:var(--sk-yellow); --card-glow:var(--sk-yellow-glow); }
+        .stat-card.cyan { --card-color:var(--sk-cyan); --card-glow:rgba(6,182,212,.3); }
+        .stat-card.green { --card-color:var(--sk-green); --card-glow:var(--sk-green-glow); }
+        .stat-card.red { --card-color:var(--sk-red); --card-glow:var(--sk-red-glow); }
+        .stat-card.purple { --card-color:var(--sk-purple); --card-glow:var(--sk-purple-glow); }
+        .stat-card.blue { --card-color:var(--sk-accent); --card-glow:var(--sk-accent-glow); }
+
+        .stat-card::before { background:linear-gradient(90deg,var(--card-color),transparent); }
+        .stat-card:hover { box-shadow:0 12px 40px var(--card-glow); }
+
+        .stat-card .stat-icon {
+            width:52px; height:52px;
+            border-radius:14px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.3rem;
+            background:linear-gradient(135deg,var(--card-color),transparent);
+            color:#fff;
+            margin-bottom:16px;
+            box-shadow:0 4px 16px var(--card-glow);
+            transition:var(--sk-transition);
+        }
+        .stat-card:hover .stat-icon { transform:scale(1.1) rotate(-5deg); }
+
+        .stat-card .stat-value {
+            font-size:1.8rem; font-weight:700; color:var(--sk-text);
+            line-height:1; margin-bottom:6px;
+            font-family:'Inter',sans-serif;
+        }
+        .stat-card .stat-label {
+            font-size:.78rem; color:var(--sk-text-dim);
+            text-transform:uppercase; letter-spacing:.08em; font-weight:500;
+        }
+        .stat-card .stat-change {
+            display:inline-flex; align-items:center; gap:4px;
+            font-size:.72rem; font-weight:600;
+            margin-top:10px; padding:3px 8px;
+            border-radius:20px;
+        }
+        .stat-card .stat-change.up { background:rgba(16,185,129,.12); color:var(--sk-green); }
+        .stat-card .stat-change.down { background:rgba(239,68,68,.12); color:var(--sk-red); }
+
+        /* Animated count */
+        .count-animate { display:inline-block; }
+
+        /* ==================== GLASS CARDS ==================== */
+        .glass-card {
+            background:var(--sk-glass);
+            backdrop-filter:var(--sk-blur);
+            -webkit-backdrop-filter:var(--sk-blur);
+            border:1px solid var(--sk-border);
+            border-radius:var(--sk-radius);
+            padding:24px;
+            margin-bottom:24px;
+            transition:var(--sk-transition);
+            position:relative; overflow:hidden;
+        }
+        .glass-card:hover { border-color:rgba(59,130,246,.2); }
+
+        .glass-card .card-header-custom {
+            display:flex; align-items:center; justify-content:space-between;
+            margin-bottom:20px; padding-bottom:16px;
+            border-bottom:1px solid var(--sk-border);
+        }
+        .glass-card .card-header-custom h3 {
+            font-size:1rem; font-weight:600; color:var(--sk-text);
+            display:flex; align-items:center; gap:10px;
+            margin:0;
+        }
+        .glass-card .card-header-custom h3 i {
+            color:var(--sk-accent); font-size:1.1rem;
+        }
+        .glass-card .card-badge {
+            font-size:.7rem; font-weight:600;
+            padding:4px 12px; border-radius:20px;
+            background:rgba(59,130,246,.12);
+            color:var(--sk-accent);
+        }
+
+        /* ==================== ANNOUNCEMENTS ==================== */
+        .announce-box {
+            background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(139,92,246,.06));
+            border:1px solid rgba(59,130,246,.15);
+            border-radius:var(--sk-radius);
+            padding:20px 24px;
+            margin-bottom:24px;
+            position:relative; overflow:hidden;
+        }
+        .announce-box::before {
+            content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
+            background:linear-gradient(180deg,var(--sk-accent),var(--sk-purple));
+        }
+        .announce-box .announce-title {
+            font-size:.9rem; font-weight:600; color:var(--sk-accent);
+            margin-bottom:6px; display:flex; align-items:center; gap:8px;
+        }
+        .announce-box .announce-text {
+            font-size:.82rem; color:var(--sk-text-dim); line-height:1.6;
+        }
+
+        /* ==================== TABLE ==================== */
+        .sk-table {
+            width:100%;
+            border-collapse:separate;
+            border-spacing:0 6px;
+        }
+        .sk-table thead th {
+            font-size:.7rem; font-weight:600; color:var(--sk-text-dim);
+            text-transform:uppercase; letter-spacing:.1em;
+            padding:8px 14px;
+            border:none;
+        }
+        .sk-table tbody tr {
+            background:rgba(255,255,255,.03);
+            border-radius:var(--sk-radius-sm);
+            transition:var(--sk-transition);
+        }
+        .sk-table tbody tr:hover { background:rgba(255,255,255,.06); transform:translateX(4px); }
+        .sk-table tbody td {
+            padding:12px 14px; font-size:.85rem; color:var(--sk-text-dim);
+            border:none; vertical-align:middle;
+        }
+        .sk-table tbody td:first-child { border-radius:var(--sk-radius-sm) 0 0 var(--sk-radius-sm); }
+        .sk-table tbody td:last-child { border-radius:0 var(--sk-radius-sm) var(--sk-radius-sm) 0; }
+        .sk-table .link-name {
+            color:var(--sk-text); font-weight:500; text-decoration:none;
+            transition:var(--sk-transition);
+        }
+        .sk-table .link-name:hover { color:var(--sk-accent); }
+        .sk-table .views-badge, .sk-table .earn-badge {
+            padding:4px 10px; border-radius:20px; font-size:.75rem; font-weight:600;
+        }
+        .sk-table .views-badge { background:rgba(59,130,246,.12); color:var(--sk-accent); }
+        .sk-table .earn-badge { background:rgba(16,185,129,.12); color:var(--sk-green); }
+
+        .empty-state {
+            text-align:center; padding:40px 20px; color:var(--sk-text-dim);
+        }
+        .empty-state i { font-size:2.5rem; margin-bottom:12px; display:block; opacity:.3; }
+
+        /* ==================== SUMMARY ROWS ==================== */
+        .summary-row {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:12px 0;
+            border-bottom:1px solid var(--sk-border);
+            transition:var(--sk-transition);
+        }
+        .summary-row:last-child { border-bottom:none; }
+        .summary-row:hover { padding-left:6px; }
+        .summary-row .label { font-size:.82rem; color:var(--sk-text-dim); }
+        .summary-row .value { font-size:.9rem; font-weight:600; color:var(--sk-text); font-family:'Inter',sans-serif; }
+
+        /* ==================== CHART ==================== */
+        .chart-container {
+            position:relative;
+            height:260px;
+        }
+        .chart-container canvas { border-radius:var(--sk-radius-sm); }
+
+        /* ==================== MODAL ==================== */
+        .modal-content {
+            background:var(--sk-surface);
+            border:1px solid var(--sk-border);
+            border-radius:var(--sk-radius);
+            box-shadow:var(--sk-shadow-lg);
+        }
+        .modal-header {
+            border-bottom:1px solid var(--sk-border);
+            padding:20px 24px;
+        }
+        .modal-header .modal-title {
+            font-weight:600; color:var(--sk-text);
+            display:flex; align-items:center; gap:8px;
+        }
+        .modal-header .modal-title i { color:var(--sk-accent); }
+        .modal-header .close { color:var(--sk-text-dim); text-shadow:none; opacity:.7; }
+        .modal-header .close:hover { color:var(--sk-text); opacity:1; }
+        .modal-body { padding:24px; }
+        .modal-body .form-control {
+            background:var(--sk-surface2); border:1px solid var(--sk-border);
+            color:var(--sk-text); border-radius:var(--sk-radius-sm);
+            padding:12px 14px; font-family:'Poppins',sans-serif;
+            transition:var(--sk-transition);
+        }
+        .modal-body .form-control:focus {
+            border-color:var(--sk-accent);
+            box-shadow:0 0 0 3px var(--sk-accent-glow);
+        }
+        .modal-body .form-control::placeholder { color:var(--sk-text-dim); }
+        .modal-body label { font-size:.8rem; font-weight:500; color:var(--sk-text-dim); margin-bottom:6px; }
+        .modal-footer {
+            border-top:1px solid var(--sk-border);
+            padding:16px 24px;
+        }
+        .btn-sk-primary {
+            background:linear-gradient(135deg,var(--sk-accent),var(--sk-purple));
+            color:#fff; border:none; border-radius:var(--sk-radius-sm);
+            padding:10px 24px; font-weight:600; font-family:'Poppins',sans-serif;
+            box-shadow:0 4px 16px var(--sk-accent-glow);
+            transition:var(--sk-transition);
+        }
+        .btn-sk-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--sk-accent-glow); }
+        .btn-sk-default {
+            background:var(--sk-surface2); color:var(--sk-text-dim);
+            border:1px solid var(--sk-border); border-radius:var(--sk-radius-sm);
+            padding:10px 24px; font-weight:500; font-family:'Poppins',sans-serif;
+            transition:var(--sk-transition);
+        }
+        .btn-sk-default:hover { background:rgba(255,255,255,.08); color:var(--sk-text); }
+
+        /* Alert result */
+        .sk-alert-success {
+            background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.2);
+            border-radius:var(--sk-radius-sm); padding:14px 16px;
+            color:var(--sk-green); font-size:.85rem;
+        }
+        .sk-alert-success a { color:var(--sk-green); font-weight:600; word-break:break-all; }
+        .sk-alert-danger {
+            background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.2);
+            border-radius:var(--sk-radius-sm); padding:14px 16px;
+            color:var(--sk-red); font-size:.85rem;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .main-footer {
+            background:var(--sk-surface);
+            border-top:1px solid var(--sk-border);
+            color:var(--sk-text-dim);
+            font-size:.78rem;
+            padding:14px 24px;
+            margin-left:260px;
+        }
+
+        /* ==================== TOAST ==================== */
+        .sk-toast {
+            position:fixed; bottom:24px; right:24px; z-index:9999;
+            background:var(--sk-surface); border:1px solid var(--sk-border);
+            border-radius:var(--sk-radius-sm);
+            padding:14px 20px; font-size:.85rem; font-weight:500;
+            box-shadow:var(--sk-shadow-lg);
+            transform:translateY(100px); opacity:0;
+            transition:all .4s cubic-bezier(.4,0,.2,1);
+            display:flex; align-items:center; gap:10px;
+        }
+        .sk-toast.show { transform:translateY(0); opacity:1; }
+        .sk-toast.success { border-left:4px solid var(--sk-green); color:var(--sk-green); }
+        .sk-toast.error { border-left:4px solid var(--sk-red); color:var(--sk-red); }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media(max-width:768px) {
+            .main-sidebar { width:0; overflow:hidden; }
+            .main-sidebar.open { width:260px; position:fixed; height:100vh; z-index:9999; }
+            .content-wrapper { margin-left:0; padding:16px; }
+            .main-footer { margin-left:0; }
+            .stat-card .stat-value { font-size:1.4rem; }
+        }
+
+        /* ==================== SCROLLBAR ==================== */
+        ::-webkit-scrollbar { width:6px; }
+        ::-webkit-scrollbar-track { background:var(--sk-bg); }
+        ::-webkit-scrollbar-thumb { background:var(--sk-surface2); border-radius:3px; }
+        ::-webkit-scrollbar-thumb:hover { background:var(--sk-text-dim); }
+
+        /* ==================== LOADING SKELETON ==================== */
+        .skeleton {
+            background:linear-gradient(90deg,var(--sk-surface2) 25%,rgba(255,255,255,.06) 50%,var(--sk-surface2) 75%);
+            background-size:200% 100%;
+            animation:shimmer 1.5s infinite;
+            border-radius:6px;
+        }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+        /* ==================== COPY BTN ==================== */
+        .copy-btn {
+            background:var(--sk-surface2); border:1px solid var(--sk-border);
+            color:var(--sk-text-dim); border-radius:6px;
+            padding:4px 10px; font-size:.72rem; font-weight:600;
+            transition:var(--sk-transition); cursor:pointer;
+        }
+        .copy-btn:hover { background:var(--sk-accent); color:#fff; border-color:var(--sk-accent); }
+
+        /* ==================== PULSE DOT ==================== */
+        .pulse-dot {
+            width:8px; height:8px; border-radius:50%; display:inline-block;
+            margin-right:6px;
+        }
+        .pulse-dot.green { background:var(--sk-green); box-shadow:0 0 8px var(--sk-green-glow); animation:pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(1.3)} }
+
+        /* Fade in animation */
+        .fade-in { animation:fadeIn .6s ease forwards; opacity:0; }
+        .fade-in:nth-child(1) { animation-delay:.1s; }
+        .fade-in:nth-child(2) { animation-delay:.2s; }
+        .fade-in:nth-child(3) { animation-delay:.3s; }
+        .fade-in:nth-child(4) { animation-delay:.4s; }
+        @keyframes fadeIn { to{opacity:1;transform:translateY(0)} from{opacity:0;transform:translateY(16px)} }
+    </style>
 </head>
-
 <body class="member-dashboard hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
-    <!-- ==================== MAIN HEADER ==================== -->
+    <!-- BG ORBS -->
+    <div class="bg-orbs">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- HEADER -->
     <header class="main-header">
         <a href="../index.html" class="logo">
             <span class="logo-mini"><b>S</b></span>
             <span class="logo-lg"><b>Shortify</b></span>
         </a>
-
         <nav class="navbar navbar-static-top" role="navigation">
-            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
-               role="button"><span class="sr-only">Toggle navigation</span></a>
-
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <i class="fa fa-bars"></i>
+            </a>
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    <!-- User Account Menu (member.ctp jaisa) -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="" id="header-avatar" class="user-image" alt="User Image">
@@ -60,10 +608,10 @@
                             </li>
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="profile.html" class="btn btn-default btn-flat">Profile</a>
+                                    <a href="profile.html" class="btn btn-sk-default btn-flat">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a>
+                                    <a href="#" id="logout-btn" class="btn btn-sk-default btn-flat">Logout</a>
                                 </div>
                             </li>
                         </ul>
@@ -73,279 +621,206 @@
         </nav>
     </header>
 
-    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <!-- SIDEBAR -->
     <aside class="main-sidebar">
         <section class="sidebar">
-            <br>
-            <!-- New Shorten Link button (#myModal jaisa) -->
             <button type="button"
-                    class="btn btn-block btn-social btn-github btn-lg shorten-button"
+                    class="btn btn-block shorten-button"
                     data-toggle="modal" data-target="#shorten-modal">
-                <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
+                <i class="fa fa-paper-plane"></i> New Shorten Link
             </button>
-            <br>
+
+            <!-- Wallet -->
+            <div class="wallet-card">
+                <div class="wallet-label"><i class="fa fa-wallet"></i> Money Wallet</div>
+                <div class="wallet-amount"><span class="currency">&#8377;</span><span id="wallet-balance">0.00</span></div>
+            </div>
 
             <ul class="sidebar-menu">
-                <!-- Money Wallet (wallet_enable wala li) -->
-                <li>
-                    <a><i class="fa fa-credit-card text-aqua"></i>
-                        <span><b>Money Wallet</b><br>
-                            &#8377;<span id="wallet-balance">0.00</span>
-                        </span>
-                    </a>
-                </li>
-
                 <li class="active">
-                    <a href="dashboard.html"><i class="fa fa-dashboard"></i>
-                        <span>Statistics</span></a>
+                    <a href="dashboard.html"><i class="fa fa-chart-pie"></i> <span>Statistics</span></a>
                 </li>
-
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-link"></i>
-                        <span>Manage Links</span>
+                    <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li><a href="links.html">All Links</a></li>
-                        <li><a href="links-hidden.html">Hidden Links</a></li>
+                        <li><a href="links.html"><i class="fa fa-circle" style="font-size:6px"></i> All Links</a></li>
+                        <li><a href="links-hidden.html"><i class="fa fa-circle" style="font-size:6px"></i> Hidden Links</a></li>
                     </ul>
                 </li>
-
-                <li>
-                    <a href="withdraw.html"><i class="fa fa-dollar"></i>
-                        <span>Withdraw</span></a>
-                </li>
-
-                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
-
+                <li><a href="withdraw.html"><i class="fa fa-wallet"></i> <span>Withdraw</span></a></li>
+                <li><a href="membership.html"><i class="fa fa-crown text-yellow"></i> <span>Membership</span></a></li>
                 <li><a href="advertise.html"><i class="fa fa-bullhorn text-aqua"></i> <span>Advertise</span></a></li>
-
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-wrench"></i>
-                        <span>Tools</span>
+                    <a href="#"><i class="fa fa-tools"></i> <span>Tools</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li><a href="tools-quick.html">Quick Link</a></li>
-                        <li><a href="tools-mass.html">Mass Shrinker</a></li>
-                        <li><a href="tools-fullpage.html">Full Page Script</a></li>
-                        <li><a href="tools-api.html">Developers API</a></li>
+                        <li><a href="tools-quick.html"><i class="fa fa-circle" style="font-size:6px"></i> Quick Link</a></li>
+                        <li><a href="tools-mass.html"><i class="fa fa-circle" style="font-size:6px"></i> Mass Shrinker</a></li>
+                        <li><a href="tools-fullpage.html"><i class="fa fa-circle" style="font-size:6px"></i> Full Page Script</a></li>
+                        <li><a href="tools-api.html"><i class="fa fa-circle" style="font-size:6px"></i> Developers API</a></li>
                     </ul>
                 </li>
-
-                <li>
-                    <a href="referrals.html"><i class="fa fa-exchange"></i>
-                        <span>Referrals</span></a>
-                </li>
-
-                <li>
-                    <a href="profile.html"><i class="fa fa-user"></i>
-                        <span>Profile</span></a>
-                </li>
-
-                <li>
-                    <a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i>
-                        <span>Logout</span></a>
-                </li>
+                <li><a href="referrals.html"><i class="fa fa-user-friends"></i> <span>Referrals</span></a></li>
+                <li><a href="profile.html"><i class="fa fa-user-circle"></i> <span>Profile</span></a></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out-alt text-red"></i> <span>Logout</span></a></li>
             </ul>
         </section>
     </aside>
 
-    <!-- ==================== CONTENT WRAPPER ==================== -->
+    <!-- CONTENT -->
     <div class="content-wrapper">
-        <section class="content-header">
-            <h1>Statistics <small>Dashboard</small></h1>
-            <ol class="breadcrumb">
-                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Statistics</li>
-            </ol>
-        </section>
+        <h1 class="page-title">
+            <i class="fa fa-chart-pie" style="color:var(--sk-accent)"></i> Statistics
+            <small>Dashboard Overview</small>
+        </h1>
 
-        <section class="content">
-
-            <!-- ======== SMALL BOX STATS (AdminLTE colored boxes) ======== -->
-            <div class="row">
-                <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h3 id="stat-views">0</h3>
-                            <p>Total Views</p>
-                        </div>
-                        <div class="icon"><i class="fa fa-bar-chart"></i></div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h3 id="stat-earnings">&#8377;0.00</h3>
-                            <p>Total Earnings</p>
-                        </div>
-                        <div class="icon"><i class="fa fa-shopping-bag"></i></div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-green">
-                        <div class="inner">
-                            <h3 id="stat-referral">&#8377;0.00</h3>
-                            <p>Referral Earnings</p>
-                        </div>
-                        <div class="icon"><i class="fa fa-exchange"></i></div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-red">
-                        <div class="inner">
-                            <h3 id="stat-cpm">&#8377;0.00</h3>
-                            <p>Average CPM</p>
-                        </div>
-                        <div class="icon"><i class="fa fa-usd"></i></div>
-                    </div>
-                </div>
+        <!-- STAT CARDS -->
+        <div class="stat-grid">
+            <div class="stat-card yellow fade-in">
+                <div class="stat-icon"><i class="fa fa-eye"></i></div>
+                <div class="stat-value" id="stat-views">0</div>
+                <div class="stat-label">Total Views</div>
+                <div class="stat-change up"><i class="fa fa-arrow-up"></i> Active</div>
             </div>
-
-            <!-- ======== EARNINGS CHART (last 14 days) ======== -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <i class="fa fa-line-chart"></i>
-                    <h3 class="box-title">My Earnings - Last 14 Days</h3>
-                </div>
-                <div class="box-body">
-                    <canvas id="earnings-chart" height="90"></canvas>
-                </div>
+            <div class="stat-card green fade-in">
+                <div class="stat-icon"><i class="fa fa-coins"></i></div>
+                <div class="stat-value" id="stat-earnings">&#8377;0.00</div>
+                <div class="stat-label">Total Earnings</div>
+                <div class="stat-change up"><i class="fa fa-arrow-up"></i> Lifetime</div>
             </div>
-
-            <!-- ======== ANNOUNCEMENTS BOX ======== -->
-            <div class="box box-primary hidden" id="announcements-box">
-                <div class="box-header with-border">
-                    <i class="fa fa-bullhorn"></i>
-                    <h3 class="box-title">Announcements</h3>
-                </div>
-                <div class="box-body chat">
-                    <div class="item">
-                        <p class="announcement">
-                            <span>
-                                <small class="text-muted pull-right">
-                                    <i class="fa fa-clock-o"></i>
-                                    <span id="announce-date"></span></small>
-                                <i class="fa fa-angle-double-right"></i>
-                                <b id="announce-title"></b>
-                            </span>
-                            <span id="announce-text"></span>
-                        </p>
-                    </div>
-                </div>
+            <div class="stat-card purple fade-in">
+                <div class="stat-icon"><i class="fa fa-user-friends"></i></div>
+                <div class="stat-value" id="stat-referral">&#8377;0.00</div>
+                <div class="stat-label">Referral Earnings</div>
+                <div class="stat-change up"><i class="fa fa-arrow-up"></i> Commission</div>
             </div>
-
-            <!-- ======== TOP LINKS BOX ======== -->
-            <div class="box box-success">
-                <div class="box-header with-border">
-                    <i class="fa fa-fire"></i>
-                    <h3 class="box-title">Top Links</h3>
-                </div>
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th>Alias</th>
-                                <th>Views</th>
-                                <th>Earnings</th>
-                            </tr>
-                        </thead>
-                        <tbody id="top-links-body">
-                            <tr><td colspan="3" class="text-center">Loading...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="stat-card blue fade-in">
+                <div class="stat-icon"><i class="fa fa-chart-line"></i></div>
+                <div class="stat-value" id="stat-cpm">&#8377;0.00</div>
+                <div class="stat-label">Average CPM</div>
+                <div class="stat-change up"><i class="fa fa-arrow-up"></i> Per 1000</div>
             </div>
+        </div>
 
-            <!-- ======== MONTHLY SUMMARY TABLE ======== -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <i class="fa fa-bar-chart"></i>
-                    <h3 class="box-title">Summary</h3>
-                </div>
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th>Description</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Total Links Created</td><td id="sum-links">-</td></tr>
-                            <tr><td>Total Views</td><td id="sum-views">-</td></tr>
-                            <tr><td>Wallet Balance</td><td id="sum-wallet">-</td></tr>
-                            <tr><td>Total Withdrawn</td><td id="sum-withdrawn">-</td></tr>
-                            <tr><td>Lifetime Earnings</td><td id="sum-lifetime">-</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+        <!-- EARNINGS CHART -->
+        <div class="glass-card fade-in">
+            <div class="card-header-custom">
+                <h3><i class="fa fa-chart-area"></i> My Earnings - Last 14 Days</h3>
+                <span class="card-badge"><span class="pulse-dot green"></span> Live</span>
             </div>
+            <div class="chart-container">
+                <canvas id="earnings-chart"></canvas>
+            </div>
+        </div>
 
-        </section>
+        <!-- ANNOUNCEMENTS -->
+        <div class="announce-box hidden fade-in" id="announcements-box">
+            <div class="announce-title">
+                <i class="fa fa-bullhorn"></i>
+                <span id="announce-title"></span>
+            </div>
+            <div class="announce-text" id="announce-text"></div>
+        </div>
+
+        <!-- TOP LINKS -->
+        <div class="glass-card fade-in">
+            <div class="card-header-custom">
+                <h3><i class="fa fa-fire"></i> Top Links</h3>
+                <span class="card-badge">Top 10</span>
+            </div>
+            <div style="overflow-x:auto">
+                <table class="sk-table">
+                    <thead>
+                        <tr>
+                            <th>Link</th>
+                            <th>Views</th>
+                            <th>Earnings</th>
+                        </tr>
+                    </thead>
+                    <tbody id="top-links-body">
+                        <tr><td colspan="3"><div class="empty-state"><i class="fa fa-spinner fa-spin"></i> Loading...</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="glass-card fade-in">
+            <div class="card-header-custom">
+                <h3><i class="fa fa-table"></i> Summary</h3>
+            </div>
+            <div class="summary-row">
+                <span class="label">Total Links Created</span>
+                <span class="value" id="sum-links">-</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Total Views</span>
+                <span class="value" id="sum-views">-</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Wallet Balance</span>
+                <span class="value" id="sum-wallet" style="color:var(--sk-green)">-</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Total Withdrawn</span>
+                <span class="value" id="sum-withdrawn">-</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Lifetime Earnings</span>
+                <span class="value" id="sum-lifetime" style="color:var(--sk-accent)">-</span>
+            </div>
+        </div>
     </div>
 
-    <!-- ==================== MAIN FOOTER ==================== -->
+    <!-- FOOTER -->
     <footer class="main-footer">
-        <div class="pull-right hidden-xs"></div>
-        Copyright &copy; <b>Shortify</b> 2026
+        Copyright &copy; <b>Shortify</b> 2026 <span class="pull-right" style="color:var(--sk-accent)"><i class="fa fa-bolt"></i> Powered by Firebase</span>
     </footer>
-
-    <div class="control-sidebar-bg"></div>
 </div>
 
-
-<!-- ==================== NEW SHORTEN LINK MODAL ==================== -->
+<!-- MODAL -->
 <div class="modal fade" id="shorten-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close"
-                        data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">
-                    <i class="fa fa-paper-plane"></i> New Shorten Link</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-paper-plane"></i> New Shorten Link</h4>
             </div>
             <form id="modal-shorten-form">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Destination URL</label>
-                        <input type="url" class="form-control"
-                               id="modal-url-input"
-                               placeholder="https://example.com/lambi-url"
-                               required>
+                        <input type="url" class="form-control" id="modal-url-input"
+                               placeholder="https://example.com/your-long-url" required>
                     </div>
                     <div class="form-group">
-                        <label>Custom Alias <small>(optional)</small></label>
-                        <input type="text" class="form-control"
-                               id="modal-alias-input" maxlength="30"
-                               placeholder="sirf letters/numbers/dash">
+                        <label>Custom Alias <small style="color:var(--sk-text-dim)">(optional)</small></label>
+                        <input type="text" class="form-control" id="modal-alias-input" maxlength="30"
+                               placeholder="my-custom-alias">
                     </div>
-
-                    <div class="alert alert-danger hidden" id="modal-error"></div>
-
-                    <div class="alert alert-success hidden" id="modal-result">
-                        Link ready! <a href="#" id="modal-result-link"
-                           target="_blank" style="word-break:break-all;font-weight:bold"></a>
-                        <button type="button" class="btn btn-default btn-xs pull-right"
-                                id="modal-copy"><i class="fa fa-clipboard"></i> Copy</button>
+                    <div class="sk-alert-danger hidden" id="modal-error"></div>
+                    <div class="sk-alert-success hidden" id="modal-result">
+                        Link ready! <a href="#" id="modal-result-link" target="_blank"></a>
+                        <button type="button" class="copy-btn pull-right" id="modal-copy" style="margin-top:6px">
+                            <i class="fa fa-clipboard"></i> Copy
+                        </button>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default"
-                            data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary"
-                            id="modal-submit">
-                        <i class="fa fa-paper-plane"></i> Shorten</button>
+                    <button type="button" class="btn btn-sk-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-sk-primary" id="modal-submit">
+                        <i class="fa fa-paper-plane"></i> Shorten
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<!-- TOAST -->
+<div class="sk-toast" id="sk-toast"></div>
 
-<!-- jQuery + Bootstrap + AdminLTE app.js (sidebar/treeview/modal) -->
 <script src="../vendor/jquery.min.js"></script>
 <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../vendor/dashboard/js/app.min.js"></script>
@@ -361,24 +836,37 @@
         ref, get, child, query, orderByChild, equalTo
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    /* ---------- Login guard + shell setup ---------- */
+    /* ---------- Toast ---------- */
+    function showToast(msg, type = "success") {
+        const t = document.getElementById("sk-toast");
+        t.className = "sk-toast " + type;
+        t.innerHTML = '<i class="fa fa-' + (type === "success" ? "check-circle" : "exclamation-circle") + '"></i> ' + msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 3000);
+    }
+
+    /* ---------- Login guard ---------- */
     const me = await requireLogin();
     await fillUserHeader(me);
     wireLogout();
     initShortenModal(me);
 
+    /* ---------- Sidebar treeview toggle ---------- */
+    document.querySelectorAll(".treeview > a").forEach(el => {
+        el.addEventListener("click", e => {
+            e.preventDefault();
+            el.parentElement.classList.toggle("open");
+        });
+    });
+
     /* ============================================================
-       MERI SAB LINKS LOAD KARO (stats calculate karne ke liye)
+       LOAD LINKS DATA
        ============================================================ */
-    const linksQuery = query(
-        ref(db, "aliases"),
-        orderByChild("uid"),
-        equalTo(me.uid)
-    );
+    const linksQuery = query(ref(db, "aliases"), orderByChild("uid"), equalTo(me.uid));
     const snap = await get(linksQuery);
 
     let totalViews = 0;
-    let totalEarnedFromLinks = 0;   // views * default rate ka estimate
+    let totalEarnedFromLinks = 0;
     const linksArr = [];
 
     snap.forEach((c) => {
@@ -388,100 +876,80 @@
         totalViews += Number(l.clicks) || 0;
     });
 
-    // Rates load karo (estimate earnings ke liye)
     let rates = { interstitial: 8, banner: 3, none: 1 };
     try {
         const rSnap = await get(child(ref(db), "earning_rates/default"));
         rates = Object.assign(rates, rSnap.val() || {});
     } catch {}
 
-    // Har link ki earning estimate (default interstitial rate se)
     linksArr.forEach((l) => {
         const rate = rates[l.ad_type] ?? rates.interstitial;
         totalEarnedFromLinks += ((Number(l.clicks) || 0) * Number(rate)) / 1000;
     });
 
-    /* ---------- Small boxes bharna ---------- */
+    /* ---------- Stats fill ---------- */
     document.getElementById("stat-views").textContent = formatNumber(totalViews);
 
-    // Lifetime earnings = abhi wallet + already withdrawn
     const lifetime = (me.wallet_money || 0) + (me.total_withdrawn || 0);
-    document.getElementById("stat-earnings").innerHTML =
-        "&#8377;" + lifetime.toFixed(2);
+    document.getElementById("stat-earnings").innerHTML = "&#8377;" + lifetime.toFixed(2);
 
-    // Referral earnings (go.html isko users/{uid}/referral_earnings me rakhta hai)
     let refEarn = 0;
     try {
         const reSnap = await get(ref(db, `users/${me.uid}/referral_earnings`));
         refEarn = Number(reSnap.val()) || 0;
     } catch {}
-    document.getElementById("stat-referral").innerHTML =
-        "&#8377;" + refEarn.toFixed(2);
+    document.getElementById("stat-referral").innerHTML = "&#8377;" + refEarn.toFixed(2);
 
-    // Average CPM = lifetime / views * 1000
     const avgCpm = totalViews > 0 ? (lifetime / totalViews) * 1000 : 0;
-    document.getElementById("stat-cpm").innerHTML =
-        "&#8377;" + avgCpm.toFixed(2);
+    document.getElementById("stat-cpm").innerHTML = "&#8377;" + avgCpm.toFixed(2);
 
-    /* ---------- Summary table ---------- */
+    /* ---------- Summary ---------- */
     document.getElementById("sum-links").textContent = linksArr.length;
     document.getElementById("sum-views").textContent = formatNumber(totalViews);
-    document.getElementById("sum-wallet").textContent =
-        formatMoney(me.wallet_money);
-    document.getElementById("sum-withdrawn").textContent =
-        formatMoney(me.total_withdrawn);
-    document.getElementById("sum-lifetime").textContent =
-        formatMoney(lifetime);
+    document.getElementById("sum-wallet").textContent = formatMoney(me.wallet_money);
+    document.getElementById("sum-withdrawn").textContent = formatMoney(me.total_withdrawn);
+    document.getElementById("sum-lifetime").textContent = formatMoney(lifetime);
 
-    /* ============================================================
-       ANNOUNCEMENTS BOX (settings node se)
-       ============================================================ */
+    /* ---------- Wallet sidebar ---------- */
+    document.getElementById("wallet-balance").textContent = (me.wallet_money || 0).toFixed(2);
+
+    /* ---------- Announcements ---------- */
     try {
         const sSnap = await get(ref(db, "settings"));
         const s = sSnap.val() || {};
         if (s.announce_text) {
             document.getElementById("announcements-box").classList.remove("hidden");
-            document.getElementById("announce-title").textContent =
-                s.announce_title || "Announcement";
-            document.getElementById("announce-text").innerHTML =
-                escapeHtml(s.announce_text);
-            document.getElementById("announce-date").textContent =
-                s.announce_date ? new Date(s.announce_date).toLocaleDateString("en-IN") : "";
+            document.getElementById("announce-title").textContent = s.announce_title || "Announcement";
+            document.getElementById("announce-text").innerHTML = escapeHtml(s.announce_text);
         }
-    } catch { /* optional */ }
+    } catch {}
 
-    /* ============================================================
-       TOP LINKS TABLE (views ke hisaab se sort)
-       ============================================================ */
+    /* ---------- Top Links ---------- */
     linksArr.sort((a, b) => (b.clicks || 0) - (a.clicks || 0));
     const top10 = linksArr.slice(0, 10).filter(l => l.clicks > 0);
 
     const tbody = document.getElementById("top-links-body");
     if (top10.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">
-            Abhi koi views nahi - pehla link banao aur share karo!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3"><div class="empty-state"><i class="fa fa-link"></i>Abhi koi views nahi - pehla link banao!</div></td></tr>`;
     } else {
         tbody.innerHTML = top10.map((l) => {
             const rate = rates[l.ad_type] ?? rates.interstitial;
             const earn = ((l.clicks || 0) * rate) / 1000;
-            return `
-                <tr>
-                    <td>
-                        <i class="fa fa-link"></i>
-                        <a href="${escapeHtml(SITE_URL)}#${escapeHtml(l.alias)}"
-                           target="_blank" rel="nofollow">
-                            ${escapeHtml(l.title || l.alias)}</a>
-                        <br><small class="text-muted">${escapeHtml(l.alias)}</small>
-                    </td>
-                    <td>${formatNumber(l.clicks)}</td>
-                    <td>${formatMoney(earn)}</td>
-                </tr>`;
+            return `<tr>
+                <td>
+                    <a class="link-name" href="${escapeHtml(SITE_URL)}#${escapeHtml(l.alias)}" target="_blank" rel="nofollow">
+                        <i class="fa fa-link" style="color:var(--sk-accent);margin-right:6px"></i>${escapeHtml(l.title || l.alias)}
+                    </a>
+                    <br><small style="color:var(--sk-text-dim);font-size:.72rem">${escapeHtml(l.alias)}</small>
+                </td>
+                <td><span class="views-badge">${formatNumber(l.clicks)}</span></td>
+                <td><span class="earn-badge">${formatMoney(earn)}</span></td>
+            </tr>`;
         }).join("");
     }
 
     /* ============================================================
-       EARNINGS CHART - go.html har click pe users/{uid}/daily/{date}
-       me amount bump karta hai, wahi se last 14 din ka graph.
+       EARNINGS CHART
        ============================================================ */
     try {
         const dailySnap = await get(ref(db, `users/${me.uid}/daily`));
@@ -497,29 +965,66 @@
             });
         }
 
-        new Chart(document.getElementById("earnings-chart"), {
+        const ctx = document.getElementById("earnings-chart").getContext("2d");
+        const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+        gradient.addColorStop(0, "rgba(59,130,246,.25)");
+        gradient.addColorStop(1, "rgba(59,130,246,0)");
+
+        new Chart(ctx, {
             type: "line",
             data: {
                 labels: days.map(d => d.label),
                 datasets: [{
                     label: "Earnings",
-                    data: days.map(d =>
-                        Math.round((daily[d.key] || 0) * 1000) / 1000),
-                    borderColor: "#3c8dbc",
-                    backgroundColor: "rgba(60,141,188,.15)",
+                    data: days.map(d => Math.round((daily[d.key] || 0) * 1000) / 1000),
+                    borderColor: "#3b82f6",
+                    backgroundColor: gradient,
+                    borderWidth: 3,
                     fill: true,
-                    tension: 0.3,
-                    pointRadius: 3
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: "#3b82f6",
+                    pointBorderColor: "#1e293b",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7,
+                    pointHoverBackgroundColor: "#3b82f6",
+                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderWidth: 2
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 legend: { display: false },
-                scales: { yAxes: [{ ticks: { beginAtZero: true } }] }
+                scales: {
+                    xAxes: [{
+                        gridLines: { color: "rgba(148,163,184,.08)", drawBorder: false },
+                        ticks: { color: "#94a3b8", font: { family: "Poppins", size: 11 } }
+                    }],
+                    yAxes: [{
+                        gridLines: { color: "rgba(148,163,184,.08)", drawBorder: false },
+                        ticks: { color: "#94a3b8", font: { family: "Poppins", size: 11 }, beginAtZero: true }
+                    }]
+                },
+                tooltips: {
+                    backgroundColor: "rgba(30,41,59,.95)",
+                    titleFont: { family: "Poppins", size: 12 },
+                    bodyFont: { family: "Poppins", size: 12 },
+                    borderColor: "rgba(148,163,184,.12)",
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    padding: 12
+                }
             }
         });
     } catch (e) {
-        console.error("Chart load fail:", e);
+        console.error("Chart fail:", e);
     }
+
+    /* ---------- Animate numbers ---------- */
+    document.querySelectorAll(".stat-value").forEach(el => {
+        el.style.animation = "fadeIn .8s ease forwards";
+    });
 </script>
 
 </body>
