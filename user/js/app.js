@@ -37,6 +37,9 @@ export const SITE_URL = (() => {
     return origin + path;
 })();
 
+// Short links ka base URL (go.html pe redirect hota hai)
+export const SHORT_URL_BASE = SITE_URL + "user/go.html";
+
 /* -------- CURRENCY (admin settings se load hota hai) -------- */
 let CURRENCY = "\u20B9";   // default ₹
 export function setCurrency(sym) {
@@ -351,7 +354,7 @@ export function initShortenModal(me) {
             runTransaction(ref(db, "stats/total_links"),
                 (cur) => (cur || 0) + 1);
 
-            const shortUrl = SITE_URL + "#" + alias;
+            const shortUrl = SHORT_URL_BASE + "#" + alias;
             resultLink.href = shortUrl;
             resultLink.textContent = shortUrl;
             resultBox.classList.remove("hidden");
