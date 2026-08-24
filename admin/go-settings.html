@@ -109,10 +109,10 @@
         <section class="content">
 
             <div class="callout callout-info">
-                <h4>Kaise kaam karta hai?</h4>
-                <p>Har slot me <b>poora Adsterra code</b> paste karo (script + div dono). Save karo. Bas ho gaya!</p>
-                <p><b>Example format:</b></p>
-                <div class="example-code">&lt;script async="async" data-cfasync="false" src="https://pl30764540.profitableratecpmnetwork.com/YOUR_KEY/invoke.js"&gt;&lt;/script&gt;<br>&lt;div id="container-YOUR_KEY"&gt;&lt;/div&gt;</div>
+                <h4>Dual Ad Network Strategy - $20 CPM!</h4>
+                <p><b>Steps 1-2:</b> Adsterra ads dikhega (sare Adsterra slots me)</p>
+                <p><b>Steps 3-4:</b> Monetag ads dikhega (Monetag slots me)</p>
+                <p>Har step pe FRESH ad load hota hai = DOUBLE impressions = DOUBLE revenue!</p>
             </div>
 
             <div class="row" style="margin-bottom:15px">
@@ -431,6 +431,94 @@
                     </div>
                 </div>
 
+                <!-- MONETAG SECTION -->
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-money"></i> MONETAG Ads <span class="format-badge" style="background:#00b894">Steps 3-4 me dikhega</span></h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="callout callout-success">
+                            <h4>Monetag Dual Revenue Strategy</h4>
+                            <p><b>Steps 1-2:</b> Adsterra ads → Adsterra ke saare slots</p>
+                            <p><b>Steps 3-4:</b> Monetag ads → Ye saare slots Monetag ke</p>
+                            <p>Visitor ko dono network ke ads dikhenge = MAX revenue!</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="ad-card">
+                                    <div class="ad-card-header">
+                                        <h4>Monetag Popunder (OnClick)</h4>
+                                        <label class="toggle-switch"><input type="checkbox" id="monetag_popunder_enabled"><span class="toggle-slider"></span></label>
+                                    </div>
+                                    <label>Monetag Popunder Code</label>
+                                    <textarea class="form-control code-input" id="monetag_popunder_code" placeholder="&lt;script src=&quot;https://dolohen.com/vignette.min.js&quot; data-zone=&quot;YOUR_ZONE_ID&quot;&gt;&lt;/script&gt;"></textarea>
+                                    <p class="help-block">Zone: OnClick (Popunder)</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="ad-card">
+                                    <div class="ad-card-header">
+                                        <h4>Monetag Vignette Banner</h4>
+                                        <label class="toggle-switch"><input type="checkbox" id="monetag_vignette_enabled"><span class="toggle-slider"></span></label>
+                                    </div>
+                                    <label>Monetag Vignette Code</label>
+                                    <textarea class="form-control code-input" id="monetag_vignette_code" placeholder="&lt;script src=&quot;https://dolohen.com/vignette.min.js&quot; data-zone=&quot;YOUR_ZONE_ID&quot;&gt;&lt;/script&gt;"></textarea>
+                                    <p class="help-block">Zone: Vignette Banner</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="ad-card">
+                                    <div class="ad-card-header">
+                                        <h4>Monetag In-Page Push</h4>
+                                        <label class="toggle-switch"><input type="checkbox" id="monetag_push_enabled"><span class="toggle-slider"></span></label>
+                                    </div>
+                                    <label>Monetag Push Code</label>
+                                    <textarea class="form-control code-input" id="monetag_push_code" placeholder="&lt;script src=&quot;https://dolohen.com/push.min.js&quot; data-zone=&quot;YOUR_ZONE_ID&quot;&gt;&lt;/script&gt;"></textarea>
+                                    <p class="help-block">Zone: In-Page Push</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="ad-card">
+                                    <div class="ad-card-header">
+                                        <h4>Monetag Direct Link</h4>
+                                        <label class="toggle-switch"><input type="checkbox" id="monetag_direct_enabled"><span class="toggle-slider"></span></label>
+                                    </div>
+                                    <label>Monetag Direct Link URL</label>
+                                    <textarea class="form-control code-input" id="monetag_direct_code" placeholder="Direct link URL ya full code paste karo"></textarea>
+                                    <p class="help-block">Zone: Direct Link</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="ad-card">
+                                    <div class="ad-card-header">
+                                        <h4>Monetag Interstitial</h4>
+                                        <label class="toggle-switch"><input type="checkbox" id="monetag_interstitial_enabled"><span class="toggle-slider"></span></label>
+                                    </div>
+                                    <label>Monetag Interstitial Code</label>
+                                    <textarea class="form-control code-input" id="monetag_interstitial_code" placeholder="Full-screen ad code"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="ad-card">
+                                    <div class="ad-card-header">
+                                        <h4>Monetag Anchor/Sticky</h4>
+                                        <label class="toggle-switch"><input type="checkbox" id="monetag_anchor_enabled"><span class="toggle-slider"></span></label>
+                                    </div>
+                                    <label>Monetag Anchor Code</label>
+                                    <textarea class="form-control code-input" id="monetag_anchor_code" placeholder="Bottom sticky ad code"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary btn-flat" id="save-btn-bottom">
                     <i class="fa fa-save"></i> Save All Settings</button>
 
@@ -472,6 +560,18 @@
         "sidebar_2_enabled","sidebar_2_code",
         "sidebar_3_enabled","sidebar_3_code",
         "sidebar_4_enabled","sidebar_4_code",
+        "native_enabled","native_code",
+        "smartlink_enabled","smartlink_code",
+        "mobile_banner_enabled","mobile_banner_code",
+        "floating_left_enabled","floating_left_code",
+        "floating_right_enabled","floating_right_code",
+        "monetag_popunder_enabled","monetag_popunder_code",
+        "monetag_vignette_enabled","monetag_vignette_code",
+        "monetag_push_enabled","monetag_push_code",
+        "monetag_direct_enabled","monetag_direct_code",
+        "monetag_interstitial_enabled","monetag_interstitial_code",
+        "monetag_anchor_enabled","monetag_anchor_code"
+    ];
         "social_bar_enabled","social_bar_code","social_bar_title","social_bar_url",
         "floating_left_enabled","floating_left_code",
         "floating_right_enabled","floating_right_code",

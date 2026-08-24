@@ -261,34 +261,55 @@
 
         function refreshAllAds() {
             var gp = GO_PAGE;
-            if (gp.popunder_code) injectCode(document.getElementById("popunder-slot"), gp.popunder_code);
-            if (gp.top_banner_code) renderEl("ad-top-banner", gp.top_banner_code);
-            if (gp.bottom_banner_code) renderEl("ad-bottom-banner", gp.bottom_banner_code);
-            if (gp.interstitial_code) renderEl("ad-interstitial-top", gp.interstitial_code);
-            if (gp.interstitial_bottom_code) renderEl("ad-interstitial-bottom", gp.interstitial_bottom_code);
-            if (gp.mid_banner_code) renderEl("ad-mid-banner", gp.mid_banner_code);
-            if (gp.native_code) renderEl("ad-native", gp.native_code);
-            if (gp.smartlink_code) renderEl("ad-smartlink", gp.smartlink_code);
-            if (gp.sidebar_1_code) renderEl("ad-sidebar-1", gp.sidebar_1_code);
-            if (gp.social_bar_code) {
-                injectCode(document.getElementById("sbar-custom"), gp.social_bar_code);
-                document.getElementById("sbar-cta").style.display = "none";
-                document.getElementById("sbar-title").style.display = "none";
-                document.getElementById("sbar-sub").style.display = "none";
-                setTimeout(function() { document.getElementById("social-bar").style.display = "block"; }, 1000);
-            } else if (gp.social_bar_title) {
-                document.getElementById("sbar-title").textContent = gp.social_bar_title;
-                document.getElementById("sbar-sub").textContent = gp.social_bar_url || "";
-                document.getElementById("sbar-custom").style.display = "none";
-                document.getElementById("sbar-cta").style.display = "inline-block";
-                document.getElementById("sbar-cta").onclick = function() { window.open(gp.social_bar_url || "#", "_blank"); };
-                setTimeout(function() { document.getElementById("social-bar").style.display = "block"; }, 1000);
-            }
-            if (gp.floating_left_code) { injectCode(document.getElementById("float-left"), gp.floating_left_code); document.getElementById("float-left").style.display = "block"; }
-            if (gp.floating_right_code) { injectCode(document.getElementById("float-right"), gp.floating_right_code); document.getElementById("float-right").style.display = "block"; }
-            var isMob = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            if (isMob) {
-                if (gp.mobile_banner_code) {
+            var halfStep = Math.ceil(STEP_COUNT / 2);
+            var useMonetag = currentStep > halfStep;
+
+            if (useMonetag) {
+                if (gp.monetag_popunder_code) injectCode(document.getElementById("popunder-slot"), gp.monetag_popunder_code);
+                if (gp.monetag_vignette_code) renderEl("ad-top-banner", gp.monetag_vignette_code);
+                if (gp.monetag_interstitial_code) {
+                    renderEl("ad-interstitial-top", gp.monetag_interstitial_code);
+                    renderEl("ad-interstitial-bottom", gp.monetag_interstitial_code);
+                }
+                if (gp.monetag_push_code) renderEl("ad-mid-banner", gp.monetag_push_code);
+                if (gp.monetag_direct_code) renderEl("ad-native", gp.monetag_direct_code);
+                if (gp.monetag_anchor_code) renderEl("ad-bottom-banner", gp.monetag_anchor_code);
+                if (gp.monetag_vignette_code) renderEl("ad-smartlink", gp.monetag_vignette_code);
+                var isMob = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMob && gp.monetag_push_code) {
+                    renderEl("ad-mobile-top", gp.monetag_push_code);
+                    document.getElementById("ad-mobile-top-wrap").style.display = "block";
+                    renderEl("ad-mobile-bottom", gp.monetag_push_code);
+                    document.getElementById("ad-mobile-bottom-wrap").style.display = "block";
+                }
+            } else {
+                if (gp.popunder_code) injectCode(document.getElementById("popunder-slot"), gp.popunder_code);
+                if (gp.top_banner_code) renderEl("ad-top-banner", gp.top_banner_code);
+                if (gp.bottom_banner_code) renderEl("ad-bottom-banner", gp.bottom_banner_code);
+                if (gp.interstitial_code) renderEl("ad-interstitial-top", gp.interstitial_code);
+                if (gp.interstitial_bottom_code) renderEl("ad-interstitial-bottom", gp.interstitial_bottom_code);
+                if (gp.mid_banner_code) renderEl("ad-mid-banner", gp.mid_banner_code);
+                if (gp.native_code) renderEl("ad-native", gp.native_code);
+                if (gp.smartlink_code) renderEl("ad-smartlink", gp.smartlink_code);
+                if (gp.sidebar_1_code) renderEl("ad-sidebar-1", gp.sidebar_1_code);
+                if (gp.social_bar_code) {
+                    injectCode(document.getElementById("sbar-custom"), gp.social_bar_code);
+                    document.getElementById("sbar-cta").style.display = "none";
+                    document.getElementById("sbar-title").style.display = "none";
+                    document.getElementById("sbar-sub").style.display = "none";
+                    setTimeout(function() { document.getElementById("social-bar").style.display = "block"; }, 1000);
+                } else if (gp.social_bar_title) {
+                    document.getElementById("sbar-title").textContent = gp.social_bar_title;
+                    document.getElementById("sbar-sub").textContent = gp.social_bar_url || "";
+                    document.getElementById("sbar-custom").style.display = "none";
+                    document.getElementById("sbar-cta").style.display = "inline-block";
+                    document.getElementById("sbar-cta").onclick = function() { window.open(gp.social_bar_url || "#", "_blank"); };
+                    setTimeout(function() { document.getElementById("social-bar").style.display = "block"; }, 1000);
+                }
+                if (gp.floating_left_code) { injectCode(document.getElementById("float-left"), gp.floating_left_code); document.getElementById("float-left").style.display = "block"; }
+                if (gp.floating_right_code) { injectCode(document.getElementById("float-right"), gp.floating_right_code); document.getElementById("float-right").style.display = "block"; }
+                var isMob2 = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMob2 && gp.mobile_banner_code) {
                     renderEl("ad-mobile-top", gp.mobile_banner_code);
                     document.getElementById("ad-mobile-top-wrap").style.display = "block";
                     renderEl("ad-mobile-bottom", gp.mobile_banner_code);
