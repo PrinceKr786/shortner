@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banner Ads - Shortify</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;min-height:100vh;}
+.sidebar{position:fixed;top:0;left:0;width:260px;height:100vh;background:linear-gradient(180deg,#1e3c72 0%,#2a5298 100%);color:#fff;z-index:1000;overflow-y:auto;transition:transform .3s;}
+.sidebar .logo{padding:20px;text-align:center;border-bottom:1px solid rgba(255,255,255,.1);}
+.sidebar .logo h2{font-size:24px;font-weight:700;background:linear-gradient(135deg,#f7971e,#ffd200);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.sidebar .logo small{color:rgba(255,255,255,.6);font-size:11px;}
+.sidebar .nav-menu{list-style:none;padding:10px 0;}
+.sidebar .nav-menu li a{display:flex;align-items:center;gap:12px;padding:12px 24px;color:rgba(255,255,255,.8);text-decoration:none;font-size:14px;transition:all .3s;border-left:3px solid transparent;}
+.sidebar .nav-menu li a:hover,.sidebar .nav-menu li a.active{background:rgba(255,255,255,.1);color:#fff;border-left-color:#ffd200;}
+.sidebar .nav-menu li a i{width:20px;text-align:center;font-size:16px;}
+.main-content{margin-left:260px;min-height:100vh;}
+.topbar{background:#fff;padding:12px 30px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.05);position:sticky;top:0;z-index:100;}
+.topbar .menu-toggle{display:none;background:none;border:none;font-size:22px;color:#333;cursor:pointer;}
+.topbar .user-info{display:flex;align-items:center;gap:10px;}
+.topbar .user-info img{width:36px;height:36px;border-radius:50%;object-fit:cover;}
+.topbar .user-info span{font-weight:500;font-size:14px;}
+.hero-banner{background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);color:#fff;padding:60px 40px 50px;position:relative;overflow:hidden;}
+.hero-banner::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(255,255,255,.1) 0%,transparent 70%);border-radius:50%;}
+.hero-banner::after{content:'';position:absolute;bottom:-30%;left:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);border-radius:50%;}
+.hero-banner h1{font-size:36px;font-weight:800;margin-bottom:10px;position:relative;z-index:1;}
+.hero-banner p{font-size:16px;opacity:.9;max-width:600px;position:relative;z-index:1;}
+.hero-banner .hero-icon{position:absolute;right:40px;top:50%;transform:translateY(-50%);font-size:100px;opacity:.15;z-index:0;}
+.content-area{padding:30px;max-width:1200px;margin:0 auto;}
+.section-title{font-size:22px;font-weight:700;color:#1e3c72;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.section-title i{color:#764ba2;}
+.card{background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);overflow:hidden;margin-bottom:30px;transition:transform .3s,box-shadow .3s;}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.1);}
+.card-header{padding:20px 24px;border-bottom:1px solid #f0f0f0;font-weight:600;font-size:16px;color:#1e3c72;display:flex;align-items:center;gap:10px;}
+.card-body{padding:24px;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-weight:500;font-size:13px;color:#555;margin-bottom:6px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 16px;border:2px solid #e8e8e8;border-radius:10px;font-family:'Poppins',sans-serif;font-size:14px;transition:border-color .3s;background:#fafafa;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#764ba2;background:#fff;}
+.btn{padding:12px 28px;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:8px;}
+.btn-primary{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(118,75,162,.4);}
+.btn-success{background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;}
+.btn-success:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(56,239,125,.3);}
+.btn-block{width:100%;justify-content:center;}
+.package-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
+.package-card{border:2px solid #e8e8e8;border-radius:14px;padding:20px 16px;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+.package-card:hover{border-color:#764ba2;transform:translateY(-3px);box-shadow:0 8px 25px rgba(118,75,162,.15);}
+.package-card.selected{border-color:#764ba2;background:linear-gradient(135deg,rgba(118,75,162,.05),rgba(102,126,234,.05));}
+.package-card .views{font-size:28px;font-weight:800;color:#764ba2;}
+.package-card .views-label{font-size:12px;color:#888;margin-top:2px;}
+.package-card .price{font-size:18px;font-weight:700;color:#333;margin-top:12px;}
+.package-card .per-view{font-size:11px;color:#aaa;margin-top:4px;}
+.package-card.popular{border-color:#f7971e;}
+.package-card.popular::after{content:'POPULAR';position:absolute;top:10px;right:-30px;background:linear-gradient(135deg,#f7971e,#ffd200);color:#fff;font-size:9px;font-weight:700;padding:4px 30px;transform:rotate(45deg);}
+.banner-preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+.banner-box{border:2px dashed #d0d0d0;border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;transition:all .3s;}
+.banner-box:hover{border-color:#764ba2;background:rgba(118,75,162,.02);}
+.banner-box .banner-label{position:absolute;top:8px;left:10px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;padding:3px 8px;border-radius:6px;font-weight:600;}
+.banner-box.size-728x90{width:100%;height:90px;}
+.banner-box.size-300x250{width:300px;height:250px;max-width:100%;justify-self:center;}
+.banner-box.size-160x600{width:160px;height:300px;max-height:300px;justify-self:center;}
+.banner-box.size-320x50{width:100%;height:50px;}
+.banner-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#aaa;font-size:12px;gap:6px;}
+.banner-placeholder i{font-size:28px;opacity:.5;}
+.banner-img-preview{width:100%;height:100%;object-fit:contain;display:none;}
+.campaign-item{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #f5f5f5;}
+.campaign-item:last-child{border-bottom:none;}
+.campaign-item .campaign-thumb{width:60px;height:40px;border-radius:8px;background:#f0f0f0;overflow:hidden;flex-shrink:0;}
+.campaign-item .campaign-thumb img{width:100%;height:100%;object-fit:cover;}
+.campaign-item .campaign-info{flex:1;min-width:0;}
+.campaign-item .campaign-info h4{font-size:14px;font-weight:600;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.campaign-item .campaign-info .meta{font-size:12px;color:#888;margin-top:3px;}
+.progress-bar{width:100%;height:8px;background:#e8e8e8;border-radius:10px;overflow:hidden;margin-top:8px;}
+.progress-bar .fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#667eea,#764ba2);transition:width .5s ease;}
+.status-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.status-badge.pending{background:#fff3cd;color:#856404;}
+.status-badge.active{background:#d4edda;color:#155724;}
+.status-badge.completed{background:#cce5ff;color:#004085;}
+.tip-card{background:linear-gradient(135deg,#f5f7fa,#c3cfe2);border-radius:14px;padding:20px;margin-bottom:16px;transition:transform .3s;}
+.tip-card:hover{transform:translateX(5px);}
+.tip-card h4{font-size:14px;font-weight:600;color:#1e3c72;margin-bottom:6px;}
+.tip-card p{font-size:13px;color:#555;line-height:1.6;}
+.faq-item{border-bottom:1px solid #f0f0f0;padding:16px 0;cursor:pointer;}
+.faq-item .faq-q{display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px;color:#333;}
+.faq-item .faq-q i{color:#764ba2;transition:transform .3s;font-size:12px;}
+.faq-item.open .faq-q i{transform:rotate(180deg);}
+.faq-item .faq-a{font-size:13px;color:#666;line-height:1.7;margin-top:10px;display:none;}
+.faq-item.open .faq-a{display:block;animation:fadeIn .3s;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+.calculator-result{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border-radius:14px;padding:24px;text-align:center;margin-top:20px;}
+.calculator-result .total{font-size:36px;font-weight:800;}
+.calculator-result .label{font-size:13px;opacity:.8;margin-top:4px;}
+.empty-state{text-align:center;padding:40px;color:#aaa;}
+.empty-state i{font-size:48px;margin-bottom:12px;display:block;}
+@media(max-width:992px){
+.sidebar{transform:translateX(-100%);width:280px;}
+.sidebar.open{transform:translateX(0);}
+.main-content{margin-left:0;}
+.topbar .menu-toggle{display:block;}
+.banner-preview-grid{grid-template-columns:1fr;}
+.package-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+}
+@media(max-width:600px){
+.content-area{padding:16px;}
+.hero-banner{padding:40px 20px 30px;}
+.hero-banner h1{font-size:24px;}
+.hero-banner .hero-icon{display:none;}
+.package-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+<div class="logo"><h2>Shortify</h2><small>URL Shortener</small></div>
+<ul class="nav-menu">
+<li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+<li><a href="money-wallet.html"><i class="fas fa-wallet"></i> Money Wallet</a></li>
+<li><a href="statistics.html"><i class="fas fa-chart-bar"></i> Statistics</a></li>
+<li><a href="manage-links.html"><i class="fas fa-link"></i> Manage Links</a></li>
+<li><a href="withdraw.html"><i class="fas fa-money-bill-wave"></i> Withdraw</a></li>
+<li><a href="membership.html"><i class="fas fa-crown"></i> Membership</a></li>
+<li><a href="advertise.html" class="active"><i class="fas fa-ad"></i> Advertise</a></li>
+<li><a href="tools.html"><i class="fas fa-tools"></i> Tools</a></li>
+<li><a href="referrals.html"><i class="fas fa-users"></i> Referrals</a></li>
+<li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+<li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+</ul>
+</aside>
+
+<div class="main-content">
+<header class="topbar">
+<button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+<div class="user-info"><img src="https://ui-avatars.com/api/?name=User&background=764ba2&color=fff&size=36" alt="User"><span id="userDisplay">User</span></div>
+</header>
+
+<div class="hero-banner">
+<h1>Banner Ad Campaigns</h1>
+<p>Launch stunning visual banner ads across our publisher network. Drive traffic with eye-catching creatives and precise targeting.</p>
+<div class="hero-icon"><i class="fas fa-image"></i></div>
+</div>
+
+<div class="content-area">
+
+<!-- Banner Size Previews -->
+<div class="card">
+<div class="card-header"><i class="fas fa-eye"></i> Banner Size Gallery — Live Previews</div>
+<div class="card-body">
+<div class="banner-preview-grid">
+<div class="banner-box size-728x90">
+<span class="banner-label">728×90 Leaderboard</span>
+<img class="banner-img-preview" id="preview728" alt="Banner">
+<div class="banner-placeholder" id="ph728"><i class="fas fa-expand-arrows-alt"></i><span>Enter image URL to preview</span></div>
+</div>
+<div class="banner-box size-300x250">
+<span class="banner-label">300×250 Medium Rectangle</span>
+<img class="banner-img-preview" id="preview300" alt="Banner">
+<div class="banner-placeholder" id="ph300"><i class="fas fa-expand-arrows-alt"></i><span>300×250</span></div>
+</div>
+<div class="banner-box size-160x600">
+<span class="banner-label">160×600 Wide Skyscraper</span>
+<img class="banner-img-preview" id="preview160" alt="Banner">
+<div class="banner-placeholder" id="ph160"><i class="fas fa-expand-arrows-alt"></i><span>160×600</span></div>
+</div>
+<div class="banner-box size-320x50">
+<span class="banner-label">320×50 Mobile Leaderboard</span>
+<img class="banner-img-preview" id="preview320" alt="Banner">
+<div class="banner-placeholder" id="ph320"><i class="fas fa-expand-arrows-alt"></i><span>320×50</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Create Campaign Form -->
+<div class="card">
+<div class="card-header"><i class="fas fa-plus-circle"></i> Create Banner Ad Campaign</div>
+<div class="card-body">
+<form id="campaignForm">
+<div class="form-group">
+<label>Campaign Title</label>
+<input type="text" id="campaignTitle" placeholder="e.g. Summer Sale 2026" required>
+</div>
+<div class="form-group">
+<label>Image URL (Banner Creative)</label>
+<input type="url" id="imageUrl" placeholder="https://example.com/banner.jpg" required>
+</div>
+<div class="form-group">
+<label>Target URL (Landing Page)</label>
+<input type="url" id="targetUrl" placeholder="https://example.com/landing" required>
+</div>
+
+<div class="form-group">
+<label>Select Package</label>
+<div class="package-grid" id="packageGrid"></div>
+</div>
+
+<div id="calcResult" class="calculator-result" style="display:none;">
+<div class="label">Estimated Cost</div>
+<div class="total" id="calcTotal">₹0.00</div>
+<div class="label" id="calcRate"></div>
+</div>
+
+<div style="margin-top:20px;">
+<button type="submit" class="btn btn-primary btn-block"><i class="fas fa-paper-plane"></i> Submit Campaign</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- My Campaigns -->
+<div class="card">
+<div class="card-header"><i class="fas fa-list"></i> My Banner Campaigns</div>
+<div class="card-body">
+<div id="campaignsList">
+<div class="empty-state"><i class="fas fa-ad"></i><p>No campaigns yet. Create your first banner ad above!</p></div>
+</div>
+</div>
+</div>
+
+<!-- Tips -->
+<div class="card">
+<div class="card-header"><i class="fas fa-lightbulb"></i> Banner Ad Best Practices</div>
+<div class="card-body">
+<div class="tip-card">
+<h4>Keep It Clean</h4>
+<p>Use minimal text and bold visuals. Viewers have milliseconds to absorb your message. Let the image do the heavy lifting.</p>
+</div>
+<div class="tip-card">
+<h4>Strong Call-to-Action</h4>
+<p>Buttons like "Shop Now", "Learn More", or "Get Started" dramatically improve click-through rates.</p>
+</div>
+<div class="tip-card">
+<h4>Match Your Landing Page</h4>
+<p>Ensure your banner creative visually aligns with the landing page. Consistency builds trust and reduces bounce rates.</p>
+</div>
+<div class="tip-card">
+<h4>Use High-Quality Images</h4>
+<p>Blurry or pixelated banners hurt credibility. Use crisp, professionally designed graphics at the correct resolution.</p>
+</div>
+<div class="tip-card">
+<h4>Mobile First</h4>
+<p>Over 60% of traffic is mobile. Always include a 320×50 mobile banner in your campaign for maximum reach.</p>
+</div>
+<div class="tip-card">
+<h4>A/B Test Creatives</h4>
+<p>Run multiple banner variations simultaneously. After a few days, pause the low performers and double down on winners.</p>
+</div>
+</div>
+</div>
+
+<!-- FAQ -->
+<div class="card">
+<div class="card-header"><i class="fas fa-question-circle"></i> Frequently Asked Questions</div>
+<div class="card-body">
+<div class="faq-item">
+<div class="faq-q">How long does campaign approval take?<i class="fas fa-chevron-down"></i></div>
+<div class="faq-a">Most banner campaigns are reviewed and approved within 2-4 hours during business hours. You'll receive a notification once approved.</div>
+</div>
+<div class="faq-item">
+<div class="faq-q">What image formats are supported?<i class="fas fa-chevron-down"></i></div>
+<div class="faq-a">We support JPG, PNG, GIF, and WebP formats. Maximum file size is 500KB. We recommend JPG for photos and PNG for graphics with text.</div>
+</div>
+<div class="faq-item">
+<div class="faq-q">Can I change my banner after submission?<i class="fas fa-chevron-down"></i></div>
+<div class="faq-a">Yes, you can edit your campaign while it's still in "pending" status. Once approved, contact support to request changes.</div>
+</div>
+<div class="faq-item">
+<div class="faq-q">How are impressions counted?<i class="fas fa-chevron-down"></i></div>
+<div class="faq-a">An impression is counted each time your banner is fully loaded and visible on a page for at least 1 second. We use server-side tracking for accuracy.</div>
+</div>
+<div class="faq-item">
+<div class="faq-q">What is the minimum budget?<i class="fas fa-chevron-down"></i></div>
+<div class="faq-a">Our smallest package is 1,000 impressions. You can run multiple campaigns simultaneously to spread your budget across different creatives.</div>
+</div>
+<div class="faq-item">
+<div class="faq-q">Can I pause a running campaign?<i class="fas fa-chevron-down"></i></div>
+<div class="faq-a">Yes, you can pause any active campaign from the My Campaigns section. Remaining impressions will be saved and you can resume anytime.</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<script type="module">
+import { db } from "./js/firebase-config.js";
+import { requireLogin, fillUserHeader, wireLogout, escapeHtml, formatDate, formatMoney, formatNumber, showToast, isValidUrl } from "./js/app.js";
+import { ref, get, push, onValue, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const me = await requireLogin();
+await fillUserHeader(me);
+wireLogout();
+
+const packages = [
+{ views: 1000, label: '1K' },
+{ views: 5000, label: '5K' },
+{ views: 10000, label: '10K' },
+{ views: 25000, label: '25K' },
+{ views: 50000, label: '50K', popular: true },
+{ views: 100000, label: '100K' }
+];
+
+let cpm = 0.5;
+let selectedPkg = null;
+
+try {
+const ratesSnap = await get(ref(db, 'earning_rates/default'));
+if (ratesSnap.exists()) {
+const d = ratesSnap.val();
+const interstitialRate = d.interstitial || 0.25;
+cpm = interstitialRate * 2;
+}
+} catch (e) {}
+
+const grid = document.getElementById('packageGrid');
+packages.forEach(p => {
+const card = document.createElement('div');
+card.className = 'package-card' + (p.popular ? ' popular' : '');
+card.innerHTML = `<div class="views">${p.label}</div><div class="views-label">Impressions</div><div class="price">${formatMoney((p.views / 1000) * cpm)}</div><div class="per-view">${formatMoney(cpm / 1000)}/view</div>`;
+card.onclick = () => {
+document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+card.classList.add('selected');
+selectedPkg = p;
+updateCalc();
+};
+grid.appendChild(card);
+});
+
+function updateCalc() {
+const el = document.getElementById('calcResult');
+if (!selectedPkg) { el.style.display = 'none'; return; }
+const cost = (selectedPkg.views / 1000) * cpm;
+document.getElementById('calcTotal').textContent = formatMoney(cost);
+document.getElementById('calcRate').textContent = `${formatNumber(selectedPkg.views)} impressions · ₹${cpm} CPM`;
+el.style.display = 'block';
+}
+
+// Image preview
+document.getElementById('imageUrl').addEventListener('input', function() {
+const url = this.value;
+const ids = ['preview728','preview300','preview160','preview320'];
+const phs = ['ph728','ph300','ph160','ph320'];
+ids.forEach((id, i) => {
+const img = document.getElementById(id);
+const ph = document.getElementById(phs[i]);
+if (url && isValidUrl(url)) {
+img.src = url;
+img.style.display = 'block';
+ph.style.display = 'none';
+img.onerror = () => { img.style.display = 'none'; ph.style.display = 'flex'; };
+} else {
+img.style.display = 'none';
+ph.style.display = 'flex';
+}
+});
+});
+
+// FAQ
+document.querySelectorAll('.faq-item').forEach(item => {
+item.querySelector('.faq-q').onclick = () => {
+document.querySelectorAll('.faq-item').forEach(f => { if (f !== item) f.classList.remove('open'); });
+item.classList.toggle('open');
+};
+});
+
+// Submit
+document.getElementById('campaignForm').addEventListener('submit', async (e) => {
+e.preventDefault();
+const title = document.getElementById('campaignTitle').value.trim();
+const imageUrl = document.getElementById('imageUrl').value.trim();
+const targetUrl = document.getElementById('targetUrl').value.trim();
+if (!selectedPkg) return showToast('Please select a package', 'error');
+if (!isValidUrl(imageUrl)) return showToast('Invalid image URL', 'error');
+if (!isValidUrl(targetUrl)) return showToast('Invalid target URL', 'error');
+
+const cost = (selectedPkg.views / 1000) * cpm;
+const campaignData = {
+uid: me.uid,
+advertiser_email: me.email || '',
+title: escapeHtml(title),
+image_url: imageUrl,
+target_url: targetUrl,
+package_views: selectedPkg.views,
+served_views: 0,
+cost: cost,
+status: 'pending',
+ad_type: 'banner',
+created_at: Date.now()
+};
+
+try {
+await push(ref(db, 'ads'), campaignData);
+showToast('Campaign submitted successfully!', 'success');
+document.getElementById('campaignForm').reset();
+document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+selectedPkg = null;
+document.getElementById('calcResult').style.display = 'none';
+['preview728','preview300','preview160','preview320'].forEach(id => document.getElementById(id).style.display = 'none');
+['ph728','ph300','ph160','ph320'].forEach(id => document.getElementById(id).style.display = 'flex');
+loadCampaigns();
+} catch (err) {
+showToast('Error: ' + err.message, 'error');
+}
+});
+
+// Load campaigns
+function loadCampaigns() {
+const adsRef = ref(db, 'ads');
+onValue(adsRef, snap => {
+const list = document.getElementById('campaignsList');
+const data = snap.val();
+if (!data) { list.innerHTML = '<div class="empty-state"><i class="fas fa-ad"></i><p>No campaigns yet.</p></div>'; return; }
+const entries = Object.entries(data).filter(([,v]) => v.uid === me.uid && v.ad_type === 'banner').sort((a,b) => (b[1].created_at||0) - (a[1].created_at||0));
+if (!entries.length) { list.innerHTML = '<div class="empty-state"><i class="fas fa-ad"></i><p>No banner campaigns yet.</p></div>'; return; }
+list.innerHTML = entries.map(([id, c]) => {
+const pct = c.package_views > 0 ? Math.min(100, Math.round((c.served_views / c.package_views) * 100)) : 0;
+const statusCls = c.status === 'active' ? 'active' : c.status === 'completed' ? 'completed' : 'pending';
+return `<div class="campaign-item">
+<div class="campaign-thumb"><img src="${escapeHtml(c.image_url)}" alt="Banner" onerror="this.style.display='none'"></div>
+<div class="campaign-info">
+<h4>${escapeHtml(c.title)}</h4>
+<div class="meta">${formatNumber(c.served_views||0)} / ${formatNumber(c.package_views)} impressions · ${formatMoney(c.cost)} · <span class="status-badge ${statusCls}">${c.status}</span></div>
+<div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div>
+<div class="meta">${c.created_at ? formatDate(c.created_at) : '—'}</div>
+</div>
+</div>`;
+}).join('');
+});
+}
+loadCampaigns();
+</script>
+</body>
+</html>
