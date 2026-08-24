@@ -1,108 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Redirecting... - Shortify</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="icon" href="../favicon.ico">
     <script>if(self!==top){top.location=self.location;}</script>
     <style>
         *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Inter',system-ui,sans-serif;background:#060611;color:#e4e4e7;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden}
-        .ad-top{width:100%;text-align:center;background:#0c0c1d;border-bottom:1px solid rgba(255,255,255,.04);overflow:hidden;min-height:0}
+        body{font-family:'Poppins',sans-serif;background:#0a0a1a;color:#e4e4e7;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+
+        .ad-top{width:100%;text-align:center;background:#0e0e20;min-height:0;overflow:hidden}
         .ad-top .inner{display:inline-block;width:728px;max-width:100%;min-height:90px}
-        .ad-bottom{width:100%;text-align:center;background:#0c0c1d;border-top:1px solid rgba(255,255,255,.04);overflow:hidden;padding-bottom:80px}
+        .ad-bottom{width:100%;text-align:center;background:#0e0e20;border-top:1px solid rgba(255,255,255,.03);overflow:hidden;padding-bottom:90px}
         .ad-bottom .inner{display:inline-block;width:728px;max-width:100%;min-height:90px}
-        .ad-mobile{display:none;width:100%;text-align:center;background:#0c0c1d;border-top:1px solid rgba(255,255,255,.04)}
+        .ad-mobile-top,.ad-mobile-bottom{display:none;width:100%;text-align:center;background:#0e0e20}
 
-        .hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(6,6,17,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.05)}
+        .hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(10,10,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.05)}
         .hdr-brand{display:flex;align-items:center;gap:8px;text-decoration:none}
-        .hdr-logo{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.75rem}
-        .hdr-brand h1{font-size:.95rem;font-weight:700;color:#fff}
-        .hdr-pill{display:flex;align-items:center;gap:6px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.2);padding:5px 12px;border-radius:16px;font-size:.75rem;font-weight:600;color:#a5b4fc}
+        .hdr-logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.75rem;box-shadow:0 0 16px rgba(99,102,241,.3)}
+        .hdr-brand h1{font-size:.9rem;font-weight:700;color:#fff}
+        .hdr-right{display:flex;align-items:center;gap:8px}
+        .hdr-pill{display:flex;align-items:center;gap:5px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.18);padding:5px 10px;border-radius:14px;font-size:.7rem;font-weight:600;color:#a5b4fc}
         .hdr-pill .t{color:#fff;font-variant-numeric:tabular-nums}
-        @media(max-width:640px){.hdr-brand h1{font-size:.85rem}.hdr-pill{padding:4px 8px;font-size:.7rem}}
+        .step-badge{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.2);color:#c084fc;padding:4px 10px;border-radius:10px;font-size:.65rem;font-weight:700}
 
-        .main{flex:1;display:grid;grid-template-columns:1fr 300px;gap:0;min-height:0}
-        @media(max-width:960px){.main{grid-template-columns:1fr}}
-        .center{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px;gap:16px}
+        .main-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px;gap:10px}
 
-        .card{position:relative;width:100%;max-width:460px;background:linear-gradient(145deg,rgba(20,20,40,.8),rgba(15,15,35,.9));border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:24px 22px 22px;text-align:center;overflow:hidden}
-        .card::before{content:'';position:absolute;inset:-1px;border-radius:18px;padding:1px;background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(139,92,246,.1),transparent);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+        .ad-inline{width:100%;max-width:400px;min-height:250px;background:#0e0e20;border:1px solid rgba(255,255,255,.04);border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+        .ad-inline-wide{width:100%;max-width:400px;min-height:100px;background:#0e0e20;border:1px solid rgba(255,255,255,.04);border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+
+        .card{position:relative;width:100%;max-width:400px;background:linear-gradient(145deg,rgba(18,18,38,.9),rgba(12,12,30,.95));border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:22px 18px 20px;text-align:center;overflow:hidden}
+        .card::before{content:'';position:absolute;inset:-1px;border-radius:18px;padding:1px;background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(168,85,247,.08),transparent);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
         .card>*{position:relative;z-index:1}
 
-        .interstitial-ad{width:100%;border-radius:12px;overflow:hidden;margin-bottom:16px;min-height:0;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04)}
-
-        .step-row{display:flex;gap:6px;justify-content:center;margin-bottom:12px;align-items:center}
-        .step-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.1);transition:all .4s}
-        .step-dot.active{background:#6366f1;border-color:#6366f1;box-shadow:0 0 10px rgba(99,102,241,.5)}
+        .step-row{display:flex;gap:5px;justify-content:center;margin-bottom:10px}
+        .step-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.08);transition:all .3s}
+        .step-dot.active{background:#6366f1;border-color:#6366f1;box-shadow:0 0 8px rgba(99,102,241,.5)}
         .step-dot.done{background:#34d399;border-color:#34d399}
-        .step-lbl{font-size:.65rem;color:#52525b;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+        .step-lbl{font-size:.6rem;color:#52525b;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:12px}
 
-        .spin{width:48px;height:48px;margin:0 auto 16px;border-radius:50%;border:3px solid rgba(99,102,241,.15);border-top-color:#6366f1;animation:sp .7s linear infinite}
-        @keyframes sp{to{transform:rotate(360deg)}}
-
-        .ico{width:48px;height:48px;margin:0 auto 14px;border-radius:14px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(99,102,241,.35)}
+        .ico{width:50px;height:50px;margin:0 auto 14px;border-radius:14px;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(99,102,241,.3)}
         .ico i{font-size:1.3rem;color:#fff}
 
-        .cd-num{font-size:4rem;font-weight:900;line-height:1;margin-bottom:4px;background:linear-gradient(135deg,#818cf8,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-variant-numeric:tabular-nums}
-        .cd-title{font-size:.95rem;font-weight:600;color:#e4e4e7;margin-bottom:4px}
-        .cd-sub{font-size:.78rem;color:#71717a;margin-bottom:16px;line-height:1.4}
+        .cd-num{font-size:3.8rem;font-weight:900;line-height:1;margin-bottom:4px;background:linear-gradient(135deg,#818cf8,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-variant-numeric:tabular-nums}
+        .cd-title{font-size:.9rem;font-weight:600;color:#e4e4e7;margin-bottom:4px}
+        .cd-sub{font-size:.75rem;color:#71717a;margin-bottom:14px;line-height:1.4}
 
-        .prog{height:4px;background:rgba(255,255,255,.06);border-radius:4px;margin:0 auto 16px;max-width:300px;overflow:hidden}
-        .prog-bar{height:100%;width:0%;background:linear-gradient(90deg,#6366f1,#34d399);border-radius:4px;transition:width 1s linear}
+        .prog{height:4px;background:rgba(255,255,255,.06);border-radius:4px;margin:0 auto 14px;max-width:280px;overflow:hidden}
+        .prog-bar{height:100%;width:0%;background:linear-gradient(90deg,#6366f1,#a855f7,#34d399);border-radius:4px;transition:width 1s linear}
 
-        .dest{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 14px;text-align:left;margin-bottom:16px}
-        .dest-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:#52525b;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:5px}
-        .dest-label i{color:#6366f1;font-size:.7rem}
-        .dest-url{font-size:.78rem;color:#a1a1aa;font-family:'SF Mono',Consolas,monospace;word-break:break-all}
-
-        .skip{width:100%;max-width:300px;padding:14px;border:none;border-radius:12px;font-family:inherit;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .25s;display:none}
-        .skip.waiting{background:rgba(255,255,255,.06);color:#52525b;cursor:not-allowed}
-        .skip.ready{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;box-shadow:0 6px 24px rgba(99,102,241,.4)}
-        .skip.ready:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(99,102,241,.5)}
+        .skip{width:100%;max-width:280px;padding:13px;border:none;border-radius:12px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;display:none}
+        .skip.waiting{background:rgba(255,255,255,.05);color:#52525b;cursor:not-allowed}
+        .skip.ready{background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;box-shadow:0 6px 24px rgba(99,102,241,.35)}
+        .skip.ready:active{transform:scale(.97)}
         .skip i{margin-right:6px}
 
-        .smartlink-slot{width:100%;max-width:460px;text-align:center}
-        .native-slot{width:100%;max-width:460px;border-radius:12px;overflow:hidden;background:#0c0c1d;border:1px solid rgba(255,255,255,.04)}
-        .fine{font-size:.65rem;color:#3f3f46;margin-top:14px;line-height:1.4}
+        .fine{font-size:.6rem;color:#3f3f46;margin-top:12px;line-height:1.4}
+        .err-ico{font-size:2.5rem;margin-bottom:10px}
+        .home-btn{display:inline-flex;align-items:center;gap:6px;padding:12px 28px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;font-weight:700;font-size:.82rem;text-decoration:none}
 
-        .err-ico{font-size:2.5rem;margin-bottom:12px}
-        .home-btn{display:inline-flex;align-items:center;gap:6px;padding:12px 28px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:700;font-size:.85rem;text-decoration:none;transition:all .25s;margin-top:6px}
-        .home-btn:hover{transform:translateY(-2px);color:#fff}
+        .native-slot{width:100%;max-width:400px;min-height:60px;background:#0e0e20;border-radius:10px;border:1px solid rgba(255,255,255,.04)}
+        .smartlink-slot{width:100%;max-width:400px;text-align:center;min-height:20px}
 
-        .side{background:#0a0a1a;border-left:1px solid rgba(255,255,255,.04);padding:12px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
-        @media(max-width:960px){.side{display:none}}
-        .side-ad{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:12px;overflow:hidden}
-        .side-ad-hdr{padding:6px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.03)}
-        .side-ad-hdr span{font-size:.55rem;text-transform:uppercase;letter-spacing:.08em;color:#3f3f46;font-weight:600}
-        .side-ad-hdr .tag{background:rgba(99,102,241,.12);color:#818cf8;padding:2px 7px;border-radius:5px;font-size:.5rem;font-weight:700}
-        .side-ad-body{min-height:250px;padding:6px;display:flex;align-items:center;justify-content:center}
-        .side-offer{background:linear-gradient(145deg,rgba(99,102,241,.06),rgba(139,92,246,.04));border:1px solid rgba(99,102,241,.1);border-radius:12px;padding:14px;text-align:center}
-        .side-offer .badge{display:inline-block;background:linear-gradient(135deg,#f59e0b,#f97316);color:#000;padding:2px 10px;border-radius:6px;font-size:.55rem;font-weight:800;text-transform:uppercase;margin-bottom:8px}
-        .side-offer p{font-size:.72rem;color:#71717a;margin-bottom:10px;line-height:1.4}
-        .side-offer a{display:block;padding:8px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:700;font-size:.75rem;text-decoration:none}
-
-        .sbar{position:fixed;bottom:0;left:0;right:0;display:none;z-index:200;animation:sbarUp .4s ease}
-        @keyframes sbarUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-        .sbar-inner{width:100%;background:rgba(10,10,26,.95);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);padding:8px 14px;display:flex;align-items:center;gap:10px}
-        .sbar-icon{width:32px;height:32px;min-width:32px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem}
+        .sbar{position:fixed;bottom:0;left:0;right:0;display:none;z-index:200}
+        .sbar-inner{width:100%;background:rgba(10,10,26,.96);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);padding:8px 12px;display:flex;align-items:center;gap:8px}
+        .sbar-icon{width:30px;height:30px;min-width:30px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem}
         .sbar-text{flex:1;min-width:0}
-        .sbar-text strong{display:block;font-size:.78rem;color:#e4e4e7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .sbar-text small{font-size:.65rem;color:#52525b}
-        .sbar-cta{padding:7px 14px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:700;font-size:.72rem;border:none;cursor:pointer;white-space:nowrap}
-        .sbar-close{color:#3f3f46;cursor:pointer;padding:4px;font-size:.9rem;border:none;background:none}
+        .sbar-text strong{display:block;font-size:.75rem;color:#e4e4e7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .sbar-text small{font-size:.6rem;color:#52525b}
+        .sbar-cta{padding:6px 12px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;font-weight:700;font-size:.68rem;border:none;cursor:pointer;white-space:nowrap}
+        .sbar-close{color:#3f3f46;cursor:pointer;padding:4px;font-size:.85rem;border:none;background:none}
         #sbar-custom{flex:1;overflow:hidden}
 
-        .float{position:fixed;z-index:150;border-radius:12px;overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,.5);background:#0c0c1d;border:1px solid rgba(255,255,255,.04)}
-        .float-l{left:10px;top:50%;transform:translateY(-50%);width:160px}
-        .float-r{right:10px;top:50%;transform:translateY(-50%);width:160px}
-        @media(max-width:1100px){.float{display:none!important}}
+        .float{position:fixed;z-index:150;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.5);background:#0e0e20;border:1px solid rgba(255,255,255,.04)}
+        .float-l{left:8px;bottom:80px;width:140px}
+        .float-r{right:8px;bottom:80px;width:140px}
+        @media(min-width:961px){.float{display:none!important}}
 
         .hide{display:none!important}
-        @media(max-width:640px){.center{padding:14px 10px}.card{padding:20px 16px 18px;border-radius:14px}.cd-num{font-size:3rem}.skip{max-width:260px;padding:12px;font-size:.82rem}}
+        @media(min-width:961px){.main-wrap{max-width:600px;margin:0 auto}}
+
+        @media(max-width:480px){
+            .card{padding:18px 14px 16px;border-radius:14px}
+            .cd-num{font-size:3rem}
+            .skip{max-width:240px;padding:12px;font-size:.8rem}
+            .ad-inline{max-width:100%;min-height:250px}
+        }
         @media(prefers-reduced-motion:reduce){*{animation-duration:0s!important;transition-duration:0s!important}}
     </style>
 </head>
@@ -110,74 +96,68 @@
 
     <div id="popunder-slot"></div>
     <div class="ad-top"><div class="inner" id="ad-top-banner"></div></div>
+    <div class="ad-mobile-top" id="ad-mobile-top-wrap"><div class="inner" id="ad-mobile-top"></div></div>
 
     <header class="hdr">
         <a class="hdr-brand" href="../index.html"><div class="hdr-logo">S</div><h1>Shortify</h1></a>
-        <div class="hdr-pill"><i class="fa fa-clock-o"></i><span class="t" id="timer-num">--</span><span>sec</span></div>
+        <div class="hdr-right">
+            <span class="step-badge" id="step-badge">1/5</span>
+            <div class="hdr-pill"><i class="fa fa-bolt"></i><span class="t" id="timer-num">--</span><span>sec</span></div>
+        </div>
     </header>
 
-    <div class="main">
-        <div class="center">
+    <div class="main-wrap">
 
-            <div class="card" id="state-loading">
-                <div class="spin"></div>
-                <div class="cd-title">Link taiyaar ho rahi hai...</div>
-                <div class="cd-sub">Ek second ruko</div>
-            </div>
+        <div class="ad-inline" id="ad-interstitial-top"></div>
 
-            <div class="card hide" id="state-countdown">
-                <div class="step-row" id="step-row"></div>
-                <div class="step-lbl" id="step-lbl">Step 1 of 4</div>
-
-                <div class="interstitial-ad" id="ad-interstitial"></div>
-
-                <div class="ico"><i class="fa fa-link"></i></div>
-                <div class="cd-num" id="count-num">15</div>
-                <div class="cd-title" id="cd-title">Aapki link ready ho rahi hai</div>
-                <div class="cd-sub">Niche button <span id="wait-text">15 seconds</span> me enable hoga</div>
-                <div class="prog"><div class="prog-bar" id="progress-bar"></div></div>
-
-                <div class="interstitial-ad" id="ad-interstitial-bottom"></div>
-
-                <button class="skip waiting" id="skip-btn" disabled><i class="fa fa-hourglass-half"></i> Please wait...</button>
-                <div class="fine">Sab steps complete karo — link milegi!</div>
-            </div>
-
-            <div class="native-slot" id="ad-native"></div>
-            <div class="smartlink-slot" id="ad-smartlink"></div>
-
-            <div class="card hide" id="state-error">
-                <div class="err-ico">Link nahi mili!</div>
-                <div class="cd-title" id="error-title">Error</div>
-                <div class="cd-sub" id="error-sub"></div>
-                <a href="../index.html" class="home-btn"><i class="fa fa-home"></i> Home</a>
-            </div>
-
-            <div class="card hide" id="state-disabled">
-                <div class="err-ico">Link disabled!</div>
-                <div class="cd-title">Ye link band hai</div>
-                <div class="cd-sub">Owner ne isko disable kiya hai.</div>
-                <a href="../index.html" class="home-btn"><i class="fa fa-home"></i> Home</a>
-            </div>
-
+        <div class="card" id="state-loading">
+            <div class="ico"><i class="fa fa-spinner fa-spin"></i></div>
+            <div class="cd-title">Link ban rahi hai...</div>
+            <div class="cd-sub">Thoda wait karo</div>
         </div>
 
-        <div class="side">
-            <div class="side-ad"><div class="side-ad-hdr"><span>Sponsored</span><span class="tag">AD</span></div><div class="side-ad-body" id="ad-sidebar-1"></div></div>
-            <div class="side-ad"><div class="side-ad-hdr"><span>Sponsored</span><span class="tag">AD</span></div><div class="side-ad-body" id="ad-sidebar-2"></div></div>
-            <div class="side-offer"><div class="badge">Limited Time</div><p>Shortify se paisa kamao!</p><a href="../index.html">Abhi Shuru Karo →</a></div>
-            <div class="side-ad"><div class="side-ad-hdr"><span>More</span><span class="tag">AD</span></div><div class="side-ad-body" id="ad-sidebar-3"></div></div>
-            <div class="side-ad"><div class="side-ad-hdr"><span>Also</span><span class="tag">AD</span></div><div class="side-ad-body" id="ad-sidebar-4"></div></div>
+        <div class="card hide" id="state-countdown">
+            <div class="step-row" id="step-row"></div>
+            <div class="step-lbl" id="step-lbl">Step 1 of 5</div>
+            <div class="ico"><i class="fa fa-link"></i></div>
+            <div class="cd-num" id="count-num">15</div>
+            <div class="cd-title" id="cd-title">Aapki link ready ho rahi hai</div>
+            <div class="cd-sub">Niche button <span id="wait-text">15 seconds</span> me enable hoga</div>
+            <div class="prog"><div class="prog-bar" id="progress-bar"></div></div>
+            <button class="skip waiting" id="skip-btn" disabled><i class="fa fa-hourglass-half"></i> Please wait...</button>
+            <div class="fine">Sab steps complete karo — milegi link!</div>
         </div>
+
+        <div class="ad-inline" id="ad-interstitial-bottom"></div>
+
+        <div class="ad-inline-wide" id="ad-mid-banner"></div>
+
+        <div class="native-slot" id="ad-native"></div>
+        <div class="smartlink-slot" id="ad-smartlink"></div>
+
+        <div class="card hide" id="state-error">
+            <div class="err-ico">Link nahi mili!</div>
+            <div class="cd-title" id="error-title">Error</div>
+            <div class="cd-sub" id="error-sub"></div>
+            <a href="../index.html" class="home-btn"><i class="fa fa-home"></i> Home</a>
+        </div>
+
+        <div class="card hide" id="state-disabled">
+            <div class="err-ico">Link band hai!</div>
+            <div class="cd-title">Ye link disable hai</div>
+            <div class="cd-sub">Owner ne band ki hai.</div>
+            <a href="../index.html" class="home-btn"><i class="fa fa-home"></i> Home</a>
+        </div>
+
     </div>
 
-    <div class="ad-mobile" id="ad-mobile-wrap"><div class="inner" id="ad-mobile"></div></div>
+    <div class="ad-mobile-bottom" id="ad-mobile-bottom-wrap"><div class="inner" id="ad-mobile-bottom"></div></div>
     <div class="ad-bottom"><div class="inner" id="ad-bottom-banner"></div></div>
 
     <div class="sbar" id="social-bar">
         <div class="sbar-inner">
             <div class="sbar-icon"><i class="fa fa-bullhorn"></i></div>
-            <div class="sbar-text"><strong id="sbar-title">Special Offer!</strong><small id="sbar-sub">Discover deals</small></div>
+            <div class="sbar-text"><strong id="sbar-title">Special Offer!</strong><small id="sbar-sub">Dekho</small></div>
             <div id="sbar-custom"></div>
             <button class="sbar-cta" id="sbar-cta">Check Now</button>
             <button class="sbar-close" id="sbar-close"><i class="fa fa-times"></i></button>
@@ -205,14 +185,12 @@
         var progressBar = document.getElementById("progress-bar");
         var totalSeconds = 15;
 
-        var AD_TIMER = 5;
         var RECAPTCHA_KEY = "";
-        var STEP_COUNT = 4;
+        var STEP_COUNT = 5;
         var STEP_SECONDS = 15;
         try {
             var sSnap = await get(child(ref(db), "settings"));
             var s = sSnap.val() || {};
-            AD_TIMER = parseInt(s.ad_timer_seconds) || 5;
             RECAPTCHA_KEY = s.recaptcha_site_key || "";
         } catch(e) {}
 
@@ -235,11 +213,11 @@
             adType = ["interstitial","banner","none"].indexOf(p.get("t")) >= 0 ? p.get("t") : "interstitial";
             var okUrl = false;
             try { okUrl = !!new URL(targetUrl); } catch(e) {}
-            if (!okUrl) return showError("Invalid link!", "Is redirect link me valid destination nahi hai.");
+            if (!okUrl) return showError("Invalid link!", "Valid destination nahi hai.");
             mode = "pass";
         } else {
             alias = hash.replace("#", "").trim() || new URLSearchParams(location.search).get("u") || "";
-            if (!alias) return showError("Alias missing!", "Koi link specify nahi hui.");
+            if (!alias) return showError("Link missing!", "Koi link specify nahi hui.");
         }
 
         var GO_PAGE = {};
@@ -248,8 +226,16 @@
             if (gpSnap.exists()) GO_PAGE = gpSnap.val() || {};
         } catch(e) {}
 
-        STEP_COUNT = parseInt(GO_PAGE.step_count) || 4;
+        STEP_COUNT = parseInt(GO_PAGE.step_count) || 5;
         STEP_SECONDS = parseInt(GO_PAGE.step_seconds) || 15;
+
+        var AD_SLOTS = [
+            "ad-top-banner","ad-bottom-banner",
+            "ad-interstitial-top","ad-interstitial-bottom",
+            "ad-mid-banner",
+            "ad-native","ad-smartlink",
+            "ad-mobile-top","ad-mobile-bottom"
+        ];
 
         function injectCode(container, code) {
             if (!code || !code.trim()) return false;
@@ -273,37 +259,41 @@
             return injectCode(el, code);
         }
 
-        function refreshAds() {
+        function refreshAllAds() {
             var gp = GO_PAGE;
             if (gp.popunder_code) injectCode(document.getElementById("popunder-slot"), gp.popunder_code);
             if (gp.top_banner_code) renderEl("ad-top-banner", gp.top_banner_code);
             if (gp.bottom_banner_code) renderEl("ad-bottom-banner", gp.bottom_banner_code);
-            if (gp.sidebar_1_code) renderEl("ad-sidebar-1", gp.sidebar_1_code);
-            if (gp.sidebar_2_code) renderEl("ad-sidebar-2", gp.sidebar_2_code);
-            if (gp.sidebar_3_code) renderEl("ad-sidebar-3", gp.sidebar_3_code);
-            if (gp.sidebar_4_code) renderEl("ad-sidebar-4", gp.sidebar_4_code);
-            if (gp.interstitial_code) renderEl("ad-interstitial", gp.interstitial_code);
+            if (gp.interstitial_code) renderEl("ad-interstitial-top", gp.interstitial_code);
             if (gp.interstitial_bottom_code) renderEl("ad-interstitial-bottom", gp.interstitial_bottom_code);
+            if (gp.mid_banner_code) renderEl("ad-mid-banner", gp.mid_banner_code);
             if (gp.native_code) renderEl("ad-native", gp.native_code);
             if (gp.smartlink_code) renderEl("ad-smartlink", gp.smartlink_code);
+            if (gp.sidebar_1_code) renderEl("ad-sidebar-1", gp.sidebar_1_code);
             if (gp.social_bar_code) {
                 injectCode(document.getElementById("sbar-custom"), gp.social_bar_code);
                 document.getElementById("sbar-cta").style.display = "none";
                 document.getElementById("sbar-title").style.display = "none";
                 document.getElementById("sbar-sub").style.display = "none";
-                setTimeout(function() { document.getElementById("social-bar").style.display = "block"; }, 1500);
+                setTimeout(function() { document.getElementById("social-bar").style.display = "block"; }, 1000);
             } else if (gp.social_bar_title) {
                 document.getElementById("sbar-title").textContent = gp.social_bar_title;
                 document.getElementById("sbar-sub").textContent = gp.social_bar_url || "";
                 document.getElementById("sbar-custom").style.display = "none";
                 document.getElementById("sbar-cta").style.display = "inline-block";
                 document.getElementById("sbar-cta").onclick = function() { window.open(gp.social_bar_url || "#", "_blank"); };
-                setTimeout(function() { document.getElementById("social-bar").style.display = "block"; }, 1500);
+                setTimeout(function() { document.getElementById("social-bar").style.display = "block"; }, 1000);
             }
             if (gp.floating_left_code) { injectCode(document.getElementById("float-left"), gp.floating_left_code); document.getElementById("float-left").style.display = "block"; }
             if (gp.floating_right_code) { injectCode(document.getElementById("float-right"), gp.floating_right_code); document.getElementById("float-right").style.display = "block"; }
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                if (gp.mobile_banner_code) { renderEl("ad-mobile", gp.mobile_banner_code); document.getElementById("ad-mobile-wrap").style.display = "block"; }
+            var isMob = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMob) {
+                if (gp.mobile_banner_code) {
+                    renderEl("ad-mobile-top", gp.mobile_banner_code);
+                    document.getElementById("ad-mobile-top-wrap").style.display = "block";
+                    renderEl("ad-mobile-bottom", gp.mobile_banner_code);
+                    document.getElementById("ad-mobile-bottom-wrap").style.display = "block";
+                }
             }
         }
 
@@ -314,48 +304,45 @@
                 adsSnap.forEach(function(c) {
                     var a = c.val();
                     if (a.status === "active" && a.target_url && (Number(a.served_views) || 0) < (Number(a.package_views) || 0)) {
-                        pool.push({ id: c.key, url: a.target_url, image_url: a.image_url, title: a.title, ad_type: a.ad_type });
+                        pool.push({ id: c.key, url: a.target_url, image_url: a.image_url, title: a.title });
                     }
                 });
                 if (pool.length > 0) {
                     var ba = pool.filter(function(a) { return a.image_url; });
-                    if (ba.length > 0) renderImageAd("ad-top-banner", ba[0], 90);
-                    if (ba.length > 1) renderImageAd("ad-bottom-banner", ba[1], 90);
-                    ba.slice(0, 4).forEach(function(a, i) { renderImageAd("ad-sidebar-" + (i+1), a, 250); });
-                    if (ba.length > 2) renderImageAd("ad-interstitial", ba[2], 250);
+                    if (ba[0]) renderImg("ad-top-banner", ba[0].image_url, ba[0].url, 90);
+                    if (ba[1]) renderImg("ad-bottom-banner", ba[1].image_url, ba[1].url, 90);
+                    if (ba[2]) renderImg("ad-interstitial-top", ba[2].image_url, ba[2].url, 250);
+                    if (ba[3]) renderImg("ad-interstitial-bottom", ba[3].image_url, ba[3].url, 250);
+                    if (ba[4]) renderImg("ad-mid-banner", ba[4].image_url, ba[4].url, 100);
                 }
             } catch(e) {}
-            ["ad-sidebar-1","ad-sidebar-2","ad-sidebar-3","ad-sidebar-4"].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el && !el.innerHTML.trim()) el.innerHTML = '<div style="text-align:center;padding:16px"><div style="width:40px;height:40px;margin:0 auto 8px;border-radius:10px;background:rgba(99,102,241,.1);display:flex;align-items:center;justify-content:center"><i class="fa fa-bullhorn" style="color:#6366f1"></i></div><div style="font-size:.75rem;color:#71717a">Ad Space</div></div>';
-            });
         }
 
-        function renderImageAd(elId, ad, h) {
+        function renderImg(elId, imgUrl, linkUrl, h) {
             var el = document.getElementById(elId);
-            if (!el || !ad.image_url) return;
-            el.style.minHeight = h + "px";
-            el.innerHTML = '<a href="' + ad.url + '" target="_blank"><img src="' + ad.image_url + '" style="width:100%;height:' + h + 'px;object-fit:cover;border-radius:8px;display:block" alt="Ad"></a>';
+            if (!el || !imgUrl) return;
+            el.innerHTML = '<a href="' + linkUrl + '" target="_blank"><img src="' + imgUrl + '" style="width:100%;height:' + h + 'px;object-fit:cover;display:block" alt="Ad"></a>';
         }
 
-        var remaining = AD_TIMER;
         var currentStep = 1;
+        var remaining = 15;
         var stepTitles = [
-            "Aapki link ready ho rahi hai",
-            "Ad dekho — link ban rahi hai",
-            "Thoda aur wait karo...",
-            "Last step — almost done!",
-            "Aakhri ad dekho...",
-            "Bas ho gaya!",
-            "Last one!",
-            "Almost there!",
-            "Final step!",
-            "Ready!"
+            "Aapki link ban rahi hai",
+            "Ad dekho — thoda wait",
+            "Aur thoda... link aa rahi hai",
+            "Almost done — ek aur step!",
+            "Last step — bas ho gaya!",
+            "Aakhri ad dekho!",
+            "Ready hone wala hai!",
+            "Final countdown!",
+            "Bas 1 step aur!",
+            "Link aa rahi hai!"
         ];
 
         var $stepRow = document.getElementById("step-row");
         var $stepLbl = document.getElementById("step-lbl");
         var $cdTitle = document.getElementById("cd-title");
+        var $stepBadge = document.getElementById("step-badge");
 
         function buildStepDots() {
             $stepRow.innerHTML = "";
@@ -377,12 +364,12 @@
                 ownerUid = (linkData.uid !== "guest") ? linkData.uid : null;
                 adType = linkData.ad_type || "interstitial";
                 startAdFlow();
-            } catch (err) { if (!err || !err.silent) showError("Database error!", err.message); }
+            } catch (err) { showError("Database error!", err.message); }
         } else {
             startAdFlow();
         }
 
-        refreshAds();
+        refreshAllAds();
         loadFallbackAds();
 
         function showError(title, sub) {
@@ -395,15 +382,9 @@
         function startAdFlow() {
             $loading.classList.add("hide");
             $count.classList.remove("hide");
-
             if (adType === "banner" || adType === "none") STEP_COUNT = 0;
-
-            if (STEP_COUNT > 0) {
-                buildStepDots();
-                startStep();
-            } else {
-                enableSkip();
-            }
+            if (STEP_COUNT > 0) { buildStepDots(); startStep(); }
+            else enableSkip();
         }
 
         function startStep() {
@@ -411,7 +392,8 @@
             totalSeconds = STEP_SECONDS;
             progressBar.style.width = "0%";
             $stepLbl.textContent = "Step " + currentStep + " of " + STEP_COUNT;
-            $cdTitle.textContent = stepTitles[currentStep - 1] || "Loading ad...";
+            $stepBadge.textContent = currentStep + "/" + STEP_COUNT;
+            $cdTitle.textContent = stepTitles[currentStep - 1] || "Loading...";
 
             for (var i = 1; i <= STEP_COUNT; i++) {
                 var dot = document.getElementById("sd-" + i);
@@ -421,7 +403,7 @@
                 if (i === currentStep) dot.className = "step-dot active";
             }
 
-            refreshAds();
+            refreshAllAds();
 
             $skip.style.display = "none";
             $skip.disabled = true;
@@ -432,12 +414,8 @@
             var cdTimer = setInterval(function() {
                 if (tickCountdown()) {
                     clearInterval(cdTimer);
-                    if (currentStep < STEP_COUNT) {
-                        currentStep++;
-                        startStep();
-                    } else {
-                        enableSkip();
-                    }
+                    if (currentStep < STEP_COUNT) { currentStep++; startStep(); }
+                    else enableSkip();
                 }
             }, 1000);
         }
@@ -445,12 +423,9 @@
         function tickCountdown() {
             $num.textContent = remaining;
             document.getElementById("timer-num").textContent = remaining;
-            document.getElementById("wait-text").textContent = remaining + " second" + (remaining !== 1 ? "s" : "");
+            document.getElementById("wait-text").textContent = remaining + " sec";
             if (progressBar) progressBar.style.width = ((totalSeconds - remaining) / totalSeconds * 100) + "%";
-            if (remaining <= 0) {
-                if (progressBar) progressBar.style.width = "100%";
-                return true;
-            }
+            if (remaining <= 0) { if (progressBar) progressBar.style.width = "100%"; return true; }
             remaining--;
             return false;
         }
@@ -460,12 +435,19 @@
         function enableSkip() {
             $num.style.display = "none";
             document.getElementById("wait-text").textContent = "";
-            $stepLbl.textContent = "Ready!";
+            $stepLbl.textContent = "Link taiyaar hai!";
+            $stepBadge.textContent = "DONE";
+            $stepBadge.style.background = "rgba(52,211,153,.15)";
+            $stepBadge.style.borderColor = "rgba(52,211,153,.2)";
+            $stepBadge.style.color = "#34d399";
             for (var i = 1; i <= STEP_COUNT; i++) { var d = document.getElementById("sd-" + i); if (d) d.className = "step-dot done"; }
             document.querySelector(".hdr-pill").style.background = "rgba(52,211,153,.15)";
             document.querySelector(".hdr-pill").style.borderColor = "rgba(52,211,153,.2)";
             document.querySelector(".hdr-pill").style.color = "#34d399";
             document.getElementById("timer-num").textContent = "0";
+            $cdTitle.textContent = "Sab ho gaya!";
+
+            refreshAllAds();
 
             if (RECAPTCHA_KEY && !captchaRendered) {
                 $skip.disabled = true;
@@ -473,7 +455,7 @@
                 $skip.style.display = "block";
                 var box = document.createElement("div");
                 box.id = "captcha-box";
-                box.style.marginBottom = "12px";
+                box.style.marginBottom = "10px";
                 $skip.parentNode.insertBefore(box, $skip);
                 if (!document.getElementById("grec-script")) {
                     window.___grcb = function() {};
@@ -488,7 +470,7 @@
                     try {
                         window.grecaptcha.render("captcha-box", {
                             sitekey: RECAPTCHA_KEY,
-                            callback: function() { $skip.disabled = false; $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad →'; $skip.className = "skip ready"; },
+                            callback: function() { $skip.disabled = false; $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Link Le Jao →'; $skip.className = "skip ready"; },
                             "expired-callback": function() { $skip.disabled = true; }
                         });
                         captchaRendered = true;
@@ -499,7 +481,7 @@
 
             $skip.style.display = "block";
             $skip.disabled = false;
-            $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Skip Ad →';
+            $skip.innerHTML = '<i class="fa fa-arrow-right"></i> Link Le Jao →';
             $skip.className = "skip ready";
         }
 
@@ -508,7 +490,7 @@
             if (processed) return;
             processed = true;
             $skip.disabled = true;
-            $skip.innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Redirecting...';
+            $skip.innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Ja rahe ho...';
 
             try {
                 if (mode === "alias") {
@@ -560,7 +542,7 @@
                     if (myCountry) runTransaction(ref(db, "stats/country/" + myCountry + "/clicks"), function(c) { return (c || 0) + 1; });
                 } catch(e) {}
 
-                $skip.innerHTML = '<i class="fa fa-paper-plane"></i> Ja rahe ho...';
+                $skip.innerHTML = '<i class="fa fa-paper-plane"></i> Redirecting...';
                 setTimeout(function() { window.location.href = targetUrl; }, 500);
             } catch(err) { window.location.href = targetUrl; }
         });

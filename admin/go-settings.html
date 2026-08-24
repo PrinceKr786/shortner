@@ -131,25 +131,24 @@
                     </div>
                     <div class="box-body">
                         <div class="callout callout-warning">
-                            <h4>Multi-Step Ad Flow</h4>
-                            <p>Visitor ko <b>4 steps</b> se guzarna padega. Har step me alag ads dikhte hain. Total time = steps x seconds.</p>
-                            <p><b>Example:</b> 4 steps x 15 sec = 60 sec total wait</p>
+                            <h4>$20 CPM ke liye MAX ads</h4>
+                            <p>Har step pe SARE ads FRESH load hote hain = har impression Adsterra count karta hai. <b>5 steps = 5x impressions = 5x revenue!</b></p>
                         </div>
                         <div class="row">
                             <div class="col-sm-4 form-group">
                                 <label>Kitne Steps (Pages)</label>
-                                <input type="number" min="1" max="10" class="form-control" id="step_count" value="4">
-                                <p class="help-block">Kitne ad pages dikhane hain. Default: 4</p>
+                                <input type="number" min="1" max="10" class="form-control" id="step_count" value="5">
+                                <p class="help-block">Zyada steps = zyada ad impressions. Default: 5</p>
                             </div>
                             <div class="col-sm-4 form-group">
                                 <label>Har Step me Seconds</label>
                                 <input type="number" min="5" max="60" class="form-control" id="step_seconds" value="15">
-                                <p class="help-block">Har page pe kitne second wait. Default: 15</p>
+                                <p class="help-block">Default: 15 sec</p>
                             </div>
                             <div class="col-sm-4 form-group" style="margin-bottom:0">
                                 <label>Total Time (auto)</label>
-                                <input type="text" class="form-control" id="total_time_display" readonly value="60 sec" style="background:#f5f5f5;font-weight:700">
-                                <p class="help-block">Auto-calculate: steps x seconds</p>
+                                <input type="text" class="form-control" id="total_time_display" readonly value="75 sec" style="background:#f5f5f5;font-weight:700">
+                                <p class="help-block">steps x seconds</p>
                             </div>
                         </div>
                     </div>
@@ -241,6 +240,25 @@
                                     <label>Adsterra Code (300x250 ya 336x280)</label>
                                     <textarea class="form-control code-input" id="interstitial_bottom_code" placeholder="Destination box ke upar dikhega"></textarea>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MID BANNER (Between cards) -->
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-minus-square-o"></i> Mid Banner <span class="format-badge fmt-native">Between Ads</span></h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="ad-card">
+                            <div class="ad-card-header">
+                                <h4>Mid Banner — Interstitial Bottom ke neeche, Native ke upar</h4>
+                                <label class="toggle-switch"><input type="checkbox" id="mid_banner_enabled"><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label>Adsterra Code (728x90 ya 320x50)</label>
+                                <textarea class="form-control code-input" id="mid_banner_code" placeholder="Extra banner slot — aur ads = aur revenue"></textarea>
                             </div>
                         </div>
                     </div>
@@ -449,6 +467,7 @@
         "bottom_banner_enabled","bottom_banner_code",
         "interstitial_enabled","interstitial_code",
         "interstitial_bottom_enabled","interstitial_bottom_code",
+        "mid_banner_enabled","mid_banner_code",
         "sidebar_1_enabled","sidebar_1_code",
         "sidebar_2_enabled","sidebar_2_code",
         "sidebar_3_enabled","sidebar_3_code",
