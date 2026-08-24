@@ -1,17 +1,14 @@
 ﻿<!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/plans.html
-     KAAM   : MEMBERSHIP PLANS - AdLinkFly ke "Membership Plans"
-              jaisa. Admin yahan paid plans banata hai:
-                - Plan ka naam/price/days
-                - Rate Multiplier (jaise 2.0 = double CPM)
-              User side se request aane pe admin approve karta hai
-              (withdrawals.html jaisa flow membership_requests me).
+     FILE   : admin/user-referrals.html
+     KAAM   : ALL REFERRALS DEKHO - Firebase users node se
+              referred_by wale users dikhao, unka status aur
+              commission dikhao. Stats boxes bhi hain.
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Membership Plans - Shortify CP</title>
+    <title>All Referrals - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -93,12 +90,12 @@
             <ul class="sidebar-menu">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
 
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-users"></i> <span>Users</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                         <li><a href="users.html"><i class="fa fa-circle-o"></i> User List</a></li>
-                        <li><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li class="active"><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
                         <li><a href="users-export.html"><i class="fa fa-circle-o"></i> Export Users</a></li>
                     </ul>
                 </li>
@@ -122,7 +119,7 @@
 
                 <li><a href="payout-rates.html"><i class="fa fa-calculator"></i> <span>Payout Rates</span></a></li>
 
-                <li class="active"><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
+                <li><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
 
                 <li><a href="ads.html"><i class="fa fa-bullhorn"></i> <span>Advertising</span>
                     <small class="label pull-right bg-yellow" id="menu-ads-badge" style="display:none">0</small></a></li>
@@ -181,106 +178,70 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Membership Plans <small>Paid subscriptions</small></h1>
+            <h1>All Referrals <small>Saare referred users ka data</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Membership Plans</li>
+                <li class="active">All Referrals</li>
             </ol>
         </section>
 
         <section class="content">
 
-            <!-- ======== ADD PLAN BOX ======== -->
+            <!-- ======== STATS BOXES ======== -->
+            <div class="row">
+                <div class="col-lg-4 col-xs-6">
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3 id="stat-total-referrals">0</h3>
+                            <p>Total Referrals</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-users"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-xs-6">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 id="stat-active-referrals">0</h3>
+                            <p>Active Referrals</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-check-circle"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-xs-6">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3 id="stat-total-commission">&#8377;0.00</h3>
+                            <p>Total Commission Paid</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-inr"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== REFERRALS TABLE BOX ======== -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-plus-circle"></i>
-                        Naya Plan Banao</h3>
+                    <h3 class="box-title"><i class="fa fa-users"></i>
+                        Referral List</h3>
                 </div>
 
-                <form id="plan-form">
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-3 form-group">
-                                <label>Plan Name</label>
-                                <input type="text" class="form-control"
-                                       id="plan-name-input" maxlength="30"
-                                       placeholder="e.g. Gold Member" required>
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Price (&#8377;)</label>
-                                <input type="number" step="0.01" min="0"
-                                       class="form-control" id="plan-price-input"
-                                       placeholder="199" required>
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Days Valid</label>
-                                <input type="number" min="1"
-                                       class="form-control" id="plan-days-input"
-                                       placeholder="30" required>
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Rate Multiplier</label>
-                                <input type="number" step="0.1" min="0.1"
-                                       class="form-control" id="plan-mult-input"
-                                       placeholder="2" value="2" required>
-                                <p class="help-block">2 = double CPM</p>
-                            </div>
-                            <div class="col-sm-3 form-group">
-                                <label>Icon (Font Awesome)</label>
-                                <input type="text" class="form-control"
-                                       id="plan-icon-input" placeholder="diamond"
-                                       value="diamond">
-                                <p class="help-block">fa fa-XXX</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary btn-flat">
-                            <i class="fa fa-save"></i> Save Plan</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- ======== PLANS LIST ======== -->
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-diamond"></i> Saare Plans</h3>
-                </div>
                 <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover table-striped">
+                    <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>Plan</th><th>Price</th><th>Validity</th>
-                                <th>Multiplier</th><th style="width:90px">Actions</th>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Referred By</th>
+                                <th>Date</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody id="plans-body">
+                        <tbody id="referrals-body">
                             <tr><td colspan="5" class="text-center text-muted">
-                                Abhi koi plan nahi.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ======== PENDING REQUESTS ======== -->
-            <div class="box box-warning">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-clock-o"></i>
-                        Membership Requests</h3>
-                    <small class="pull-right" style="padding-top:6px">
-                        User paisa bhej ke request bhejta hai - verify karke
-                        Approve dabao</small>
-                </div>
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr><th>User</th><th>Plan</th><th>Price</th>
-                                <th>Date</th><th>Status</th>
-                                <th style="width:200px">Actions</th></tr>
-                        </thead>
-                        <tbody id="req-body">
-                            <tr><td colspan="6" class="text-center text-muted">
-                                Loading...</td></tr>
+                                Loading referrals...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -304,10 +265,9 @@
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireAdmin, fillAdminHeader, wireLogout,
-        showToast, escapeHtml, formatDate, formatMoney
+        requireAdmin, fillAdminHeader, wireLogout, showToast
     } from "./js/app.js";
-    import { ref, get, push, set, update, remove, onValue }
+    import { ref, get }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     const me = await requireAdmin();
@@ -315,159 +275,77 @@
     wireLogout();
 
     /* ============================================================
-       PLANS CRUD
+       REFERRALS LOAD KARO Firebase se
+       users node me jin users ke paas referred_by field hai
+       woh sab referred users hain
        ============================================================ */
-    async function renderPlans() {
-        const snap = await get(ref(db, "plans"));
-        const tbody = document.getElementById("plans-body");
+    const referralsBody = document.getElementById("referrals-body");
 
+    async function loadReferrals() {
+        const snap = await get(ref(db, "users"));
         if (!snap.exists()) {
-            tbody.innerHTML = `<tr><td colspan="5"
-                class="text-center text-muted">Abhi koi plan nahi bana.</td></tr>`;
+            referralsBody.innerHTML = `<tr><td colspan="5"
+                class="text-center text-muted">Koi users nahi hain database me.</td></tr>`;
             return;
         }
 
         let rows = "";
-        snap.forEach((c) => {
-            const p = c.val();
-            rows += `<tr data-id="${c.key}">
-                <td><i class="fa fa-${escapeHtml(p.icon || "diamond")} text-yellow"></i>
-                    <b>${escapeHtml(p.name)}</b></td>
-                <td>${formatMoney(p.price)}</td>
-                <td>${Number(p.days)} days</td>
-                <td><span class="label label-success">${p.multiplier}x</span></td>
-                <td><button class="btn btn-danger btn-xs plan-del"
-                    title="Delete"><i class="fa fa-trash"></i></button></td>
+        let totalReferrals = 0;
+        let activeReferrals = 0;
+        let totalCommission = 0;
+
+        snap.forEach((userSnap) => {
+            const user = userSnap.val();
+
+            /* Sirf woh users dikhao jinke paas referred_by field hai */
+            if (!user.referred_by) return;
+
+            totalReferrals++;
+
+            /* Status determine karo - agar balance hai ya earnings hain to active */
+            const isActive = (user.balance > 0 || user.total_earned > 0);
+            if (isActive) activeReferrals++;
+
+            /* Commission track karo (referral_earnings field se) */
+            totalCommission += Number(user.referral_earnings ?? 0);
+
+            /* Date format karo */
+            const createdDate = user.created
+                ? new Date(user.created).toLocaleDateString("en-IN")
+                : "N/A";
+
+            /* Status badge */
+            const statusBadge = isActive
+                ? '<span class="label label-success">Active</span>'
+                : '<span class="label label-warning">Inactive</span>';
+
+            rows += `<tr>
+                <td><code>${userSnap.key}</code></td>
+                <td>${user.username || "N/A"}</td>
+                <td><span class="label label-info">${user.referred_by}</span></td>
+                <td>${createdDate}</td>
+                <td>${statusBadge}</td>
             </tr>`;
         });
-        tbody.innerHTML = rows;
+
+        /* Stats update karo */
+        document.getElementById("stat-total-referrals").textContent =
+            totalReferrals.toLocaleString();
+        document.getElementById("stat-active-referrals").textContent =
+            activeReferrals.toLocaleString();
+        document.getElementById("stat-total-commission").textContent =
+            "\u20B9" + totalCommission.toFixed(2);
+
+        /* Table update karo */
+        if (rows) {
+            referralsBody.innerHTML = rows;
+        } else {
+            referralsBody.innerHTML = `<tr><td colspan="5"
+                class="text-center text-muted">Koi referrals nahi hain.</td></tr>`;
+        }
     }
-    renderPlans();
 
-    document.getElementById("plan-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        try {
-            await push(ref(db, "plans"), {
-                name: document.getElementById("plan-name-input").value.trim(),
-                price: parseFloat(
-                    document.getElementById("plan-price-input").value) || 0,
-                days: parseInt(
-                    document.getElementById("plan-days-input").value) || 30,
-                multiplier: parseFloat(
-                    document.getElementById("plan-mult-input").value) || 1,
-                icon: document.getElementById("plan-icon-input").value.trim()
-                      || "diamond",
-                created_at: Date.now()
-            });
-            e.target.reset();
-            document.getElementById("plan-mult-input").value = "2";
-            document.getElementById("plan-icon-input").value = "diamond";
-            showToast("Plan save ho gaya!", "success");
-            renderPlans();
-        } catch (err) {
-            showToast("Fail: " + err.message, "error");
-        }
-    });
-
-    document.getElementById("plans-body").addEventListener("click", async (e) => {
-        const btn = e.target.closest(".plan-del");
-        if (!btn) return;
-        if (!confirm("Ye plan delete karein?")) return;
-
-        await remove(ref(db, `plans/${btn.closest("tr").dataset.id}`));
-        showToast("Plan delete ho gaya.", "success");
-        renderPlans();
-    });
-
-    /* ============================================================
-       MEMBERSHIP REQUESTS (live) - Approve/Reject
-       ============================================================ */
-    onValue(ref(db, "membership_requests"), async (snap) => {
-        const list = [];
-        snap.forEach((c) => list.push({ _id: c.key, ...c.val() }));
-        list.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
-
-        // Users ke naam ke liye
-        const usersSnap = await get(ref(db, "users"));
-        const names = {};
-        usersSnap.forEach((c) => {
-            names[c.key] = c.val().name || c.val().email || "?";
-        });
-
-        const tbody = document.getElementById("req-body");
-        if (list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6"
-                class="text-center text-muted">Koi request nahi.</td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = list.map((r) => `
-            <tr>
-                <td>${escapeHtml(names[r.uid] || r.email || "Unknown")}</td>
-                <td>${escapeHtml(r.plan_name)}</td>
-                <td>${formatMoney(r.price)}</td>
-                <td>${formatDate(r.created_at)}</td>
-                <td>${r.status === "approved"
-                        ? '<span class="label label-success">Approved</span>'
-                        : r.status === "rejected"
-                            ? '<span class="label label-danger">Rejected</span>'
-                            : '<span class="label label-warning">Pending</span>'}
-                </td>
-                <td>${r.status === "pending" ? `
-                    <button class="btn btn-success btn-xs mr-approve"
-                            data-id="${r._id}" data-uid="${r.uid}"
-                            data-plan="${r.plan_id}" data-planname="${escapeHtml(r.plan_name)}"
-                            data-days="${r.days}">
-                        <i class="fa fa-check"></i> Approve</button>
-                    <button class="btn btn-danger btn-xs mr-reject"
-                            data-id="${r._id}">
-                        <i class="fa fa-times"></i> Reject</button>`
-                    : '<small class="text-muted">-</small>'}
-                </td>
-            </tr>`).join("");
-    });
-
-    document.getElementById("req-body").addEventListener("click", async (e) => {
-        const appBtn = e.target.closest(".mr-approve");
-        const rejBtn = e.target.closest(".mr-reject");
-        if (!appBtn && !rejBtn) return;
-
-        /* ---------- APPROVE: membership activate ---------- */
-        if (appBtn) {
-            const uid = appBtn.dataset.uid;
-            const expiresAt = Date.now() +
-                (parseInt(appBtn.dataset.days) || 30) * 86400000;
-
-            if (!confirm(`${appBtn.dataset.planname} activate karein ` +
-                `${formatDate(expiresAt)} tak?`)) return;
-
-            try {
-                // User ko membership de do
-                await update(ref(db, `users/${uid}/membership`), {
-                    plan_id: appBtn.dataset.plan,
-                    name: appBtn.dataset.planname,
-                    multiplier: null,   // go.html plan node se padhega
-                    expires_at: expiresAt
-                });
-                // Request approved mark karo
-                await update(ref(db, `membership_requests/${appBtn.dataset.id}`),
-                    { status: "approved", processed_at: Date.now() });
-
-                showToast("Membership activate ho gayi!", "success");
-            } catch (err) {
-                showToast("Fail: " + err.message, "error");
-            }
-        }
-
-        /* ---------- REJECT ---------- */
-        if (rejBtn) {
-            if (!confirm("Request reject karein?")) return;
-            await update(ref(db, `membership_requests/${rejBtn.dataset.id}`),
-                { status: "rejected", processed_at: Date.now() });
-            showToast("Reject ho gaya.", "warning");
-        }
-    });
+    loadReferrals();
 </script>
 
 </body>

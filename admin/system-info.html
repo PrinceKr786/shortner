@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/system-info.html
+     KAAM   : SYSTEM INFORMATION - Site ki details yahan se dekho.
+              Firebase project info, user count, link count sab dikhta hai.
+              Sab data Firebase se real-time fetch hota hai.
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Information - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <!-- Inline skin-black CSS (GitHub Pages fix) -->
+    <style>
+        .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
+        .skin-black .main-header .navbar .nav>li>a{color:#333}
+        .skin-black .main-header .navbar .nav>li>a:hover,.skin-black .main-header .navbar .nav>li>a:active,.skin-black .main-header .navbar .nav>li>a:focus,.skin-black .main-header .navbar .nav .open>a,.skin-black .main-header .navbar .nav .open>a:hover,.skin-black .main-header .navbar .nav .open>a:focus,.skin-black .main-header .navbar .nav>.active>a{background:#f9f9f9;color:#333}
+        .skin-black .main-header .navbar .nav>.active>a{border-bottom-color:#fff}
+        .skin-black .main-header .logo{background-color:#367fa9;color:#fff}
+        .skin-black .main-header .logo:hover{background-color:#357ca5}
+        .skin-black .main-sidebar{background-color:#222d32}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
+        .skin-black .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
+        .skin-black .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+        .info-box-icon{font-size:40px}
+        .info-box-content .info-box-text{font-size:13px;color:#999}
+        .info-box-content .info-box-number{font-size:22px;font-weight:700;margin-top:2px}
+    </style>
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-users"></i> <span>Users</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="users.html"><i class="fa fa-circle-o"></i> User List</a></li>
+                        <li><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li><a href="users-export.html"><i class="fa fa-circle-o"></i> Export Users</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="withdrawals.html"><i class="fa fa-money"></i> <span>Withdrawals</span>
+                    <small class="label pull-right bg-red" id="menu-pending-badge" style="display:none">0</small></a></li>
+
+                <li><a href="rates.html"><i class="fa fa-line-chart"></i> <span>CPM Rates</span></a></li>
+
+                <li><a href="campaign-prices.html"><i class="fa fa-tag"></i> <span>Campaign Prices</span></a></li>
+
+                <li><a href="payout-rates.html"><i class="fa fa-calculator"></i> <span>Payout Rates</span></a></li>
+
+                <li><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
+
+                <li><a href="ads.html"><i class="fa fa-bullhorn"></i> <span>Advertising</span>
+                    <small class="label pull-right bg-yellow" id="menu-ads-badge" style="display:none">0</small></a></li>
+
+                <li><a href="go-settings.html"><i class="fa fa-cog"></i> <span>Go Page Ads</span></a></li>
+
+                <li><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+
+                <li><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-pencil"></i> <span>Blog</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-file-text"></i> <span>Pages</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="pages.html"><i class="fa fa-circle-o"></i> Pages List</a></li>
+                        <li><a href="add-page.html"><i class="fa fa-circle-o"></i> Add Page</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview active">
+                    <a href="#"><i class="fa fa-cogs"></i> <span>Settings</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="settings.html"><i class="fa fa-circle-o"></i> General</a></li>
+                        <li><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li><a href="menu-manager.html"><i class="fa fa-circle-o"></i> Menu Manager</a></li>
+                        <li class="active"><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+</ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>System Information <small>Site ki details aur status</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li class="active">System Info</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- ======== ROW 1: SITE INFO ======== -->
+            <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box bg-aqua">
+                        <span class="info-box-icon"><i class="fa fa-globe"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Site URL</span>
+                            <span class="info-box-number" id="si-site-url">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box bg-green">
+                        <span class="info-box-icon"><i class="fa fa-database"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Firebase Project</span>
+                            <span class="info-box-number" id="si-firebase-project">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box bg-yellow">
+                        <span class="info-box-icon"><i class="fa fa-cloud"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Hosting</span>
+                            <span class="info-box-number" id="si-hosting">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== ROW 2: VERSIONS ======== -->
+            <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box bg-teal">
+                        <span class="info-box-icon"><i class="fa fa-code"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">JavaScript Version</span>
+                            <span class="info-box-number" id="si-js-version">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box bg-purple">
+                        <span class="info-box-icon"><i class="fa fa-shield"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Admin Panel Version</span>
+                            <span class="info-box-number" id="si-admin-version">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box bg-red">
+                        <span class="info-box-icon"><i class="fa fa-heartbeat"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Database Status</span>
+                            <span class="info-box-number" id="si-db-status">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== ROW 3: STATS ======== -->
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="info-box bg-orange">
+                        <span class="info-box-icon"><i class="fa fa-users"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Total Users</span>
+                            <span class="info-box-number" id="si-total-users">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="info-box bg-navy">
+                        <span class="info-box-icon"><i class="fa fa-link"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Total Links</span>
+                            <span class="info-box-number" id="si-total-links">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== DETAILED INFO BOX ======== -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-info-circle"></i>
+                        Detailed System Information</h3>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:35%">Property</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="si-detail-table">
+                            <tr>
+                                <td><b>Site URL</b></td>
+                                <td id="si-detail-url">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Site Name</b></td>
+                                <td id="si-detail-name">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Firebase Project</b></td>
+                                <td id="si-detail-project">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Database URL</b></td>
+                                <td id="si-detail-db-url">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Hosting Platform</b></td>
+                                <td id="si-detail-hosting">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Admin Panel Version</b></td>
+                                <td id="si-detail-version">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>JavaScript Engine</b></td>
+                                <td id="si-detail-js-engine">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Browser</b></td>
+                                <td id="si-detail-browser">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Registered Users</b></td>
+                                <td id="si-detail-total-users">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Short Links</b></td>
+                                <td id="si-detail-total-links">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Withdrawals</b></td>
+                                <td id="si-detail-total-withdrawals">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Database Status</b></td>
+                                <td id="si-detail-db-status">Loading...</td>
+                            </tr>
+                            <tr>
+                                <td><b>Last Updated</b></td>
+                                <td id="si-detail-last-updated">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ======== REFRESH BUTTON ======== -->
+            <button type="button" class="btn btn-primary btn-flat"
+                    id="refresh-btn" onclick="location.reload()">
+                <i class="fa fa-refresh"></i> Refresh Karo</button>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout, showToast
+    } from "./js/app.js";
+    import { ref, get }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    // Admin verify karo, header fill karo, logout wire karo
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       SYSTEM INFO FETCH KARO - sab data Firebase se aata hai
+       ============================================================ */
+    async function loadSystemInfo() {
+        try {
+            // Basic site info
+            const siteSnap = await get(ref(db, "settings"));
+            const site = siteSnap.val() || {};
+            document.getElementById("si-site-url").textContent =
+                location.origin;
+            document.getElementById("si-firebase-project").textContent =
+                db.app.options.projectId || "N/A";
+            document.getElementById("si-hosting").textContent =
+                "GitHub Pages";
+            document.getElementById("si-js-version").textContent =
+                navigator.userAgent.includes("Chrome") ? "ES2022+" : "ES6+";
+            document.getElementById("si-admin-version").textContent =
+                "v1.0.0";
+
+            // Database status check karo
+            try {
+                await get(ref(db, ".info/connected"));
+                document.getElementById("si-db-status").textContent =
+                    "Connected";
+                document.getElementById("si-detail-db-status").innerHTML =
+                    '<span class="label label-success">Connected</span>';
+            } catch (e) {
+                document.getElementById("si-db-status").textContent =
+                    "Disconnected";
+                document.getElementById("si-detail-db-status").innerHTML =
+                    '<span class="label label-danger">Disconnected</span>';
+            }
+
+            // User count nikalo
+            const usersSnap = await get(ref(db, "users"));
+            const users = usersSnap.val() || {};
+            const userCount = Object.keys(users).length;
+            document.getElementById("si-total-users").textContent =
+                userCount.toLocaleString();
+            document.getElementById("si-detail-total-users").textContent =
+                userCount.toLocaleString();
+
+            // Link count nikalo (sab users ke links count karo)
+            let linkCount = 0;
+            for (const uid of Object.keys(users)) {
+                const linksSnap = await get(ref(db, "users/" + uid + "/links"));
+                const links = linksSnap.val() || {};
+                linkCount += Object.keys(links).length;
+            }
+            document.getElementById("si-total-links").textContent =
+                linkCount.toLocaleString();
+            document.getElementById("si-detail-total-links").textContent =
+                linkCount.toLocaleString();
+
+            // Withdrawal count
+            const withdrawalsSnap = await get(ref(db, "withdrawals"));
+            const withdrawals = withdrawalsSnap.val() || {};
+            document.getElementById("si-detail-total-withdrawals").textContent =
+                Object.keys(withdrawals).length.toLocaleString();
+
+            // Detail table bharo
+            document.getElementById("si-detail-url").textContent =
+                location.origin;
+            document.getElementById("si-detail-name").textContent =
+                site.site_name || "Shortify CP";
+            document.getElementById("si-detail-project").textContent =
+                db.app.options.projectId || "N/A";
+            document.getElementById("si-detail-db-url").textContent =
+                db.app.options.databaseURL || "N/A";
+            document.getElementById("si-detail-hosting").textContent =
+                "GitHub Pages (Free Hosting)";
+            document.getElementById("si-detail-version").textContent =
+                "Shortify CP v1.0.0";
+            document.getElementById("si-detail-js-engine").textContent =
+                navigator.product || "Gecko/WebKit/V8";
+            document.getElementById("si-detail-browser").textContent =
+                navigator.userAgent.substring(0, 80) + "...";
+            document.getElementById("si-detail-last-updated").textContent =
+                new Date().toLocaleString();
+
+        } catch (err) {
+            showToast("System info load karne me error: " + err.message, "error");
+        }
+    }
+
+    // Shuru me system info load karo
+    await loadSystemInfo();
+</script>
+
+</body>
+</html>

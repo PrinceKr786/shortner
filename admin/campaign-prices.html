@@ -1,19 +1,14 @@
 ﻿<!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/rates.html
-     KAAM   : CPM RATES EDITOR - AdLinkFly ke admin Payout Rates
-              jaisa:
-                - Har ad type ka CPM rate set karna
-                  (earning_rates/default node)
-                - Min payout / referral commission / banner ad code
-                  (settings node)
-              go.html inhi values se users ki kamai calculate
-              karta hai.
+     FILE   : admin/campaign-prices.html
+     KAAM   : CAMPAIGN PRICES EDITOR - Har ad type ke liye
+              advertiser aur publisher CPM rates set karna,
+              plus minimum campaign amount define karna.
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CPM Rates - Shortify CP</title>
+    <title>Campaign Prices - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -118,9 +113,9 @@
                 <li><a href="withdrawals.html"><i class="fa fa-money"></i> <span>Withdrawals</span>
                     <small class="label pull-right bg-red" id="menu-pending-badge" style="display:none">0</small></a></li>
 
-                <li class="active"><a href="rates.html"><i class="fa fa-line-chart"></i> <span>CPM Rates</span></a></li>
+                <li><a href="rates.html"><i class="fa fa-line-chart"></i> <span>CPM Rates</span></a></li>
 
-                <li><a href="campaign-prices.html"><i class="fa fa-tag"></i> <span>Campaign Prices</span></a></li>
+                <li class="active"><a href="campaign-prices.html"><i class="fa fa-tag"></i> <span>Campaign Prices</span></a></li>
 
                 <li><a href="payout-rates.html"><i class="fa fa-calculator"></i> <span>Payout Rates</span></a></li>
 
@@ -183,152 +178,125 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Payout Rates <small>CPM settings</small></h1>
+            <h1>Campaign Prices <small>Ad type ke hisaab se CPM prices</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">CPM Rates</li>
+                <li class="active">Campaign Prices</li>
             </ol>
         </section>
 
         <section class="content">
 
-            <!-- ======== CPM RATES BOX ======== -->
+            <!-- ======== INTERSTITIAL PRICES BOX ======== -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-line-chart"></i>
-                        CPM Rates (per 1000 views)</h3>
+                    <h3 class="box-title"><i class="fa fa-window-maximize text-primary"></i>
+                        Interstitial Ads</h3>
                 </div>
 
-                <form id="rates-form">
+                <form id="interstitial-form">
                     <div class="box-body">
-
-                        <p class="help-block">
-                            Ye rates go.html me har valid view pe use hote hain.
-                            Example: rate 8 = 1000 views pe &#8377;8.
-                        </p>
-
                         <div class="row">
                             <div class="col-sm-4 form-group">
-                                <label><i class="fa fa-window-maximize text-primary"></i>
-                                    Interstitial Ads</label>
+                                <label>CPM Price for Advertisers (&#8377;)</label>
                                 <input type="number" step="0.01" min="0"
-                                       class="form-control" id="rate-interstitial">
+                                       class="form-control" id="inter-advertiser-price">
+                                <p class="help-block">Advertiser ko itna CPM lagega per 1000 impressions.</p>
                             </div>
                             <div class="col-sm-4 form-group">
-                                <label><i class="fa fa-picture-o text-info"></i>
-                                    Banner Ads</label>
+                                <label>CPM Price for Publishers (&#8377;)</label>
                                 <input type="number" step="0.01" min="0"
-                                       class="form-control" id="rate-banner">
+                                       class="form-control" id="inter-publisher-price">
+                                <p class="help-block">Publisher ko itna milega per 1000 impressions.</p>
                             </div>
                             <div class="col-sm-4 form-group">
-                                <label><i class="fa fa-ban text-danger"></i>
-                                    No Ads</label>
+                                <label>Minimum Campaign Amount (&#8377;)</label>
                                 <input type="number" step="0.01" min="0"
-                                       class="form-control" id="rate-none">
+                                       class="form-control" id="inter-min-campaign">
+                                <p class="help-block">Minimum itna budget chahiye campaign banane ke liye.</p>
                             </div>
                         </div>
-
                     </div>
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary btn-flat"
-                                id="save-rates-btn">
-                            <i class="fa fa-save"></i> Save Rates</button>
+                                id="save-inter-btn">
+                            <i class="fa fa-save"></i> Save Interstitial</button>
                     </div>
                 </form>
             </div>
 
-            <!-- ======== COUNTRY RATES BOX ======== -->
-            <div class="box box-info">
+            <!-- ======== BANNER PRICES BOX ======== -->
+            <div class="box box-success">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-globe"></i>
-                        Country-wise Rates <small>(upar wale default ko override karta hai)</small></h3>
+                    <h3 class="box-title"><i class="fa fa-picture-o text-success"></i>
+                        Banner Ads</h3>
                 </div>
 
-                <div class="box-body">
-
-                    <p class="help-block">
-                        Jaise US/UK traffic mehnga hota hai - unke liye zyada rate
-                        dalo. Visitor ka country automatically detect hota hai
-                        (go.html). Yahan na ho to default rate lagega.
-                    </p>
-
-                    <!-- ADD FORM -->
-                    <form id="country-add-form" class="form-inline"
-                          style="margin-bottom:16px">
-                        <input type="text" class="form-control" id="cr-code"
-                               placeholder="Country Code (IN, US...)" maxlength="2"
-                               style="width:170px;text-transform:uppercase" required>
-                        <input type="number" step="0.01" min="0" class="form-control"
-                               id="cr-interstitial" placeholder="Interstitial" required
-                               style="width:120px">
-                        <input type="number" step="0.01" min="0" class="form-control"
-                               id="cr-banner" placeholder="Banner" style="width:100px">
-                        <input type="number" step="0.01" min="0" class="form-control"
-                               id="cr-none" placeholder="No Ads" style="width:100px">
-                        <button type="submit" class="btn btn-info btn-flat">
-                            <i class="fa fa-plus"></i> Add Country</button>
-                    </form>
-
-                    <!-- LIST -->
-                    <table class="table table-striped table-hover"
-                           style="margin-bottom:0">
-                        <thead>
-                            <tr><th>Country</th><th>Interstitial</th><th>Banner</th>
-                                <th>No Ads</th><th style="width:80px"></th></tr>
-                        </thead>
-                        <tbody id="country-body">
-                            <tr><td colspan="5" class="text-center text-muted">
-                                Koi country rate nahi. Sab pe default chalega.</td></tr>
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-
-            <!-- ======== OTHER SETTINGS BOX ======== -->
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-sliders"></i>
-                        Payout Settings &amp; Banner Ad</h3>
-                </div>
-
-                <form id="misc-form">
+                <form id="banner-form">
                     <div class="box-body">
-
                         <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Minimum Payout (&#8377;)</label>
+                            <div class="col-sm-4 form-group">
+                                <label>CPM Price for Advertisers (&#8377;)</label>
                                 <input type="number" step="0.01" min="0"
-                                       class="form-control" id="min-payout-input">
-                                <p class="help-block">Itne balance par hi withdraw
-                                   request ban payegi.</p>
+                                       class="form-control" id="banner-advertiser-price">
+                                <p class="help-block">Advertiser ko itna CPM lagega per 1000 impressions.</p>
                             </div>
-
-                            <div class="col-sm-6 form-group">
-                                <label>Referral Commission (%)</label>
-                                <input type="number" step="0.1" min="0" max="100"
-                                       class="form-control" id="ref-comm-input">
-                                <p class="help-block">Referrer ko uske member ki
-                                   kamai ka itna % milega.</p>
+                            <div class="col-sm-4 form-group">
+                                <label>CPM Price for Publishers (&#8377;)</label>
+                                <input type="number" step="0.01" min="0"
+                                       class="form-control" id="banner-publisher-price">
+                                <p class="help-block">Publisher ko itna milega per 1000 impressions.</p>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label>Minimum Campaign Amount (&#8377;)</label>
+                                <input type="number" step="0.01" min="0"
+                                       class="form-control" id="banner-min-campaign">
+                                <p class="help-block">Minimum itna budget chahiye campaign banane ke liye.</p>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label>Banner Ad Code
-                                <small>(banner-type links ke top slot me)</small></label>
-                            <textarea class="form-control" id="banner-code-input"
-                                      rows="4"
-                                      placeholder='Jaise: <a href="https://ad-network.com/your-id" target="_blank"><img src="https://ad-network.com/banner-728x90.png"></a>'></textarea>
-                            <p class="help-block">Yahan apne ad network ka HTML
-                               code paste karo. Khali chhoda to "Advertisement"
-                               placeholder dikhega.</p>
-                        </div>
-
                     </div>
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary btn-flat"
-                                id="save-misc-btn">
-                            <i class="fa fa-save"></i> Save Settings</button>
+                        <button type="submit" class="btn btn-success btn-flat"
+                                id="save-banner-btn">
+                            <i class="fa fa-save"></i> Save Banner</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ======== POPUP PRICES BOX ======== -->
+            <div class="box box-warning">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-external-link text-warning"></i>
+                        Popup Ads</h3>
+                </div>
+
+                <form id="popup-form">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label>CPM Price for Advertisers (&#8377;)</label>
+                                <input type="number" step="0.01" min="0"
+                                       class="form-control" id="popup-advertiser-price">
+                                <p class="help-block">Advertiser ko itna CPM lagega per 1000 impressions.</p>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label>CPM Price for Publishers (&#8377;)</label>
+                                <input type="number" step="0.01" min="0"
+                                       class="form-control" id="popup-publisher-price">
+                                <p class="help-block">Publisher ko itna milega per 1000 impressions.</p>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label>Minimum Campaign Amount (&#8377;)</label>
+                                <input type="number" step="0.01" min="0"
+                                       class="form-control" id="popup-min-campaign">
+                                <p class="help-block">Minimum itna budget chahiye campaign banane ke liye.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-warning btn-flat"
+                                id="save-popup-btn">
+                            <i class="fa fa-save"></i> Save Popup</button>
                     </div>
                 </form>
             </div>
@@ -353,7 +321,7 @@
     import {
         requireAdmin, fillAdminHeader, wireLogout, showToast
     } from "./js/app.js";
-    import { ref, get, update, remove, set }
+    import { ref, get, set }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     const me = await requireAdmin();
@@ -361,144 +329,83 @@
     wireLogout();
 
     /* ============================================================
-       CURRENT VALUES LOAD KARO
+       CAMPAIGN PRICES LOAD KARO Firebase se
+       settings/campaigns node me saari prices store hoti hain
        ============================================================ */
-    const [ratesSnap, settingsSnap] = await Promise.all([
-        get(ref(db, "earning_rates/default")),
-        get(ref(db, "settings"))
-    ]);
+    const snap = await get(ref(db, "settings/campaigns"));
+    const data = snap.val() || {};
 
-    const rates = ratesSnap.val() ||
-                  { interstitial: 8, banner: 3, none: 1 };
-    const st = settingsSnap.val() ||
-               { min_payout: 5, referral_commission: 20 };
+    /* Interstitial fields */
+    document.getElementById("inter-advertiser-price").value =
+        Number(data.interstitial_price ?? 0);
+    document.getElementById("inter-publisher-price").value =
+        Number(data.interstitial_publisher_price ?? 0);
+    document.getElementById("inter-min-campaign").value =
+        Number(data.interstitial_min_campaign ?? 0);
 
-    document.getElementById("rate-interstitial").value =
-        Number(rates.interstitial ?? 8);
-    document.getElementById("rate-banner").value =
-        Number(rates.banner ?? 3);
-    document.getElementById("rate-none").value =
-        Number(rates.none ?? 1);
-    document.getElementById("min-payout-input").value =
-        Number(st.min_payout ?? 5);
-    document.getElementById("ref-comm-input").value =
-        Number(st.referral_commission ?? 20);
-    document.getElementById("banner-code-input").value =
-        st.banner_ad_code || "";
+    /* Banner fields */
+    document.getElementById("banner-advertiser-price").value =
+        Number(data.banner_price ?? 0);
+    document.getElementById("banner-publisher-price").value =
+        Number(data.banner_publisher_price ?? 0);
+    document.getElementById("banner-min-campaign").value =
+        Number(data.banner_min_campaign ?? 0);
 
+    /* Popup fields */
+    document.getElementById("popup-advertiser-price").value =
+        Number(data.popup_price ?? 0);
+    document.getElementById("popup-publisher-price").value =
+        Number(data.popup_publisher_price ?? 0);
+    document.getElementById("popup-min-campaign").value =
+        Number(data.popup_min_campaign ?? 0);
 
     /* ============================================================
-       SAVE HANDLERS
+       SAVE HANDLERS - Har form ka alag save handler
        ============================================================ */
-    document.getElementById("rates-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
 
+    /* Interstitial save */
+    document.getElementById("interstitial-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
         try {
-            await update(ref(db, "earning_rates/default"), {
-                interstitial:
-                    parseFloat(document.getElementById("rate-interstitial").value) || 0,
-                banner:
-                    parseFloat(document.getElementById("rate-banner").value) || 0,
-                none:
-                    parseFloat(document.getElementById("rate-none").value) || 0
-            });
-            showToast("CPM rates save ho gaye!", "success");
+            await set(ref(db, "settings/campaigns/interstitial_price"),
+                parseFloat(document.getElementById("inter-advertiser-price").value) || 0);
+            await set(ref(db, "settings/campaigns/interstitial_publisher_price"),
+                parseFloat(document.getElementById("inter-publisher-price").value) || 0);
+            await set(ref(db, "settings/campaigns/interstitial_min_campaign"),
+                parseFloat(document.getElementById("inter-min-campaign").value) || 0);
+            showToast("Interstitial prices save ho gayi!", "success");
         } catch (err) {
             showToast("Fail: " + err.message, "error");
         }
     });
 
-    document.getElementById("misc-form").addEventListener("submit", async (e) => {
+    /* Banner save */
+    document.getElementById("banner-form").addEventListener("submit", async (e) => {
         e.preventDefault();
-
         try {
-            await update(ref(db, "settings"), {
-                min_payout:
-                    parseFloat(document.getElementById("min-payout-input").value) || 0,
-                referral_commission:
-                    parseFloat(document.getElementById("ref-comm-input").value) || 0,
-                banner_ad_code:
-                    document.getElementById("banner-code-input").value.trim()
-            });
-            showToast("Settings save ho gayi!", "success");
+            await set(ref(db, "settings/campaigns/banner_price"),
+                parseFloat(document.getElementById("banner-advertiser-price").value) || 0);
+            await set(ref(db, "settings/campaigns/banner_publisher_price"),
+                parseFloat(document.getElementById("banner-publisher-price").value) || 0);
+            await set(ref(db, "settings/campaigns/banner_min_campaign"),
+                parseFloat(document.getElementById("banner-min-campaign").value) || 0);
+            showToast("Banner prices save ho gayi!", "success");
         } catch (err) {
             showToast("Fail: " + err.message, "error");
         }
     });
 
-
-    /* ============================================================
-       COUNTRY-WISE RATES
-       earning_rates/countries/{CC} = {interstitial, banner, none}
-       ============================================================ */
-    const countryBody = document.getElementById("country-body");
-
-    async function renderCountries() {
-        const snap = await get(ref(db, "earning_rates/countries"));
-        if (!snap.exists()) {
-            countryBody.innerHTML = `<tr><td colspan="5"
-                class="text-center text-muted">Koi country rate nahi.
-                Sab pe default chalega.</td></tr>`;
-            return;
-        }
-
-        let rows = "";
-        snap.forEach((c) => {
-            const r = c.val();
-            rows += `<tr data-cc="${c.key}">
-                <td><span class="label label-primary">${c.key}</span></td>
-                <td>${Number(r.interstitial || 0)}</td>
-                <td>${Number(r.banner || 0)}</td>
-                <td>${Number(r.none || 0)}</td>
-                <td><button class="btn btn-danger btn-xs cr-del"
-                        title="Delete"><i class="fa fa-trash"></i></button></td>
-            </tr>`;
-        });
-        countryBody.innerHTML = rows;
-    }
-    renderCountries();
-
-    /* ---------- Add country ---------- */
-    document.getElementById("country-add-form").addEventListener("submit",
-        async (e) => {
+    /* Popup save */
+    document.getElementById("popup-form").addEventListener("submit", async (e) => {
         e.preventDefault();
-
-        const cc = document.getElementById("cr-code").value.trim().toUpperCase();
-        const inter =
-            parseFloat(document.getElementById("cr-interstitial").value);
-        if (!/^[A-Z]{2}$/.test(cc) || isNaN(inter)) {
-            showToast("2-letter country code + interstitial rate dalo.", "warning");
-            return;
-        }
-
         try {
-            await set(ref(db, `earning_rates/countries/${cc}`), {
-                interstitial: inter,
-                banner: parseFloat(
-                    document.getElementById("cr-banner").value) || 0,
-                none: parseFloat(
-                    document.getElementById("cr-none").value) || 0
-            });
-            e.target.reset();
-            showToast(cc + " rates add ho gaye!", "success");
-            renderCountries();
-        } catch (err) {
-            showToast("Fail: " + err.message, "error");
-        }
-    });
-
-    /* ---------- Delete country ---------- */
-    countryBody.addEventListener("click", async (e) => {
-        const btn = e.target.closest(".cr-del");
-        if (!btn) return;
-
-        const cc = btn.closest("tr").dataset.cc;
-        if (!confirm(cc + " ka rate delete karein? Default wapas lagega.")) return;
-
-        try {
-            await remove(ref(db, `earning_rates/countries/${cc}`));
-            showToast(cc + " delete ho gaya.", "success");
-            renderCountries();
+            await set(ref(db, "settings/campaigns/popup_price"),
+                parseFloat(document.getElementById("popup-advertiser-price").value) || 0);
+            await set(ref(db, "settings/campaigns/popup_publisher_price"),
+                parseFloat(document.getElementById("popup-publisher-price").value) || 0);
+            await set(ref(db, "settings/campaigns/popup_min_campaign"),
+                parseFloat(document.getElementById("popup-min-campaign").value) || 0);
+            showToast("Popup prices save ho gayi!", "success");
         } catch (err) {
             showToast("Fail: " + err.message, "error");
         }

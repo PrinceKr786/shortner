@@ -1,17 +1,19 @@
 ﻿<!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/plans.html
-     KAAM   : MEMBERSHIP PLANS - AdLinkFly ke "Membership Plans"
-              jaisa. Admin yahan paid plans banata hai:
-                - Plan ka naam/price/days
-                - Rate Multiplier (jaise 2.0 = double CPM)
-              User side se request aane pe admin approve karta hai
-              (withdrawals.html jaisa flow membership_requests me).
+     FILE   : admin/invoices.html
+     KAAM   : INVOICE MANAGEMENT - Manage all invoices for
+              Shortify CP users. Saari invoices Firebase se
+              load hoti hain with filtering by user, status
+              and date range.
+     DB NODE: invoices/{invoiceId}
+                 uid, user_name, user_email, amount, type,
+                 status(pending|paid|overdue|cancelled),
+                 description, created_at, due_date, paid_at
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Membership Plans - Shortify CP</title>
+    <title>Manage Invoices - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -122,7 +124,7 @@
 
                 <li><a href="payout-rates.html"><i class="fa fa-calculator"></i> <span>Payout Rates</span></a></li>
 
-                <li class="active"><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
+                <li><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
 
                 <li><a href="ads.html"><i class="fa fa-bullhorn"></i> <span>Advertising</span>
                     <small class="label pull-right bg-yellow" id="menu-ads-badge" style="display:none">0</small></a></li>
@@ -131,7 +133,7 @@
 
                 <li><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
 
-                <li><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+                <li class="active"><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
 
                 <li class="treeview">
                     <a href="#"><i class="fa fa-pencil"></i> <span>Blog</span>
@@ -181,106 +183,139 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Membership Plans <small>Paid subscriptions</small></h1>
+            <h1>Manage Invoices <small>All user invoices</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Membership Plans</li>
+                <li class="active">Invoices</li>
             </ol>
         </section>
 
         <section class="content">
 
-            <!-- ======== ADD PLAN BOX ======== -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-plus-circle"></i>
-                        Naya Plan Banao</h3>
+            <!-- ======== STAT BOXES ======== -->
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3 id="stat-total">0</h3>
+                            <p>Total Invoices</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-file-text-o"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
+                    </div>
                 </div>
 
-                <form id="plan-form">
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-3 form-group">
-                                <label>Plan Name</label>
-                                <input type="text" class="form-control"
-                                       id="plan-name-input" maxlength="30"
-                                       placeholder="e.g. Gold Member" required>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3 id="stat-pending">0</h3>
+                            <p>Pending</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-hourglass-half"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 id="stat-paid">0</h3>
+                            <p>Paid</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-check"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3 id="stat-amount">&#8377;0.00</h3>
+                            <p>Total Amount</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-inr"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== FILTER BOX ======== -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-filter"></i> Filters</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool"
+                                data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <label>User ID</label>
+                                <input type="text" id="filter-userid"
+                                       class="form-control" placeholder="User ID daalo...">
                             </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Price (&#8377;)</label>
-                                <input type="number" step="0.01" min="0"
-                                       class="form-control" id="plan-price-input"
-                                       placeholder="199" required>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select id="filter-status" class="form-control">
+                                    <option value="">Sabhi Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="overdue">Overdue</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
                             </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Days Valid</label>
-                                <input type="number" min="1"
-                                       class="form-control" id="plan-days-input"
-                                       placeholder="30" required>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="date" id="filter-start"
+                                       class="form-control">
                             </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Rate Multiplier</label>
-                                <input type="number" step="0.1" min="0.1"
-                                       class="form-control" id="plan-mult-input"
-                                       placeholder="2" value="2" required>
-                                <p class="help-block">2 = double CPM</p>
-                            </div>
-                            <div class="col-sm-3 form-group">
-                                <label>Icon (Font Awesome)</label>
-                                <input type="text" class="form-control"
-                                       id="plan-icon-input" placeholder="diamond"
-                                       value="diamond">
-                                <p class="help-block">fa fa-XXX</p>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input type="date" id="filter-end"
+                                       class="form-control">
                             </div>
                         </div>
                     </div>
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary btn-flat">
-                            <i class="fa fa-save"></i> Save Plan</button>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button id="btn-apply" class="btn btn-primary">
+                                <i class="fa fa-search"></i> Apply Filters</button>
+                            <button id="btn-reset" class="btn btn-default">
+                                <i class="fa fa-refresh"></i> Reset</button>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
 
-            <!-- ======== PLANS LIST ======== -->
-            <div class="box">
+            <!-- ======== INVOICES TABLE ======== -->
+            <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-diamond"></i> Saare Plans</h3>
+                    <h3 class="box-title"><i class="fa fa-file-text-o"></i>
+                        Saari Invoices</h3>
+                    <span class="label label-info" id="filtered-count">0</span>
                 </div>
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th>Plan</th><th>Price</th><th>Validity</th>
-                                <th>Multiplier</th><th style="width:90px">Actions</th>
+                                <th>Invoice ID</th>
+                                <th>User</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
-                        <tbody id="plans-body">
-                            <tr><td colspan="5" class="text-center text-muted">
-                                Abhi koi plan nahi.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ======== PENDING REQUESTS ======== -->
-            <div class="box box-warning">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-clock-o"></i>
-                        Membership Requests</h3>
-                    <small class="pull-right" style="padding-top:6px">
-                        User paisa bhej ke request bhejta hai - verify karke
-                        Approve dabao</small>
-                </div>
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr><th>User</th><th>Plan</th><th>Price</th>
-                                <th>Date</th><th>Status</th>
-                                <th style="width:200px">Actions</th></tr>
-                        </thead>
-                        <tbody id="req-body">
-                            <tr><td colspan="6" class="text-center text-muted">
-                                Loading...</td></tr>
+                        <tbody id="invoices-body">
+                            <tr><td colspan="6" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -305,9 +340,9 @@
     import { db } from "./js/firebase-config.js";
     import {
         requireAdmin, fillAdminHeader, wireLogout,
-        showToast, escapeHtml, formatDate, formatMoney
+        escapeHtml, formatDate, formatMoney
     } from "./js/app.js";
-    import { ref, get, push, set, update, remove, onValue }
+    import { ref, onValue }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     const me = await requireAdmin();
@@ -315,158 +350,149 @@
     wireLogout();
 
     /* ============================================================
-       PLANS CRUD
+       STATE - saare invoices yahan store honge
        ============================================================ */
-    async function renderPlans() {
-        const snap = await get(ref(db, "plans"));
-        const tbody = document.getElementById("plans-body");
+    let allInvoices = [];
+    let filteredInvoices = [];
 
-        if (!snap.exists()) {
-            tbody.innerHTML = `<tr><td colspan="5"
-                class="text-center text-muted">Abhi koi plan nahi bana.</td></tr>`;
-            return;
-        }
+    const invoicesBody = document.getElementById("invoices-body");
+    const filterUserid = document.getElementById("filter-userid");
+    const filterStatus = document.getElementById("filter-status");
+    const filterStart  = document.getElementById("filter-start");
+    const filterEnd    = document.getElementById("filter-end");
 
-        let rows = "";
-        snap.forEach((c) => {
-            const p = c.val();
-            rows += `<tr data-id="${c.key}">
-                <td><i class="fa fa-${escapeHtml(p.icon || "diamond")} text-yellow"></i>
-                    <b>${escapeHtml(p.name)}</b></td>
-                <td>${formatMoney(p.price)}</td>
-                <td>${Number(p.days)} days</td>
-                <td><span class="label label-success">${p.multiplier}x</span></td>
-                <td><button class="btn btn-danger btn-xs plan-del"
-                    title="Delete"><i class="fa fa-trash"></i></button></td>
-            </tr>`;
+    /* ============================================================
+       FIREBA SE LIVE DATA LOAD
+       ============================================================ */
+    onValue(ref(db, "invoices"), (snapshot) => {
+        allInvoices = [];
+        snapshot.forEach((c) => {
+            allInvoices.push({ id: c.key, ...c.val() });
         });
-        tbody.innerHTML = rows;
-    }
-    renderPlans();
+        // Naye pehle sort by created_at
+        allInvoices.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
 
-    document.getElementById("plan-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        try {
-            await push(ref(db, "plans"), {
-                name: document.getElementById("plan-name-input").value.trim(),
-                price: parseFloat(
-                    document.getElementById("plan-price-input").value) || 0,
-                days: parseInt(
-                    document.getElementById("plan-days-input").value) || 30,
-                multiplier: parseFloat(
-                    document.getElementById("plan-mult-input").value) || 1,
-                icon: document.getElementById("plan-icon-input").value.trim()
-                      || "diamond",
-                created_at: Date.now()
-            });
-            e.target.reset();
-            document.getElementById("plan-mult-input").value = "2";
-            document.getElementById("plan-icon-input").value = "diamond";
-            showToast("Plan save ho gaya!", "success");
-            renderPlans();
-        } catch (err) {
-            showToast("Fail: " + err.message, "error");
-        }
-    });
-
-    document.getElementById("plans-body").addEventListener("click", async (e) => {
-        const btn = e.target.closest(".plan-del");
-        if (!btn) return;
-        if (!confirm("Ye plan delete karein?")) return;
-
-        await remove(ref(db, `plans/${btn.closest("tr").dataset.id}`));
-        showToast("Plan delete ho gaya.", "success");
-        renderPlans();
+        applyFilters();
     });
 
     /* ============================================================
-       MEMBERSHIP REQUESTS (live) - Approve/Reject
+       FILTER LOGIC - user_id, status, date range ke hisaab se
        ============================================================ */
-    onValue(ref(db, "membership_requests"), async (snap) => {
-        const list = [];
-        snap.forEach((c) => list.push({ _id: c.key, ...c.val() }));
-        list.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+    function applyFilters() {
+        const uid    = filterUserid.value.trim().toLowerCase();
+        const status = filterStatus.value;
+        const start  = filterStart.value ? new Date(filterStart.value).getTime() : 0;
+        const end    = filterEnd.value ? new Date(filterEnd.value).getTime() + 86400000 : Infinity;
 
-        // Users ke naam ke liye
-        const usersSnap = await get(ref(db, "users"));
-        const names = {};
-        usersSnap.forEach((c) => {
-            names[c.key] = c.val().name || c.val().email || "?";
+        filteredInvoices = allInvoices.filter((inv) => {
+            // User ID filter
+            if (uid && !(inv.uid || "").toLowerCase().includes(uid)) return false;
+            // Status filter
+            if (status && inv.status !== status) return false;
+            // Date range filter
+            const invDate = inv.created_at || 0;
+            if (invDate < start || invDate > end) return false;
+            return true;
         });
 
-        const tbody = document.getElementById("req-body");
-        if (list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6"
-                class="text-center text-muted">Koi request nahi.</td></tr>`;
+        renderStats();
+        renderTable();
+    }
+
+    /* ============================================================
+       STATS CALCULATE - total, pending, paid, amount
+       ============================================================ */
+    function renderStats() {
+        let totalCount = allInvoices.length;
+        let pendingCount = 0;
+        let paidCount = 0;
+        let totalAmount = 0;
+
+        for (const inv of allInvoices) {
+            if (inv.status === "pending") pendingCount++;
+            if (inv.status === "paid") paidCount++;
+            totalAmount += Number(inv.amount) || 0;
+        }
+
+        document.getElementById("stat-total").textContent = totalCount;
+        document.getElementById("stat-pending").textContent = pendingCount;
+        document.getElementById("stat-paid").textContent = paidCount;
+        document.getElementById("stat-amount").textContent = formatMoney(totalAmount);
+
+        // Filtered count dikhao
+        document.getElementById("filtered-count").textContent = filteredInvoices.length;
+    }
+
+    /* ============================================================
+       TABLE RENDER - filtered invoices dikhao
+       ============================================================ */
+    function renderTable() {
+        if (filteredInvoices.length === 0) {
+            invoicesBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">
+                Koi invoice nahi mila filters ke hisaab se.</td></tr>`;
             return;
         }
 
-        tbody.innerHTML = list.map((r) => `
-            <tr>
-                <td>${escapeHtml(names[r.uid] || r.email || "Unknown")}</td>
-                <td>${escapeHtml(r.plan_name)}</td>
-                <td>${formatMoney(r.price)}</td>
-                <td>${formatDate(r.created_at)}</td>
-                <td>${r.status === "approved"
-                        ? '<span class="label label-success">Approved</span>'
-                        : r.status === "rejected"
-                            ? '<span class="label label-danger">Rejected</span>'
-                            : '<span class="label label-warning">Pending</span>'}
+        invoicesBody.innerHTML = filteredInvoices.map((inv) => {
+            // Status badge
+            let statusLabel;
+            switch (inv.status) {
+                case "paid":
+                    statusLabel = '<span class="label label-success">Paid</span>';
+                    break;
+                case "pending":
+                    statusLabel = '<span class="label label-warning">Pending</span>';
+                    break;
+                case "overdue":
+                    statusLabel = '<span class="label label-danger">Overdue</span>';
+                    break;
+                case "cancelled":
+                    statusLabel = '<span class="label label-default">Cancelled</span>';
+                    break;
+                default:
+                    statusLabel = '<span class="label label-info">Unknown</span>';
+            }
+
+            // Invoice ID chota dikhao (agar lamba hai to)
+            const shortId = inv.id.length > 16
+                ? inv.id.substring(0, 16) + "..."
+                : inv.id;
+
+            return `<tr>
+                <td><small class="text-muted" title="${escapeHtml(inv.id)}">${escapeHtml(shortId)}</small></td>
+                <td>
+                    <b>${escapeHtml(inv.user_name || inv.name || "Unknown")}</b><br>
+                    <small class="text-muted">${escapeHtml(inv.user_email || inv.email || "")}</small>
+                    <br><code>${escapeHtml(inv.uid || "")}</code>
                 </td>
-                <td>${r.status === "pending" ? `
-                    <button class="btn btn-success btn-xs mr-approve"
-                            data-id="${r._id}" data-uid="${r.uid}"
-                            data-plan="${r.plan_id}" data-planname="${escapeHtml(r.plan_name)}"
-                            data-days="${r.days}">
-                        <i class="fa fa-check"></i> Approve</button>
-                    <button class="btn btn-danger btn-xs mr-reject"
-                            data-id="${r._id}">
-                        <i class="fa fa-times"></i> Reject</button>`
-                    : '<small class="text-muted">-</small>'}
+                <td style="font-weight:700">${formatMoney(inv.amount)}</td>
+                <td>${escapeHtml(inv.type || "-")}</td>
+                <td>${statusLabel}</td>
+                <td>
+                    ${formatDate(inv.created_at)}
+                    ${inv.due_date ? '<br><small class="text-muted">Due: ' + formatDate(inv.due_date) + '</small>' : ''}
+                    ${inv.paid_at ? '<br><small class="text-muted">Paid: ' + formatDate(inv.paid_at) + '</small>' : ''}
                 </td>
-            </tr>`).join("");
+            </tr>`;
+        }).join("");
+    }
+
+    /* ============================================================
+       FILTER BUTTON HANDLERS
+       ============================================================ */
+    document.getElementById("btn-apply").addEventListener("click", applyFilters);
+
+    document.getElementById("btn-reset").addEventListener("click", () => {
+        filterUserid.value = "";
+        filterStatus.value = "";
+        filterStart.value  = "";
+        filterEnd.value    = "";
+        applyFilters();
     });
 
-    document.getElementById("req-body").addEventListener("click", async (e) => {
-        const appBtn = e.target.closest(".mr-approve");
-        const rejBtn = e.target.closest(".mr-reject");
-        if (!appBtn && !rejBtn) return;
-
-        /* ---------- APPROVE: membership activate ---------- */
-        if (appBtn) {
-            const uid = appBtn.dataset.uid;
-            const expiresAt = Date.now() +
-                (parseInt(appBtn.dataset.days) || 30) * 86400000;
-
-            if (!confirm(`${appBtn.dataset.planname} activate karein ` +
-                `${formatDate(expiresAt)} tak?`)) return;
-
-            try {
-                // User ko membership de do
-                await update(ref(db, `users/${uid}/membership`), {
-                    plan_id: appBtn.dataset.plan,
-                    name: appBtn.dataset.planname,
-                    multiplier: null,   // go.html plan node se padhega
-                    expires_at: expiresAt
-                });
-                // Request approved mark karo
-                await update(ref(db, `membership_requests/${appBtn.dataset.id}`),
-                    { status: "approved", processed_at: Date.now() });
-
-                showToast("Membership activate ho gayi!", "success");
-            } catch (err) {
-                showToast("Fail: " + err.message, "error");
-            }
-        }
-
-        /* ---------- REJECT ---------- */
-        if (rejBtn) {
-            if (!confirm("Request reject karein?")) return;
-            await update(ref(db, `membership_requests/${rejBtn.dataset.id}`),
-                { status: "rejected", processed_at: Date.now() });
-            showToast("Reject ho gaya.", "warning");
-        }
+    // Enter key se bhi filter ho jaye
+    filterUserid.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") applyFilters();
     });
 </script>
 

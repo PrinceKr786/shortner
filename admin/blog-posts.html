@@ -1,27 +1,15 @@
-﻿<!DOCTYPE html>
-<!-- ============================================================
-     FILE   : admin/links.html
-     KAAM   : ALL LINKS MANAGEMENT - AdLinkFly ke admin Links
-              page jaisa:
-                - Site ki SAARI short links ki table
-                - Search (alias/title/url)
-                - Link disable/enable karna
-                - Link delete karna
-                - Owner ka naam dikhana
-     ============================================================ -->
+<!-- FILE:/KAAM: BLOG POSTS - Admin blog posts manage karta hai: list, add, edit, delete -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>All Links - Shortify CP</title>
+    <title>Blog Posts - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
-
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
-    <!-- Inline skin-black CSS (GitHub Pages fix) -->
     <style>
         .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
         .skin-black .main-header .navbar .nav>li>a{color:#333}
@@ -44,26 +32,18 @@
     <link rel="stylesheet" href="../theme/css/app.css">
     <link rel="icon" href="../favicon.ico">
 </head>
-
 <body class="hold-transition skin-black sidebar-mini">
 <div class="wrapper">
-
-    <!-- ==================== MAIN HEADER ==================== -->
     <header class="main-header">
         <a href="dashboard.html" class="logo">
             <span class="logo-mini"><b>S</b>CP</span>
             <span class="logo-lg"><b>Shortify</b> CP</span>
         </a>
-
         <nav class="navbar navbar-static-top" role="navigation">
-            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
-               role="button"><span class="sr-only">Toggle navigation</span></a>
-
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"><span class="sr-only">Toggle navigation</span></a>
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    <li><a href="../index.html" target="_blank">
-                        <i class="fa fa-globe"></i> View Site</a></li>
-
+                    <li><a href="../index.html" target="_blank"><i class="fa fa-globe"></i> View Site</a></li>
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="" id="header-avatar" class="user-image" alt="">
@@ -77,8 +57,8 @@
                             </li>
                             <li class="user-footer">
                                 <div class="pull-right">
-                                    <a href="#" id="logout-btn"
-                                       class="btn btn-default btn-flat">Log out</a></div>
+                                    <a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a>
+                                </div>
                             </li>
                         </ul>
                     </li>
@@ -87,7 +67,6 @@
         </nav>
     </header>
 
-    <!-- ==================== MAIN SIDEBAR ==================== -->
     <aside class="main-sidebar">
         <section class="sidebar">
             <br>
@@ -104,11 +83,11 @@
                     </ul>
                 </li>
 
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li class="active"><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
                         <li><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
                         <li><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
                     </ul>
@@ -134,11 +113,11 @@
 
                 <li><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
 
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-pencil"></i> <span>Blog</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li class="active"><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
                         <li><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
                     </ul>
                 </li>
@@ -175,47 +154,35 @@
                 </li>
 
                 <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
-</ul>
+            </ul>
         </section>
     </aside>
 
-    <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>All Links <small id="links-count-label">0 total</small></h1>
+            <h1>Blog Posts <small>Saare blog posts yahan dikhte hain</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">All Links</li>
+                <li class="active">Blog Posts</li>
             </ol>
         </section>
-
         <section class="content">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-link"></i> Short Links</h3>
-                    <div class="box-tools" style="width:240px">
-                        <input type="text" class="form-control input-sm"
-                               id="search-input"
-                               placeholder="Alias / URL / owner search...">
-                    </div>
+                    <h3 class="box-title"><i class="fa fa-list"></i> Saare Blog Posts</h3>
+                    <a href="add-post.html" class="btn btn-primary btn-flat pull-right">
+                        <i class="fa fa-plus"></i> Naya Post Banao
+                    </a>
                 </div>
-
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th style="width:110px">Alias</th>
-                                <th>Destination</th>
-                                <th>Owner</th>
-                                <th>Type</th>
-                                <th>Clicks</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th style="width:120px">Actions</th>
+                                <th>ID</th><th>Title</th><th>Slug</th><th>Published</th><th>Created</th><th style="width:120px">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="links-body">
-                            <tr><td colspan="8" class="text-center">Loading...</td></tr>
+                        <tbody id="posts-body">
+                            <tr><td colspan="6" class="text-center text-muted">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -230,157 +197,59 @@
     <div class="control-sidebar-bg"></div>
 </div>
 
-
 <script src="../vendor/jquery.min.js"></script>
 <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../vendor/dashboard/js/app.min.js"></script>
-
 <script type="module">
     import { db } from "./js/firebase-config.js";
-    import {
-        requireAdmin, fillAdminHeader, wireLogout,
-        showToast, escapeHtml, formatDate, formatNumber, SITE_URL
-    } from "./js/app.js";
-    import { ref, get, update, remove }
-        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { requireAdmin, fillAdminHeader, wireLogout, showToast, escapeHtml, formatDate } from "./js/app.js";
+    import { ref, get, push, set, remove, onValue, off } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
-    let allLinks = [];
-
     /* ============================================================
-       LINKS + USERS LOAD KARO (owner naam ke liye users chahiye)
+       POSTS LIST - Firebase se posts load karo
        ============================================================ */
-    const [linksSnap, usersSnap] = await Promise.all([
-        get(ref(db, "aliases")),
-        get(ref(db, "users"))
-    ]);
-
-    const userNameMap = {};
-    if (usersSnap.exists()) {
-        usersSnap.forEach((c) => {
-            const u = c.val();
-            userNameMap[c.key] = u.name || u.email || "Unknown";
-        });
-    }
-
-    if (linksSnap.exists()) {
-        linksSnap.forEach((c) => {
-            allLinks.push({ alias: c.key, ...c.val() });
-        });
-    }
-    // Naye links pehle
-    allLinks.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
-
-    document.getElementById("links-count-label").textContent =
-        `${formatNumber(allLinks.length)} total`;
-
-    /* ============================================================
-       TABLE RENDER
-       ============================================================ */
-    function render(filter = "") {
-        const f = filter.toLowerCase();
-        const rows = allLinks.filter(l =>
-            !f ||
-            l.alias.toLowerCase().includes(f) ||
-            (l.url || "").toLowerCase().includes(f) ||
-            (l.title || "").toLowerCase().includes(f) ||
-            (userNameMap[l.uid] || "").toLowerCase().includes(f));
-
-        const tbody = document.getElementById("links-body");
-
-        if (rows.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">
-                ${f ? "Koi match nahi mila." : "Abhi koi link nahi bana."}</td></tr>`;
+    function renderPosts(snap) {
+        const tbody = document.getElementById("posts-body");
+        if (!snap.exists()) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">Abhi koi post nahi.</td></tr>`;
             return;
         }
-
-        tbody.innerHTML = rows.map((l) => {
-            const typeLabel = {
-                interstitial: '<span class="label label-primary">Interstitial</span>',
-                banner:       '<span class="label label-info">Banner</span>',
-                none:         '<span class="label label-default">No Ads</span>'
-            }[l.ad_type] || '<span class="label label-default">-</span>';
-
-            return `<tr data-alias="${escapeHtml(l.alias)}">
-                <td><b>${escapeHtml(l.alias)}</b></td>
-                <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;
-                           white-space:nowrap"
-                    title="${escapeHtml(l.url)}">${escapeHtml(l.title || l.url)}</td>
-                <td>${escapeHtml(userNameMap[l.uid] ||
-                        (l.uid === "guest" ? "Guest" : "Unknown"))}</td>
-                <td>${typeLabel}</td>
-                <td>${formatNumber(l.clicks)}</td>
-                <td>${formatDate(l.created_at)}</td>
-                <td>${l.status === "hidden"
-                    ? '<span class="label label-danger">Hidden</span>'
-                    : '<span class="label label-success">Active</span>'}</td>
+        let rows = "";
+        snap.forEach((c) => {
+            const p = c.val();
+            rows += `<tr data-id="${c.key}">
+                <td>${escapeHtml(c.key.substring(0, 8))}</td>
+                <td>${escapeHtml(p.title || "")}</td>
+                <td><code>${escapeHtml(p.slug || "")}</code></td>
+                <td>${p.published ? '<span class="label label-success">Haan</span>' : '<span class="label label-default">Nahi</span>'}</td>
+                <td>${formatDate(p.created_at)}</td>
                 <td>
-                    <a class="btn btn-default btn-xs" target="_blank"
-                       href="${SITE_URL}#${l.alias}" title="Open short link">
-                        <i class="fa fa-external-link"></i></a>
-                    <button class="btn btn-warning btn-xs act-hide"
-                            title="${l.status === "hidden" ? "Show" : "Hide"}">
-                        <i class="fa ${l.status === "hidden"
-                            ? "fa-eye" : "fa-eye-slash"}"></i></button>
-                    <button class="btn btn-danger btn-xs act-delete"
-                            title="Delete forever">
-                        <i class="fa fa-trash"></i></button>
+                    <a href="edit-post.html?id=${c.key}" class="btn btn-info btn-xs" title="Edit"><i class="fa fa-edit"></i></a>
+                    <button class="btn btn-danger btn-xs post-del" data-id="${c.key}" title="Delete"><i class="fa fa-trash"></i></button>
                 </td>
             </tr>`;
-        }).join("");
+        });
+        tbody.innerHTML = rows;
     }
 
-    render();
-    document.getElementById("search-input").addEventListener("input", (e) => {
-        render(e.target.value.trim());
-    });
+    const postsRef = ref(db, "posts");
+    onValue(postsRef, renderPosts);
 
-    /* ============================================================
-       ACTIONS
-       ============================================================ */
-    document.getElementById("links-body").addEventListener("click", async (e) => {
-        const btn = e.target.closest("button");
+    document.getElementById("posts-body").addEventListener("click", async (e) => {
+        const btn = e.target.closest(".post-del");
         if (!btn) return;
-
-        const alias = btn.closest("tr").dataset.alias;
-        const link = allLinks.find(l => l.alias === alias);
-        if (!link) return;
-
-        /* ---------- HIDE / SHOW ---------- */
-        if (btn.classList.contains("act-hide")) {
-            const newStatus = link.status === "hidden" ? "active" : "hidden";
-
-            try {
-                await update(ref(db, `aliases/${alias}`), { status: newStatus });
-                link.status = newStatus;
-                showToast(newStatus === "hidden"
-                    ? "Link hide kar di." : "Link wapas live hai.", "success");
-                render(document.getElementById("search-input").value.trim());
-            } catch (err) {
-                showToast("Fail: " + err.message, "error");
-            }
-        }
-
-        /* ---------- DELETE ---------- */
-        if (btn.classList.contains("act-delete")) {
-            if (!confirm(`"${alias}" ko HAMESHA ke liye delete karein?`)) return;
-
-            try {
-                await remove(ref(db, `aliases/${alias}`));
-                allLinks = allLinks.filter(l => l.alias !== alias);
-                document.getElementById("links-count-label").textContent =
-                    `${formatNumber(allLinks.length)} total`;
-                showToast("Link delete ho gayi.", "success");
-                render(document.getElementById("search-input").value.trim());
-            } catch (err) {
-                showToast("Fail: " + err.message, "error");
-            }
+        if (!confirm("Ye post delete karein?")) return;
+        try {
+            await remove(ref(db, `posts/${btn.dataset.id}`));
+            showToast("Post delete ho gaya.", "success");
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
         }
     });
 </script>
-
 </body>
 </html>

@@ -1,17 +1,14 @@
 ﻿<!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/plans.html
-     KAAM   : MEMBERSHIP PLANS - AdLinkFly ke "Membership Plans"
-              jaisa. Admin yahan paid plans banata hai:
-                - Plan ka naam/price/days
-                - Rate Multiplier (jaise 2.0 = double CPM)
-              User side se request aane pe admin approve karta hai
-              (withdrawals.html jaisa flow membership_requests me).
+     FILE   : admin/payment-methods.html
+     KAAM   : PAYMENT METHODS - Withdrawal ke payment methods manage karo.
+              Har method ka naam, status, minimum amount, fee sab yahan se.
+              Data Firebase "settings/payment_methods" path pe save hota hai.
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Membership Plans - Shortify CP</title>
+    <title>Payment Methods - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -32,7 +29,7 @@
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
-        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
         .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
         .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
         .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
@@ -122,7 +119,7 @@
 
                 <li><a href="payout-rates.html"><i class="fa fa-calculator"></i> <span>Payout Rates</span></a></li>
 
-                <li class="active"><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
+                <li><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
 
                 <li><a href="ads.html"><i class="fa fa-bullhorn"></i> <span>Advertising</span>
                     <small class="label pull-right bg-yellow" id="menu-ads-badge" style="display:none">0</small></a></li>
@@ -160,14 +157,14 @@
                     </ul>
                 </li>
 
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-cogs"></i> <span>Settings</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                         <li><a href="settings.html"><i class="fa fa-circle-o"></i> General</a></li>
                         <li><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
                         <li><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
-                        <li><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li class="active"><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
                         <li><a href="menu-manager.html"><i class="fa fa-circle-o"></i> Menu Manager</a></li>
                         <li><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
                     </ul>
@@ -181,108 +178,91 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Membership Plans <small>Paid subscriptions</small></h1>
+            <h1>Payment Methods <small>Withdrawal ke liye payment options manage karo</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Membership Plans</li>
+                <li><a href="settings.html">Settings</a></li>
+                <li class="active">Payment Methods</li>
             </ol>
         </section>
 
         <section class="content">
 
-            <!-- ======== ADD PLAN BOX ======== -->
+            <!-- ======== EXISTING METHODS TABLE ======== -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-plus-circle"></i>
-                        Naya Plan Banao</h3>
-                </div>
-
-                <form id="plan-form">
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-3 form-group">
-                                <label>Plan Name</label>
-                                <input type="text" class="form-control"
-                                       id="plan-name-input" maxlength="30"
-                                       placeholder="e.g. Gold Member" required>
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Price (&#8377;)</label>
-                                <input type="number" step="0.01" min="0"
-                                       class="form-control" id="plan-price-input"
-                                       placeholder="199" required>
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Days Valid</label>
-                                <input type="number" min="1"
-                                       class="form-control" id="plan-days-input"
-                                       placeholder="30" required>
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Rate Multiplier</label>
-                                <input type="number" step="0.1" min="0.1"
-                                       class="form-control" id="plan-mult-input"
-                                       placeholder="2" value="2" required>
-                                <p class="help-block">2 = double CPM</p>
-                            </div>
-                            <div class="col-sm-3 form-group">
-                                <label>Icon (Font Awesome)</label>
-                                <input type="text" class="form-control"
-                                       id="plan-icon-input" placeholder="diamond"
-                                       value="diamond">
-                                <p class="help-block">fa fa-XXX</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary btn-flat">
-                            <i class="fa fa-save"></i> Save Plan</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- ======== PLANS LIST ======== -->
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-diamond"></i> Saare Plans</h3>
-                </div>
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th>Plan</th><th>Price</th><th>Validity</th>
-                                <th>Multiplier</th><th style="width:90px">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="plans-body">
-                            <tr><td colspan="5" class="text-center text-muted">
-                                Abhi koi plan nahi.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ======== PENDING REQUESTS ======== -->
-            <div class="box box-warning">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-clock-o"></i>
-                        Membership Requests</h3>
-                    <small class="pull-right" style="padding-top:6px">
-                        User paisa bhej ke request bhejta hai - verify karke
-                        Approve dabao</small>
+                    <h3 class="box-title"><i class="fa fa-credit-card"></i>
+                        Existing Payment Methods</h3>
                 </div>
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <thead>
-                            <tr><th>User</th><th>Plan</th><th>Price</th>
-                                <th>Date</th><th>Status</th>
-                                <th style="width:200px">Actions</th></tr>
+                            <tr>
+                                <th>Method Name</th>
+                                <th>Status</th>
+                                <th>Minimum Amount</th>
+                                <th>Fee</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
-                        <tbody id="req-body">
-                            <tr><td colspan="6" class="text-center text-muted">
-                                Loading...</td></tr>
+                        <tbody id="methods-table-body">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">
+                                    Loading...
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- ======== ADD NEW METHOD ======== -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-plus-circle"></i>
+                        Naya Payment Method Jodo</h3>
+                </div>
+                <div class="box-body">
+                    <form id="add-method-form">
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label>Method Ka Naam</label>
+                                <input type="text" class="form-control"
+                                       id="pm-name" required
+                                       placeholder="e.g. PayPal, Bank Transfer">
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label>Status</label>
+                                <select class="form-control" id="pm-status">
+                                    <option value="enabled">Enabled - active hai</option>
+                                    <option value="disabled">Disabled - band hai</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label>Minimum Amount</label>
+                                <input type="number" class="form-control"
+                                       id="pm-minimum" min="0" step="0.01"
+                                       placeholder="e.g. 5" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label>Fee (per withdrawal)</label>
+                                <input type="number" class="form-control"
+                                       id="pm-fee" min="0" step="0.01"
+                                       placeholder="e.g. 1" required>
+                            </div>
+                            <div class="col-sm-8 form-group" style="margin-bottom:0">
+                                <label>Description</label>
+                                <textarea class="form-control" id="pm-description"
+                                          rows="2" maxlength="200"
+                                          placeholder="Payment method ke baare me detail..."></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-flat"
+                                id="add-btn">
+                            <i class="fa fa-plus"></i> Method Jodo</button>
+                    </form>
                 </div>
             </div>
 
@@ -304,170 +284,141 @@
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireAdmin, fillAdminHeader, wireLogout,
-        showToast, escapeHtml, formatDate, formatMoney
+        requireAdmin, fillAdminHeader, wireLogout, showToast
     } from "./js/app.js";
-    import { ref, get, push, set, update, remove, onValue }
+    import { ref, get, set, push, remove }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+    // Admin verify karo, header fill karo, logout wire karo
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
     /* ============================================================
-       PLANS CRUD
+       PAYMENT METHODS LOAD KARO (settings/payment_methods path se)
        ============================================================ */
-    async function renderPlans() {
-        const snap = await get(ref(db, "plans"));
-        const tbody = document.getElementById("plans-body");
+    let methodsData = {};
 
-        if (!snap.exists()) {
-            tbody.innerHTML = `<tr><td colspan="5"
-                class="text-center text-muted">Abhi koi plan nahi bana.</td></tr>`;
+    async function loadMethods() {
+        const snap = await get(ref(db, "settings/payment_methods"));
+        methodsData = snap.val() || {};
+        renderTable();
+    }
+
+    /* ============================================================
+       TABLE ME METHODS DIKHAO
+       ============================================================ */
+    function renderTable() {
+        const tbody = document.getElementById("methods-table-body");
+        const keys = Object.keys(methodsData);
+
+        if (keys.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">' +
+                'Koi payment method nahi hai. Naya jodo!</td></tr>';
             return;
         }
 
-        let rows = "";
-        snap.forEach((c) => {
-            const p = c.val();
-            rows += `<tr data-id="${c.key}">
-                <td><i class="fa fa-${escapeHtml(p.icon || "diamond")} text-yellow"></i>
-                    <b>${escapeHtml(p.name)}</b></td>
-                <td>${formatMoney(p.price)}</td>
-                <td>${Number(p.days)} days</td>
-                <td><span class="label label-success">${p.multiplier}x</span></td>
-                <td><button class="btn btn-danger btn-xs plan-del"
-                    title="Delete"><i class="fa fa-trash"></i></button></td>
-            </tr>`;
+        tbody.innerHTML = "";
+        keys.forEach((key) => {
+            const m = methodsData[key];
+            const tr = document.createElement("tr");
+            tr.innerHTML =
+                '<td><b>' + escHtml(m.name || "Unnamed") + '</b></td>' +
+                '<td><span class="label label-' +
+                (m.status === "enabled" ? "success" : "danger") + '">' +
+                (m.status === "enabled" ? "Enabled" : "Disabled") +
+                '</span></td>' +
+                '<td>' + escHtml(String(m.minimum_amount || 0)) + '</td>' +
+                '<td>' + escHtml(String(m.fee || 0)) + '</td>' +
+                '<td>' +
+                    '<button class="btn btn-xs btn-warning edit-btn" data-key="' + key + '">' +
+                    '<i class="fa fa-edit"></i></button> ' +
+                    '<button class="btn btn-xs btn-danger delete-btn" data-key="' + key + '">' +
+                    '<i class="fa fa-trash"></i></button>' +
+                '</td>';
+            tbody.appendChild(tr);
         });
-        tbody.innerHTML = rows;
-    }
-    renderPlans();
 
-    document.getElementById("plan-form").addEventListener("submit", async (e) => {
+        // Delete button click handler - method hatao
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+            btn.addEventListener("click", async () => {
+                const key = btn.getAttribute("data-key");
+                if (!confirm("Kya tumhe ye payment method delete karna hai?")) return;
+                try {
+                    await remove(ref(db, "settings/payment_methods/" + key));
+                    showToast("Payment method delete ho gaya!", "success");
+                    await loadMethods();
+                } catch (err) {
+                    showToast("Fail: " + err.message, "error");
+                }
+            });
+        });
+
+        // Edit button click handler - status toggle karo
+        document.querySelectorAll(".edit-btn").forEach((btn) => {
+            btn.addEventListener("click", async () => {
+                const key = btn.getAttribute("data-key");
+                const m = methodsData[key];
+                const newStatus = m.status === "enabled" ? "disabled" : "enabled";
+                try {
+                    await set(ref(db, "settings/payment_methods/" + key + "/status"), newStatus);
+                    showToast("Status update ho gaya!", "success");
+                    await loadMethods();
+                } catch (err) {
+                    showToast("Fail: " + err.message, "error");
+                }
+            });
+        });
+    }
+
+    /* ============================================================
+       NAYA METHOD ADD KARO
+       ============================================================ */
+    document.getElementById("add-method-form").addEventListener("submit", async (e) => {
         e.preventDefault();
 
+        const btn = document.getElementById("add-btn");
+        btn.disabled = true;
+
+        const name = document.getElementById("pm-name").value.trim();
+        const status = document.getElementById("pm-status").value;
+        const minimum = parseFloat(document.getElementById("pm-minimum").value) || 0;
+        const fee = parseFloat(document.getElementById("pm-fee").value) || 0;
+        const description = document.getElementById("pm-description").value.trim();
+
         try {
-            await push(ref(db, "plans"), {
-                name: document.getElementById("plan-name-input").value.trim(),
-                price: parseFloat(
-                    document.getElementById("plan-price-input").value) || 0,
-                days: parseInt(
-                    document.getElementById("plan-days-input").value) || 30,
-                multiplier: parseFloat(
-                    document.getElementById("plan-mult-input").value) || 1,
-                icon: document.getElementById("plan-icon-input").value.trim()
-                      || "diamond",
-                created_at: Date.now()
+            await push(ref(db, "settings/payment_methods"), {
+                name: name,
+                status: status,
+                minimum_amount: minimum,
+                fee: fee,
+                description: description,
+                created: Date.now()
             });
-            e.target.reset();
-            document.getElementById("plan-mult-input").value = "2";
-            document.getElementById("plan-icon-input").value = "diamond";
-            showToast("Plan save ho gaya!", "success");
-            renderPlans();
+
+            showToast("Naya payment method add ho gaya!", "success");
+            // Form reset karo
+            document.getElementById("add-method-form").reset();
+            document.getElementById("pm-status").value = "enabled";
+            await loadMethods();
         } catch (err) {
             showToast("Fail: " + err.message, "error");
+        } finally {
+            btn.disabled = false;
         }
-    });
-
-    document.getElementById("plans-body").addEventListener("click", async (e) => {
-        const btn = e.target.closest(".plan-del");
-        if (!btn) return;
-        if (!confirm("Ye plan delete karein?")) return;
-
-        await remove(ref(db, `plans/${btn.closest("tr").dataset.id}`));
-        showToast("Plan delete ho gaya.", "success");
-        renderPlans();
     });
 
     /* ============================================================
-       MEMBERSHIP REQUESTS (live) - Approve/Reject
+       HELPER - XSS safe HTML banana
        ============================================================ */
-    onValue(ref(db, "membership_requests"), async (snap) => {
-        const list = [];
-        snap.forEach((c) => list.push({ _id: c.key, ...c.val() }));
-        list.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+    function escHtml(str) {
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+    }
 
-        // Users ke naam ke liye
-        const usersSnap = await get(ref(db, "users"));
-        const names = {};
-        usersSnap.forEach((c) => {
-            names[c.key] = c.val().name || c.val().email || "?";
-        });
-
-        const tbody = document.getElementById("req-body");
-        if (list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6"
-                class="text-center text-muted">Koi request nahi.</td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = list.map((r) => `
-            <tr>
-                <td>${escapeHtml(names[r.uid] || r.email || "Unknown")}</td>
-                <td>${escapeHtml(r.plan_name)}</td>
-                <td>${formatMoney(r.price)}</td>
-                <td>${formatDate(r.created_at)}</td>
-                <td>${r.status === "approved"
-                        ? '<span class="label label-success">Approved</span>'
-                        : r.status === "rejected"
-                            ? '<span class="label label-danger">Rejected</span>'
-                            : '<span class="label label-warning">Pending</span>'}
-                </td>
-                <td>${r.status === "pending" ? `
-                    <button class="btn btn-success btn-xs mr-approve"
-                            data-id="${r._id}" data-uid="${r.uid}"
-                            data-plan="${r.plan_id}" data-planname="${escapeHtml(r.plan_name)}"
-                            data-days="${r.days}">
-                        <i class="fa fa-check"></i> Approve</button>
-                    <button class="btn btn-danger btn-xs mr-reject"
-                            data-id="${r._id}">
-                        <i class="fa fa-times"></i> Reject</button>`
-                    : '<small class="text-muted">-</small>'}
-                </td>
-            </tr>`).join("");
-    });
-
-    document.getElementById("req-body").addEventListener("click", async (e) => {
-        const appBtn = e.target.closest(".mr-approve");
-        const rejBtn = e.target.closest(".mr-reject");
-        if (!appBtn && !rejBtn) return;
-
-        /* ---------- APPROVE: membership activate ---------- */
-        if (appBtn) {
-            const uid = appBtn.dataset.uid;
-            const expiresAt = Date.now() +
-                (parseInt(appBtn.dataset.days) || 30) * 86400000;
-
-            if (!confirm(`${appBtn.dataset.planname} activate karein ` +
-                `${formatDate(expiresAt)} tak?`)) return;
-
-            try {
-                // User ko membership de do
-                await update(ref(db, `users/${uid}/membership`), {
-                    plan_id: appBtn.dataset.plan,
-                    name: appBtn.dataset.planname,
-                    multiplier: null,   // go.html plan node se padhega
-                    expires_at: expiresAt
-                });
-                // Request approved mark karo
-                await update(ref(db, `membership_requests/${appBtn.dataset.id}`),
-                    { status: "approved", processed_at: Date.now() });
-
-                showToast("Membership activate ho gayi!", "success");
-            } catch (err) {
-                showToast("Fail: " + err.message, "error");
-            }
-        }
-
-        /* ---------- REJECT ---------- */
-        if (rejBtn) {
-            if (!confirm("Request reject karein?")) return;
-            await update(ref(db, `membership_requests/${rejBtn.dataset.id}`),
-                { status: "rejected", processed_at: Date.now() });
-            showToast("Reject ho gaya.", "warning");
-        }
-    });
+    // Shuru me methods load karo
+    await loadMethods();
 </script>
 
 </body>

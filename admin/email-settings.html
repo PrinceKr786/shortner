@@ -1,24 +1,14 @@
 ﻿<!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/ads.html
-     KAAM   : ADVERTISING MARKETPLACE - AdLinkFly ke "Advertising"
-              module jaisa:
-                - Advertisers banner campaign banate hain
-                  (user/advertise.html se)
-                - Yahan Admin Approve/Reject karta hai
-                - Active ads go.html ke banner slot me rotate hote
-                  hain (impressions count hota hai, package pura ho
-                  to status khud "completed" ho jata hai)
-
-     DB NODE: ads/{adId}
-       title, image_url, target_url, uid, advertiser_email,
-       package_views, served_views,
-       status(pending|active|rejected|completed), created_at...
+     FILE   : admin/email-settings.html
+     KAAM   : EMAIL SETTINGS - SMTP server configure karo yahan se.
+              Host, port, username, password sab yahan se set hota hai.
+              Data Firebase "settings/options" path pe save hota hai.
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Advertising - Shortify CP</title>
+    <title>Email Settings - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -131,7 +121,7 @@
 
                 <li><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
 
-                <li class="active"><a href="ads.html"><i class="fa fa-bullhorn"></i> <span>Advertising</span>
+                <li><a href="ads.html"><i class="fa fa-bullhorn"></i> <span>Advertising</span>
                     <small class="label pull-right bg-yellow" id="menu-ads-badge" style="display:none">0</small></a></li>
 
                 <li><a href="go-settings.html"><i class="fa fa-cog"></i> <span>Go Page Ads</span></a></li>
@@ -167,13 +157,13 @@
                     </ul>
                 </li>
 
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-cogs"></i> <span>Settings</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                         <li><a href="settings.html"><i class="fa fa-circle-o"></i> General</a></li>
                         <li><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
-                        <li><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class="active"><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
                         <li><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
                         <li><a href="menu-manager.html"><i class="fa fa-circle-o"></i> Menu Manager</a></li>
                         <li><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
@@ -188,79 +178,111 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Advertising <small>Banner campaigns</small></h1>
+            <h1>Email Settings <small>SMTP server configure karo</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Advertising</li>
+                <li><a href="settings.html">Settings</a></li>
+                <li class="active">Email Settings</li>
             </ol>
         </section>
 
         <section class="content">
 
-            <!-- ======== INFO BOXES ======== -->
-            <div class="row">
-                <div class="col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-yellow"><i class="fa fa-hourglass-half"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Pending Ads</span>
-                            <span class="info-box-number" id="stat-pending">0</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-green"><i class="fa fa-play-circle"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Active Campaigns</span>
-                            <span class="info-box-number" id="stat-active">0</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-aqua"><i class="fa fa-eye"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Total Impressions Served</span>
-                            <span class="info-box-number" id="stat-impressions">0</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-teal" style="background:#39cccc">
-                            <i class="fa fa-shopping-cart"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Views Sold (revenue potential)</span>
-                            <span class="info-box-number" id="stat-sold">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <form id="email-form">
 
-            <!-- ======== CAMPAIGNS TABLE ======== -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-bullhorn"></i>
-                        Banner Campaigns</h3>
+                <!-- ======== SMTP SERVER ======== -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-envelope"></i>
+                            SMTP Server Details</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label>SMTP Host</label>
+                                <input type="text" class="form-control"
+                                       id="em-host"
+                                       placeholder="smtp.gmail.com">
+                                <p class="help-block">Gmail ke liye smtp.gmail.com,
+                                   Outlook ke liye smtp-mail.outlook.com</p>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label>SMTP Port</label>
+                                <input type="text" class="form-control"
+                                       id="em-port" placeholder="587">
+                                <p class="help-block">SSL ke liye 465, TLS ke liye 587</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label>Username</label>
+                                <input type="text" class="form-control"
+                                       id="em-username"
+                                       placeholder="your-email@gmail.com">
+                            </div>
+                            <div class="col-sm-6 form-group" style="margin-bottom:0">
+                                <label>Password</label>
+                                <input type="password" class="form-control"
+                                       id="em-password"
+                                       placeholder="App password dalo (normal password nahi)">
+                                <p class="help-block">Gmail me 2FA on ho to
+                                   App Password generate karo.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th>Creative (preview)</th>
-                                <th>Title / Advertiser</th>
-                                <th>Progress</th>
-                                <th>Status</th>
-                                <th style="width:210px">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ads-body">
-                            <tr><td colspan="5" class="text-center">Loading...</td></tr>
-                        </tbody>
-                    </table>
+
+                <!-- ======== FROM ADDRESS ======== -->
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-paper-plane"></i>
+                            From Address</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label>From Email Address</label>
+                                <input type="email" class="form-control"
+                                       id="em-from-address"
+                                       placeholder="noreply@shortify.com">
+                            </div>
+                            <div class="col-sm-6 form-group" style="margin-bottom:0">
+                                <label>From Name</label>
+                                <input type="text" class="form-control"
+                                       id="em-from-name"
+                                       placeholder="Shortify Team"
+                                       maxlength="50">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <!-- ======== ENCRYPTION ======== -->
+                <div class="box box-warning">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-lock"></i>
+                            Encryption</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group" style="margin-bottom:0">
+                            <label>Email Encryption</label>
+                            <select class="form-control" id="em-encryption">
+                                <option value="none">None - bina encryption</option>
+                                <option value="ssl">SSL</option>
+                                <option value="tls">TLS (recommended)</option>
+                            </select>
+                            <p class="help-block">TLS ya SSL dono chalte hain.
+                               Port 587 = TLS, Port 465 = SSL.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SAVE BUTTON -->
+                <button type="submit" class="btn btn-primary btn-flat"
+                        id="save-btn">
+                    <i class="fa fa-save"></i> Email Settings Save Karo</button>
+
+            </form>
 
         </section>
     </div>
@@ -280,171 +302,63 @@
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireAdmin, fillAdminHeader, wireLogout,
-        showToast, escapeHtml, formatDate, formatNumber
+        requireAdmin, fillAdminHeader, wireLogout, showToast
     } from "./js/app.js";
-    import { ref, onValue, update, remove }
+    import { ref, get, update }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+    // Admin verify karo, header fill karo, logout wire karo
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
     /* ============================================================
-       LIVE ADS LIST + STATS
+       CURRENT VALUES LOAD KARO (settings/options path se)
        ============================================================ */
-    onValue(ref(db, "ads"), (snap) => {
-        const list = [];
-        let pend = 0, active = 0, impressions = 0, sold = 0;
+    const snap = await get(ref(db, "settings/options"));
+    const o = snap.val() || {};
 
-        snap.forEach((c) => {
-            const a = c.val();
-            a._id = c.key;
-            list.push(a);
+    document.getElementById("em-host").value = o.email_host || "";
+    document.getElementById("em-port").value = o.email_port || "";
+    document.getElementById("em-username").value = o.email_username || "";
+    document.getElementById("em-password").value = o.email_password || "";
+    document.getElementById("em-from-address").value = o.email_from_address || "";
+    document.getElementById("em-from-name").value = o.email_from_name || "";
+    document.getElementById("em-encryption").value = o.email_encryption || "tls";
 
-            if (a.status === "pending") pend++;
-            if (a.status === "active") active++;
-            impressions += Number(a.served_views) || 0;
-            sold += Number(a.package_views) || 0;
-        });
-        list.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
-
-        document.getElementById("stat-pending").textContent = pend;
-        document.getElementById("stat-active").textContent = active;
-        document.getElementById("stat-impressions").textContent =
-            formatNumber(impressions);
-        document.getElementById("stat-sold").textContent =
-            formatNumber(sold);
-
-        // Sidebar pending badge
-        const badge = document.getElementById("menu-pending-badge");
-        if (pend > 0) {
-            badge.style.display = "";
-            badge.textContent = pend;
-        } else {
-            badge.style.display = "none";
-        }
-
-        renderTable(list);
-    });
-
-    function renderTable(list) {
-        const tbody = document.getElementById("ads-body");
-
-        if (list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5"
-                class="text-center text-muted">
-                Abhi koi campaign nahi. Advertisers user/advertise.html se
-                campaign banate hain.</td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = list.map((a) => {
-            const pkg = Number(a.package_views) || 1;
-            const served = Number(a.served_views) || 0;
-            const pct = Math.min(100, Math.round((served / pkg) * 100));
-
-            const bar = `<div class="progress progress-xs" style="margin-bottom:4px">
-                    <div class="progress-bar ${pct >= 100 ? "bg-green" : "bg-aqua"}"
-                         style="width:${pct}%"></div></div>
-                <small>${formatNumber(served)} / ${formatNumber(pkg)}
-                       (${pct}%)</small>`;
-
-            const statusLabel =
-                a.status === "active" ? '<span class="label label-success">Active</span>' :
-                a.status === "pending" ? '<span class="label label-warning">Pending</span>' :
-                a.status === "completed" ? '<span class="label label-default">Completed</span>' :
-                '<span class="label label-danger">Rejected</span>';
-
-            return `<tr data-id="${a._id}">
-                <td style="width:180px">
-                    <img src="${escapeHtml(a.image_url)}"
-                         alt="ad" style="max-width:160px;max-height:60px;
-                         border:1px solid #ddd;border-radius:3px;background:#f5f5f5">
-                </td>
-                <td>
-                    <b>${escapeHtml(a.title)}</b><br>
-                    <small class="text-muted">${escapeHtml(a.advertiser_email)}</small><br>
-                    <a href="${escapeHtml(a.target_url)}" target="_blank"
-                       style="font-size:.75rem;word-break:break-all">${escapeHtml(a.target_url)}</a>
-                </td>
-                <td>${bar}</td>
-                <td>${statusLabel}<br>
-                    <small class="text-muted">${formatDate(a.created_at)}</small></td>
-                <td>
-                    ${a.status === "pending" ? `
-                        <button class="btn btn-success btn-xs ad-approve">
-                            <i class="fa fa-check"></i> Approve</button>
-                        <button class="btn btn-danger btn-xs ad-reject">
-                            <i class="fa fa-times"></i> Reject</button>` : ""}
-                    ${(a.status === "active" || a.status === "completed") ? `
-                        <button class="btn btn-warning btn-xs ad-pause"
-                                title="${a.status === "active"
-                                    ? "Pause (reject jaisa, refund concept nahi)"
-                                    : "Wapas chalu karo"}">
-                            <i class="fa ${a.status === "active"
-                                ? "fa-pause" : "fa-play"}"></i></button>` : ""}
-                    <button class="btn btn-danger btn-xs ad-delete"
-                            title="Delete forever">
-                        <i class="fa fa-trash"></i></button>
-                </td>
-            </tr>`;
-        }).join("");
-    }
 
     /* ============================================================
-       ACTIONS
+       SAVE - sab email settings ek update me save karo
        ============================================================ */
-    document.getElementById("ads-body").addEventListener("click", async (e) => {
-        const btn = e.target.closest("button");
-        if (!btn) return;
+    document.getElementById("email-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-        const id = btn.closest("tr").dataset.id;
-        const updates = { processed_at: Date.now() };
+        const btn = document.getElementById("save-btn");
+        btn.disabled = true;
 
-        /* ---------- APPROVE ---------- */
-        if (btn.classList.contains("ad-approve")) {
-            if (!confirm("Campaign approve karein? Ye ab go.html ke banner "
-                + "rotation me dikhna shuru ho jayega.")) return;
-            updates.status = "active";
-            try {
-                await update(ref(db, `ads/${id}`), updates);
-                showToast("Campaign live ho gaya!", "success");
-            } catch (err) { showToast("Fail: " + err.message, "error"); }
-        }
+        try {
+            await update(ref(db, "settings/options"), {
+                email_host:
+                    document.getElementById("em-host").value.trim(),
+                email_port:
+                    document.getElementById("em-port").value.trim(),
+                email_username:
+                    document.getElementById("em-username").value.trim(),
+                email_password:
+                    document.getElementById("em-password").value.trim(),
+                email_from_address:
+                    document.getElementById("em-from-address").value.trim(),
+                email_from_name:
+                    document.getElementById("em-from-name").value.trim(),
+                email_encryption:
+                    document.getElementById("em-encryption").value
+            });
 
-        /* ---------- REJECT ---------- */
-        if (btn.classList.contains("ad-reject")) {
-            if (!confirm("Reject karein?")) return;
-            updates.status = "rejected";
-            try {
-                await update(ref(db, `ads/${id}`), updates);
-                showToast("Reject ho gaya.", "warning");
-            } catch (err) { showToast("Fail: " + err.message, "error"); }
-        }
-
-        /* ---------- PAUSE / RESUME ---------- */
-        if (btn.classList.contains("ad-pause")) {
-            // Current status ulta karo
-            try {
-                const snap = await (await import(
-                    "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")
-                ).get(ref(db, `ads/${id}/status`));
-                const cur = snap.val();
-                updates.status = cur === "active" ? "paused" : "active";
-                await update(ref(db, `ads/${id}`), updates);
-                showToast(updates.status === "active"
-                    ? "Resume kar diya." : "Pause kar diya.", "info");
-            } catch (err) { showToast("Fail: " + err.message, "error"); }
-        }
-
-        /* ---------- DELETE ---------- */
-        if (btn.classList.contains("ad-delete")) {
-            if (!confirm("Campaign HAMESHA ke liye delete karein?")) return;
-            try {
-                await remove(ref(db, `ads/${id}`));
-                showToast("Delete ho gaya.", "success");
-            } catch (err) { showToast("Fail: " + err.message, "error"); }
+            showToast("Email settings save ho gayi!", "success");
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        } finally {
+            btn.disabled = false;
         }
     });
 </script>

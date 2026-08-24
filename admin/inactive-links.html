@@ -1,17 +1,17 @@
 ﻿<!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/plans.html
-     KAAM   : MEMBERSHIP PLANS - AdLinkFly ke "Membership Plans"
-              jaisa. Admin yahan paid plans banata hai:
-                - Plan ka naam/price/days
-                - Rate Multiplier (jaise 2.0 = double CPM)
-              User side se request aane pe admin approve karta hai
-              (withdrawals.html jaisa flow membership_requests me).
-     ============================================================ -->
+     FILE   : admin/inactive-links.html
+     KAAM   : INACTIVE LINKS PAGE - Sirf un links ko dikhata hai
+              jo inactive hain (status == "inactive" ya active == false):
+                - Inactive short links ki table
+                - Search (alias/URL/owner)
+                - Link activate karna (wapas live karo)
+                - Link permanently delete karna
+      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Membership Plans - Shortify CP</title>
+    <title>Inactive Links - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -103,13 +103,13 @@
                     </ul>
                 </li>
 
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                         <li><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
                         <li><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
-                        <li><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                        <li class="active"><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
                     </ul>
                 </li>
 
@@ -122,7 +122,7 @@
 
                 <li><a href="payout-rates.html"><i class="fa fa-calculator"></i> <span>Payout Rates</span></a></li>
 
-                <li class="active"><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
+                <li><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
 
                 <li><a href="ads.html"><i class="fa fa-bullhorn"></i> <span>Advertising</span>
                     <small class="label pull-right bg-yellow" id="menu-ads-badge" style="display:none">0</small></a></li>
@@ -181,111 +181,44 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Membership Plans <small>Paid subscriptions</small></h1>
+            <h1>Inactive Links <small id="links-count-label">0 inactive</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Membership Plans</li>
+                <li class="active">Inactive Links</li>
             </ol>
         </section>
 
         <section class="content">
-
-            <!-- ======== ADD PLAN BOX ======== -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-plus-circle"></i>
-                        Naya Plan Banao</h3>
+                    <h3 class="box-title"><i class="fa fa-pause-circle"></i> Inactive Links</h3>
+                    <div class="box-tools" style="width:240px">
+                        <input type="text" class="form-control input-sm"
+                               id="search-input"
+                               placeholder="Alias / URL / owner search...">
+                    </div>
                 </div>
 
-                <form id="plan-form">
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-3 form-group">
-                                <label>Plan Name</label>
-                                <input type="text" class="form-control"
-                                       id="plan-name-input" maxlength="30"
-                                       placeholder="e.g. Gold Member" required>
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Price (&#8377;)</label>
-                                <input type="number" step="0.01" min="0"
-                                       class="form-control" id="plan-price-input"
-                                       placeholder="199" required>
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Days Valid</label>
-                                <input type="number" min="1"
-                                       class="form-control" id="plan-days-input"
-                                       placeholder="30" required>
-                            </div>
-                            <div class="col-sm-2 form-group">
-                                <label>Rate Multiplier</label>
-                                <input type="number" step="0.1" min="0.1"
-                                       class="form-control" id="plan-mult-input"
-                                       placeholder="2" value="2" required>
-                                <p class="help-block">2 = double CPM</p>
-                            </div>
-                            <div class="col-sm-3 form-group">
-                                <label>Icon (Font Awesome)</label>
-                                <input type="text" class="form-control"
-                                       id="plan-icon-input" placeholder="diamond"
-                                       value="diamond">
-                                <p class="help-block">fa fa-XXX</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary btn-flat">
-                            <i class="fa fa-save"></i> Save Plan</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- ======== PLANS LIST ======== -->
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-diamond"></i> Saare Plans</h3>
-                </div>
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th>Plan</th><th>Price</th><th>Validity</th>
-                                <th>Multiplier</th><th style="width:90px">Actions</th>
+                                <th style="width:60px">ID</th>
+                                <th style="width:110px">Alias</th>
+                                <th>URL</th>
+                                <th>Clicks</th>
+                                <th>Owner</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th style="width:140px">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="plans-body">
-                            <tr><td colspan="5" class="text-center text-muted">
-                                Abhi koi plan nahi.</td></tr>
+                        <tbody id="links-body">
+                            <tr><td colspan="8" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-
-            <!-- ======== PENDING REQUESTS ======== -->
-            <div class="box box-warning">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-clock-o"></i>
-                        Membership Requests</h3>
-                    <small class="pull-right" style="padding-top:6px">
-                        User paisa bhej ke request bhejta hai - verify karke
-                        Approve dabao</small>
-                </div>
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr><th>User</th><th>Plan</th><th>Price</th>
-                                <th>Date</th><th>Status</th>
-                                <th style="width:200px">Actions</th></tr>
-                        </thead>
-                        <tbody id="req-body">
-                            <tr><td colspan="6" class="text-center text-muted">
-                                Loading...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </section>
     </div>
 
@@ -305,167 +238,147 @@
     import { db } from "./js/firebase-config.js";
     import {
         requireAdmin, fillAdminHeader, wireLogout,
-        showToast, escapeHtml, formatDate, formatMoney
+        showToast, escapeHtml, formatDate, formatNumber, SITE_URL
     } from "./js/app.js";
-    import { ref, get, push, set, update, remove, onValue }
+    import { ref, get, update, remove }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+    /* ============================================================
+       ADMIN CHECK — sirf admin access kar sake ye page
+       ============================================================ */
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
-    /* ============================================================
-       PLANS CRUD
-       ============================================================ */
-    async function renderPlans() {
-        const snap = await get(ref(db, "plans"));
-        const tbody = document.getElementById("plans-body");
-
-        if (!snap.exists()) {
-            tbody.innerHTML = `<tr><td colspan="5"
-                class="text-center text-muted">Abhi koi plan nahi bana.</td></tr>`;
-            return;
-        }
-
-        let rows = "";
-        snap.forEach((c) => {
-            const p = c.val();
-            rows += `<tr data-id="${c.key}">
-                <td><i class="fa fa-${escapeHtml(p.icon || "diamond")} text-yellow"></i>
-                    <b>${escapeHtml(p.name)}</b></td>
-                <td>${formatMoney(p.price)}</td>
-                <td>${Number(p.days)} days</td>
-                <td><span class="label label-success">${p.multiplier}x</span></td>
-                <td><button class="btn btn-danger btn-xs plan-del"
-                    title="Delete"><i class="fa fa-trash"></i></button></td>
-            </tr>`;
-        });
-        tbody.innerHTML = rows;
-    }
-    renderPlans();
-
-    document.getElementById("plan-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        try {
-            await push(ref(db, "plans"), {
-                name: document.getElementById("plan-name-input").value.trim(),
-                price: parseFloat(
-                    document.getElementById("plan-price-input").value) || 0,
-                days: parseInt(
-                    document.getElementById("plan-days-input").value) || 30,
-                multiplier: parseFloat(
-                    document.getElementById("plan-mult-input").value) || 1,
-                icon: document.getElementById("plan-icon-input").value.trim()
-                      || "diamond",
-                created_at: Date.now()
-            });
-            e.target.reset();
-            document.getElementById("plan-mult-input").value = "2";
-            document.getElementById("plan-icon-input").value = "diamond";
-            showToast("Plan save ho gaya!", "success");
-            renderPlans();
-        } catch (err) {
-            showToast("Fail: " + err.message, "error");
-        }
-    });
-
-    document.getElementById("plans-body").addEventListener("click", async (e) => {
-        const btn = e.target.closest(".plan-del");
-        if (!btn) return;
-        if (!confirm("Ye plan delete karein?")) return;
-
-        await remove(ref(db, `plans/${btn.closest("tr").dataset.id}`));
-        showToast("Plan delete ho gaya.", "success");
-        renderPlans();
-    });
+    let allLinks = [];
 
     /* ============================================================
-       MEMBERSHIP REQUESTS (live) - Approve/Reject
+       LINKS + USERS LOAD KARO
+       Sirf woh links jo inactive hain (status == "inactive" ya active == false)
+       Owner naam ke liye users chahiye
        ============================================================ */
-    onValue(ref(db, "membership_requests"), async (snap) => {
-        const list = [];
-        snap.forEach((c) => list.push({ _id: c.key, ...c.val() }));
-        list.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+    const [linksSnap, usersSnap] = await Promise.all([
+        get(ref(db, "aliases")),
+        get(ref(db, "users"))
+    ]);
 
-        // Users ke naam ke liye
-        const usersSnap = await get(ref(db, "users"));
-        const names = {};
+    const userNameMap = {};
+    if (usersSnap.exists()) {
         usersSnap.forEach((c) => {
-            names[c.key] = c.val().name || c.val().email || "?";
+            const u = c.val();
+            userNameMap[c.key] = u.name || u.email || "Unknown";
         });
+    }
 
-        const tbody = document.getElementById("req-body");
-        if (list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6"
-                class="text-center text-muted">Koi request nahi.</td></tr>`;
+    if (linksSnap.exists()) {
+        linksSnap.forEach((c) => {
+            const link = c.val();
+            /* Inactive links filter — status field ya active flag dono check karo */
+            if (link.status === "inactive" || link.active === false) {
+                allLinks.push({ alias: c.key, ...link });
+            }
+        });
+    }
+    /* Naye links pehle dikhao — latest created_at upar */
+    allLinks.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+    document.getElementById("links-count-label").textContent =
+        `${formatNumber(allLinks.length)} inactive`;
+
+    /* ============================================================
+       TABLE RENDER
+       ============================================================ */
+    function render(filter = "") {
+        const f = filter.toLowerCase();
+        const rows = allLinks.filter(l =>
+            !f ||
+            l.alias.toLowerCase().includes(f) ||
+            (l.url || "").toLowerCase().includes(f) ||
+            (l.title || "").toLowerCase().includes(f) ||
+            (userNameMap[l.uid] || "").toLowerCase().includes(f));
+
+        const tbody = document.getElementById("links-body");
+
+        if (rows.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">
+                ${f ? "Koi match nahi mila." : "Koi inactive link nahi hai."}</td></tr>`;
             return;
         }
 
-        tbody.innerHTML = list.map((r) => `
-            <tr>
-                <td>${escapeHtml(names[r.uid] || r.email || "Unknown")}</td>
-                <td>${escapeHtml(r.plan_name)}</td>
-                <td>${formatMoney(r.price)}</td>
-                <td>${formatDate(r.created_at)}</td>
-                <td>${r.status === "approved"
-                        ? '<span class="label label-success">Approved</span>'
-                        : r.status === "rejected"
-                            ? '<span class="label label-danger">Rejected</span>'
-                            : '<span class="label label-warning">Pending</span>'}
+        tbody.innerHTML = rows.map((l, idx) => {
+            return `<tr data-alias="${escapeHtml(l.alias)}">
+                <td>${idx + 1}</td>
+                <td><b>${escapeHtml(l.alias)}</b></td>
+                <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;
+                           white-space:nowrap"
+                    title="${escapeHtml(l.url)}">${escapeHtml(l.title || l.url)}</td>
+                <td>${formatNumber(l.clicks)}</td>
+                <td>${escapeHtml(userNameMap[l.uid] ||
+                        (l.uid === "guest" ? "Guest" : "Unknown"))}</td>
+                <td><span class="label label-warning">Inactive</span></td>
+                <td>${formatDate(l.created_at)}</td>
+                <td>
+                    <a class="btn btn-default btn-xs" target="_blank"
+                       href="${SITE_URL}#${l.alias}" title="Open short link">
+                        <i class="fa fa-external-link"></i></a>
+                    <button class="btn btn-success btn-xs act-activate"
+                            title="Activate karo (wapas live karo)">
+                        <i class="fa fa-check"></i></button>
+                    <button class="btn btn-danger btn-xs act-delete"
+                            title="Delete forever">
+                        <i class="fa fa-trash"></i></button>
                 </td>
-                <td>${r.status === "pending" ? `
-                    <button class="btn btn-success btn-xs mr-approve"
-                            data-id="${r._id}" data-uid="${r.uid}"
-                            data-plan="${r.plan_id}" data-planname="${escapeHtml(r.plan_name)}"
-                            data-days="${r.days}">
-                        <i class="fa fa-check"></i> Approve</button>
-                    <button class="btn btn-danger btn-xs mr-reject"
-                            data-id="${r._id}">
-                        <i class="fa fa-times"></i> Reject</button>`
-                    : '<small class="text-muted">-</small>'}
-                </td>
-            </tr>`).join("");
+            </tr>`;
+        }).join("");
+    }
+
+    render();
+    document.getElementById("search-input").addEventListener("input", (e) => {
+        render(e.target.value.trim());
     });
 
-    document.getElementById("req-body").addEventListener("click", async (e) => {
-        const appBtn = e.target.closest(".mr-approve");
-        const rejBtn = e.target.closest(".mr-reject");
-        if (!appBtn && !rejBtn) return;
+    /* ============================================================
+       ACTIONS — Activate aur Delete
+       ============================================================ */
+    document.getElementById("links-body").addEventListener("click", async (e) => {
+        const btn = e.target.closest("button");
+        if (!btn) return;
 
-        /* ---------- APPROVE: membership activate ---------- */
-        if (appBtn) {
-            const uid = appBtn.dataset.uid;
-            const expiresAt = Date.now() +
-                (parseInt(appBtn.dataset.days) || 30) * 86400000;
+        const alias = btn.closest("tr").dataset.alias;
+        const link = allLinks.find(l => l.alias === alias);
+        if (!link) return;
 
-            if (!confirm(`${appBtn.dataset.planname} activate karein ` +
-                `${formatDate(expiresAt)} tak?`)) return;
-
+        /* ---------- ACTIVATE (wapas live karo) ---------- */
+        if (btn.classList.contains("act-activate")) {
             try {
-                // User ko membership de do
-                await update(ref(db, `users/${uid}/membership`), {
-                    plan_id: appBtn.dataset.plan,
-                    name: appBtn.dataset.planname,
-                    multiplier: null,   // go.html plan node se padhega
-                    expires_at: expiresAt
+                await update(ref(db, `aliases/${alias}`), {
+                    active: true,
+                    status: "active"
                 });
-                // Request approved mark karo
-                await update(ref(db, `membership_requests/${appBtn.dataset.id}`),
-                    { status: "approved", processed_at: Date.now() });
-
-                showToast("Membership activate ho gayi!", "success");
+                allLinks = allLinks.filter(l => l.alias !== alias);
+                document.getElementById("links-count-label").textContent =
+                    `${formatNumber(allLinks.length)} inactive`;
+                showToast("Link activate ho gayi (wapas live hai).", "success");
+                render(document.getElementById("search-input").value.trim());
             } catch (err) {
                 showToast("Fail: " + err.message, "error");
             }
         }
 
-        /* ---------- REJECT ---------- */
-        if (rejBtn) {
-            if (!confirm("Request reject karein?")) return;
-            await update(ref(db, `membership_requests/${rejBtn.dataset.id}`),
-                { status: "rejected", processed_at: Date.now() });
-            showToast("Reject ho gaya.", "warning");
+        /* ---------- DELETE (permanently hatao) ---------- */
+        if (btn.classList.contains("act-delete")) {
+            if (!confirm(`"${alias}" ko HAMESHA ke liye delete karein?`)) return;
+
+            try {
+                await remove(ref(db, `aliases/${alias}`));
+                allLinks = allLinks.filter(l => l.alias !== alias);
+                document.getElementById("links-count-label").textContent =
+                    `${formatNumber(allLinks.length)} inactive`;
+                showToast("Link delete ho gayi.", "success");
+                render(document.getElementById("search-input").value.trim());
+            } catch (err) {
+                showToast("Fail: " + err.message, "error");
+            }
         }
     });
 </script>

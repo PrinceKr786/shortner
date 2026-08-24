@@ -1,0 +1,528 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/payout-rates.html
+     KAAM   : PAYOUT RATES EDITOR - Har ad type ke liye
+              country-wise publisher CPM rates set karna:
+                - Interstitial ke liye alag rates
+                - Banner ke liye alag rates
+                - Popup ke liye alag rates
+              Default/global rate bhi set hota hai.
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payout Rates - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <!-- Inline skin-black CSS (GitHub Pages fix) -->
+    <style>
+        .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
+        .skin-black .main-header .navbar .nav>li>a{color:#333}
+        .skin-black .main-header .navbar .nav>li>a:hover,.skin-black .main-header .navbar .nav>li>a:active,.skin-black .main-header .navbar .nav>li>a:focus,.skin-black .main-header .navbar .nav .open>a,.skin-black .main-header .navbar .nav .open>a:hover,.skin-black .main-header .navbar .nav .open>a:focus,.skin-black .main-header .navbar .nav>.active>a{background:#f9f9f9;color:#333}
+        .skin-black .main-header .navbar .nav>.active>a{border-bottom-color:#fff}
+        .skin-black .main-header .logo{background-color:#367fa9;color:#fff}
+        .skin-black .main-header .logo:hover{background-color:#357ca5}
+        .skin-black .main-sidebar{background-color:#222d32}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
+        .skin-black .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
+        .skin-black .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+    </style>
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-users"></i> <span>Users</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="users.html"><i class="fa fa-circle-o"></i> User List</a></li>
+                        <li><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li><a href="users-export.html"><i class="fa fa-circle-o"></i> Export Users</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="withdrawals.html"><i class="fa fa-money"></i> <span>Withdrawals</span>
+                    <small class="label pull-right bg-red" id="menu-pending-badge" style="display:none">0</small></a></li>
+
+                <li><a href="rates.html"><i class="fa fa-line-chart"></i> <span>CPM Rates</span></a></li>
+
+                <li><a href="campaign-prices.html"><i class="fa fa-tag"></i> <span>Campaign Prices</span></a></li>
+
+                <li class="active"><a href="payout-rates.html"><i class="fa fa-calculator"></i> <span>Payout Rates</span></a></li>
+
+                <li><a href="plans.html"><i class="fa fa-diamond"></i> <span>Membership Plans</span></a></li>
+
+                <li><a href="ads.html"><i class="fa fa-bullhorn"></i> <span>Advertising</span>
+                    <small class="label pull-right bg-yellow" id="menu-ads-badge" style="display:none">0</small></a></li>
+
+                <li><a href="go-settings.html"><i class="fa fa-cog"></i> <span>Go Page Ads</span></a></li>
+
+                <li><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+
+                <li><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-pencil"></i> <span>Blog</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-file-text"></i> <span>Pages</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="pages.html"><i class="fa fa-circle-o"></i> Pages List</a></li>
+                        <li><a href="add-page.html"><i class="fa fa-circle-o"></i> Add Page</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-cogs"></i> <span>Settings</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="settings.html"><i class="fa fa-circle-o"></i> General</a></li>
+                        <li><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li><a href="menu-manager.html"><i class="fa fa-circle-o"></i> Menu Manager</a></li>
+                        <li><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+</ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Payout Rates <small>CPM per 1000 views</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Payout Rates</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- ======== INTERSTITIAL RATES BOX ======== -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-window-maximize text-primary"></i>
+                        Interstitial Ads</h3>
+                </div>
+
+                <div class="box-body">
+                    <!-- Default/Global rate -->
+                    <div class="row" style="margin-bottom:16px">
+                        <div class="col-sm-3 form-group">
+                            <label>Default Desktop Rate (&#8377; per 1000 views)</label>
+                            <input type="number" step="0.01" min="0"
+                                   class="form-control" id="inter-default-desktop">
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label>Default Mobile Rate (&#8377; per 1000 views)</label>
+                            <input type="number" step="0.01" min="0"
+                                   class="form-control" id="inter-default-mobile">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-primary btn-flat"
+                                    id="inter-save-global">
+                                <i class="fa fa-save"></i> Save Default Rates</button>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Add country form -->
+                    <form id="inter-add-form" class="form-inline" style="margin-bottom:16px">
+                        <input type="text" class="form-control" id="inter-cr-code"
+                               placeholder="Country Code (IN, US...)" maxlength="2"
+                               style="width:170px;text-transform:uppercase" required>
+                        <input type="number" step="0.01" min="0" class="form-control"
+                               id="inter-cr-desktop" placeholder="Desktop Rate" required
+                               style="width:130px">
+                        <input type="number" step="0.01" min="0" class="form-control"
+                               id="inter-cr-mobile" placeholder="Mobile Rate"
+                               style="width:130px">
+                        <button type="submit" class="btn btn-primary btn-flat">
+                            <i class="fa fa-plus"></i> Add Country</button>
+                    </form>
+
+                    <!-- Country rates table -->
+                    <table class="table table-striped table-hover" style="margin-bottom:0">
+                        <thead>
+                            <tr><th>Country</th><th>Desktop Rate</th><th>Mobile Rate</th>
+                                <th style="width:80px"></th></tr>
+                        </thead>
+                        <tbody id="inter-country-body">
+                            <tr><td colspan="4" class="text-center text-muted">
+                                Koi country rate nahi. Sab pe default chalega.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ======== BANNER RATES BOX ======== -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-picture-o text-success"></i>
+                        Banner Ads</h3>
+                </div>
+
+                <div class="box-body">
+                    <!-- Default/Global rate -->
+                    <div class="row" style="margin-bottom:16px">
+                        <div class="col-sm-3 form-group">
+                            <label>Default Desktop Rate (&#8377; per 1000 views)</label>
+                            <input type="number" step="0.01" min="0"
+                                   class="form-control" id="banner-default-desktop">
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label>Default Mobile Rate (&#8377; per 1000 views)</label>
+                            <input type="number" step="0.01" min="0"
+                                   class="form-control" id="banner-default-mobile">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-success btn-flat"
+                                    id="banner-save-global">
+                                <i class="fa fa-save"></i> Save Default Rates</button>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Add country form -->
+                    <form id="banner-add-form" class="form-inline" style="margin-bottom:16px">
+                        <input type="text" class="form-control" id="banner-cr-code"
+                               placeholder="Country Code (IN, US...)" maxlength="2"
+                               style="width:170px;text-transform:uppercase" required>
+                        <input type="number" step="0.01" min="0" class="form-control"
+                               id="banner-cr-desktop" placeholder="Desktop Rate" required
+                               style="width:130px">
+                        <input type="number" step="0.01" min="0" class="form-control"
+                               id="banner-cr-mobile" placeholder="Mobile Rate"
+                               style="width:130px">
+                        <button type="submit" class="btn btn-success btn-flat">
+                            <i class="fa fa-plus"></i> Add Country</button>
+                    </form>
+
+                    <!-- Country rates table -->
+                    <table class="table table-striped table-hover" style="margin-bottom:0">
+                        <thead>
+                            <tr><th>Country</th><th>Desktop Rate</th><th>Mobile Rate</th>
+                                <th style="width:80px"></th></tr>
+                        </thead>
+                        <tbody id="banner-country-body">
+                            <tr><td colspan="4" class="text-center text-muted">
+                                Koi country rate nahi. Sab pe default chalega.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ======== POPUP RATES BOX ======== -->
+            <div class="box box-warning">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-external-link text-warning"></i>
+                        Popup Ads</h3>
+                </div>
+
+                <div class="box-body">
+                    <!-- Default/Global rate -->
+                    <div class="row" style="margin-bottom:16px">
+                        <div class="col-sm-3 form-group">
+                            <label>Default Desktop Rate (&#8377; per 1000 views)</label>
+                            <input type="number" step="0.01" min="0"
+                                   class="form-control" id="popup-default-desktop">
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label>Default Mobile Rate (&#8377; per 1000 views)</label>
+                            <input type="number" step="0.01" min="0"
+                                   class="form-control" id="popup-default-mobile">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-warning btn-flat"
+                                    id="popup-save-global">
+                                <i class="fa fa-save"></i> Save Default Rates</button>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Add country form -->
+                    <form id="popup-add-form" class="form-inline" style="margin-bottom:16px">
+                        <input type="text" class="form-control" id="popup-cr-code"
+                               placeholder="Country Code (IN, US...)" maxlength="2"
+                               style="width:170px;text-transform:uppercase" required>
+                        <input type="number" step="0.01" min="0" class="form-control"
+                               id="popup-cr-desktop" placeholder="Desktop Rate" required
+                               style="width:130px">
+                        <input type="number" step="0.01" min="0" class="form-control"
+                               id="popup-cr-mobile" placeholder="Mobile Rate"
+                               style="width:130px">
+                        <button type="submit" class="btn btn-warning btn-flat">
+                            <i class="fa fa-plus"></i> Add Country</button>
+                    </form>
+
+                    <!-- Country rates table -->
+                    <table class="table table-striped table-hover" style="margin-bottom:0">
+                        <thead>
+                            <tr><th>Country</th><th>Desktop Rate</th><th>Mobile Rate</th>
+                                <th style="width:80px"></th></tr>
+                        </thead>
+                        <tbody id="popup-country-body">
+                            <tr><td colspan="4" class="text-center text-muted">
+                                Koi country rate nahi. Sab pe default chalega.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout, showToast
+    } from "./js/app.js";
+    import { ref, get, set, remove }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       PAYOUT RATES LOAD KARO Firebase se
+       settings/payout_rates/interstitial, banner, popup nodes
+       ============================================================ */
+    const snap = await get(ref(db, "settings/payout_rates"));
+    const allRates = snap.val() || {};
+
+    /* ---------- Helper: populate form fields ---------- */
+    function loadAdType(type, prefix) {
+        const d = allRates[type] || {};
+        document.getElementById(`${prefix}-default-desktop`).value =
+            Number(d.default_desktop ?? 0);
+        document.getElementById(`${prefix}-default-mobile`).value =
+            Number(d.default_mobile ?? 0);
+    }
+
+    loadAdType("interstitial", "inter");
+    loadAdType("banner", "banner");
+    loadAdType("popup", "popup");
+
+    /* ---------- Helper: render country table ---------- */
+    async function renderCountries(type, bodyId) {
+        const snap = await get(ref(db, `settings/payout_rates/${type}/countries`));
+        const tbody = document.getElementById(bodyId);
+
+        if (!snap.exists()) {
+            tbody.innerHTML = `<tr><td colspan="4"
+                class="text-center text-muted">Koi country rate nahi.
+                Sab pe default chalega.</td></tr>`;
+            return;
+        }
+
+        let rows = "";
+        snap.forEach((c) => {
+            const r = c.val();
+            rows += `<tr data-cc="${c.key}">
+                <td><span class="label label-primary">${c.key}</span></td>
+                <td>${Number(r.desktop ?? 0)}</td>
+                <td>${Number(r.mobile ?? 0)}</td>
+                <td><button class="btn btn-danger btn-xs pr-del"
+                        title="Delete"><i class="fa fa-trash"></i></button></td>
+            </tr>`;
+        });
+        tbody.innerHTML = rows;
+    }
+
+    /* ---------- Helper: save global rates ---------- */
+    function setupGlobalSave(type, prefix, btnId, btnClass) {
+        document.getElementById(btnId).addEventListener("click", async () => {
+            try {
+                await set(ref(db, `settings/payout_rates/${type}`), {
+                    default_desktop: parseFloat(
+                        document.getElementById(`${prefix}-default-desktop`).value) || 0,
+                    default_mobile: parseFloat(
+                        document.getElementById(`${prefix}-default-mobile`).value) || 0
+                });
+                showToast(`${type} default rates save ho gayi!`, "success");
+            } catch (err) {
+                showToast("Fail: " + err.message, "error");
+            }
+        });
+    }
+
+    setupGlobalSave("interstitial", "inter", "inter-save-global", "btn-primary");
+    setupGlobalSave("banner", "banner", "banner-save-global", "btn-success");
+    setupGlobalSave("popup", "popup", "popup-save-global", "btn-warning");
+
+    /* ---------- Helper: setup add form ---------- */
+    function setupAddForm(type, prefix, formId) {
+        document.getElementById(formId).addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const cc = document.getElementById(`${prefix}-cr-code`).value.trim().toUpperCase();
+            const desktop = parseFloat(
+                document.getElementById(`${prefix}-cr-desktop`).value);
+            if (!/^[A-Z]{2}$/.test(cc) || isNaN(desktop)) {
+                showToast("2-letter country code + desktop rate dalo.", "warning");
+                return;
+            }
+
+            try {
+                await set(ref(db, `settings/payout_rates/${type}/countries/${cc}`), {
+                    desktop: desktop,
+                    mobile: parseFloat(
+                        document.getElementById(`${prefix}-cr-mobile`).value) || 0
+                });
+                e.target.reset();
+                showToast(`${cc} ka ${type} rate add ho gaya!`, "success");
+                renderCountries(type, `${prefix}-country-body`);
+            } catch (err) {
+                showToast("Fail: " + err.message, "error");
+            }
+        });
+    }
+
+    setupAddForm("interstitial", "inter", "inter-add-form");
+    setupAddForm("banner", "banner", "banner-add-form");
+    setupAddForm("popup", "popup", "popup-add-form");
+
+    /* ---------- Helper: setup delete ---------- */
+    function setupDelete(type, prefix) {
+        document.getElementById(`${prefix}-country-body`).addEventListener("click",
+            async (e) => {
+            const btn = e.target.closest(".pr-del");
+            if (!btn) return;
+
+            const cc = btn.closest("tr").dataset.cc;
+            if (!confirm(`${cc} ka ${type} rate delete karein? Default wapas lagega.`))
+                return;
+
+            try {
+                await remove(ref(db, `settings/payout_rates/${type}/countries/${cc}`));
+                showToast(`${cc} ka ${type} rate delete ho gaya.`, "success");
+                renderCountries(type, `${prefix}-country-body`);
+            } catch (err) {
+                showToast("Fail: " + err.message, "error");
+            }
+        });
+    }
+
+    setupDelete("interstitial", "inter");
+    setupDelete("banner", "banner");
+    setupDelete("popup", "popup");
+
+    /* ---------- Initial render ---------- */
+    renderCountries("interstitial", "inter-country-body");
+    renderCountries("banner", "banner-country-body");
+    renderCountries("popup", "popup-country-body");
+</script>
+
+</body>
+</html>
