@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/admin-view-campaign.html
+     KAAM   : VIEW CAMPAIGN DETAILS - Admin campaign ki full
+              details dekh sakta hai. URL hash se ID padhta hai
+              (#id=xxx). Display: ID, Name, Type, Status,
+              URL/Banner, Price, Visitors/Total, Created.
+              Country pricing table + Action buttons.
+     DB NODE: campaigns/{id}
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Campaign Details - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <!-- Inline skin-black CSS (GitHub Pages fix) -->
+    <style>
+        .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
+        .skin-black .main-header .navbar .nav>li>a{color:#333}
+        .skin-black .main-header .navbar .nav>li>a:hover,.skin-black .main-header .navbar .nav>li>a:active,.skin-black .main-header .navbar .nav>li>a:focus,.skin-black .main-header .navbar .nav .open>a,.skin-black .main-header .navbar .nav .open>a:hover,.skin-black .main-header .navbar .nav .open>a:focus,.skin-black .main-header .navbar .nav>.active>a{background:#f9f9f9;color:#333}
+        .skin-black .main-header .navbar .nav>.active>a{border-bottom-color:#fff}
+        .skin-black .main-header .logo{background-color:#367fa9;color:#fff}
+        .skin-black .main-header .logo:hover{background-color:#357ca5}
+        .skin-black .main-sidebar{background-color:#222d32}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
+        .skin-black .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
+        .skin-black .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+        .banner-preview-box{border:2px dashed #ccc;padding:15px;background:#f9f9f9;text-align:center;min-height:80px}
+    </style>
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li class=""><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+
+                <li class=""><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+
+                <li class=""><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+
+                <li class=""><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li class=""><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li class=""><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li class=""><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li class=""><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li class=""><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices > Interstitial</a></li>
+                        <li class=""><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices > Banner</a></li>
+                        <li class=""><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices > Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-money"></i> <span>Withdraws</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-users"></i> <span>Users</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li class=""><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-diamond"></i> <span>Plans</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-pencil"></i> <span>Blog</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li class=""><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-file-text"></i> <span>Pages</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-star"></i> <span>Testimonials</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li class=""><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
+                        <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Campaign Details <small>Full campaign info dekho</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="admin-campaigns.html">Campaigns</a></li>
+                <li class="active">Campaign Details</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- ======== LOADING ======== -->
+            <div id="loading-msg" class="text-center" style="padding:40px">
+                <i class="fa fa-spinner fa-spin fa-3x"></i>
+                <p>Campaign load ho raha hai...</p>
+            </div>
+
+            <!-- ======== NOT FOUND ======== -->
+            <div id="not-found" class="callout callout-danger" style="display:none">
+                <h4>Campaign nahi mili!</h4>
+                <p>Ye campaign exist nahi karta ya delete ho chuka hai.
+                   <a href="admin-campaigns.html">Wapas jao</a>.</p>
+            </div>
+
+            <!-- ======== CAMPAIGN DETAILS ======== -->
+            <div id="campaign-details" style="display:none">
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <!-- ======== INFO BOX ======== -->
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><i class="fa fa-bullseye"></i>
+                                    Campaign Info</h3>
+                                <div class="pull-right">
+                                    <a href="admin-edit-campaign.html#id="
+                                       class="btn btn-warning btn-xs" id="edit-link">
+                                        <i class="fa fa-pencil"></i> Edit</a>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th style="width:140px">Campaign ID</th>
+                                        <td><code id="detail-id"></code></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Name</th>
+                                        <td><strong id="detail-name"></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Type</th>
+                                        <td><span id="detail-type"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td><span id="detail-status"></span></td>
+                                    </tr>
+                                    <tr id="row-url">
+                                        <th>Target URL</th>
+                                        <td><a id="detail-url" href="#" target="_blank"></a></td>
+                                    </tr>
+                                    <tr id="row-title">
+                                        <th>Website Title</th>
+                                        <td id="detail-title"></td>
+                                    </tr>
+                                    <tr id="row-banner" style="display:none">
+                                        <th>Banner Info</th>
+                                        <td>
+                                            <strong id="detail-banner-name"></strong><br>
+
+            <ul class="sidebar-menu">
+                <li class=""><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+
+                <li class=""><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+
+                <li class=""><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+
+                <li class=""><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li class=""><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li class=""><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li class=""><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li class=""><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li class=""><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices > Interstitial</a></li>
+                        <li class=""><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices > Banner</a></li>
+                        <li class=""><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices > Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-money"></i> <span>Withdraws</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-users"></i> <span>Users</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li class=""><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-diamond"></i> <span>Plans</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-pencil"></i> <span>Blog</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li class=""><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-file-text"></i> <span>Pages</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-star"></i> <span>Testimonials</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li class=""><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
+                        <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        showToast, escapeHtml, formatDate, formatMoney
+    } from "./js/app.js";
+    import { ref, get, update, remove }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       URL HASH SE CAMPAIGN ID NIKALO (#id=xxx)
+       ============================================================ */
+    const hash = window.location.hash;
+    const match = hash.match(/id=(.+)/);
+    const campaignId = match ? match[1] : null;
+
+    if (!campaignId) {
+        document.getElementById("loading-msg").style.display = "none";
+        document.getElementById("not-found").style.display = "";
+    } else {
+        // Edit link me ID lagao
+        document.getElementById("edit-link").href =
+            "admin-edit-campaign.html#id=" + campaignId;
+        document.getElementById("btn-edit").href =
+            "admin-edit-campaign.html#id=" + campaignId;
+
+        await loadCampaign(campaignId);
+        await loadPricing();
+    }
+
+    /* ============================================================
+       CAMPAIGN DATA LOAD KARO Firebase se
+       ============================================================ */
+    async function loadCampaign(id) {
+        try {
+            const snap = await get(ref(db, `campaigns/${id}`));
+            if (!snap.exists()) {
+                document.getElementById("loading-msg").style.display = "none";
+                document.getElementById("not-found").style.display = "";
+                return;
+            }
+
+            const cam = snap.val();
+
+            // ID
+            document.getElementById("detail-id").textContent = id;
+
+            // Name
+            document.getElementById("detail-name").textContent = cam.name || "-";
+
+            // Type badge
+            const typeEl = document.getElementById("detail-type");
+            if (cam.type === "interstitial") {
+                typeEl.innerHTML = '<span class="label label-primary">Interstitial</span>';
+            } else if (cam.type === "banner") {
+                typeEl.innerHTML = '<span class="label label-success">Banner</span>';
+            } else if (cam.type === "popup") {
+                typeEl.innerHTML = '<span class="label label-warning">Popup</span>';
+            } else {
+                typeEl.innerHTML = '<span class="label label-default">' +
+                    escapeHtml(cam.type || "Unknown") + '</span>';
+            }
+
+            // Status badge
+            const statusEl = document.getElementById("detail-status");
+            if (cam.status === "active") {
+                statusEl.innerHTML = '<span class="label label-success">Active</span>';
+            } else if (cam.status === "paused") {
+                statusEl.innerHTML = '<span class="label label-warning">Paused</span>';
+            } else if (cam.status === "cancelled") {
+                statusEl.innerHTML = '<span class="label label-danger">Cancelled</span>';
+            } else if (cam.status === "finished") {
+                statusEl.innerHTML = '<span class="label label-default">Finished</span>';
+            } else {
+                statusEl.innerHTML = '<span class="label label-info">Pending</span>';
+            }
+
+            // URL (interstitial/popup ke liye)
+            if (cam.url) {
+                document.getElementById("detail-url").href = cam.url;
+                document.getElementById("detail-url").textContent = cam.url;
+                document.getElementById("row-url").style.display = "";
+            } else {
+                document.getElementById("row-url").style.display = "none";
+            }
+
+            // Title (interstitial/popup ke liye)
+            if (cam.title) {
+                document.getElementById("detail-title").textContent = cam.title;
+                document.getElementById("row-title").style.display = "";
+            } else {
+                document.getElementById("row-title").style.display = "none";
+            }
+
+            // Banner info (sirf banner type ke liye)
+            if (cam.type === "banner" && cam.banner_name) {
+                document.getElementById("detail-banner-name").textContent = cam.banner_name;
+                document.getElementById("detail-banner-size").textContent = cam.banner_size || "-";
+                document.getElementById("row-banner").style.display = "";
+
+                // Banner preview
+                if (cam.banner_code) {
+                    document.getElementById("banner-preview-content").innerHTML = cam.banner_code;
+                    document.getElementById("banner-preview-box").style.display = "";
+                }
+            }
+
+            // Price
+            document.getElementById("detail-price").textContent =
+                formatMoney(cam.price || 0);
+
+            // Visitors
+            document.getElementById("detail-visitors").textContent =
+                Number(cam.visitors || 0).toLocaleString();
+
+            // User
+            document.getElementById("detail-user").textContent =
+                cam.user_email || cam.uid || "-";
+
+            // Created
+            document.getElementById("detail-created").textContent =
+                formatDate(cam.created_at);
+
+            // Updated
+            document.getElementById("detail-updated").textContent =
+                formatDate(cam.updated_at || cam.created_at);
+
+            // Action buttons dikhao status ke hisaab se
+            if (cam.status === "active") {
+                document.getElementById("btn-pause").style.display = "";
+            }
+            if (cam.status === "paused") {
+                document.getElementById("btn-resume").style.display = "";
+            }
+
+            document.getElementById("loading-msg").style.display = "none";
+            document.getElementById("campaign-details").style.display = "";
+        } catch (err) {
+            showToast("Campaign load karne me error: " + err.message, "error");
+            document.getElementById("loading-msg").style.display = "none";
+            document.getElementById("not-found").style.display = "";
+        }
+    }
+
+    /* ============================================================
+       COUNTRY PRICING LOAD KARO settings/campaigns se
+       ============================================================ */
+    async function loadPricing() {
+        try {
+            const snap = await get(ref(db, "settings/campaigns"));
+            const data = snap.val() || {};
+
+            // Campaign type ke hisaab se pricing prefix
+            const campaignSnap = await get(ref(db, `campaigns/${campaignId}`));
+            const cam = campaignSnap.val() || {};
+            const prefix = cam.type || "interstitial";
+
+            const prices = {
+                india: data[prefix + "_price"] || 0,
+                usa: data[prefix + "_price_usa"] || data[prefix + "_price"] || 0,
+                uk: data[prefix + "_price_uk"] || data[prefix + "_price"] || 0,
+                canada: data[prefix + "_price_canada"] || data[prefix + "_price"] || 0,
+                australia: data[prefix + "_price_australia"] || data[prefix + "_price"] || 0,
+                germany: data[prefix + "_price_germany"] || data[prefix + "_price"] || 0,
+                france: data[prefix + "_price_france"] || data[prefix + "_price"] || 0,
+                brazil: data[prefix + "_price_brazil"] || data[prefix + "_price"] || 0,
+                others: data[prefix + "_price_others"] || data[prefix + "_price"] || 0
+            };
+
+            document.getElementById("price-india").textContent = Number(prices.india).toFixed(2);
+            document.getElementById("price-usa").textContent = Number(prices.usa).toFixed(2);
+            document.getElementById("price-uk").textContent = Number(prices.uk).toFixed(2);
+            document.getElementById("price-canada").textContent = Number(prices.canada).toFixed(2);
+            document.getElementById("price-australia").textContent = Number(prices.australia).toFixed(2);
+            document.getElementById("price-germany").textContent = Number(prices.germany).toFixed(2);
+            document.getElementById("price-france").textContent = Number(prices.france).toFixed(2);
+            document.getElementById("price-brazil").textContent = Number(prices.brazil).toFixed(2);
+            document.getElementById("price-others").textContent = Number(prices.others).toFixed(2);
+        } catch (e) {
+            console.error("Pricing load karne me error:", e);
+        }
+    }
+
+    /* ============================================================
+       ACTION BUTTONS - Pause, Resume, Delete
+       ============================================================ */
+
+    /* ---------- PAUSE ---------- */
+    document.getElementById("btn-pause").addEventListener("click", async () => {
+        if (!confirm("Campaign pause karein?")) return;
+        try {
+            await update(ref(db, `campaigns/${campaignId}`), {
+                status: "paused",
+                paused_at: Date.now(),
+                updated_at: Date.now()
+            });
+            showToast("Campaign pause ho gaya.", "info");
+            location.reload();
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        }
+    });
+
+    /* ---------- RESUME ---------- */
+    document.getElementById("btn-resume").addEventListener("click", async () => {
+        if (!confirm("Campaign resume karein?")) return;
+        try {
+            await update(ref(db, `campaigns/${campaignId}`), {
+                status: "active",
+                resumed_at: Date.now(),
+                updated_at: Date.now()
+            });
+            showToast("Campaign resume ho gaya.", "success");
+            location.reload();
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        }
+    });
+
+    /* ---------- DELETE ---------- */
+    document.getElementById("btn-delete").addEventListener("click", async () => {
+        if (!confirm("Campaign HAMESHA ke liye delete karein? Ye undo nahi hoga!")) return;
+        try {
+            await remove(ref(db, `campaigns/${campaignId}`));
+            showToast("Campaign delete ho gaya.", "success");
+            setTimeout(() => {
+                window.location.href = "admin-campaigns.html";
+            }, 1500);
+        } catch (err) {
+            showToast("Fail: " + err.message, "error");
+        }
+    });
+</script>
+
+</body>
+</html>

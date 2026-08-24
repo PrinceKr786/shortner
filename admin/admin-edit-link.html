@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/admin-edit-link.html
+     KAAM   : EDIT LINK - Admin kisi bhi link ko edit kar sakta
+              hai. Long URL, Title, Description, Status change
+              kar sakte ho. Firebase path: aliases/{id}
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Link - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <style>
+        .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
+        .skin-black .main-header .navbar .nav>li>a{color:#333}
+        .skin-black .main-header .navbar .nav>li>a:hover,.skin-black .main-header .navbar .nav>li>a:active,.skin-black .main-header .navbar .nav>li>a:focus,.skin-black .main-header .navbar .nav .open>a,.skin-black .main-header .navbar .nav .open>a:hover,.skin-black .main-header .navbar .nav .open>a:focus,.skin-black .main-header .navbar .nav>.active>a{background:#f9f9f9;color:#333}
+        .skin-black .main-header .navbar .nav>.active>a{border-bottom-color:#fff}
+        .skin-black .main-header .logo{background-color:#367fa9;color:#fff}
+        .skin-black .main-header .logo:hover{background-color:#357ca5}
+        .skin-black .main-sidebar{background-color:#222d32}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
+        .skin-black .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
+        .skin-black .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+    </style>
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li class=""><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+
+                <li class=""><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+
+                <li class=""><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+
+                <li class=""><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li class=""><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li class=""><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li class=""><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li class=""><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li class=""><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices > Interstitial</a></li>
+                        <li class=""><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices > Banner</a></li>
+                        <li class=""><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices > Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-money"></i> <span>Withdraws</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-users"></i> <span>Users</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li class=""><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-diamond"></i> <span>Plans</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-pencil"></i> <span>Blog</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li class=""><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-file-text"></i> <span>Pages</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-star"></i> <span>Testimonials</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li class=""><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
+                        <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Edit Link <small>Link ki details edit karo</small></h1>
+            <ol class="breadcrumb">
+                <li><i class="fa fa-dashboard"></i> Home</li>
+                <li>Manage Links</li>
+                <li class="active">Edit Link</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div id="loading-state" class="text-center" style="padding:60px">
+                <i class="fa fa-spinner fa-spin fa-3x"></i>
+                <p style="margin-top:15px">Link load ho raha hai...</p>
+            </div>
+
+            <div id="error-box" class="callout callout-danger" style="display:none"></div>
+
+            <div id="edit-content" style="display:none">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><i class="fa fa-link"></i>
+                                    Edit Link: <span id="link-alias"></span></h3>
+                            </div>
+                            <form id="edit-form">
+                                <div class="box-body">
+                                    <div id="success-box" class="callout callout-success" style="display:none"></div>
+
+                                    <!-- Link Info Display -->
+                                    <div class="callout callout-info">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <small><b>Short URL:</b></small><br>
+
+            <ul class="sidebar-menu">
+                <li class=""><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+
+                <li class=""><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+
+                <li class=""><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+
+                <li class=""><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li class=""><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li class=""><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li class=""><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li class=""><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li class=""><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices > Interstitial</a></li>
+                        <li class=""><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices > Banner</a></li>
+                        <li class=""><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices > Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-money"></i> <span>Withdraws</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-users"></i> <span>Users</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li class=""><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-diamond"></i> <span>Plans</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-pencil"></i> <span>Blog</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li class=""><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-file-text"></i> <span>Pages</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-star"></i> <span>Testimonials</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li class=""><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
+                        <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        showToast, escapeHtml, formatDateTime
+    } from "./js/app.js";
+    import { ref, get, update }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    /* ============================================================
+       ADMIN GUARD + HEADER
+       ============================================================ */
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       URL HASH SE LINK ID NIKALO
+       ============================================================ */
+    const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+    const linkId = hash.get("id");
+
+    if (!linkId) {
+        document.getElementById("loading-state").style.display = "none";
+        document.getElementById("error-box").style.display = "";
+        document.getElementById("error-box").textContent =
+            "Link ID nahi mila. URL me #id=xxx hona chahiye.";
+    }
+
+    /* ============================================================
+       LINK DATA
+       ============================================================ */
+    let linkData = null;
+
+    /* ============================================================
+       LINK LOAD KARO
+       ============================================================ */
+    if (linkId) {
+        try {
+            const snap = await get(ref(db, "aliases/" + linkId));
+
+            if (!snap.exists()) {
+                throw new Error("Ye link ID valid nahi hai.");
+            }
+
+            linkData = snap.val();
+            linkData._id = linkId;
+
+            // Origin nikalo short URL ke liye
+            const origin = window.location.origin;
+            let path = window.location.pathname.replace(/(user\/|admin\/)[^\/]*$/, "/");
+            path = path.replace(/\/+$/, "");
+            const shortUrl = `${origin}${path}/go/${linkId}`;
+
+            // Form fill karo
+            document.getElementById("link-alias").textContent = linkId;
+            document.getElementById("link-short-url").href = shortUrl;
+            document.getElementById("link-short-url").textContent = shortUrl;
+            document.getElementById("link-clicks").textContent =
+                linkData.clicks || linkData.views || 0;
+
+            document.getElementById("edit-url").value = linkData.url || linkData.long_url || "";
+            document.getElementById("edit-title").value = linkData.title || "";
+            document.getElementById("edit-description").value =
+                linkData.description || linkData.desc || "";
+
+            // Status select karo
+            const status = (linkData.status || "active").toLowerCase();
+            const statusSelect = document.getElementById("edit-status");
+            for (let i = 0; i < statusSelect.options.length; i++) {
+                if (statusSelect.options[i].value === status) {
+                    statusSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // Owner info
+            const uid = linkData.uid || linkData.user_id || "";
+            document.getElementById("edit-owner").value = uid;
+
+            // Created date
+            document.getElementById("edit-created").value =
+                formatDateTime(linkData.created_at || linkData.createdAt);
+
+            // Last click
+            document.getElementById("edit-last-click").value =
+                formatDateTime(linkData.last_click || linkData.lastClick);
+
+            // Content dikhao
+            document.getElementById("loading-state").style.display = "none";
+            document.getElementById("edit-content").style.display = "";
+
+        } catch (err) {
+            console.error("Link load fail:", err);
+            document.getElementById("loading-state").style.display = "none";
+            document.getElementById("error-box").style.display = "";
+            document.getElementById("error-box").textContent = err.message;
+        }
+    }
+
+    /* ============================================================
+       FORM SUBMIT - Save changes to Firebase
+       ============================================================ */
+    document.getElementById("edit-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById("save-btn");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+
+        try {
+            const newUrl = document.getElementById("edit-url").value.trim();
+            const newTitle = document.getElementById("edit-title").value.trim();
+            const newDesc = document.getElementById("edit-description").value.trim();
+            const newStatus = document.getElementById("edit-status").value;
+
+            if (!newUrl) {
+                showToast("Long URL zaroori hai!", "warning");
+                return;
+            }
+
+            // URL validate karo
+            try {
+                new URL(newUrl);
+            } catch {
+                showToast("Valid URL dalo (https://...)", "warning");
+                return;
+            }
+
+            const updates = {
+                url: newUrl,
+                long_url: newUrl,
+                title: newTitle,
+                description: newDesc,
+                desc: newDesc,
+                status: newStatus,
+                updated_at: Date.now(),
+                updated_by: me.uid,
+                updated_by_email: me.email
+            };
+
+            await update(ref(db, "aliases/" + linkId), updates);
+
+            showToast("Link successfully update ho gaya!", "success");
+
+            document.getElementById("success-box").style.display = "";
+            document.getElementById("success-box").textContent =
+                "Changes save ho gaye. Short URL: " +
+                window.location.origin + "/go/" + linkId;
+
+            setTimeout(() => {
+                document.getElementById("success-box").style.display = "none";
+            }, 5000);
+
+        } catch (err) {
+            console.error("Save fail:", err);
+            showToast("Save nahi ho paya: " + err.message, "error");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-save"></i> Save Changes';
+        }
+    });
+</script>
+
+</body>
+</html>

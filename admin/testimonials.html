@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/email-settings.html
-     KAAM   : EMAIL SETTINGS - SMTP server configure karo yahan se.
-              Host, port, username, password sab yahan se set hota hai.
-              Data Firebase "settings/options" path pe save hota hai.
+     FILE   : admin/testimonials.html
+     KAAM   : ADMIN TESTIMONIALS - Manage Testimonials page
+              - Firebase "testimonials" node se data load karo
+              - Table mein dikhao: ID, Name, Position, Published, Created, Actions
+              - Add New button, Edit/Delete actions
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Email Settings - Shortify CP</title>
+    <title>Manage Testimonials - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -174,11 +175,11 @@
                     </ul>
                 </li>
 
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-star"></i> <span>Testimonials</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li class=""><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=" active"><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
                         <li class=""><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
                     </ul>
                 </li>
@@ -201,7 +202,7 @@
                     </ul>
                 </li>
 
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
@@ -209,7 +210,7 @@
                         <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
                         <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
                         <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
-                        <li class=" active"><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
                         <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
                         <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
                     </ul>
@@ -223,112 +224,44 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Email Settings <small>SMTP server configure karo</small></h1>
+            <h1>Manage Testimonials <small>Customer reviews manage karo</small></h1>
             <ol class="breadcrumb">
-                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="settings.html">Settings</a></li>
-                <li class="active">Email Settings</li>
+                <li><i class="fa fa-dashboard"></i> Home</li>
+                <li><a href="testimonials.html">Testimonials</a></li>
+                <li class="active">All Testimonials</li>
             </ol>
         </section>
 
         <section class="content">
-
-            <form id="email-form">
-
-                <!-- ======== SMTP SERVER ======== -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-envelope"></i>
-                            SMTP Server Details</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Host</label>
-                                <input type="text" class="form-control"
-                                       id="em-host"
-                                       placeholder="smtp.gmail.com">
-                                <p class="help-block">Gmail ke liye smtp.gmail.com,
-                                   Outlook ke liye smtp-mail.outlook.com</p>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Port</label>
-                                <input type="text" class="form-control"
-                                       id="em-port" placeholder="587">
-                                <p class="help-block">SSL ke liye 465, TLS ke liye 587</p>
-                            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-quote-left"></i> All Testimonials</h3>
+                            <a href="add-testimonial.html" class="btn btn-success btn-sm pull-right">
+                                <i class="fa fa-plus"></i> Add New Testimonial
+                            </a>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Username</label>
-                                <input type="text" class="form-control"
-                                       id="em-username"
-                                       placeholder="your-email@gmail.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>Password</label>
-                                <input type="password" class="form-control"
-                                       id="em-password"
-                                       placeholder="App password dalo (normal password nahi)">
-                                <p class="help-block">Gmail me 2FA on ho to
-                                   App Password generate karo.</p>
-                            </div>
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Position</th>
+                                        <th>Published</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="testimonials-body">
+                                    <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-
-                <!-- ======== FROM ADDRESS ======== -->
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-paper-plane"></i>
-                            From Address</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>From Email Address</label>
-                                <input type="email" class="form-control"
-                                       id="em-from-address"
-                                       placeholder="noreply@shortify.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>From Name</label>
-                                <input type="text" class="form-control"
-                                       id="em-from-name"
-                                       placeholder="Shortify Team"
-                                       maxlength="50">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ======== ENCRYPTION ======== -->
-                <div class="box box-warning">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-lock"></i>
-                            Encryption</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="form-group" style="margin-bottom:0">
-                            <label>Email Encryption</label>
-                            <select class="form-control" id="em-encryption">
-                                <option value="none">None - bina encryption</option>
-                                <option value="ssl">SSL</option>
-                                <option value="tls">TLS (recommended)</option>
-                            </select>
-                            <p class="help-block">TLS ya SSL dono chalte hain.
-                               Port 587 = TLS, Port 465 = SSL.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SAVE BUTTON -->
-                <button type="submit" class="btn btn-primary btn-flat"
-                        id="save-btn">
-                    <i class="fa fa-save"></i> Email Settings Save Karo</button>
-
-            </form>
-
+            </div>
         </section>
     </div>
 
@@ -339,7 +272,6 @@
     <div class="control-sidebar-bg"></div>
 </div>
 
-
 <script src="../vendor/jquery.min.js"></script>
 <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../vendor/dashboard/js/app.min.js"></script>
@@ -347,65 +279,82 @@
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireAdmin, fillAdminHeader, wireLogout, showToast
+        requireAdmin, fillAdminHeader, wireLogout,
+        escapeHtml, formatDate, showToast
     } from "./js/app.js";
-    import { ref, get, update }
+    import { ref, get, remove }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    // Admin verify karo, header fill karo, logout wire karo
+    /* ---- Admin auth check ---- */
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
     /* ============================================================
-       CURRENT VALUES LOAD KARO (settings/options path se)
+       TESTIMONIALS DATA LOAD - Firebase se testimonials node padho
        ============================================================ */
-    const snap = await get(ref(db, "settings/options"));
-    const o = snap.val() || {};
-
-    document.getElementById("em-host").value = o.email_host || "";
-    document.getElementById("em-port").value = o.email_port || "";
-    document.getElementById("em-username").value = o.email_username || "";
-    document.getElementById("em-password").value = o.email_password || "";
-    document.getElementById("em-from-address").value = o.email_from_address || "";
-    document.getElementById("em-from-name").value = o.email_from_name || "";
-    document.getElementById("em-encryption").value = o.email_encryption || "tls";
-
-
-    /* ============================================================
-       SAVE - sab email settings ek update me save karo
-       ============================================================ */
-    document.getElementById("email-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const btn = document.getElementById("save-btn");
-        btn.disabled = true;
-
+    async function loadTestimonials() {
+        const tbody = document.getElementById("testimonials-body");
         try {
-            await update(ref(db, "settings/options"), {
-                email_host:
-                    document.getElementById("em-host").value.trim(),
-                email_port:
-                    document.getElementById("em-port").value.trim(),
-                email_username:
-                    document.getElementById("em-username").value.trim(),
-                email_password:
-                    document.getElementById("em-password").value.trim(),
-                email_from_address:
-                    document.getElementById("em-from-address").value.trim(),
-                email_from_name:
-                    document.getElementById("em-from-name").value.trim(),
-                email_encryption:
-                    document.getElementById("em-encryption").value
+            const snap = await get(ref(db, "testimonials"));
+            if (!snap.exists()) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">
+                    Abhi koi testimonials nahi hai. Pehla add karo!</td></tr>`;
+                return;
+            }
+
+            const list = [];
+            snap.forEach((c) => {
+                const t = c.val();
+                t._id = c.key;
+                list.push(t);
             });
 
-            showToast("Email settings save ho gayi!", "success");
-        } catch (err) {
-            showToast("Fail: " + err.message, "error");
-        } finally {
-            btn.disabled = false;
+            // Naye pehle sort karo
+            list.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+            tbody.innerHTML = list.map((t) => {
+                const pubLabel = t.published
+                    ? '<span class="label label-success">Published</span>'
+                    : '<span class="label label-warning">Draft</span>';
+                return `<tr>
+                    <td><code>${escapeHtml(t._id)}</code></td>
+                    <td>${escapeHtml(t.name || "-")}</td>
+                    <td>${escapeHtml(t.position || "-")}</td>
+                    <td>${pubLabel}</td>
+                    <td>${formatDate(t.created_at)}</td>
+                    <td>
+                        <a href="edit-testimonial.html#id=${t._id}" class="btn btn-info btn-xs" title="Edit">
+                            <i class="fa fa-pencil"></i> Edit
+                        </a>
+                        <button class="btn btn-danger btn-xs delete-btn" data-id="${t._id}" title="Delete">
+                            <i class="fa fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>`;
+            }).join("");
+
+            // Delete buttons ke liye event lagao
+            document.querySelectorAll(".delete-btn").forEach((btn) => {
+                btn.addEventListener("click", async () => {
+                    if (!confirm("Kya aap is testimonial ko delete karna chahte ho?")) return;
+                    try {
+                        await remove(ref(db, "testimonials/" + btn.dataset.id));
+                        showToast("Testimonial delete ho gaya!", "success");
+                        loadTestimonials();
+                    } catch (e) {
+                        showToast("Delete failed: " + e.message, "error");
+                    }
+                });
+            });
+
+        } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">
+                Error loading testimonials: ${escapeHtml(e.message)}</td></tr>`;
         }
-    });
+    }
+
+    loadTestimonials();
 </script>
 
 </body>

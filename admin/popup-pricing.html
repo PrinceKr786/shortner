@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/email-settings.html
-     KAAM   : EMAIL SETTINGS - SMTP server configure karo yahan se.
-              Host, port, username, password sab yahan se set hota hai.
-              Data Firebase "settings/options" path pe save hota hai.
+     FILE   : admin/popup-pricing.html
+     KAAM   : POPUP CAMPAIGN PRICING - Country wise popup ad
+              ki CPM price edit kar sakte ho.
+              Firebase path: settings/campaigns/popup_price
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Email Settings - Shortify CP</title>
+    <title>Popup Campaign Pricing - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
-    <!-- Inline skin-black CSS (GitHub Pages fix) -->
     <style>
         .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
         .skin-black .main-header .navbar .nav>li>a{color:#333}
@@ -29,7 +28,7 @@
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
-        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
         .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
         .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
         .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
@@ -106,7 +105,7 @@
                     </ul>
                 </li>
 
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
@@ -116,7 +115,7 @@
                         <li class=""><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
                         <li class=""><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices > Interstitial</a></li>
                         <li class=""><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices > Banner</a></li>
-                        <li class=""><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices > Popup</a></li>
+                        <li class=" active"><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices > Popup</a></li>
                     </ul>
                 </li>
 
@@ -201,7 +200,7 @@
                     </ul>
                 </li>
 
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
@@ -209,7 +208,7 @@
                         <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
                         <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
                         <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
-                        <li class=" active"><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
                         <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
                         <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
                     </ul>
@@ -223,112 +222,59 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Email Settings <small>SMTP server configure karo</small></h1>
+            <h1>Popup Campaign Pricing <small>Country wise CPM rate set karo</small></h1>
             <ol class="breadcrumb">
-                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="settings.html">Settings</a></li>
-                <li class="active">Email Settings</li>
+                <li><i class="fa fa-dashboard"></i> Home</li>
+                <li>Advertising</li>
+                <li class="active">Popup Pricing</li>
             </ol>
         </section>
 
         <section class="content">
-
-            <form id="email-form">
-
-                <!-- ======== SMTP SERVER ======== -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-envelope"></i>
-                            SMTP Server Details</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Host</label>
-                                <input type="text" class="form-control"
-                                       id="em-host"
-                                       placeholder="smtp.gmail.com">
-                                <p class="help-block">Gmail ke liye smtp.gmail.com,
-                                   Outlook ke liye smtp-mail.outlook.com</p>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Port</label>
-                                <input type="text" class="form-control"
-                                       id="em-port" placeholder="587">
-                                <p class="help-block">SSL ke liye 465, TLS ke liye 587</p>
-                            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-external-link"></i>
+                                Popup Ad - Price per 1000 Views</h3>
+                            <button type="button" id="add-country-btn" class="btn btn-success btn-xs pull-right">
+                                <i class="fa fa-plus"></i> Add Country</button>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Username</label>
-                                <input type="text" class="form-control"
-                                       id="em-username"
-                                       placeholder="your-email@gmail.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>Password</label>
-                                <input type="password" class="form-control"
-                                       id="em-password"
-                                       placeholder="App password dalo (normal password nahi)">
-                                <p class="help-block">Gmail me 2FA on ho to
-                                   App Password generate karo.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <div class="box-body">
+                            <div id="error-box" class="callout callout-danger" style="display:none"></div>
+                            <div id="success-box" class="callout callout-success" style="display:none"></div>
 
-                <!-- ======== FROM ADDRESS ======== -->
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-paper-plane"></i>
-                            From Address</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>From Email Address</label>
-                                <input type="email" class="form-control"
-                                       id="em-from-address"
-                                       placeholder="noreply@shortify.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>From Name</label>
-                                <input type="text" class="form-control"
-                                       id="em-from-name"
-                                       placeholder="Shortify Team"
-                                       maxlength="50">
-                            </div>
+                            <p class="text-muted">
+                                <i class="fa fa-info-circle"></i>
+                                Yahan har country ke liye popup ad ki CPM price set karo.
+                                Popup ads naye window me open hote hain click pe.
+                            </p>
+
+                            <table class="table table-bordered table-striped" id="pricing-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width:40px">#</th>
+                                        <th>Country Code</th>
+                                        <th>Country Name</th>
+                                        <th>Price per 1000 Views (USD)</th>
+                                        <th style="width:80px">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pricing-body">
+                                    <tr><td colspan="5" class="text-center">
+                                        <i class="fa fa-spinner fa-spin"></i> Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="box-footer">
+                            <button type="button" id="save-btn" class="btn btn-primary">
+                                <i class="fa fa-save"></i> Save All Changes</button>
+                            <a href="campaign-prices.html" class="btn btn-default pull-right">
+                                <i class="fa fa-arrow-left"></i> Back</a>
                         </div>
                     </div>
                 </div>
-
-                <!-- ======== ENCRYPTION ======== -->
-                <div class="box box-warning">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-lock"></i>
-                            Encryption</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="form-group" style="margin-bottom:0">
-                            <label>Email Encryption</label>
-                            <select class="form-control" id="em-encryption">
-                                <option value="none">None - bina encryption</option>
-                                <option value="ssl">SSL</option>
-                                <option value="tls">TLS (recommended)</option>
-                            </select>
-                            <p class="help-block">TLS ya SSL dono chalte hain.
-                               Port 587 = TLS, Port 465 = SSL.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SAVE BUTTON -->
-                <button type="submit" class="btn btn-primary btn-flat"
-                        id="save-btn">
-                    <i class="fa fa-save"></i> Email Settings Save Karo</button>
-
-            </form>
-
+            </div>
         </section>
     </div>
 
@@ -347,65 +293,234 @@
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireAdmin, fillAdminHeader, wireLogout, showToast
+        requireAdmin, fillAdminHeader, wireLogout,
+        showToast, escapeHtml
     } from "./js/app.js";
-    import { ref, get, update }
+    import { ref, get, set }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    // Admin verify karo, header fill karo, logout wire karo
+    /* ============================================================
+       ADMIN GUARD + HEADER
+       ============================================================ */
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
     /* ============================================================
-       CURRENT VALUES LOAD KARO (settings/options path se)
+       FIREBASE PATH
        ============================================================ */
-    const snap = await get(ref(db, "settings/options"));
-    const o = snap.val() || {};
-
-    document.getElementById("em-host").value = o.email_host || "";
-    document.getElementById("em-port").value = o.email_port || "";
-    document.getElementById("em-username").value = o.email_username || "";
-    document.getElementById("em-password").value = o.email_password || "";
-    document.getElementById("em-from-address").value = o.email_from_address || "";
-    document.getElementById("em-from-name").value = o.email_from_name || "";
-    document.getElementById("em-encryption").value = o.email_encryption || "tls";
-
+    const FIREBASE_PATH = "settings/campaigns/popup_price";
 
     /* ============================================================
-       SAVE - sab email settings ek update me save karo
+       PRICING DATA STORAGE
        ============================================================ */
-    document.getElementById("email-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
+    let pricingData = {};
 
-        const btn = document.getElementById("save-btn");
-        btn.disabled = true;
+    /* ============================================================
+       PRICING TABLE RENDER KARO
+       ============================================================ */
+    function renderTable() {
+        const tbody = document.getElementById("pricing-body");
+        const entries = Object.entries(pricingData);
 
+        if (entries.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">
+                Abhi koi country add nahi hui. "Add Country" button dabao.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = entries.map(([code, data], i) => `
+            <tr data-code="${escapeHtml(code)}">
+                <td>${i + 1}</td>
+                <td>
+                    <input type="text" class="form-control input-sm country-code"
+                           value="${escapeHtml(code)}" maxlength="2"
+                           style="text-transform:uppercase;width:80px"
+                           data-original="${escapeHtml(code)}">
+                </td>
+                <td>
+                    <input type="text" class="form-control input-sm country-name"
+                           value="${escapeHtml(data.name || '')}"
+                           placeholder="Country Name">
+                </td>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        <input type="number" class="form-control input-sm price-val"
+                               value="${data.price || 0}" step="0.01" min="0">
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-xs remove-row">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join("");
+    }
+
+    /* ============================================================
+       FIREBASE SE DATA LOAD KARO
+       ============================================================ */
+    async function loadPricing() {
         try {
-            await update(ref(db, "settings/options"), {
-                email_host:
-                    document.getElementById("em-host").value.trim(),
-                email_port:
-                    document.getElementById("em-port").value.trim(),
-                email_username:
-                    document.getElementById("em-username").value.trim(),
-                email_password:
-                    document.getElementById("em-password").value.trim(),
-                email_from_address:
-                    document.getElementById("em-from-address").value.trim(),
-                email_from_name:
-                    document.getElementById("em-from-name").value.trim(),
-                email_encryption:
-                    document.getElementById("em-encryption").value
-            });
-
-            showToast("Email settings save ho gayi!", "success");
+            const snap = await get(ref(db, FIREBASE_PATH));
+            if (snap.exists()) {
+                pricingData = snap.val() || {};
+            } else {
+                // Default countries add karo
+                pricingData = {
+                    "IN": { name: "India", price: 0.80 },
+                    "US": { name: "United States", price: 4.00 },
+                    "GB": { name: "United Kingdom", price: 3.50 },
+                    "CA": { name: "Canada", price: 3.00 },
+                    "AU": { name: "Australia", price: 3.00 },
+                    "DE": { name: "Germany", price: 2.50 },
+                    "FR": { name: "France", price: 2.00 },
+                    "BR": { name: "Brazil", price: 1.20 },
+                    "JP": { name: "Japan", price: 2.00 },
+                    "Other": { name: "Other Countries", price: 0.40 }
+                };
+            }
+            renderTable();
         } catch (err) {
-            showToast("Fail: " + err.message, "error");
-        } finally {
-            btn.disabled = false;
+            console.error("Popup pricing load fail:", err);
+            showToast("Data load nahi ho paya: " + err.message, "error");
+        }
+    }
+
+    /* ============================================================
+       TABLE SE DATA COLLECT KARO
+       ============================================================ */
+    function collectData() {
+        const rows = document.querySelectorAll("#pricing-body tr[data-code]");
+        const newData = {};
+
+        rows.forEach((row) => {
+            const codeInput = row.querySelector(".country-code");
+            const nameInput = row.querySelector(".country-name");
+            const priceInput = row.querySelector(".price-val");
+
+            const code = codeInput.value.trim().toUpperCase();
+            const name = nameInput.value.trim();
+            const price = parseFloat(priceInput.value) || 0;
+
+            if (code) {
+                newData[code] = { name: name, price: price };
+            }
+        });
+
+        return newData;
+    }
+
+    /* ============================================================
+       ADD COUNTRY BUTTON
+       ============================================================ */
+    document.getElementById("add-country-btn").addEventListener("click", () => {
+        const tbody = document.getElementById("pricing-body");
+
+        if (tbody.querySelector(".text-center")) {
+            tbody.innerHTML = "";
+        }
+
+        const newRow = document.createElement("tr");
+        newRow.setAttribute("data-code", "NEW");
+        newRow.innerHTML = `
+            <td>${tbody.children.length + 1}</td>
+            <td>
+                <input type="text" class="form-control input-sm country-code"
+                       value="" maxlength="2" placeholder="XX"
+                       style="text-transform:uppercase;width:80px"
+                       data-original="">
+            </td>
+            <td>
+                <input type="text" class="form-control input-sm country-name"
+                       value="" placeholder="Country Name">
+            </td>
+            <td>
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input type="number" class="form-control input-sm price-val"
+                           value="0" step="0.01" min="0">
+                </div>
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger btn-xs remove-row">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(newRow);
+
+        newRow.querySelector(".remove-row").addEventListener("click", function() {
+            newRow.remove();
+            const allRows = document.querySelectorAll("#pricing-body tr[data-code]");
+            allRows.forEach((r, i) => {
+                r.querySelector("td").textContent = i + 1;
+            });
+        });
+
+        newRow.querySelector(".country-code").addEventListener("input", function() {
+            newRow.setAttribute("data-code", this.value.trim().toUpperCase() || "NEW");
+        });
+    });
+
+    /* ============================================================
+       REMOVE ROW BUTTONS (event delegation)
+       ============================================================ */
+    document.getElementById("pricing-body").addEventListener("click", (e) => {
+        if (e.target.closest(".remove-row")) {
+            const row = e.target.closest("tr");
+            row.remove();
+            const allRows = document.querySelectorAll("#pricing-body tr[data-code]");
+            allRows.forEach((r, i) => {
+                r.querySelector("td").textContent = i + 1;
+            });
         }
     });
+
+    /* ============================================================
+       SAVE BUTTON - Firebase me store karo
+       ============================================================ */
+    document.getElementById("save-btn").addEventListener("click", async () => {
+        const btn = document.getElementById("save-btn");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+
+        try {
+            const newData = collectData();
+
+            if (Object.keys(newData).length === 0) {
+                showToast("Koi data nahi hai save karne ke liye!", "warning");
+                return;
+            }
+
+            await set(ref(db, FIREBASE_PATH), newData);
+            pricingData = newData;
+
+            showToast("Popup pricing save ho gayi!", "success");
+
+            document.getElementById("success-box").style.display = "";
+            document.getElementById("success-box").textContent =
+                "Changes successfully save ho gaye.";
+
+            setTimeout(() => {
+                document.getElementById("success-box").style.display = "none";
+            }, 3000);
+
+        } catch (err) {
+            console.error("Save fail:", err);
+            showToast("Save nahi ho paya: " + err.message, "error");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-save"></i> Save All Changes';
+        }
+    });
+
+    /* ============================================================
+       INITIAL LOAD
+       ============================================================ */
+    await loadPricing();
 </script>
 
 </body>

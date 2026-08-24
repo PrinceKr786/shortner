@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/dashboard.html
-     KAAM   : ADMIN DASHBOARD - AdLinkFly ke Admin/AdminsController
-              dashboard jaisa:
-                - Stats small-boxes (users, links, clicks, pending)
-                - Latest users table
-                - Latest withdrawals table
+     FILE   : admin/admin-statistics.html
+     KAAM   : STATISTICS TABLE - Daily stats ka detailed table
+              with date range filter. Firebase path: stats/daily
+              Date, Total Views, Unique Views, Total Earnings,
+              Top Country, Top Referrer dikhai deta hai.
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard - Shortify CP</title>
+    <title>Statistics Table - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -19,7 +18,6 @@
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
-    <!-- Inline skin-black CSS (GitHub Pages fix) -->
     <style>
         .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
         .skin-black .main-header .navbar .nav>li>a{color:#333}
@@ -31,7 +29,7 @@
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
-        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
         .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
         .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
         .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
@@ -90,7 +88,7 @@
         <section class="sidebar">
             <br>
             <ul class="sidebar-menu">
-                <li class=" active"><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+                <li class=""><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
 
                 <li class=""><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
 
@@ -194,11 +192,11 @@
                     </ul>
                 </li>
 
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li class=""><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li class=" active"><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
                         <li class=""><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
                     </ul>
                 </li>
@@ -225,153 +223,140 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Dashboard <small>Control Panel</small></h1>
+            <h1>Statistics Table <small>Daily stats ka detailed view</small></h1>
             <ol class="breadcrumb">
                 <li><i class="fa fa-dashboard"></i> Home</li>
-                <li class="active">Dashboard</li>
+                <li class="active">Statistics</li>
             </ol>
         </section>
 
         <section class="content">
+            <!-- ======== DATE RANGE FILTER ======== -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-filter"></i>
+                                Date Range Filter</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Start Date</label>
+                                        <input type="date" id="start-date" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>End Date</label>
+                                        <input type="date" id="end-date" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>&nbsp;</label>
+                                        <div>
+                                            <button type="button" id="filter-btn" class="btn btn-primary">
+                                                <i class="fa fa-search"></i> Filter</button>
+                                            <button type="button" id="reset-btn" class="btn btn-default">
+                                                <i class="fa fa-refresh"></i> Reset</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Quick Select</label>
+                                        <select id="quick-range" class="form-control">
+                                            <option value="">-- Select --</option>
+                                            <option value="7">Last 7 Days</option>
+                                            <option value="14">Last 14 Days</option>
+                                            <option value="30">Last 30 Days</option>
+                                            <option value="90">Last 90 Days</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <!-- ======== STATS SMALL BOXES ======== -->
+            <!-- ======== SUMMARY BOXES ======== -->
             <div class="row">
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-aqua">
                         <div class="inner">
-                            <h3 id="stat-users">0</h3>
-                            <p>Total Users</p>
+                            <h3 id="sum-views">0</h3>
+                            <p>Total Views</p>
                         </div>
-                        <div class="icon"><i class="fa fa-users"></i></div>
-                        <a href="users.html" class="small-box-footer">
-                            Manage Users <i class="fa fa-arrow-circle-right"></i></a>
+                        <div class="icon"><i class="fa fa-eye"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
                     </div>
                 </div>
-
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-green">
                         <div class="inner">
-                            <h3 id="stat-links">0</h3>
-                            <p>Total Links</p>
+                            <h3 id="sum-unique">0</h3>
+                            <p>Unique Views</p>
                         </div>
-                        <div class="icon"><i class="fa fa-link"></i></div>
-                        <a href="links.html" class="small-box-footer">
-                            All Links <i class="fa fa-arrow-circle-right"></i></a>
+                        <div class="icon"><i class="fa fa-user"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
                     </div>
                 </div>
-
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-yellow">
                         <div class="inner">
-                            <h3 id="stat-clicks">0</h3>
-                            <p>Total Clicks</p>
+                            <h3 id="sum-earnings">$0.00</h3>
+                            <p>Total Earnings</p>
                         </div>
-                        <div class="icon"><i class="fa fa-eye"></i></div>
-                        <a href="#" class="small-box-footer">&nbsp;</a>
+                        <div class="icon"><i class="fa fa-money"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
                     </div>
                 </div>
-
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-red">
                         <div class="inner">
-                            <h3 id="stat-pending">0</h3>
-                            <p>Pending Payouts</p>
+                            <h3 id="sum-days">0</h3>
+                            <p>Total Days</p>
                         </div>
-                        <div class="icon"><i class="fa fa-money"></i></div>
-                        <a href="withdrawals.html" class="small-box-footer">
-                            Review <i class="fa fa-arrow-circle-right"></i></a>
+                        <div class="icon"><i class="fa fa-calendar"></i></div>
+                        <div class="small-box-footer">&nbsp;</div>
                     </div>
                 </div>
             </div>
 
-            <!-- ======== CHARTS (last 14 days) ======== -->
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="box box-success">
-                        <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-line-chart"></i>
-                                Clicks - Last 14 Days</h3>
-                        </div>
-                        <div class="box-body">
-                            <canvas id="chart-clicks" height="110"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-5">
-                    <div class="box box-warning">
-                        <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-money"></i>
-                                Earnings Paid Out - Last 14 Days</h3>
-                        </div>
-                        <div class="box-body">
-                            <canvas id="chart-earnings" height="150"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ======== TOP COUNTRIES ======== -->
+            <!-- ======== STATISTICS TABLE ======== -->
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box box-info">
-                        <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-globe"></i>
-                                Traffic by Country</h3>
-                        </div>
-                        <div class="box-body">
-                            <canvas id="chart-countries" height="60"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ======== LATEST USERS + WITHDRAWALS ======== -->
-            <div class="row">
-                <div class="col-md-7">
                     <div class="box">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-user-plus"></i>
-                                Latest Users</h3>
-                            <a href="users.html" class="btn btn-default btn-xs pull-right">
-                                View All</a>
+                            <h3 class="box-title"><i class="fa fa-table"></i>
+                                Daily Statistics</h3>
+                            <button type="button" id="export-btn" class="btn btn-success btn-xs pull-right">
+                                <i class="fa fa-download"></i> Export CSV</button>
                         </div>
                         <div class="box-body table-responsive no-padding">
-                            <table class="table table-hover table-striped">
+                            <table class="table table-hover table-striped" id="stats-table">
                                 <thead>
-                                    <tr><th>Name</th><th>Email</th>
-                                        <th>Joined</th><th>Status</th></tr>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Total Views</th>
+                                        <th>Unique Views</th>
+                                        <th>Total Earnings</th>
+                                        <th>Top Country</th>
+                                        <th>Top Referrer</th>
+                                    </tr>
                                 </thead>
-                                <tbody id="latest-users-body">
-                                    <tr><td colspan="4" class="text-center">Loading...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-5">
-                    <div class="box">
-                        <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-money"></i>
-                                Latest Withdrawal Requests</h3>
-                            <a href="withdrawals.html" class="btn btn-default btn-xs pull-right">
-                                View All</a>
-                        </div>
-                        <div class="box-body table-responsive no-padding">
-                            <table class="table table-hover table-striped">
-                                <thead>
-                                    <tr><th>User</th><th>Amount</th><th>Date</th><th>Status</th></tr>
-                                </thead>
-                                <tbody id="latest-withdrawals-body">
-                                    <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                                <tbody id="stats-body">
+                                    <tr><td colspan="6" class="text-center">
+                                        <i class="fa fa-spinner fa-spin"></i> Loading...</td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-
         </section>
     </div>
 
@@ -386,211 +371,227 @@
 <script src="../vendor/jquery.min.js"></script>
 <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../vendor/dashboard/js/app.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
         requireAdmin, fillAdminHeader, wireLogout,
-        escapeHtml, formatDate, formatMoney
+        showToast, escapeHtml, formatMoney
     } from "./js/app.js";
-    import { ref, get, onValue }
+    import { ref, get }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+    /* ============================================================
+       ADMIN GUARD + HEADER
+       ============================================================ */
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
     /* ============================================================
-       STATS COUNTERS
+       ALL DAILY DATA
        ============================================================ */
-    // Users poora node padhna padega (count ke liye)
-    const usersSnap = await get(ref(db, "users"));
-    let userCount = 0;
-    const allUsers = [];
-    if (usersSnap.exists()) {
-        usersSnap.forEach((c) => {
-            userCount++;
-            const u = c.val();
-            u._uid = c.key;
-            allUsers.push(u);
-        });
-    }
-    document.getElementById("stat-users").textContent = userCount;
-
-    // Links/clicks stats node se (live)
-    onValue(ref(db, "stats/total_links"), (s) => {
-        document.getElementById("stat-links").textContent = s.val() || 0;
-    });
-    onValue(ref(db, "stats/total_clicks"), (s) => {
-        document.getElementById("stat-clicks").textContent = s.val() || 0;
-    });
+    let allDailyData = {};
+    let filteredData = {};
 
     /* ============================================================
-       WITHDRAWALS - live list (pending badge + latest table)
+       DATE DEFAULTS (aaj se 30 din pehle)
        ============================================================ */
-    onValue(ref(db, "withdrawals"), (snap) => {
-        const list = [];
-        snap.forEach((c) => {
-            const w = c.val();
-            w._id = c.key;
-            w._uid = c.key.split("_")[1] || "";
-            list.push(w);
-        });
-        list.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+    const today = new Date().toISOString().slice(0, 10);
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+        .toISOString().slice(0, 10);
 
-        const pending = list.filter(w =>
-            !w.status || w.status === "pending").length;
+    document.getElementById("start-date").value = thirtyDaysAgo;
+    document.getElementById("end-date").value = today;
 
-        const badge = document.getElementById("menu-pending-badge");
-        if (pending > 0) {
-            badge.style.display = "";
-            badge.textContent = pending;
-        } else {
-            badge.style.display = "none";
+    /* ============================================================
+       FIREBASE SE DAILY DATA LOAD KARO
+       ============================================================ */
+    async function loadDailyData() {
+        try {
+            const snap = await get(ref(db, "stats/daily"));
+            if (snap.exists()) {
+                allDailyData = snap.val() || {};
+            }
+            applyFilter();
+        } catch (err) {
+            console.error("Daily data load fail:", err);
+            showToast("Data load nahi ho paya: " + err.message, "error");
         }
-        document.getElementById("stat-pending").textContent = pending;
+    }
 
-        // Latest 8 dikhao
-        const tbody = document.getElementById("latest-withdrawals-body");
-        if (list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">
-                Abhi koi request nahi aayi.</td></tr>`;
+    /* ============================================================
+       FILTER APPLY KARO
+       ============================================================ */
+    function applyFilter() {
+        const startDate = document.getElementById("start-date").value;
+        const endDate = document.getElementById("end-date").value;
+
+        filteredData = {};
+
+        Object.entries(allDailyData).forEach(([dateKey, dayData]) => {
+            if (startDate && dateKey < startDate) return;
+            if (endDate && dateKey > endDate) return;
+            filteredData[dateKey] = dayData;
+        });
+
+        renderTable();
+        renderSummary();
+    }
+
+    /* ============================================================
+       SUMMARY CALCULATE KARO
+       ============================================================ */
+    function renderSummary() {
+        let totalViews = 0;
+        let totalUnique = 0;
+        let totalEarnings = 0;
+
+        Object.values(filteredData).forEach((day) => {
+            totalViews += day.clicks || 0;
+            totalUnique += day.unique_clicks || day.unique || 0;
+            totalEarnings += day.earnings || 0;
+        });
+
+        const dayCount = Object.keys(filteredData).length;
+
+        document.getElementById("sum-views").textContent = totalViews;
+        document.getElementById("sum-unique").textContent = totalUnique;
+        document.getElementById("sum-earnings").textContent = formatMoney(totalEarnings);
+        document.getElementById("sum-days").textContent = dayCount;
+    }
+
+    /* ============================================================
+       TABLE RENDER KARO
+       ============================================================ */
+    function renderTable() {
+        const tbody = document.getElementById("stats-body");
+        const entries = Object.entries(filteredData)
+            .sort((a, b) => b[0].localeCompare(a[0])); // latest pehle
+
+        if (entries.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">
+                Is date range me koi data nahi hai.</td></tr>`;
             return;
         }
 
-        tbody.innerHTML = list.slice(0, 8).map((w) => {
-            // User ka naam users list se dhundo
-            const u = allUsers.find(x => x._uid === w._uid);
-            const label = (!w.status || w.status === "pending")
-                ? '<span class="label label-warning">Pending</span>'
-                : (w.status === "completed"
-                    ? '<span class="label label-success">Paid</span>'
-                    : '<span class="label label-danger">Rejected</span>');
+        tbody.innerHTML = entries.map(([dateKey, day]) => {
+            // Top country nikalo
+            const countries = day.countries || day.country || {};
+            let topCountry = "-";
+            let maxCountryClicks = 0;
+            Object.entries(countries).forEach(([code, count]) => {
+                if (count > maxCountryClicks) {
+                    maxCountryClicks = count;
+                    topCountry = code;
+                }
+            });
+
+            // Top referrer nikalo
+            const referrers = day.referrers || day.referrer || {};
+            let topReferrer = "-";
+            let maxRefClicks = 0;
+            Object.entries(referrers).forEach(([ref, count]) => {
+                if (count > maxRefClicks) {
+                    maxRefClicks = count;
+                    topReferrer = ref;
+                }
+            });
+
             return `<tr>
-                <td>${u ? escapeHtml(u.name) : escapeHtml(w.name || "Unknown")}</td>
-                <td><b>${formatMoney(w.amount)}</b></td>
-                <td>${formatDate(w.created_at)}</td>
-                <td>${label}</td></tr>`;
+                <td><b>${escapeHtml(dateKey)}</b></td>
+                <td>${day.clicks || 0}</td>
+                <td>${day.unique_clicks || day.unique || 0}</td>
+                <td>${formatMoney(day.earnings || 0)}</td>
+                <td><span class="label label-info">${escapeHtml(topCountry)}</span></td>
+                <td>${escapeHtml(topReferrer.length > 30
+                    ? topReferrer.substring(0, 30) + "..."
+                    : topReferrer)}</td>
+            </tr>`;
         }).join("");
+    }
+
+    /* ============================================================
+       FILTER BUTTON
+       ============================================================ */
+    document.getElementById("filter-btn").addEventListener("click", () => {
+        applyFilter();
+        showToast("Filter apply ho gaya!", "info");
     });
 
     /* ============================================================
-       LATEST USERS TABLE (naye pehle)
+       RESET BUTTON
        ============================================================ */
-    allUsers.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
-
-    const ubody = document.getElementById("latest-users-body");
-    if (allUsers.length === 0) {
-        ubody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">
-            Abhi koi user signup nahi hua.</td></tr>`;
-    } else {
-        ubody.innerHTML = allUsers.slice(0, 8).map((u) => `
-            <tr>
-                <td>${escapeHtml(u.name || "-")}</td>
-                <td>${escapeHtml(u.email || "-")}</td>
-                <td>${formatDate(u.created_at)}</td>
-                <td>${u.disabled
-                    ? '<span class="label label-danger">Disabled</span>'
-                    : '<span class="label label-success">Active</span>'}</td>
-            </tr>`).join("");
-    }
+    document.getElementById("reset-btn").addEventListener("click", () => {
+        document.getElementById("start-date").value = thirtyDaysAgo;
+        document.getElementById("end-date").value = today;
+        applyFilter();
+        showToast("Filter reset ho gaya!", "info");
+    });
 
     /* ============================================================
-       CHARTS - stats/daily + stats/country nodes se
-       (go.html har click pe yahan data bump karta hai)
+       QUICK RANGE SELECT
        ============================================================ */
-    // Last 14 din ki date keys banao (purani -> nayi)
-    function lastNDays(n) {
-        const out = [];
-        for (let i = n - 1; i >= 0; i--) {
-            const d = new Date();
-            d.setDate(d.getDate() - i);
-            out.push({
-                key: d.toISOString().slice(0, 10),
-                label: d.getDate() + "/" + (d.getMonth() + 1)
-            });
+    document.getElementById("quick-range").addEventListener("change", (e) => {
+        const days = parseInt(e.target.value);
+        if (!days) return;
+
+        const end = new Date();
+        const start = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+
+        document.getElementById("start-date").value = start.toISOString().slice(0, 10);
+        document.getElementById("end-date").value = end.toISOString().slice(0, 10);
+        applyFilter();
+        showToast(`Last ${days} days ka data load ho gaya!`, "info");
+    });
+
+    /* ============================================================
+       EXPORT CSV
+       ============================================================ */
+    document.getElementById("export-btn").addEventListener("click", () => {
+        const entries = Object.entries(filteredData)
+            .sort((a, b) => b[0].localeCompare(a[0]));
+
+        if (entries.length === 0) {
+            showToast("Export karne ke liye koi data nahi hai!", "warning");
+            return;
         }
-        return out;
-    }
 
-    try {
-        const [dailySnap, countrySnap] = await Promise.all([
-            get(ref(db, "stats/daily")),
-            get(ref(db, "stats/country"))
-        ]);
-        const daily = dailySnap.val() || {};
-        const countries = countrySnap.val() || {};
+        let csv = "Date,Total Views,Unique Views,Total Earnings,Top Country,Top Referrer\n";
 
-        const days = lastNDays(14);
-        const clicksData   = days.map(d => (daily[d.key]?.clicks) || 0);
-        const earningsData = days.map(d =>
-            Math.round((daily[d.key]?.earnings || 0) * 1000) / 1000);
+        entries.forEach(([dateKey, day]) => {
+            const countries = day.countries || day.country || {};
+            let topCountry = "-";
+            let maxCC = 0;
+            Object.entries(countries).forEach(([c, n]) => {
+                if (n > maxCC) { maxCC = n; topCountry = c; }
+            });
 
-        // ---- Clicks line chart ----
-        new Chart(document.getElementById("chart-clicks"), {
-            type: "line",
-            data: {
-                labels: days.map(d => d.label),
-                datasets: [{
-                    label: "Clicks",
-                    data: clicksData,
-                    borderColor: "#00a65a",
-                    backgroundColor: "rgba(0,166,90,.12)",
-                    fill: true,
-                    tension: 0.3,
-                    pointRadius: 3
-                }]
-            },
-            options: {
-                legend: { display: false },
-                scales: { yAxes: [{ ticks: { beginAtZero: true,
-                    precision: 0 } }] }
-            }
+            const referrers = day.referrers || day.referrer || {};
+            let topRef = "-";
+            let maxRC = 0;
+            Object.entries(referrers).forEach(([r, n]) => {
+                if (n > maxRC) { maxRC = n; topRef = r; }
+            });
+
+            csv += `${dateKey},${day.clicks || 0},${day.unique_clicks || day.unique || 0},${(day.earnings || 0).toFixed(4)},"${topCountry}","${topRef}"\n`;
         });
 
-        // ---- Earnings bar chart ----
-        new Chart(document.getElementById("chart-earnings"), {
-            type: "bar",
-            data: {
-                labels: days.map(d => d.label),
-                datasets: [{
-                    label: "Earnings",
-                    data: earningsData,
-                    backgroundColor: "#f39c12"
-                }]
-            },
-            options: {
-                legend: { display: false },
-                scales: { yAxes: [{ ticks: { beginAtZero: true }] } }
-            }
-        });
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `statistics_${today}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
 
-        // ---- Countries horizontal bar ----
-        const cKeys = Object.keys(countries)
-            .sort((a, b) =>
-                ((countries[b].clicks)||0) - ((countries[a].clicks)||0))
-            .slice(0, 8);   // top 8
+        showToast("CSV download ho raha hai!", "success");
+    });
 
-        new Chart(document.getElementById("chart-countries"), {
-            type: "horizontalBar",
-            data: {
-                labels: cKeys,
-                datasets: [{
-                    label: "Clicks",
-                    data: cKeys.map(k => countries[k].clicks || 0),
-                    backgroundColor: "#00c0ef"
-                }]
-            },
-            options: {
-                legend: { display: false },
-                scales: { xAxes: [{ ticks: { beginAtZero: true,
-                    precision: 0 } }] }
-            }
-        });
-    } catch (e) {
-        console.error("Chart load fail:", e);
-    }
+    /* ============================================================
+       INITIAL LOAD
+       ============================================================ */
+    await loadDailyData();
 </script>
 
 </body>

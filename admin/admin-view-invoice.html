@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/admin-view-invoice.html
+     KAAM   : INVOICE DETAILS - Admin invoice ka detail dekh
+              sakta hai aur usse Mark as Paid/Cancel kar sakta hai.
+              Read invoice ID from URL hash (#id=xxx)
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice Details - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <style>
+        .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
+        .skin-black .main-header .navbar .nav>li>a{color:#333}
+        .skin-black .main-header .navbar .nav>li>a:hover,.skin-black .main-header .navbar .nav>li>a:active,.skin-black .main-header .navbar .nav>li>a:focus,.skin-black .main-header .navbar .nav .open>a,.skin-black .main-header .navbar .nav .open>a:hover,.skin-black .main-header .navbar .nav .open>a:focus,.skin-black .main-header .navbar .nav>.active>a{background:#f9f9f9;color:#333}
+        .skin-black .main-header .navbar .nav>.active>a{border-bottom-color:#fff}
+        .skin-black .main-header .logo{background-color:#367fa9;color:#fff}
+        .skin-black .main-header .logo:hover{background-color:#357ca5}
+        .skin-black .main-sidebar{background-color:#222d32}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
+        .skin-black .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
+        .skin-black .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+    </style>
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li class=""><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+
+                <li class=""><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+
+                <li class=""><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+
+                <li class=""><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li class=""><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li class=""><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li class=""><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li class=""><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li class=""><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices > Interstitial</a></li>
+                        <li class=""><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices > Banner</a></li>
+                        <li class=""><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices > Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-money"></i> <span>Withdraws</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-users"></i> <span>Users</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li class=""><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-diamond"></i> <span>Plans</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-pencil"></i> <span>Blog</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li class=""><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-file-text"></i> <span>Pages</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-star"></i> <span>Testimonials</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li class=""><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
+                        <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Invoice Details <small>Invoice ka full detail dekho</small></h1>
+            <ol class="breadcrumb">
+                <li><i class="fa fa-dashboard"></i> Home</li>
+                <li>Invoices</li>
+                <li class="active">View Invoice</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div id="loading-state" class="text-center" style="padding:60px">
+                <i class="fa fa-spinner fa-spin fa-3x"></i>
+                <p style="margin-top:15px">Invoice load ho raha hai...</p>
+            </div>
+
+            <div id="error-box" class="callout callout-danger" style="display:none"></div>
+
+            <div id="invoice-content" style="display:none">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><i class="fa fa-file-text-o"></i>
+                                    Invoice #<span id="inv-id"></span></h3>
+                                <span id="inv-status-badge" class="label pull-right"></span>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th style="width:200px">Invoice ID</th>
+                                        <td id="inv-full-id"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>User</th>
+                                        <td>
+                                            <span id="inv-user-name"></span>
+                                            <br><small class="text-muted" id="inv-user-email"></small>
+                                            <br><small class="text-muted" id="inv-user-uid"></small>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Amount</th>
+                                        <td><h3 id="inv-amount" class="text-success" style="margin:0"></h3></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Payment Method</th>
+                                        <td id="inv-method"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Description</th>
+                                        <td id="inv-description"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Created</th>
+                                        <td id="inv-created"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Updated</th>
+                                        <td id="inv-updated"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="box box-warning">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><i class="fa fa-gears"></i>
+                                    Actions</h3>
+                            </div>
+                            <div class="box-body">
+                                <div id="action-pending">
+                                    <p><b>Status change karo:</b></p>
+                                    <button type="button" id="btn-mark-paid"
+                                            class="btn btn-success btn-block">
+                                        <i class="fa fa-check"></i> Mark as Paid</button>
+                                    <br>
+
+            <ul class="sidebar-menu">
+                <li class=""><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+
+                <li class=""><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+
+                <li class=""><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+
+                <li class=""><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li class=""><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li class=""><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li class=""><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li class=""><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li class=""><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices > Interstitial</a></li>
+                        <li class=""><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices > Banner</a></li>
+                        <li class=""><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices > Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-money"></i> <span>Withdraws</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-users"></i> <span>Users</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li class=""><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-diamond"></i> <span>Plans</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-pencil"></i> <span>Blog</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li class=""><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-file-text"></i> <span>Pages</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-star"></i> <span>Testimonials</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li class=""><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li class=""><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class=""><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
+                        <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        showToast, escapeHtml, formatMoney, formatDateTime
+    } from "./js/app.js";
+    import { ref, get, update }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    /* ============================================================
+       ADMIN GUARD + HEADER
+       ============================================================ */
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* ============================================================
+       URL HASH SE INVOICE ID NIKALO
+       ============================================================ */
+    const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+    const invoiceId = hash.get("id");
+
+    if (!invoiceId) {
+        document.getElementById("loading-state").style.display = "none";
+        document.getElementById("error-box").style.display = "";
+        document.getElementById("error-box").textContent =
+            "Invoice ID nahi mila. URL me #id=xxx hona chahiye.";
+    }
+
+    /* ============================================================
+       INVOICE DATA
+       ============================================================ */
+    let invoiceData = null;
+
+    /* ============================================================
+       INVOICE LOAD KARO
+       ============================================================ */
+    if (invoiceId) {
+        try {
+            // Pehle invoices node me dhundo
+            let snap = await get(ref(db, "invoices/" + invoiceId));
+
+            // Agar nahi mila toh payments node me dhundo
+            if (!snap.exists()) {
+                snap = await get(ref(db, "payments/" + invoiceId));
+            }
+
+            if (!snap.exists()) {
+                throw new Error("Ye invoice ID valid nahi hai.");
+            }
+
+            invoiceData = snap.val();
+            invoiceData._id = invoiceId;
+
+            // User data load karo
+            let userName = "Unknown";
+            let userEmail = "";
+            const uid = invoiceData.uid || invoiceData.user_id || "";
+            if (uid) {
+                const userSnap = await get(ref(db, "users/" + uid));
+                if (userSnap.exists()) {
+                    const u = userSnap.val();
+                    userName = u.name || u.email || "Unknown";
+                    userEmail = u.email || "";
+                }
+            }
+
+            // Status badge
+            const status = (invoiceData.status || "pending").toLowerCase();
+            const statusBadge = document.getElementById("inv-status-badge");
+            if (status === "completed" || status === "paid") {
+                statusBadge.className = "label label-success pull-right";
+                statusBadge.textContent = "PAID";
+            } else if (status === "cancelled" || status === "canceled") {
+                statusBadge.className = "label label-danger pull-right";
+                statusBadge.textContent = "CANCELLED";
+            } else {
+                statusBadge.className = "label label-warning pull-right";
+                statusBadge.textContent = "PENDING";
+            }
+
+            // Invoice details fill karo
+            document.getElementById("inv-id").textContent =
+                invoiceId.substring(0, 12) + "...";
+            document.getElementById("inv-full-id").textContent = invoiceId;
+            document.getElementById("inv-user-name").textContent = userName;
+            document.getElementById("inv-user-email").textContent = userEmail;
+            document.getElementById("inv-user-uid").textContent = "UID: " + uid;
+            document.getElementById("inv-amount").textContent =
+                formatMoney(invoiceData.amount || 0);
+            document.getElementById("inv-method").textContent =
+                invoiceData.payment_method || invoiceData.method || "N/A";
+            document.getElementById("inv-description").textContent =
+                invoiceData.description || invoiceData.note || "No description";
+            document.getElementById("inv-created").textContent =
+                formatDateTime(invoiceData.created_at || invoiceData.createdAt);
+            document.getElementById("inv-updated").textContent =
+                formatDateTime(invoiceData.updated_at || invoiceData.updatedAt);
+
+            // Action buttons
+            document.getElementById("loading-state").style.display = "none";
+            document.getElementById("invoice-content").style.display = "";
+
+            if (status === "completed" || status === "paid") {
+                document.getElementById("action-pending").style.display = "none";
+                document.getElementById("action-completed").style.display = "";
+            } else if (status === "cancelled" || status === "canceled") {
+                document.getElementById("action-pending").style.display = "none";
+                document.getElementById("action-cancelled").style.display = "";
+            }
+
+        } catch (err) {
+            console.error("Invoice load fail:", err);
+            document.getElementById("loading-state").style.display = "none";
+            document.getElementById("error-box").style.display = "";
+            document.getElementById("error-box").textContent = err.message;
+        }
+    }
+
+    /* ============================================================
+       MARK AS PAID BUTTON
+       ============================================================ */
+    if (document.getElementById("btn-mark-paid")) {
+        document.getElementById("btn-mark-paid").addEventListener("click", async () => {
+            if (!confirm("Kya tu sach me is invoice ko PAID mark karna chahta hai?")) return;
+
+            const btn = document.getElementById("btn-mark-paid");
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Processing...';
+
+            try {
+                const updates = {
+                    status: "completed",
+                    paid_at: Date.now(),
+                    paid_by: me.uid,
+                    paid_by_email: me.email,
+                    updated_at: Date.now()
+                };
+
+                // Dono paths update karo (invoices + payments)
+                await update(ref(db, "invoices/" + invoiceId), updates);
+                await update(ref(db, "payments/" + invoiceId), updates);
+
+                showToast("Invoice PAID mark ho gaya!", "success");
+
+                // Page reload karo
+                setTimeout(() => location.reload(), 1000);
+
+            } catch (err) {
+                console.error("Mark paid fail:", err);
+                showToast("Update nahi ho paya: " + err.message, "error");
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa fa-check"></i> Mark as Paid';
+            }
+        });
+    }
+
+    /* ============================================================
+       CANCEL INVOICE BUTTON
+       ============================================================ */
+    if (document.getElementById("btn-cancel")) {
+        document.getElementById("btn-cancel").addEventListener("click", async () => {
+            if (!confirm("Kya tu sach me ye invoice CANCEL karna chahta hai? Ye action reversible nahi hai.")) return;
+
+            const btn = document.getElementById("btn-cancel");
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Cancelling...';
+
+            try {
+                const updates = {
+                    status: "cancelled",
+                    cancelled_at: Date.now(),
+                    cancelled_by: me.uid,
+                    cancelled_by_email: me.email,
+                    updated_at: Date.now()
+                };
+
+                await update(ref(db, "invoices/" + invoiceId), updates);
+                await update(ref(db, "payments/" + invoiceId), updates);
+
+                showToast("Invoice cancelled ho gaya!", "success");
+
+                setTimeout(() => location.reload(), 1000);
+
+            } catch (err) {
+                console.error("Cancel fail:", err);
+                showToast("Cancel nahi ho paya: " + err.message, "error");
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa fa-times"></i> Cancel Invoice';
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

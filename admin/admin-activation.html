@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/email-settings.html
-     KAAM   : EMAIL SETTINGS - SMTP server configure karo yahan se.
-              Host, port, username, password sab yahan se set hota hai.
-              Data Firebase "settings/options" path pe save hota hai.
+     FILE   : admin/admin-activation.html
+     KAAM   : LICENSE ACTIVATION - License status dikhao
+              - License Status, Purchase Code (masked), Expiry Date
+              - Note: "This is a free open-source version. No activation required."
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Email Settings - Shortify CP</title>
+    <title>License Activation - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -36,6 +36,11 @@
         .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
         .skin-black .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
         .skin-black .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+        .license-box { text-align: center; padding: 30px; }
+        .license-status { font-size: 24px; font-weight: bold; margin: 20px 0; }
+        .license-info { margin-top: 20px; }
+        .license-info .info-item { margin-bottom: 10px; font-size: 16px; }
+        .license-info .info-label { font-weight: bold; display: inline-block; width: 180px; }
     </style>
     <link rel="stylesheet" href="../theme/css/app.css">
     <link rel="icon" href="../favicon.ico">
@@ -209,9 +214,9 @@
                         <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
                         <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
                         <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
-                        <li class=" active"><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
                         <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
-                        <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                        <li class=" active"><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
                     </ul>
                 </li>
 
@@ -223,112 +228,57 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Email Settings <small>SMTP server configure karo</small></h1>
+            <h1>License Activation <small>License status check karo</small></h1>
             <ol class="breadcrumb">
-                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="settings.html">Settings</a></li>
-                <li class="active">Email Settings</li>
+                <li><i class="fa fa-dashboard"></i> Home</li>
+                <li class="active">License Activation</li>
             </ol>
         </section>
 
         <section class="content">
-
-            <form id="email-form">
-
-                <!-- ======== SMTP SERVER ======== -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-envelope"></i>
-                            SMTP Server Details</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Host</label>
-                                <input type="text" class="form-control"
-                                       id="em-host"
-                                       placeholder="smtp.gmail.com">
-                                <p class="help-block">Gmail ke liye smtp.gmail.com,
-                                   Outlook ke liye smtp-mail.outlook.com</p>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Port</label>
-                                <input type="text" class="form-control"
-                                       id="em-port" placeholder="587">
-                                <p class="help-block">SSL ke liye 465, TLS ke liye 587</p>
-                            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-key"></i> License Information</h3>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Username</label>
-                                <input type="text" class="form-control"
-                                       id="em-username"
-                                       placeholder="your-email@gmail.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>Password</label>
-                                <input type="password" class="form-control"
-                                       id="em-password"
-                                       placeholder="App password dalo (normal password nahi)">
-                                <p class="help-block">Gmail me 2FA on ho to
-                                   App Password generate karo.</p>
+                        <div class="box-body">
+                            <div class="license-box">
+                                <div class="callout callout-success">
+                                    <h4><i class="fa fa-check-circle"></i> Free Open Source Version</h4>
+                                    <p>This is a free open-source version. No activation required.</p>
+                                </div>
+
+                                <div class="license-status text-green">
+                                    <i class="fa fa-unlock-alt"></i> ACTIVE
+                                </div>
+
+                                <div class="license-info">
+                                    <div class="info-item">
+                                        <span class="info-label">License Status:</span>
+                                        <span class="text-green"><i class="fa fa-check"></i> Active (Open Source)</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Purchase Code:</span>
+                                        <span class="text-muted">XXXX-XXXX-XXXX-XXXX (N/A - Free Version)</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Expiry Date:</span>
+                                        <span class="text-green"><i class="fa fa-infinity"></i> Lifetime (No Expiry)</span>
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <p class="text-muted">
+                                    <i class="fa fa-info-circle"></i>
+                                    Ye ek free open-source version hai. Isme koi activation ya license key ki zaroorat nahi hai.
+                                    Aap isko freely use, modify, aur distribute kar sakte ho.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- ======== FROM ADDRESS ======== -->
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-paper-plane"></i>
-                            From Address</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>From Email Address</label>
-                                <input type="email" class="form-control"
-                                       id="em-from-address"
-                                       placeholder="noreply@shortify.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>From Name</label>
-                                <input type="text" class="form-control"
-                                       id="em-from-name"
-                                       placeholder="Shortify Team"
-                                       maxlength="50">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ======== ENCRYPTION ======== -->
-                <div class="box box-warning">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-lock"></i>
-                            Encryption</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="form-group" style="margin-bottom:0">
-                            <label>Email Encryption</label>
-                            <select class="form-control" id="em-encryption">
-                                <option value="none">None - bina encryption</option>
-                                <option value="ssl">SSL</option>
-                                <option value="tls">TLS (recommended)</option>
-                            </select>
-                            <p class="help-block">TLS ya SSL dono chalte hain.
-                               Port 587 = TLS, Port 465 = SSL.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SAVE BUTTON -->
-                <button type="submit" class="btn btn-primary btn-flat"
-                        id="save-btn">
-                    <i class="fa fa-save"></i> Email Settings Save Karo</button>
-
-            </form>
-
+            </div>
         </section>
     </div>
 
@@ -339,7 +289,6 @@
     <div class="control-sidebar-bg"></div>
 </div>
 
-
 <script src="../vendor/jquery.min.js"></script>
 <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../vendor/dashboard/js/app.min.js"></script>
@@ -347,65 +296,21 @@
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireAdmin, fillAdminHeader, wireLogout, showToast
+        requireAdmin, fillAdminHeader, wireLogout,
+        escapeHtml, showToast
     } from "./js/app.js";
-    import { ref, get, update }
-        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    // Admin verify karo, header fill karo, logout wire karo
+    /* ---- Admin auth check ---- */
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
     /* ============================================================
-       CURRENT VALUES LOAD KARO (settings/options path se)
+       LICENSE ACTIVATION PAGE
+       Ye page bas static info dikhata hai - koi data load nahi karna
+       Firebase se kuch padhna nahi hai, sirf display karna hai
        ============================================================ */
-    const snap = await get(ref(db, "settings/options"));
-    const o = snap.val() || {};
-
-    document.getElementById("em-host").value = o.email_host || "";
-    document.getElementById("em-port").value = o.email_port || "";
-    document.getElementById("em-username").value = o.email_username || "";
-    document.getElementById("em-password").value = o.email_password || "";
-    document.getElementById("em-from-address").value = o.email_from_address || "";
-    document.getElementById("em-from-name").value = o.email_from_name || "";
-    document.getElementById("em-encryption").value = o.email_encryption || "tls";
-
-
-    /* ============================================================
-       SAVE - sab email settings ek update me save karo
-       ============================================================ */
-    document.getElementById("email-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const btn = document.getElementById("save-btn");
-        btn.disabled = true;
-
-        try {
-            await update(ref(db, "settings/options"), {
-                email_host:
-                    document.getElementById("em-host").value.trim(),
-                email_port:
-                    document.getElementById("em-port").value.trim(),
-                email_username:
-                    document.getElementById("em-username").value.trim(),
-                email_password:
-                    document.getElementById("em-password").value.trim(),
-                email_from_address:
-                    document.getElementById("em-from-address").value.trim(),
-                email_from_name:
-                    document.getElementById("em-from-name").value.trim(),
-                email_encryption:
-                    document.getElementById("em-encryption").value
-            });
-
-            showToast("Email settings save ho gayi!", "success");
-        } catch (err) {
-            showToast("Fail: " + err.message, "error");
-        } finally {
-            btn.disabled = false;
-        }
-    });
+    console.log("License Activation page loaded - Free Open Source Version");
 </script>
 
 </body>

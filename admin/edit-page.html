@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/email-settings.html
-     KAAM   : EMAIL SETTINGS - SMTP server configure karo yahan se.
-              Host, port, username, password sab yahan se set hota hai.
-              Data Firebase "settings/options" path pe save hota hai.
+     FILE   : admin/edit-page.html
+     KAAM   : EDIT PAGE - Existing page edit karo
+              - URL hash se ID lo (#id=xxx)
+              - Firebase se data padho: pages/{id}
+              - Form: title, slug, published, content, meta_title, meta_description
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Email Settings - Shortify CP</title>
+    <title>Edit Page - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -201,7 +202,7 @@
                     </ul>
                 </li>
 
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
@@ -209,7 +210,7 @@
                         <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
                         <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
                         <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
-                        <li class=" active"><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
                         <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
                         <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
                     </ul>
@@ -223,112 +224,78 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Email Settings <small>SMTP server configure karo</small></h1>
+            <h1>Edit Page <small>Page details edit karo</small></h1>
             <ol class="breadcrumb">
-                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="settings.html">Settings</a></li>
-                <li class="active">Email Settings</li>
+                <li><i class="fa fa-dashboard"></i> Home</li>
+                <li><a href="pages.html">Pages</a></li>
+                <li class="active">Edit Page</li>
             </ol>
         </section>
 
         <section class="content">
-
-            <form id="email-form">
-
-                <!-- ======== SMTP SERVER ======== -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-envelope"></i>
-                            SMTP Server Details</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Host</label>
-                                <input type="text" class="form-control"
-                                       id="em-host"
-                                       placeholder="smtp.gmail.com">
-                                <p class="help-block">Gmail ke liye smtp.gmail.com,
-                                   Outlook ke liye smtp-mail.outlook.com</p>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Port</label>
-                                <input type="text" class="form-control"
-                                       id="em-port" placeholder="587">
-                                <p class="help-block">SSL ke liye 465, TLS ke liye 587</p>
-                            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-pencil"></i> Edit Page</h3>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Username</label>
-                                <input type="text" class="form-control"
-                                       id="em-username"
-                                       placeholder="your-email@gmail.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>Password</label>
-                                <input type="password" class="form-control"
-                                       id="em-password"
-                                       placeholder="App password dalo (normal password nahi)">
-                                <p class="help-block">Gmail me 2FA on ho to
-                                   App Password generate karo.</p>
-                            </div>
+                        <div id="loading-msg" class="box-body text-center">
+                            <p><i class="fa fa-spinner fa-spin"></i> Page load ho raha hai...</p>
                         </div>
+                        <form id="page-form" style="display:none;">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="title">Title *</label>
+                                    <input type="text" class="form-control" id="title"
+                                           placeholder="Page ka title" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="slug">Slug</label>
+                                    <input type="text" class="form-control" id="slug"
+                                           placeholder="url-friendly-slug">
+                                </div>
+
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="published">
+                                        Published (site pe dikhana hai)
+                                    </label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="content">Content</label>
+                                    <textarea class="form-control" id="content" rows="12"
+                                              placeholder="Poori page ka content..."></textarea>
+                                </div>
+
+                                <hr>
+                                <h4><i class="fa fa-search"></i> SEO Settings</h4>
+
+                                <div class="form-group">
+                                    <label for="meta_title">Meta Title</label>
+                                    <input type="text" class="form-control" id="meta_title"
+                                           placeholder="SEO title (agar empty hai to title use hoga)">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="meta_description">Meta Description</label>
+                                    <textarea class="form-control" id="meta_description" rows="2"
+                                              placeholder="SEO description"></textarea>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <a href="pages.html" class="btn btn-default">
+                                    <i class="fa fa-arrow-left"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary pull-right">
+                                    <i class="fa fa-save"></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-                <!-- ======== FROM ADDRESS ======== -->
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-paper-plane"></i>
-                            From Address</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>From Email Address</label>
-                                <input type="email" class="form-control"
-                                       id="em-from-address"
-                                       placeholder="noreply@shortify.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>From Name</label>
-                                <input type="text" class="form-control"
-                                       id="em-from-name"
-                                       placeholder="Shortify Team"
-                                       maxlength="50">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ======== ENCRYPTION ======== -->
-                <div class="box box-warning">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-lock"></i>
-                            Encryption</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="form-group" style="margin-bottom:0">
-                            <label>Email Encryption</label>
-                            <select class="form-control" id="em-encryption">
-                                <option value="none">None - bina encryption</option>
-                                <option value="ssl">SSL</option>
-                                <option value="tls">TLS (recommended)</option>
-                            </select>
-                            <p class="help-block">TLS ya SSL dono chalte hain.
-                               Port 587 = TLS, Port 465 = SSL.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SAVE BUTTON -->
-                <button type="submit" class="btn btn-primary btn-flat"
-                        id="save-btn">
-                    <i class="fa fa-save"></i> Email Settings Save Karo</button>
-
-            </form>
-
+            </div>
         </section>
     </div>
 
@@ -339,7 +306,6 @@
     <div class="control-sidebar-bg"></div>
 </div>
 
-
 <script src="../vendor/jquery.min.js"></script>
 <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../vendor/dashboard/js/app.min.js"></script>
@@ -347,63 +313,91 @@
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireAdmin, fillAdminHeader, wireLogout, showToast
+        requireAdmin, fillAdminHeader, wireLogout,
+        escapeHtml, showToast
     } from "./js/app.js";
     import { ref, get, update }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    // Admin verify karo, header fill karo, logout wire karo
+    /* ---- Admin auth check ---- */
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
     /* ============================================================
-       CURRENT VALUES LOAD KARO (settings/options path se)
+       URL HASH SE ID LO - #id=xxx format
        ============================================================ */
-    const snap = await get(ref(db, "settings/options"));
-    const o = snap.val() || {};
-
-    document.getElementById("em-host").value = o.email_host || "";
-    document.getElementById("em-port").value = o.email_port || "";
-    document.getElementById("em-username").value = o.email_username || "";
-    document.getElementById("em-password").value = o.email_password || "";
-    document.getElementById("em-from-address").value = o.email_from_address || "";
-    document.getElementById("em-from-name").value = o.email_from_name || "";
-    document.getElementById("em-encryption").value = o.email_encryption || "tls";
-
+    const hash = window.location.hash;
+    const idMatch = hash.match(/id=(.+)/);
+    if (!idMatch) {
+        document.getElementById("loading-msg").innerHTML =
+            '<div class="callout callout-danger"><p>Error: Page ID nahi mila URL mein!</p></div>';
+        throw new Error("No ID in URL");
+    }
+    const pageId = idMatch[1];
 
     /* ============================================================
-       SAVE - sab email settings ek update me save karo
+       PAGE DATA LOAD - Firebase se pages/{id} padho
        ============================================================ */
-    document.getElementById("email-form").addEventListener("submit", async (e) => {
+    try {
+        const snap = await get(ref(db, "pages/" + pageId));
+        if (!snap.exists()) {
+            document.getElementById("loading-msg").innerHTML =
+                '<div class="callout callout-danger"><p>Error: Page nahi mila!</p></div>';
+            throw new Error("Page not found");
+        }
+
+        const p = snap.val();
+
+        // Form fields pre-fill karo
+        document.getElementById("title").value = p.title || "";
+        document.getElementById("slug").value = p.slug || "";
+        document.getElementById("published").checked = p.published || false;
+        document.getElementById("content").value = p.content || "";
+        document.getElementById("meta_title").value = p.meta_title || "";
+        document.getElementById("meta_description").value = p.meta_description || "";
+
+        // Form dikhao, loading hide karo
+        document.getElementById("loading-msg").style.display = "none";
+        document.getElementById("page-form").style.display = "";
+
+    } catch (e) {
+        showToast("Load failed: " + e.message, "error");
+    }
+
+    /* ============================================================
+       FORM SUBMIT - Changes save karo
+       ============================================================ */
+    document.getElementById("page-form").addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const btn = document.getElementById("save-btn");
-        btn.disabled = true;
+        const title = document.getElementById("title").value.trim();
+        const slug = document.getElementById("slug").value.trim();
+        const published = document.getElementById("published").checked;
+        const content = document.getElementById("content").value.trim();
+        const meta_title = document.getElementById("meta_title").value.trim();
+        const meta_description = document.getElementById("meta_description").value.trim();
+
+        if (!title) {
+            showToast("Title zaroori hai!", "error");
+            return;
+        }
 
         try {
-            await update(ref(db, "settings/options"), {
-                email_host:
-                    document.getElementById("em-host").value.trim(),
-                email_port:
-                    document.getElementById("em-port").value.trim(),
-                email_username:
-                    document.getElementById("em-username").value.trim(),
-                email_password:
-                    document.getElementById("em-password").value.trim(),
-                email_from_address:
-                    document.getElementById("em-from-address").value.trim(),
-                email_from_name:
-                    document.getElementById("em-from-name").value.trim(),
-                email_encryption:
-                    document.getElementById("em-encryption").value
+            await update(ref(db, "pages/" + pageId), {
+                title: title,
+                slug: slug,
+                published: published,
+                content: content,
+                meta_title: meta_title,
+                meta_description: meta_description,
+                updated_at: Date.now()
             });
 
-            showToast("Email settings save ho gayi!", "success");
-        } catch (err) {
-            showToast("Fail: " + err.message, "error");
-        } finally {
-            btn.disabled = false;
+            showToast("Page successfully update ho gaya!", "success");
+
+        } catch (e) {
+            showToast("Update failed: " + e.message, "error");
         }
     });
 </script>

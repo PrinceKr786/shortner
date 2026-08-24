@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/email-settings.html
-     KAAM   : EMAIL SETTINGS - SMTP server configure karo yahan se.
-              Host, port, username, password sab yahan se set hota hai.
-              Data Firebase "settings/options" path pe save hota hai.
+     FILE   : admin/admin-create-campaign-interstitial.html
+     KAAM   : CREATE INTERSTITIAL CAMPAIGN - Admin interstitial
+              ad campaign bana sakta hai. Form me:
+              Campaign Name, Website Title, Website URL,
+              Country pricing table, Terms checkbox.
+     DB NODE: campaigns/{campaignId}
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Email Settings - Shortify CP</title>
+    <title>Create Interstitial Campaign - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -106,12 +108,12 @@
                     </ul>
                 </li>
 
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                         <li class=""><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
-                        <li class=""><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li class=" active"><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
                         <li class=""><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
                         <li class=""><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
                         <li class=""><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices > Interstitial</a></li>
@@ -201,7 +203,7 @@
                     </ul>
                 </li>
 
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
@@ -209,7 +211,7 @@
                         <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
                         <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
                         <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
-                        <li class=" active"><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
                         <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
                         <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
                     </ul>
@@ -223,111 +225,96 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Email Settings <small>SMTP server configure karo</small></h1>
+            <h1>Create Interstitial Campaign <small>Naya interstitial ad campaign banao</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="settings.html">Settings</a></li>
-                <li class="active">Email Settings</li>
+                <li><a href="admin-campaigns.html">Campaigns</a></li>
+                <li class="active">Create Interstitial</li>
             </ol>
         </section>
 
         <section class="content">
 
-            <form id="email-form">
-
-                <!-- ======== SMTP SERVER ======== -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-envelope"></i>
-                            SMTP Server Details</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Host</label>
-                                <input type="text" class="form-control"
-                                       id="em-host"
-                                       placeholder="smtp.gmail.com">
-                                <p class="help-block">Gmail ke liye smtp.gmail.com,
-                                   Outlook ke liye smtp-mail.outlook.com</p>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Port</label>
-                                <input type="text" class="form-control"
-                                       id="em-port" placeholder="587">
-                                <p class="help-block">SSL ke liye 465, TLS ke liye 587</p>
-                            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- ======== CAMPAIGN FORM ======== -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-window-maximize"></i>
+                                Interstitial Campaign Details</h3>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Username</label>
-                                <input type="text" class="form-control"
-                                       id="em-username"
-                                       placeholder="your-email@gmail.com">
+                        <form id="create-form">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label>Campaign Name <span class="text-red">*</span></label>
+                                    <input type="text" class="form-control" id="cam-name"
+                                           placeholder="e.g. Summer Sale 2026" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Website Title <span class="text-red">*</span></label>
+                                    <input type="text" class="form-control" id="cam-title"
+                                           placeholder="e.g. Buy Amazing Products" required>
+                                    <p class="help-block">Ye title ad me dikhlega.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Website URL <span class="text-red">*</span></label>
+                                    <input type="url" class="form-control" id="cam-url"
+                                           placeholder="https://example.com" required>
+                                    <p class="help-block">Jab user ad click karega to ye URL khulega.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Price (INR) <span class="text-red">*</span></label>
+                                    <input type="number" step="0.01" min="1" class="form-control"
+                                           id="cam-price" placeholder="100.00" required>
+                                    <p class="help-block">Campaign ka total budget.</p>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="cam-terms" required>
+                                        I agree to the <a href="#" target="_blank">Terms &amp; Conditions</a>
+                                        and <a href="#" target="_blank">Advertising Policy</a>.
+                                    </label>
+                                </div>
                             </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>Password</label>
-                                <input type="password" class="form-control"
-                                       id="em-password"
-                                       placeholder="App password dalo (normal password nahi)">
-                                <p class="help-block">Gmail me 2FA on ho to
-                                   App Password generate karo.</p>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary btn-flat"
+                                        id="save-btn">
+                                    <i class="fa fa-save"></i> Create Campaign</button>
+                                <a href="admin-campaigns.html"
+                                   class="btn btn-default btn-flat">Cancel</a>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
 
-                <!-- ======== FROM ADDRESS ======== -->
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-paper-plane"></i>
-                            From Address</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>From Email Address</label>
-                                <input type="email" class="form-control"
-                                       id="em-from-address"
-                                       placeholder="noreply@shortify.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>From Name</label>
-                                <input type="text" class="form-control"
-                                       id="em-from-name"
-                                       placeholder="Shortify Team"
-                                       maxlength="50">
-                            </div>
+                <div class="col-md-4">
+                    <!-- ======== COUNTRY PRICING TABLE ======== -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-globe"></i>
+                                Country Pricing (per 1000 views)</h3>
+                        </div>
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr><th>Country</th><th>CPM (INR)</th></tr>
+                                </thead>
+                                <tbody id="pricing-body">
+                                    <tr><td>India</td><td>&#8377; <span id="price-india">-</span></td></tr>
+                                    <tr><td>United States</td><td>&#8377; <span id="price-usa">-</span></td></tr>
+                                    <tr><td>United Kingdom</td><td>&#8377; <span id="price-uk">-</span></td></tr>
+                                    <tr><td>Canada</td><td>&#8377; <span id="price-canada">-</span></td></tr>
+                                    <tr><td>Australia</td><td>&#8377; <span id="price-australia">-</span></td></tr>
+                                    <tr><td>Germany</td><td>&#8377; <span id="price-germany">-</span></td></tr>
+                                    <tr><td>France</td><td>&#8377; <span id="price-france">-</span></td></tr>
+                                    <tr><td>Brazil</td><td>&#8377; <span id="price-brazil">-</span></td></tr>
+                                    <tr><td>Others</td><td>&#8377; <span id="price-others">-</span></td></tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-
-                <!-- ======== ENCRYPTION ======== -->
-                <div class="box box-warning">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-lock"></i>
-                            Encryption</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="form-group" style="margin-bottom:0">
-                            <label>Email Encryption</label>
-                            <select class="form-control" id="em-encryption">
-                                <option value="none">None - bina encryption</option>
-                                <option value="ssl">SSL</option>
-                                <option value="tls">TLS (recommended)</option>
-                            </select>
-                            <p class="help-block">TLS ya SSL dono chalte hain.
-                               Port 587 = TLS, Port 465 = SSL.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SAVE BUTTON -->
-                <button type="submit" class="btn btn-primary btn-flat"
-                        id="save-btn">
-                    <i class="fa fa-save"></i> Email Settings Save Karo</button>
-
-            </form>
+            </div>
 
         </section>
     </div>
@@ -349,61 +336,98 @@
     import {
         requireAdmin, fillAdminHeader, wireLogout, showToast
     } from "./js/app.js";
-    import { ref, get, update }
+    import { ref, get, set, push }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    // Admin verify karo, header fill karo, logout wire karo
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
     /* ============================================================
-       CURRENT VALUES LOAD KARO (settings/options path se)
+       COUNTRY PRICING LOAD KARO settings/campaigns se
        ============================================================ */
-    const snap = await get(ref(db, "settings/options"));
-    const o = snap.val() || {};
+    try {
+        const snap = await get(ref(db, "settings/campaigns"));
+        const data = snap.val() || {};
 
-    document.getElementById("em-host").value = o.email_host || "";
-    document.getElementById("em-port").value = o.email_port || "";
-    document.getElementById("em-username").value = o.email_username || "";
-    document.getElementById("em-password").value = o.email_password || "";
-    document.getElementById("em-from-address").value = o.email_from_address || "";
-    document.getElementById("em-from-name").value = o.email_from_name || "";
-    document.getElementById("em-encryption").value = o.email_encryption || "tls";
+        const prices = {
+            india: data.interstitial_price || 0,
+            usa: data.interstitial_price_usa || data.interstitial_price || 0,
+            uk: data.interstitial_price_uk || data.interstitial_price || 0,
+            canada: data.interstitial_price_canada || data.interstitial_price || 0,
+            australia: data.interstitial_price_australia || data.interstitial_price || 0,
+            germany: data.interstitial_price_germany || data.interstitial_price || 0,
+            france: data.interstitial_price_france || data.interstitial_price || 0,
+            brazil: data.interstitial_price_brazil || data.interstitial_price || 0,
+            others: data.interstitial_price_others || data.interstitial_price || 0
+        };
 
+        document.getElementById("price-india").textContent = Number(prices.india).toFixed(2);
+        document.getElementById("price-usa").textContent = Number(prices.usa).toFixed(2);
+        document.getElementById("price-uk").textContent = Number(prices.uk).toFixed(2);
+        document.getElementById("price-canada").textContent = Number(prices.canada).toFixed(2);
+        document.getElementById("price-australia").textContent = Number(prices.australia).toFixed(2);
+        document.getElementById("price-germany").textContent = Number(prices.germany).toFixed(2);
+        document.getElementById("price-france").textContent = Number(prices.france).toFixed(2);
+        document.getElementById("price-brazil").textContent = Number(prices.brazil).toFixed(2);
+        document.getElementById("price-others").textContent = Number(prices.others).toFixed(2);
+    } catch (e) {
+        console.error("Prices load karne me error:", e);
+    }
 
     /* ============================================================
-       SAVE - sab email settings ek update me save karo
+       FORM SUBMIT - Campaign save karo Firebase me
        ============================================================ */
-    document.getElementById("email-form").addEventListener("submit", async (e) => {
+    document.getElementById("create-form").addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        const name = document.getElementById("cam-name").value.trim();
+        const title = document.getElementById("cam-title").value.trim();
+        const url = document.getElementById("cam-url").value.trim();
+        const price = parseFloat(document.getElementById("cam-price").value) || 0;
+        const terms = document.getElementById("cam-terms").checked;
+
+        if (!terms) {
+            showToast("Pehle Terms & Conditions accept karo!", "warning");
+            return;
+        }
+
+        if (!name || !title || !url || price <= 0) {
+            showToast("Saari fields bhariye!", "warning");
+            return;
+        }
 
         const btn = document.getElementById("save-btn");
         btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
 
         try {
-            await update(ref(db, "settings/options"), {
-                email_host:
-                    document.getElementById("em-host").value.trim(),
-                email_port:
-                    document.getElementById("em-port").value.trim(),
-                email_username:
-                    document.getElementById("em-username").value.trim(),
-                email_password:
-                    document.getElementById("em-password").value.trim(),
-                email_from_address:
-                    document.getElementById("em-from-address").value.trim(),
-                email_from_name:
-                    document.getElementById("em-from-name").value.trim(),
-                email_encryption:
-                    document.getElementById("em-encryption").value
-            });
+            const campaignData = {
+                name: name,
+                title: title,
+                url: url,
+                type: "interstitial",
+                price: price,
+                status: "active",
+                uid: me.uid || "",
+                user_email: me.email || "",
+                visitors: 0,
+                created_at: Date.now(),
+                updated_at: Date.now()
+            };
 
-            showToast("Email settings save ho gayi!", "success");
+            const newRef = push(ref(db, "campaigns"));
+            await set(newRef, campaignData);
+
+            showToast("Interstitial campaign ban gaya! ID: " + newRef.key.slice(0, 8), "success");
+
+            setTimeout(() => {
+                window.location.href = "admin-campaigns.html";
+            }, 1500);
         } catch (err) {
             showToast("Fail: " + err.message, "error");
-        } finally {
             btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-save"></i> Create Campaign';
         }
     });
 </script>

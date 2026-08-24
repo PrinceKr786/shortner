@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     FILE   : admin/email-settings.html
-     KAAM   : EMAIL SETTINGS - SMTP server configure karo yahan se.
-              Host, port, username, password sab yahan se set hota hai.
-              Data Firebase "settings/options" path pe save hota hai.
+     FILE   : admin/login-as-user.html
+     KAAM   : LOGIN AS USER - Admin kisi user ki tarah login
+              kar sakta hai. Token generate hota hai jo
+              different browser me open karne pe login kar deta hai.
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Email Settings - Shortify CP</title>
+    <title>Login as User - Shortify CP</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
-    <!-- Inline skin-black CSS (GitHub Pages fix) -->
     <style>
         .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
         .skin-black .main-header .navbar .nav>li>a{color:#333}
@@ -29,7 +28,7 @@
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
         .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
-        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
         .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
         .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
         .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
@@ -201,7 +200,7 @@
                     </ul>
                 </li>
 
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="#"><i class="fa fa-gears"></i> <span>Settings</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
@@ -209,7 +208,7 @@
                         <li class=""><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
                         <li class=""><a href="go-settings.html"><i class="fa fa-circle-o"></i> Go Page Ads</a></li>
                         <li class=""><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
-                        <li class=" active"><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li class=""><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
                         <li class=""><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
                         <li class=""><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
                     </ul>
@@ -223,112 +222,68 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Email Settings <small>SMTP server configure karo</small></h1>
+            <h1>Login as User <small>User ki tarah login karo</small></h1>
             <ol class="breadcrumb">
-                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="settings.html">Settings</a></li>
-                <li class="active">Email Settings</li>
+                <li><i class="fa fa-dashboard"></i> Home</li>
+                <li>Users</li>
+                <li class="active">Login as User</li>
             </ol>
         </section>
 
         <section class="content">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="box box-warning">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-sign-in"></i>
+                                User Login Token</h3>
+                        </div>
+                        <div class="box-body">
+                            <div id="error-box" class="callout callout-danger" style="display:none"></div>
+                            <div id="success-box" class="callout callout-success" style="display:none"></div>
 
-            <form id="email-form">
-
-                <!-- ======== SMTP SERVER ======== -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-envelope"></i>
-                            SMTP Server Details</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Host</label>
-                                <input type="text" class="form-control"
-                                       id="em-host"
-                                       placeholder="smtp.gmail.com">
-                                <p class="help-block">Gmail ke liye smtp.gmail.com,
-                                   Outlook ke liye smtp-mail.outlook.com</p>
+                            <div id="loading-state" class="text-center" style="padding:30px">
+                                <i class="fa fa-spinner fa-spin fa-2x"></i>
+                                <p>Token generate ho raha hai...</p>
                             </div>
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Port</label>
-                                <input type="text" class="form-control"
-                                       id="em-port" placeholder="587">
-                                <p class="help-block">SSL ke liye 465, TLS ke liye 587</p>
+
+                            <div id="result-area" style="display:none">
+                                <div class="callout callout-warning">
+                                    <p><i class="fa fa-exclamation-triangle"></i>
+                                        <b>Warning:</b> Ye URL copy karke <b>different browser</b> ya incognito
+                                        window me open karo. Current session me redirect karega toh logout ho jaoge.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>User Email</label>
+                                    <input type="text" id="user-email" class="form-control" disabled>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Login URL</label>
+                                    <div class="input-group">
+                                        <input type="text" id="login-url" class="form-control" readonly>
+                                        <span class="input-group-btn">
+                                            <button type="button" id="copy-btn" class="btn btn-success">
+                                                <i class="fa fa-copy"></i> Copy</button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="callout callout-info">
+                                    <p><i class="fa fa-info-circle"></i>
+                                        Token 1 ghante ke liye valid hai. Iske baad expire ho jayega.</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Username</label>
-                                <input type="text" class="form-control"
-                                       id="em-username"
-                                       placeholder="your-email@gmail.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>Password</label>
-                                <input type="password" class="form-control"
-                                       id="em-password"
-                                       placeholder="App password dalo (normal password nahi)">
-                                <p class="help-block">Gmail me 2FA on ho to
-                                   App Password generate karo.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- ======== FROM ADDRESS ======== -->
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-paper-plane"></i>
-                            From Address</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>From Email Address</label>
-                                <input type="email" class="form-control"
-                                       id="em-from-address"
-                                       placeholder="noreply@shortify.com">
-                            </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>From Name</label>
-                                <input type="text" class="form-control"
-                                       id="em-from-name"
-                                       placeholder="Shortify Team"
-                                       maxlength="50">
-                            </div>
+                        <div class="box-footer">
+                            <a href="users.html" class="btn btn-default">
+                                <i class="fa fa-arrow-left"></i> Back to Users</a>
                         </div>
                     </div>
                 </div>
-
-                <!-- ======== ENCRYPTION ======== -->
-                <div class="box box-warning">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-lock"></i>
-                            Encryption</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="form-group" style="margin-bottom:0">
-                            <label>Email Encryption</label>
-                            <select class="form-control" id="em-encryption">
-                                <option value="none">None - bina encryption</option>
-                                <option value="ssl">SSL</option>
-                                <option value="tls">TLS (recommended)</option>
-                            </select>
-                            <p class="help-block">TLS ya SSL dono chalte hain.
-                               Port 587 = TLS, Port 465 = SSL.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SAVE BUTTON -->
-                <button type="submit" class="btn btn-primary btn-flat"
-                        id="save-btn">
-                    <i class="fa fa-save"></i> Email Settings Save Karo</button>
-
-            </form>
-
+            </div>
         </section>
     </div>
 
@@ -345,67 +300,97 @@
 <script src="../vendor/dashboard/js/app.min.js"></script>
 
 <script type="module">
-    import { db } from "./js/firebase-config.js";
+    import { db, auth } from "./js/firebase-config.js";
     import {
-        requireAdmin, fillAdminHeader, wireLogout, showToast
+        requireAdmin, fillAdminHeader, wireLogout,
+        showToast, escapeHtml
     } from "./js/app.js";
-    import { ref, get, update }
+    import { ref, get, set }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    // Admin verify karo, header fill karo, logout wire karo
+    /* ============================================================
+       ADMIN GUARD + HEADER
+       ============================================================ */
     const me = await requireAdmin();
     await fillAdminHeader(me);
     wireLogout();
 
     /* ============================================================
-       CURRENT VALUES LOAD KARO (settings/options path se)
+       URL HASH SE USER ID NIKALO
        ============================================================ */
-    const snap = await get(ref(db, "settings/options"));
-    const o = snap.val() || {};
+    const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+    const uid = hash.get("id");
 
-    document.getElementById("em-host").value = o.email_host || "";
-    document.getElementById("em-port").value = o.email_port || "";
-    document.getElementById("em-username").value = o.email_username || "";
-    document.getElementById("em-password").value = o.email_password || "";
-    document.getElementById("em-from-address").value = o.email_from_address || "";
-    document.getElementById("em-from-name").value = o.email_from_name || "";
-    document.getElementById("em-encryption").value = o.email_encryption || "tls";
-
+    if (!uid) {
+        document.getElementById("loading-state").style.display = "none";
+        document.getElementById("error-box").style.display = "";
+        document.getElementById("error-box").textContent =
+            "User ID nahi mila. URL me #id=xxx hona chahiye.";
+    }
 
     /* ============================================================
-       SAVE - sab email settings ek update me save karo
+       TOKEN GENERATE KARO
        ============================================================ */
-    document.getElementById("email-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const btn = document.getElementById("save-btn");
-        btn.disabled = true;
-
+    if (uid) {
         try {
-            await update(ref(db, "settings/options"), {
-                email_host:
-                    document.getElementById("em-host").value.trim(),
-                email_port:
-                    document.getElementById("em-port").value.trim(),
-                email_username:
-                    document.getElementById("em-username").value.trim(),
-                email_password:
-                    document.getElementById("em-password").value.trim(),
-                email_from_address:
-                    document.getElementById("em-from-address").value.trim(),
-                email_from_name:
-                    document.getElementById("em-from-name").value.trim(),
-                email_encryption:
-                    document.getElementById("em-encryption").value
+            // Pehle user ka data load karo
+            const userSnap = await get(ref(db, "users/" + uid));
+
+            if (!userSnap.exists()) {
+                throw new Error("Ye user ID valid nahi hai.");
+            }
+
+            const userData = userSnap.val();
+
+            // Token generate karo - 1 ghante ke liye valid
+            const tokenData = {
+                uid: uid,
+                email: userData.email,
+                name: userData.name || "",
+                created_by: me.uid,
+                created_by_email: me.email,
+                created_at: Date.now(),
+                expires_at: Date.now() + (60 * 60 * 1000) // 1 ghanta
+            };
+
+            // Firebase me login_tokens node pe store karo
+            const tokenRef = ref(db, "login_tokens/" + uid);
+            await set(tokenRef, tokenData);
+
+            // Login URL banao
+            const origin = window.location.origin;
+            let path = window.location.pathname.replace(/(user\/|admin\/)[^\/]*$/, "/");
+            path = path.replace(/\/+$/, "");
+            const loginUrl = `${origin}${path}/user/index.html#token=${uid}`;
+
+            // Result dikhao
+            document.getElementById("loading-state").style.display = "none";
+            document.getElementById("result-area").style.display = "";
+            document.getElementById("user-email").value = userData.email || "N/A";
+            document.getElementById("login-url").value = loginUrl;
+
+            // Copy button
+            document.getElementById("copy-btn").addEventListener("click", () => {
+                const urlInput = document.getElementById("login-url");
+                urlInput.select();
+                document.execCommand("copy");
+
+                showToast("URL copy ho gaya!", "success");
+
+                const btn = document.getElementById("copy-btn");
+                btn.innerHTML = '<i class="fa fa-check"></i> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa fa-copy"></i> Copy';
+                }, 2000);
             });
 
-            showToast("Email settings save ho gayi!", "success");
         } catch (err) {
-            showToast("Fail: " + err.message, "error");
-        } finally {
-            btn.disabled = false;
+            console.error("Token generate fail:", err);
+            document.getElementById("loading-state").style.display = "none";
+            document.getElementById("error-box").style.display = "";
+            document.getElementById("error-box").textContent = err.message;
         }
-    });
+    }
 </script>
 
 </body>
