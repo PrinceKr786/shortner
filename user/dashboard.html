@@ -1,489 +1,69 @@
 ﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : user/dashboard.html
+     KAAM   : MEMBER DASHBOARD - AdLinkFly ke Member/Users/
+              dashboard.ctp ka EXACT replica (AdminLTE skin-blue):
+                - 4 small-box stat cards (yellow/aqua/green/red)
+                - Announcements box
+                - Top 10 Links box
+                - Earnings chart
+                - Summary table
+     LAYOUT : main-header + main-sidebar + content-wrapper + main-footer
+     ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard - Shortify</title>
+    <title>Statistics - Shortify</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="../theme/css/app.css">
     <link rel="icon" href="../favicon.ico">
-    <style>
-        /* ============================================================
-           LIGHT MODE (DEFAULT)
-           ============================================================ */
-        :root {
-            --bg: #f0f2f5;
-            --surface: #ffffff;
-            --surface-hover: #f8f9fa;
-            --surface-alt: #f7f8fa;
-            --border: #e2e5e9;
-            --border-light: #eef0f2;
-            --text: #1a1d23;
-            --text-secondary: #5f6368;
-            --text-muted: #9aa0a6;
-            --accent: #1a73e8;
-            --accent-light: #e8f0fe;
-            --accent-hover: #1557b0;
-            --green: #0d9e6c;
-            --green-light: #e6f7f1;
-            --yellow: #e8a100;
-            --yellow-light: #fef7e0;
-            --red: #d93025;
-            --red-light: #fce8e6;
-            --purple: #7b2ff2;
-            --purple-light: #f0e6ff;
-            --cyan: #0097a7;
-            --cyan-light: #e0f7fa;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
-            --shadow: 0 2px 8px rgba(0,0,0,.08);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,.12);
-            --radius: 12px;
-            --radius-sm: 8px;
-            --sidebar-bg: #ffffff;
-            --sidebar-border: #e8eaed;
-            --sidebar-text: #5f6368;
-            --sidebar-hover: #f1f3f4;
-            --sidebar-active: #e8f0fe;
-            --header-bg: #ffffff;
-            --header-border: #e8eaed;
-            --transition: all .2s ease;
-        }
-
-        /* ============================================================
-           DARK MODE
-           ============================================================ */
-        body.dark {
-            --bg: #111318;
-            --surface: #1d1f25;
-            --surface-hover: #25272d;
-            --surface-alt: #22242a;
-            --border: #33363d;
-            --border-light: #2a2c33;
-            --text: #e3e3e6;
-            --text-secondary: #9aa0a6;
-            --text-muted: #6b7075;
-            --accent: #8ab4f8;
-            --accent-light: rgba(138,180,248,.1);
-            --accent-hover: #aecbfa;
-            --green: #81c995;
-            --green-light: rgba(129,201,149,.1);
-            --yellow: #fdd663;
-            --yellow-light: rgba(253,214,99,.1);
-            --red: #f28b82;
-            --red-light: rgba(242,139,130,.1);
-            --purple: #c58af9;
-            --purple-light: rgba(197,138,249,.1);
-            --cyan: #78d9ec;
-            --cyan-light: rgba(120,217,236,.1);
-            --shadow-sm: 0 1px 3px rgba(0,0,0,.2);
-            --shadow: 0 2px 8px rgba(0,0,0,.3);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,.4);
-            --sidebar-bg: #1d1f25;
-            --sidebar-border: #33363d;
-            --sidebar-text: #9aa0a6;
-            --sidebar-hover: #2a2c33;
-            --sidebar-active: rgba(138,180,248,.1);
-            --header-bg: #1d1f25;
-            --header-border: #33363d;
-        }
-
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            font-family:'Inter',system-ui,-apple-system,sans-serif;
-            background:var(--bg);
-            color:var(--text);
-            min-height:100vh;
-            overflow-x:hidden;
-            transition:background .3s ease, color .3s ease;
-        }
-
-        a { color:var(--accent); text-decoration:none; }
-        a:hover { color:var(--accent-hover); }
-
-        /* ============================================================
-           HEADER
-           ============================================================ */
-        .main-header {
-            background:var(--header-bg);
-            border-bottom:1px solid var(--header-border);
-            height:60px;
-            position:sticky; top:0; z-index:1000;
-            transition:var(--transition);
-        }
-        .main-header .logo {
-            background:var(--accent);
-            color:#fff;
-            width:60px; height:60px;
-            line-height:60px; text-align:center;
-            font-size:1.1rem; font-weight:700;
-            transition:var(--transition);
-        }
-        .main-header .logo .logo-mini { display:inline; }
-        .main-header .logo .logo-lg { display:none; }
-        .main-header .logo:hover { width:180px; }
-        .main-header .logo:hover .logo-lg { display:inline; }
-        .main-header .logo:hover .logo-mini { display:none; }
-
-        .sidebar-toggle {
-            color:var(--text-secondary); padding:18px 14px;
-            transition:var(--transition);
-        }
-        .sidebar-toggle:hover { color:var(--text); background:var(--surface-hover); }
-        .navbar-custom-menu > .nav > li > a {
-            color:var(--text-secondary); padding:18px 14px;
-        }
-        .navbar-custom-menu > .nav > li > a:hover { color:var(--text); }
-        .user-image { border-radius:50%; border:2px solid var(--border); }
-        .dropdown-menu {
-            background:var(--surface); border:1px solid var(--border);
-            border-radius:var(--radius-sm); box-shadow:var(--shadow-lg);
-            margin-top:6px; overflow:hidden;
-        }
-        .dropdown-menu > li > a { color:var(--text-secondary); padding:10px 16px; font-size:.85rem; }
-        .dropdown-menu > li > a:hover { background:var(--surface-hover); color:var(--text); }
-        .user-header { background:var(--accent); border-radius:0; }
-        .user-header p { color:#fff; }
-        .user-footer { padding:10px; }
-        .user-footer .btn { background:var(--surface-hover); color:var(--text); border:1px solid var(--border); font-size:.8rem; }
-
-        /* ============================================================
-           SIDEBAR
-           ============================================================ */
-        .main-sidebar {
-            background:var(--sidebar-bg);
-            border-right:1px solid var(--sidebar-border);
-            width:250px;
-            transition:background .3s ease;
-        }
-        .main-sidebar .sidebar { padding:12px; }
-
-        .shorten-btn {
-            background:var(--accent); color:#fff;
-            border:none; border-radius:var(--radius-sm);
-            padding:12px 16px; width:100%;
-            font-family:'Inter',sans-serif; font-size:.85rem; font-weight:600;
-            cursor:pointer; transition:var(--transition);
-            display:flex; align-items:center; justify-content:center; gap:8px;
-        }
-        .shorten-btn:hover { background:var(--accent-hover); transform:translateY(-1px); box-shadow:var(--shadow); }
-
-        .wallet-box {
-            background:var(--surface-alt);
-            border:1px solid var(--border);
-            border-radius:var(--radius-sm);
-            padding:14px 16px; margin:12px 0;
-            transition:var(--transition);
-        }
-        .wallet-box .wl { font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); margin-bottom:4px; }
-        .wallet-box .wa { font-size:1.4rem; font-weight:700; color:var(--text); }
-        .wallet-box .wa .rupee { font-size:.9rem; color:var(--green); margin-right:2px; }
-
-        .sidebar-menu > li > a {
-            color:var(--sidebar-text);
-            border-radius:var(--radius-sm);
-            padding:10px 12px; margin-bottom:2px;
-            transition:var(--transition);
-            font-size:.85rem; font-weight:500;
-            display:flex; align-items:center; gap:10px;
-        }
-        .sidebar-menu > li > a:hover {
-            background:var(--sidebar-hover); color:var(--text);
-        }
-        .sidebar-menu > li.active > a {
-            background:var(--sidebar-active); color:var(--accent); font-weight:600;
-        }
-        .sidebar-menu > li > a > i { width:20px; text-align:center; font-size:.9rem; }
-        .sidebar-menu > li.active > a > i { color:var(--accent); }
-
-        .treeview-menu {
-            display:none; margin:0 0 2px 32px;
-            padding:2px; background:transparent; border-radius:var(--radius-sm);
-        }
-        .treeview.open > .treeview-menu { display:block; }
-        .treeview-menu > li > a { padding:7px 12px; font-size:.8rem; color:var(--text-muted); border-radius:6px; }
-        .treeview-menu > li > a:hover { background:var(--sidebar-hover); color:var(--text); }
-
-        /* ============================================================
-           CONTENT
-           ============================================================ */
-        .content-wrapper { background:transparent; padding:24px; margin-left:250px; }
-
-        .page-title {
-            font-size:1.3rem; font-weight:700; color:var(--text);
-            margin-bottom:20px; display:flex; align-items:center; gap:10px;
-        }
-        .page-title small { font-size:.78rem; color:var(--text-muted); font-weight:400; margin-left:4px; }
-
-        /* ============================================================
-           STAT CARDS
-           ============================================================ */
-        .stat-grid {
-            display:grid; grid-template-columns:repeat(4,1fr);
-            gap:16px; margin-bottom:24px;
-        }
-        @media(max-width:1100px) { .stat-grid { grid-template-columns:repeat(2,1fr); } }
-        @media(max-width:600px) { .stat-grid { grid-template-columns:1fr; } }
-
-        .stat-card {
-            background:var(--surface);
-            border:1px solid var(--border);
-            border-radius:var(--radius);
-            padding:20px;
-            transition:var(--transition);
-            position:relative; overflow:hidden;
-        }
-        .stat-card:hover { box-shadow:var(--shadow); transform:translateY(-2px); }
-
-        .stat-card .sc-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-        .stat-card .sc-icon {
-            width:44px; height:44px; border-radius:10px;
-            display:flex; align-items:center; justify-content:center;
-            font-size:1.1rem;
-        }
-        .stat-card.yellow .sc-icon { background:var(--yellow-light); color:var(--yellow); }
-        .stat-card.green .sc-icon { background:var(--green-light); color:var(--green); }
-        .stat-card.purple .sc-icon { background:var(--purple-light); color:var(--purple); }
-        .stat-card.blue .sc-icon { background:var(--accent-light); color:var(--accent); }
-
-        .stat-card .sc-tag {
-            font-size:.65rem; font-weight:600; text-transform:uppercase;
-            letter-spacing:.05em; padding:3px 8px; border-radius:20px;
-        }
-        .stat-card.yellow .sc-tag { background:var(--yellow-light); color:var(--yellow); }
-        .stat-card.green .sc-tag { background:var(--green-light); color:var(--green); }
-        .stat-card.purple .sc-tag { background:var(--purple-light); color:var(--purple); }
-        .stat-card.blue .sc-tag { background:var(--accent-light); color:var(--accent); }
-
-        .stat-card .sc-value { font-size:1.6rem; font-weight:700; color:var(--text); line-height:1.2; }
-        .stat-card .sc-label { font-size:.78rem; color:var(--text-muted); margin-top:2px; }
-
-        .stat-card .sc-bar { height:4px; background:var(--border-light); border-radius:2px; margin-top:14px; overflow:hidden; }
-        .stat-card.yellow .sc-bar-fill { background:var(--yellow); }
-        .stat-card.green .sc-bar-fill { background:var(--green); }
-        .stat-card.purple .sc-bar-fill { background:var(--purple); }
-        .stat-card.blue .sc-bar-fill { background:var(--accent); }
-        .stat-card .sc-bar-fill { height:100%; border-radius:2px; transition:width 1s ease; }
-
-        /* ============================================================
-           CARD (generic)
-           ============================================================ */
-        .card {
-            background:var(--surface);
-            border:1px solid var(--border);
-            border-radius:var(--radius);
-            margin-bottom:20px;
-            transition:var(--transition);
-            overflow:hidden;
-        }
-        .card:hover { box-shadow:var(--shadow-sm); }
-        .card-head {
-            display:flex; align-items:center; justify-content:space-between;
-            padding:16px 20px;
-            border-bottom:1px solid var(--border-light);
-        }
-        .card-head h3 {
-            font-size:.9rem; font-weight:600; color:var(--text);
-            display:flex; align-items:center; gap:8px; margin:0;
-        }
-        .card-head h3 i { color:var(--accent); font-size:.9rem; }
-        .card-head .badge {
-            font-size:.65rem; font-weight:600; padding:3px 10px;
-            border-radius:20px; background:var(--accent-light); color:var(--accent);
-        }
-        .card-body { padding:20px; }
-
-        /* ============================================================
-           ANNOUNCEMENT
-           ============================================================ */
-        .announce {
-            background:var(--accent-light);
-            border:1px solid rgba(26,115,232,.15);
-            border-left:4px solid var(--accent);
-            border-radius:var(--radius-sm);
-            padding:16px 20px;
-            margin-bottom:20px;
-        }
-        .announce .ann-title { font-size:.85rem; font-weight:600; color:var(--accent); margin-bottom:4px; }
-        .announce .ann-text { font-size:.82rem; color:var(--text-secondary); line-height:1.6; }
-
-        /* ============================================================
-           TABLE
-           ============================================================ */
-        .tbl { width:100%; border-collapse:collapse; }
-        .tbl thead th {
-            font-size:.7rem; font-weight:600; text-transform:uppercase;
-            letter-spacing:.06em; color:var(--text-muted);
-            padding:8px 14px; text-align:left; border-bottom:1px solid var(--border);
-        }
-        .tbl tbody tr { transition:var(--transition); }
-        .tbl tbody tr:hover { background:var(--surface-hover); }
-        .tbl tbody td {
-            padding:11px 14px; font-size:.83rem; color:var(--text-secondary);
-            border-bottom:1px solid var(--border-light); vertical-align:middle;
-        }
-        .tbl .link-name { color:var(--text); font-weight:500; }
-        .tbl .link-name:hover { color:var(--accent); }
-        .tbl .link-alias { font-size:.72rem; color:var(--text-muted); }
-
-        .vbadge, .ebadge { padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:600; }
-        .vbadge { background:var(--accent-light); color:var(--accent); }
-        .ebadge { background:var(--green-light); color:var(--green); }
-
-        .empty { text-align:center; padding:36px 20px; color:var(--text-muted); font-size:.85rem; }
-        .empty i { display:block; font-size:2rem; margin-bottom:10px; opacity:.3; }
-
-        /* ============================================================
-           SUMMARY
-           ============================================================ */
-        .sum-row {
-            display:flex; justify-content:space-between; align-items:center;
-            padding:11px 0; border-bottom:1px solid var(--border-light);
-        }
-        .sum-row:last-child { border-bottom:none; }
-        .sum-row .sl { font-size:.82rem; color:var(--text-secondary); }
-        .sum-row .sv { font-size:.88rem; font-weight:600; color:var(--text); }
-
-        /* ============================================================
-           CHART
-           ============================================================ */
-        .chart-wrap { position:relative; height:240px; padding:0 4px; }
-
-        /* ============================================================
-           MODAL
-           ============================================================ */
-        .modal-content { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); }
-        .modal-header { border-bottom:1px solid var(--border-light); padding:16px 20px; }
-        .modal-header .modal-title { font-size:.95rem; font-weight:600; color:var(--text); display:flex; align-items:center; gap:8px; }
-        .modal-header .modal-title i { color:var(--accent); }
-        .modal-header .close { color:var(--text-muted); opacity:.7; }
-        .modal-header .close:hover { color:var(--text); opacity:1; }
-        .modal-body { padding:20px; }
-        .modal-body label { font-size:.78rem; font-weight:500; color:var(--text-secondary); margin-bottom:5px; }
-        .modal-body .form-control {
-            background:var(--surface-alt); border:1px solid var(--border);
-            color:var(--text); border-radius:var(--radius-sm);
-            padding:10px 12px; font-family:'Inter',sans-serif; font-size:.85rem;
-        }
-        .modal-body .form-control:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-light); outline:none; }
-        .modal-body .form-control::placeholder { color:var(--text-muted); }
-        .modal-footer { border-top:1px solid var(--border-light); padding:14px 20px; }
-
-        .btn-primary-custom {
-            background:var(--accent); color:#fff; border:none;
-            border-radius:var(--radius-sm); padding:9px 20px;
-            font-family:'Inter',sans-serif; font-size:.85rem; font-weight:600;
-            cursor:pointer; transition:var(--transition);
-        }
-        .btn-primary-custom:hover { background:var(--accent-hover); }
-        .btn-secondary-custom {
-            background:var(--surface-alt); color:var(--text-secondary);
-            border:1px solid var(--border); border-radius:var(--radius-sm);
-            padding:9px 20px; font-family:'Inter',sans-serif; font-size:.85rem;
-            cursor:pointer; transition:var(--transition);
-        }
-        .btn-secondary-custom:hover { background:var(--surface-hover); color:var(--text); }
-
-        .alert-ok {
-            background:var(--green-light); border:1px solid rgba(13,158,108,.15);
-            border-radius:var(--radius-sm); padding:12px 14px;
-            color:var(--green); font-size:.82rem;
-        }
-        .alert-ok a { color:var(--green); font-weight:600; word-break:break-all; }
-        .alert-err {
-            background:var(--red-light); border:1px solid rgba(217,48,37,.15);
-            border-radius:var(--radius-sm); padding:12px 14px;
-            color:var(--red); font-size:.82rem;
-        }
-
-        /* ============================================================
-           MODE TOGGLE
-           ============================================================ */
-        .mode-toggle {
-            width:36px; height:36px;
-            border-radius:50%; border:1px solid var(--border);
-            background:var(--surface); color:var(--text-secondary);
-            cursor:pointer; display:flex; align-items:center; justify-content:center;
-            font-size:.9rem; transition:var(--transition);
-            margin-right:8px;
-        }
-        .mode-toggle:hover { background:var(--surface-hover); color:var(--text); border-color:var(--accent); }
-
-        /* ============================================================
-           TOAST
-           ============================================================ */
-        .toast-msg {
-            position:fixed; bottom:20px; right:20px; z-index:9999;
-            background:var(--surface); border:1px solid var(--border);
-            border-radius:var(--radius-sm);
-            padding:12px 18px; font-size:.83rem; font-weight:500;
-            box-shadow:var(--shadow-lg); color:var(--text);
-            display:flex; align-items:center; gap:8px;
-            transform:translateY(60px); opacity:0;
-            transition:all .3s ease;
-        }
-        .toast-msg.show { transform:translateY(0); opacity:1; }
-        .toast-msg.ok { border-left:3px solid var(--green); }
-        .toast-msg.fail { border-left:3px solid var(--red); }
-
-        /* ============================================================
-           FOOTER
-           ============================================================ */
-        .main-footer {
-            background:var(--surface); border-top:1px solid var(--border);
-            color:var(--text-muted); font-size:.75rem;
-            padding:12px 20px; margin-left:250px;
-        }
-
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
-        @media(max-width:768px) {
-            .main-sidebar { width:0; overflow:hidden; }
-            .main-sidebar.open { width:250px; position:fixed; height:100vh; z-index:9999; }
-            .content-wrapper { margin-left:0; padding:16px; }
-            .main-footer { margin-left:0; }
-            .stat-card .sc-value { font-size:1.3rem; }
-        }
-
-        ::-webkit-scrollbar { width:5px; }
-        ::-webkit-scrollbar-track { background:transparent; }
-        ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
-    </style>
 </head>
+
 <body class="member-dashboard hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
+    <!-- ==================== MAIN HEADER ==================== -->
     <header class="main-header">
         <a href="../index.html" class="logo">
             <span class="logo-mini"><b>S</b></span>
             <span class="logo-lg"><b>Shortify</b></span>
         </a>
+
         <nav class="navbar navbar-static-top" role="navigation">
-            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                <i class="fas fa-bars"></i>
-            </a>
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    <li><button class="mode-toggle" id="mode-btn" title="Toggle dark mode"><i class="fas fa-moon"></i></button></li>
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <img src="" id="header-avatar" class="user-image" alt="User Image">
                             <span class="hidden-xs" id="header-name">...</span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="user-header">
-                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
-                                <p><span id="dropdown-name">...</span><br><small>Member since <span id="member-since">-</span></small></p>
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="User Image">
+                                <p>
+                                    <span id="dropdown-name">...</span><br>
+                                    <small>Member since <span id="member-since">-</span></small>
+                                </p>
                             </li>
                             <li class="user-footer">
-                                <div class="pull-left"><a href="profile.html" class="btn btn-default btn-flat">Profile</a></div>
-                                <div class="pull-right"><a href="#" id="logout-btn" class="btn btn-default btn-flat">Logout</a></div>
+                                <div class="pull-left">
+                                    <a href="profile.html" class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a>
+                                </div>
                             </li>
                         </ul>
                     </li>
@@ -492,31 +72,55 @@
         </nav>
     </header>
 
+    <!-- ==================== MAIN SIDEBAR ==================== -->
     <aside class="main-sidebar">
         <section class="sidebar">
-            <button class="shorten-btn" data-toggle="modal" data-target="#shorten-modal">
-                <i class="fas fa-plus"></i> New Shorten Link
+            <br>
+            <button type="button"
+                    class="btn btn-block btn-social btn-github btn-lg shorten-button"
+                    data-toggle="modal" data-target="#shorten-modal">
+                <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
             </button>
-
-            <div class="wallet-box">
-                <div class="wl"><i class="fas fa-wallet"></i> Money Wallet</div>
-                <div class="wa"><span class="rupee">&#8377;</span><span id="wallet-balance">0.00</span></div>
-            </div>
+            <br>
 
             <ul class="sidebar-menu">
-                <li class="active"><a href="dashboard.html"><i class="fas fa-chart-pie"></i> <span>Statistics</span></a></li>
+                <!-- Money Wallet -->
+                <li>
+                    <a><i class="fa fa-credit-card text-aqua"></i>
+                        <span><b>Money Wallet</b><br>
+                            &#8377;<span id="wallet-balance">0.00</span>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="active">
+                    <a href="dashboard.html"><i class="fa fa-dashboard"></i>
+                        <span>Statistics</span></a>
+                </li>
+
                 <li class="treeview">
-                    <a href="#"><i class="fas fa-link"></i> <span>Manage Links</span> <i class="fas fa-angle-left pull-right"></i></a>
+                    <a href="#"><i class="fa fa-link"></i>
+                        <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                         <li><a href="links.html">All Links</a></li>
                         <li><a href="links-hidden.html">Hidden Links</a></li>
                     </ul>
                 </li>
-                <li><a href="withdraw.html"><i class="fas fa-wallet"></i> <span>Withdraw</span></a></li>
-                <li><a href="membership.html"><i class="fas fa-crown" style="color:var(--yellow)"></i> <span>Membership</span></a></li>
-                <li><a href="advertise.html"><i class="fas fa-bullhorn" style="color:var(--cyan)"></i> <span>Advertise</span></a></li>
+
+                <li>
+                    <a href="withdraw.html"><i class="fa fa-dollar"></i>
+                        <span>Withdraw</span></a>
+                </li>
+
+                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
+
+                <li><a href="advertise.html"><i class="fa fa-bullhorn text-aqua"></i> <span>Advertise</span></a></li>
+
                 <li class="treeview">
-                    <a href="#"><i class="fas fa-tools"></i> <span>Tools</span> <i class="fas fa-angle-left pull-right"></i></a>
+                    <a href="#"><i class="fa fa-wrench"></i>
+                        <span>Tools</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                         <li><a href="tools-quick.html">Quick Link</a></li>
                         <li><a href="tools-mass.html">Mass Shrinker</a></li>
@@ -524,146 +128,220 @@
                         <li><a href="tools-api.html">Developers API</a></li>
                     </ul>
                 </li>
-                <li><a href="referrals.html"><i class="fas fa-user-friends"></i> <span>Referrals</span></a></li>
-                <li><a href="profile.html"><i class="fas fa-user-circle"></i> <span>Profile</span></a></li>
-                <li><a href="#" id="sidebar-logout"><i class="fas fa-sign-out-alt" style="color:var(--red)"></i> <span>Logout</span></a></li>
+
+                <li>
+                    <a href="referrals.html"><i class="fa fa-exchange"></i>
+                        <span>Referrals</span></a>
+                </li>
+
+                <li>
+                    <a href="profile.html"><i class="fa fa-user"></i>
+                        <span>Profile</span></a>
+                </li>
+
+                <li>
+                    <a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i>
+                        <span>Logout</span></a>
+                </li>
             </ul>
         </section>
     </aside>
 
-    <!-- CONTENT -->
+    <!-- ==================== CONTENT WRAPPER ==================== -->
     <div class="content-wrapper">
-        <div class="page-title"><i class="fas fa-chart-pie" style="color:var(--accent)"></i> Statistics <small>Dashboard</small></div>
+        <section class="content-header">
+            <h1>Statistics <small>Dashboard</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Statistics</li>
+            </ol>
+        </section>
 
-        <!-- STAT CARDS -->
-        <div class="stat-grid">
-            <div class="stat-card yellow">
-                <div class="sc-top">
-                    <div class="sc-icon"><i class="fas fa-eye"></i></div>
-                    <span class="sc-tag">Views</span>
-                </div>
-                <div class="sc-value" id="stat-views">0</div>
-                <div class="sc-label">Total Views</div>
-                <div class="sc-bar"><div class="sc-bar-fill" style="width:0%" id="bar-views"></div></div>
-            </div>
-            <div class="stat-card green">
-                <div class="sc-top">
-                    <div class="sc-icon"><i class="fas fa-coins"></i></div>
-                    <span class="sc-tag">Earnings</span>
-                </div>
-                <div class="sc-value" id="stat-earnings">&#8377;0.00</div>
-                <div class="sc-label">Total Earnings</div>
-                <div class="sc-bar"><div class="sc-bar-fill" style="width:0%" id="bar-earn"></div></div>
-            </div>
-            <div class="stat-card purple">
-                <div class="sc-top">
-                    <div class="sc-icon"><i class="fas fa-user-friends"></i></div>
-                    <span class="sc-tag">Referral</span>
-                </div>
-                <div class="sc-value" id="stat-referral">&#8377;0.00</div>
-                <div class="sc-label">Referral Earnings</div>
-                <div class="sc-bar"><div class="sc-bar-fill" style="width:0%" id="bar-ref"></div></div>
-            </div>
-            <div class="stat-card blue">
-                <div class="sc-top">
-                    <div class="sc-icon"><i class="fas fa-chart-line"></i></div>
-                    <span class="sc-tag">CPM</span>
-                </div>
-                <div class="sc-value" id="stat-cpm">&#8377;0.00</div>
-                <div class="sc-label">Average CPM</div>
-                <div class="sc-bar"><div class="sc-bar-fill" style="width:0%" id="bar-cpm"></div></div>
-            </div>
-        </div>
+        <section class="content">
 
-        <!-- CHART -->
-        <div class="card">
-            <div class="card-head">
-                <h3><i class="fas fa-chart-area"></i> Earnings - Last 14 Days</h3>
-                <span class="badge">Live</span>
-            </div>
-            <div class="card-body">
-                <div class="chart-wrap"><canvas id="earnings-chart"></canvas></div>
-            </div>
-        </div>
+            <!-- ======== SMALL BOX STATS ======== -->
+            <div class="row">
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3 id="stat-views">0</h3>
+                            <p>Total Views</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-bar-chart"></i></div>
+                    </div>
+                </div>
 
-        <!-- ANNOUNCEMENTS -->
-        <div class="announce hidden" id="announcements-box">
-            <div class="ann-title"><i class="fas fa-bullhorn"></i> <span id="announce-title"></span></div>
-            <div class="ann-text" id="announce-text"></div>
-        </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3 id="stat-earnings">&#8377;0.00</h3>
+                            <p>Total Earnings</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-shopping-bag"></i></div>
+                    </div>
+                </div>
 
-        <!-- TOP LINKS -->
-        <div class="card">
-            <div class="card-head">
-                <h3><i class="fas fa-fire"></i> Top Links</h3>
-                <span class="badge">Top 10</span>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 id="stat-referral">&#8377;0.00</h3>
+                            <p>Referral Earnings</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-exchange"></i></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3 id="stat-cpm">&#8377;0.00</h3>
+                            <p>Average CPM</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-usd"></i></div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body" style="padding:0">
-                <div style="overflow-x:auto">
-                    <table class="tbl">
-                        <thead><tr><th>Link</th><th>Views</th><th>Earnings</th></tr></thead>
+
+            <!-- ======== EARNINGS CHART ======== -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <i class="fa fa-line-chart"></i>
+                    <h3 class="box-title">My Earnings - Last 14 Days</h3>
+                </div>
+                <div class="box-body">
+                    <canvas id="earnings-chart" height="90"></canvas>
+                </div>
+            </div>
+
+            <!-- ======== ANNOUNCEMENTS ======== -->
+            <div class="box box-primary hidden" id="announcements-box">
+                <div class="box-header with-border">
+                    <i class="fa fa-bullhorn"></i>
+                    <h3 class="box-title">Announcements</h3>
+                </div>
+                <div class="box-body chat">
+                    <div class="item">
+                        <p class="announcement">
+                            <span>
+                                <small class="text-muted pull-right">
+                                    <i class="fa fa-clock-o"></i>
+                                    <span id="announce-date"></span></small>
+                                <i class="fa fa-angle-double-right"></i>
+                                <b id="announce-title"></b>
+                            </span>
+                            <span id="announce-text"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== TOP LINKS ======== -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <i class="fa fa-fire"></i>
+                    <h3 class="box-title">Top Links</h3>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Alias</th>
+                                <th>Views</th>
+                                <th>Earnings</th>
+                            </tr>
+                        </thead>
                         <tbody id="top-links-body">
-                            <tr><td colspan="3"><div class="empty"><i class="fas fa-spinner fa-spin"></i>Loading...</div></td></tr>
+                            <tr><td colspan="3" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
 
-        <!-- SUMMARY -->
-        <div class="card">
-            <div class="card-head"><h3><i class="fas fa-list-alt"></i> Summary</h3></div>
-            <div class="card-body">
-                <div class="sum-row"><span class="sl">Total Links Created</span><span class="sv" id="sum-links">-</span></div>
-                <div class="sum-row"><span class="sl">Total Views</span><span class="sv" id="sum-views">-</span></div>
-                <div class="sum-row"><span class="sl">Wallet Balance</span><span class="sv" id="sum-wallet" style="color:var(--green)">-</span></div>
-                <div class="sum-row"><span class="sl">Total Withdrawn</span><span class="sv" id="sum-withdrawn">-</span></div>
-                <div class="sum-row"><span class="sl">Lifetime Earnings</span><span class="sv" id="sum-lifetime" style="color:var(--accent)">-</span></div>
+            <!-- ======== SUMMARY ======== -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <i class="fa fa-bar-chart"></i>
+                    <h3 class="box-title">Summary</h3>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Total Links Created</td><td id="sum-links">-</td></tr>
+                            <tr><td>Total Views</td><td id="sum-views">-</td></tr>
+                            <tr><td>Wallet Balance</td><td id="sum-wallet">-</td></tr>
+                            <tr><td>Total Withdrawn</td><td id="sum-withdrawn">-</td></tr>
+                            <tr><td>Lifetime Earnings</td><td id="sum-lifetime">-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+
+        </section>
     </div>
 
+    <!-- ==================== FOOTER ==================== -->
     <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
         Copyright &copy; <b>Shortify</b> 2026
-        <span class="pull-right"><i class="fas fa-database"></i> Powered by Firebase</span>
     </footer>
+
+    <div class="control-sidebar-bg"></div>
 </div>
 
-<!-- MODAL -->
+<!-- ==================== SHORTEN MODAL ==================== -->
 <div class="modal fade" id="shorten-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><i class="fas fa-paper-plane"></i> New Shorten Link</h4>
+                <button type="button" class="close"
+                        data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">
+                    <i class="fa fa-paper-plane"></i> New Shorten Link</h4>
             </div>
             <form id="modal-shorten-form">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Destination URL</label>
-                        <input type="url" class="form-control" id="modal-url-input" placeholder="https://example.com/your-long-url" required>
+                        <input type="url" class="form-control"
+                               id="modal-url-input"
+                               placeholder="https://example.com/lambi-url"
+                               required>
                     </div>
                     <div class="form-group">
-                        <label>Custom Alias <small style="color:var(--text-muted)">(optional)</small></label>
-                        <input type="text" class="form-control" id="modal-alias-input" maxlength="30" placeholder="my-custom-alias">
+                        <label>Custom Alias <small>(optional)</small></label>
+                        <input type="text" class="form-control"
+                               id="modal-alias-input" maxlength="30"
+                               placeholder="sirf letters/numbers/dash">
                     </div>
-                    <div class="alert-err hidden" id="modal-error"></div>
-                    <div class="alert-ok hidden" id="modal-result">
-                        Link ready! <a href="#" id="modal-result-link" target="_blank"></a>
-                        <button type="button" class="btn-secondary-custom" style="margin-top:8px;font-size:.75rem;padding:5px 12px" id="modal-copy"><i class="fas fa-clipboard"></i> Copy</button>
+
+                    <div class="alert alert-danger hidden" id="modal-error"></div>
+
+                    <div class="alert alert-success hidden" id="modal-result">
+                        Link ready! <a href="#" id="modal-result-link"
+                           target="_blank" style="word-break:break-all;font-weight:bold"></a>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                id="modal-copy"><i class="fa fa-clipboard"></i> Copy</button>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-secondary-custom" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn-primary-custom" id="modal-submit"><i class="fas fa-paper-plane"></i> Shorten</button>
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary"
+                            id="modal-submit">
+                        <i class="fa fa-paper-plane"></i> Shorten</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<div class="toast-msg" id="toast-msg"></div>
-
+<!-- jQuery + Bootstrap + AdminLTE + Chart.js -->
 <script src="../vendor/jquery.min.js"></script>
 <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../vendor/dashboard/js/app.min.js"></script>
@@ -679,145 +357,164 @@
         ref, get, child, query, orderByChild, equalTo
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    /* ---------- Dark/Light Mode ---------- */
-    const body = document.body;
-    const modeBtn = document.getElementById("mode-btn");
-    const savedMode = localStorage.getItem("theme") || "light";
-    if (savedMode === "dark") { body.classList.add("dark"); modeBtn.innerHTML = '<i class="fas fa-sun"></i>'; }
-    modeBtn.addEventListener("click", () => {
-        const isDark = body.classList.toggle("dark");
-        modeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        localStorage.setItem("theme", isDark ? "dark" : "light");
-    });
-
-    /* ---------- Toast ---------- */
-    function showToast(msg, type = "ok") {
-        const t = document.getElementById("toast-msg");
-        t.className = "toast-msg " + type;
-        t.innerHTML = '<i class="fas fa-' + (type === "ok" ? "check-circle" : "exclamation-circle") + '"></i> ' + msg;
-        t.classList.add("show");
-        setTimeout(() => t.classList.remove("show"), 3000);
-    }
-
-    /* ---------- Login ---------- */
+    /* ---------- Login guard + shell setup ---------- */
     const me = await requireLogin();
     await fillUserHeader(me);
     wireLogout();
     initShortenModal(me);
 
-    /* ---------- Sidebar treeview ---------- */
-    document.querySelectorAll(".treeview > a").forEach(el => {
-        el.addEventListener("click", e => { e.preventDefault(); el.parentElement.classList.toggle("open"); });
+    /* ============================================================
+       LOAD MY LINKS (stats ke liye)
+       ============================================================ */
+    const linksQuery = query(
+        ref(db, "aliases"),
+        orderByChild("uid"),
+        equalTo(me.uid)
+    );
+    const snap = await get(linksQuery);
+
+    let totalViews = 0;
+    let totalEarnedFromLinks = 0;
+    const linksArr = [];
+
+    snap.forEach((c) => {
+        const l = c.val();
+        l.alias = c.key;
+        linksArr.push(l);
+        totalViews += Number(l.clicks) || 0;
     });
 
-    /* ---------- Load Data ---------- */
-    const linksQuery = query(ref(db, "aliases"), orderByChild("uid"), equalTo(me.uid));
-    const snap = await get(linksQuery);
-    let totalViews = 0, totalEarned = 0;
-    const linksArr = [];
-    snap.forEach(c => { const l = c.val(); l.alias = c.key; linksArr.push(l); totalViews += Number(l.clicks) || 0; });
-
     let rates = { interstitial: 8, banner: 3, none: 1 };
-    try { const r = await get(child(ref(db), "earning_rates/default")); rates = Object.assign(rates, r.val() || {}); } catch {}
-    linksArr.forEach(l => { const rate = rates[l.ad_type] ?? rates.interstitial; totalEarned += ((Number(l.clicks) || 0) * Number(rate)) / 1000; });
+    try {
+        const rSnap = await get(child(ref(db), "earning_rates/default"));
+        rates = Object.assign(rates, rSnap.val() || {});
+    } catch {}
 
-    /* ---------- Fill Stats ---------- */
+    linksArr.forEach((l) => {
+        const rate = rates[l.ad_type] ?? rates.interstitial;
+        totalEarnedFromLinks += ((Number(l.clicks) || 0) * Number(rate)) / 1000;
+    });
+
+    /* ---------- Fill stat boxes ---------- */
     document.getElementById("stat-views").textContent = formatNumber(totalViews);
+
     const lifetime = (me.wallet_money || 0) + (me.total_withdrawn || 0);
-    document.getElementById("stat-earnings").innerHTML = "&#8377;" + lifetime.toFixed(2);
+    document.getElementById("stat-earnings").innerHTML =
+        "&#8377;" + lifetime.toFixed(2);
+
     let refEarn = 0;
-    try { const re = await get(ref(db, `users/${me.uid}/referral_earnings`)); refEarn = Number(re.val()) || 0; } catch {}
-    document.getElementById("stat-referral").innerHTML = "&#8377;" + refEarn.toFixed(2);
+    try {
+        const reSnap = await get(ref(db, `users/${me.uid}/referral_earnings`));
+        refEarn = Number(reSnap.val()) || 0;
+    } catch {}
+    document.getElementById("stat-referral").innerHTML =
+        "&#8377;" + refEarn.toFixed(2);
+
     const avgCpm = totalViews > 0 ? (lifetime / totalViews) * 1000 : 0;
-    document.getElementById("stat-cpm").innerHTML = "&#8377;" + avgCpm.toFixed(2);
+    document.getElementById("stat-cpm").innerHTML =
+        "&#8377;" + avgCpm.toFixed(2);
 
-    /* ---------- Bars animate ---------- */
-    setTimeout(() => {
-        const maxViews = Math.max(totalViews, 1);
-        document.getElementById("bar-views").style.width = Math.min((totalViews / maxViews) * 100, 100) + "%";
-        document.getElementById("bar-earn").style.width = lifetime > 0 ? Math.min((lifetime / (lifetime + 1)) * 100, 100) + "%" : "0%";
-        document.getElementById("bar-ref").style.width = refEarn > 0 ? Math.min((refEarn / (refEarn + 1)) * 100, 100) + "%" : "0%";
-        document.getElementById("bar-cpm").style.width = avgCpm > 0 ? Math.min((avgCpm / (avgCpm + 1)) * 100, 100) + "%" : "0%";
-    }, 300);
-
-    /* ---------- Summary ---------- */
+    /* ---------- Summary table ---------- */
     document.getElementById("sum-links").textContent = linksArr.length;
     document.getElementById("sum-views").textContent = formatNumber(totalViews);
-    document.getElementById("sum-wallet").textContent = formatMoney(me.wallet_money);
-    document.getElementById("sum-withdrawn").textContent = formatMoney(me.total_withdrawn);
-    document.getElementById("sum-lifetime").textContent = formatMoney(lifetime);
-    document.getElementById("wallet-balance").textContent = (me.wallet_money || 0).toFixed(2);
+    document.getElementById("sum-wallet").textContent =
+        formatMoney(me.wallet_money);
+    document.getElementById("sum-withdrawn").textContent =
+        formatMoney(me.total_withdrawn);
+    document.getElementById("sum-lifetime").textContent =
+        formatMoney(lifetime);
 
-    /* ---------- Announcements ---------- */
+    /* ---------- Wallet sidebar ---------- */
+    document.getElementById("wallet-balance").textContent =
+        (me.wallet_money || 0).toFixed(2);
+
+    /* ============================================================
+       ANNOUNCEMENTS
+       ============================================================ */
     try {
         const sSnap = await get(ref(db, "settings"));
         const s = sSnap.val() || {};
         if (s.announce_text) {
             document.getElementById("announcements-box").classList.remove("hidden");
-            document.getElementById("announce-title").textContent = s.announce_title || "Announcement";
-            document.getElementById("announce-text").innerHTML = escapeHtml(s.announce_text);
+            document.getElementById("announce-title").textContent =
+                s.announce_title || "Announcement";
+            document.getElementById("announce-text").innerHTML =
+                escapeHtml(s.announce_text);
+            document.getElementById("announce-date").textContent =
+                s.announce_date ? new Date(s.announce_date).toLocaleDateString("en-IN") : "";
         }
     } catch {}
 
-    /* ---------- Top Links ---------- */
+    /* ============================================================
+       TOP LINKS TABLE
+       ============================================================ */
     linksArr.sort((a, b) => (b.clicks || 0) - (a.clicks || 0));
     const top10 = linksArr.slice(0, 10).filter(l => l.clicks > 0);
+
     const tbody = document.getElementById("top-links-body");
     if (top10.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3"><div class="empty"><i class="fas fa-link"></i>Abhi koi views nahi - pehla link banao!</div></td></tr>';
+        tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">
+            Abhi koi views nahi - pehla link banao aur share karo!</td></tr>`;
     } else {
-        tbody.innerHTML = top10.map(l => {
+        tbody.innerHTML = top10.map((l) => {
             const rate = rates[l.ad_type] ?? rates.interstitial;
             const earn = ((l.clicks || 0) * rate) / 1000;
-            return `<tr>
-                <td><a class="link-name" href="${escapeHtml(SITE_URL)}#${escapeHtml(l.alias)}" target="_blank" rel="nofollow">${escapeHtml(l.title || l.alias)}</a><br><span class="link-alias">${escapeHtml(l.alias)}</span></td>
-                <td><span class="vbadge">${formatNumber(l.clicks)}</span></td>
-                <td><span class="ebadge">${formatMoney(earn)}</span></td>
-            </tr>`;
+            return `
+                <tr>
+                    <td>
+                        <i class="fa fa-link"></i>
+                        <a href="${escapeHtml(SITE_URL)}#${escapeHtml(l.alias)}"
+                           target="_blank" rel="nofollow">
+                            ${escapeHtml(l.title || l.alias)}</a>
+                        <br><small class="text-muted">${escapeHtml(l.alias)}</small>
+                    </td>
+                    <td>${formatNumber(l.clicks)}</td>
+                    <td>${formatMoney(earn)}</td>
+                </tr>`;
         }).join("");
     }
 
-    /* ---------- Chart ---------- */
+    /* ============================================================
+       EARNINGS CHART
+       ============================================================ */
     try {
         const dailySnap = await get(ref(db, `users/${me.uid}/daily`));
         const daily = dailySnap.val() || {};
+
         const days = [];
         for (let i = 13; i >= 0; i--) {
-            const d = new Date(); d.setDate(d.getDate() - i);
-            days.push({ key: d.toISOString().slice(0,10), label: d.getDate()+"/"+(d.getMonth()+1) });
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            days.push({
+                key: d.toISOString().slice(0, 10),
+                label: d.getDate() + "/" + (d.getMonth() + 1)
+            });
         }
-        const isDark = body.classList.contains("dark");
-        const gridColor = isDark ? "rgba(148,163,184,.08)" : "rgba(0,0,0,.06)";
-        const tickColor = isDark ? "#9aa0a6" : "#5f6368";
-        const ctx = document.getElementById("earnings-chart").getContext("2d");
-        const grad = ctx.createLinearGradient(0,0,0,240);
-        grad.addColorStop(0, "rgba(26,115,232,.12)");
-        grad.addColorStop(1, "rgba(26,115,232,0)");
-        new Chart(ctx, {
-            type:"line",
+
+        new Chart(document.getElementById("earnings-chart"), {
+            type: "line",
             data: {
-                labels: days.map(d=>d.label),
-                datasets:[{
-                    label:"Earnings",
-                    data: days.map(d=>Math.round((daily[d.key]||0)*1000)/1000),
-                    borderColor:isDark?"#8ab4f8":"#1a73e8",
-                    backgroundColor:grad, borderWidth:2.5, fill:true, tension:.35,
-                    pointRadius:3.5, pointBackgroundColor:isDark?"#8ab4f8":"#1a73e8",
-                    pointBorderColor:isDark?"#1d1f25":"#fff", pointBorderWidth:2,
-                    pointHoverRadius:6
+                labels: days.map(d => d.label),
+                datasets: [{
+                    label: "Earnings",
+                    data: days.map(d =>
+                        Math.round((daily[d.key] || 0) * 1000) / 1000),
+                    borderColor: "#3c8dbc",
+                    backgroundColor: "rgba(60,141,188,.15)",
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 3
                 }]
             },
             options: {
-                responsive:true, maintainAspectRatio:false,
-                legend:{display:false},
-                scales:{
-                    xAxes:[{gridLines:{color:gridColor,drawBorder:false},ticks:{color:tickColor,font:{family:"Inter",size:11}}}],
-                    yAxes:[{gridLines:{color:gridColor,drawBorder:false},ticks:{color:tickColor,font:{family:"Inter",size:11},beginAtZero:true}}]
-                },
-                tooltips:{backgroundColor:isDark?"#2a2c33":"#fff",titleFont:{family:"Inter",size:12},bodyFont:{family:"Inter",size:12},titleColor:isDark?"#e3e3e6":"#1a1d23",bodyColor:isDark?"#9aa0a6":"#5f6368",borderColor:isDark?"#33363d":"#e2e5e9",borderWidth:1,cornerRadius:8,padding:10,displayColors:false}
+                legend: { display: false },
+                scales: { yAxes: [{ ticks: { beginAtZero: true } }] }
             }
         });
-    } catch(e) { console.error("Chart fail:",e); }
+    } catch (e) {
+        console.error("Chart load fail:", e);
+    }
 </script>
+
 </body>
 </html>
