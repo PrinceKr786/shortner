@@ -1,23 +1,21 @@
 ﻿<!DOCTYPE html>
 <!-- ============================================================
-     FILE   : user/tools-api.html
-     KAAM   : DEVELOPERS API - AdLinkFly ke Tools/api.ctp jaisa
-              documentation page:
-                - Personal API key dikhata hai (auto-generate)
-                - Endpoint/params/response docs
-                - PHP/cURL + JS example code
-     NOTE   : /api endpoint Cloudflare Worker se chalta hai
-              (README dekho) - Worker deploy hone tak examples
-              sirf reference hain.
+     FILE   : user/tools-bookmarklet.html
+     KAAM   : BOOKMARKLET TOOL PAGE
+              - Draggable JavaScript bookmarklet button dikhata hai
+              - Instructions kaise use karna hai
+              - Bookmarklet current page URL ko Shortify se shorten karta hai
+              - Popup khulta hai link short karne ke liye
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Developers API - Shortify</title>
+    <title>Bookmarklet - Shortify</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
@@ -47,14 +45,16 @@
     </style>
     <link rel="stylesheet" href="../theme/css/app.css">
     <link rel="icon" href="../favicon.ico">
-
     <style>
-        pre.code-sample {
-            background:#1e282c; color:#a6e22e; padding:14px;
-            border-radius:4px; font-size:.82rem;
-            white-space:pre-wrap; word-break:break-all;
-        }
-        table.api-doc td:first-child { font-family:monospace; color:#c7254e; }
+        .bookmarklet-demo{display:inline-block;padding:12px 28px;background:#3c8dbc;color:#fff;
+            border:2px dashed #fff;border-radius:8px;font-size:18px;font-weight:bold;cursor:grab;
+            text-decoration:none;margin:20px 0;box-shadow:0 4px 12px rgba(0,0,0,.3);
+            transition:all .2s}
+        .bookmarklet-demo:hover{background:#367fa9;transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.4)}
+        .bookmarklet-demo:active{cursor:grabbing;transform:translateY(0)}
+        .step-box{background:#f9f9f9;border-left:4px solid #3c8dbc;padding:15px;margin:10px 0;border-radius:4px}
+        .step-num{display:inline-block;width:30px;height:30px;background:#3c8dbc;color:#fff;
+            border-radius:50%;text-align:center;line-height:30px;font-weight:bold;margin-right:10px}
     </style>
 </head>
 
@@ -71,17 +71,18 @@
         <nav class="navbar navbar-static-top" role="navigation">
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
                role="button"><span class="sr-only">Toggle navigation</span></a>
+
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <img src="" id="header-avatar" class="user-image" alt="User Image">
                             <span class="hidden-xs" id="header-name">...</span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="user-header">
-                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="User Image">
                                 <p><span id="dropdown-name">...</span><br>
                                     <small>Member since <span id="member-since">-</span></small></p>
                             </li>
@@ -106,6 +107,7 @@
                 <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
             </button>
             <br>
+
             <ul class="sidebar-menu">
                 <li>
                     <a><i class="fa fa-credit-card text-aqua"></i>
@@ -161,8 +163,8 @@
                         <li><a href="tools-quick.html">Quick Link</a></li>
                         <li><a href="tools-mass.html">Mass Shrinker</a></li>
                         <li><a href="tools-fullpage.html">Full Page Script</a></li>
-                        <li><a href="tools-bookmarklet.html">Bookmarklet</a></li>
-                        <li class="active"><a href="tools-api.html">Developers API</a></li>
+                        <li class="active"><a href="tools-bookmarklet.html">Bookmarklet</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
                     </ul>
                 </li>
 
@@ -177,93 +179,95 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Developers API <small>Apne apps se link banao</small></h1>
+            <h1>Bookmarklet <small>Ek click me page short karo</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li>Tools</li>
-                <li class="active">Developers API</li>
+                <li><a href="#">Tools</a></li>
+                <li class="active">Bookmarklet</li>
             </ol>
         </section>
 
         <section class="content">
 
-            <!-- ===== API KEY ===== -->
+            <!-- Bookmarklet button -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-key"></i> Your API Key</h3>
+                    <h3 class="box-title"><i class="fa fa-bookmark"></i> Shortify Bookmarklet</h3>
+                </div>
+                <div class="box-body text-center">
+
+                    <p class="text-muted" style="margin-bottom:20px">
+                        Neeche ka button apne browser ke bookmarks bar me drag karo.
+                        Phir kisi bhi page pe click karke uska short link bana sakte ho!
+                    </p>
+
+                    <!-- Bookmarklet link - isko drag kar sakte hai bookmarks bar me -->
+                    <a id="bookmarklet-link" class="bookmarklet-demo" href="#">
+                        <i class="fa fa-link"></i> Shortify It!
+                    </a>
+
+                    <p class="text-muted" style="margin-top:10px;font-size:13px">
+                        <i class="fa fa-arrows"></i> Ise apne bookmarks bar me drag karo
+                    </p>
+
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-question-circle"></i> Kaise Use Kare?</h3>
                 </div>
                 <div class="box-body">
-                    <div class="input-group input-group-lg">
-                        <input type="text" class="form-control" id="api-key-input" readonly>
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-flat"
-                                    id="copy-key-btn"><i class="fa fa-clipboard"></i> Copy</button>
-                            <button type="button" class="btn btn-warning btn-flat"
-                                    id="regen-key-btn"><i class="fa fa-refresh"></i> Regenerate</button>
-                        </span>
+
+                    <div class="step-box">
+                        <span class="step-num">1</span>
+                        Upar ka <strong>"Shortify It!"</strong> button ko apne browser ke
+                        <strong>Bookmarks Bar</strong> me drag & drop karo.
                     </div>
-                    <p class="help-block" style="margin-top:10px">
-                        Ye key apni API requests me use karo.
-                        Regenerate karne se purani key turant band ho jayegi.</p>
-                </div>
-            </div>
 
-            <!-- ===== ENDPOINT DOC ===== -->
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-plug"></i> Endpoint</h3>
-                </div>
-                <div class="box-body">
+                    <div class="step-box">
+                        <span class="step-num">2</span>
+                        Jab kisi bhi website pe ho aur short link chahiye, to bookmarks bar pe
+                        <strong>"Shortify It!"</strong> pe click karo.
+                    </div>
 
-                    <pre class="code-sample" id="endpoint-sample">Loading...</pre>
+                    <div class="step-box">
+                        <span class="step-num">3</span>
+                        Ek popup khulega jisme current page URL hoga. Apna custom alias dalo
+                        ya khali chhodo (auto generate hoga).
+                    </div>
 
-                    <table class="table api-doc table-striped">
-                        <thead><tr><th style="width:130px">Parameter</th><th>Description</th></tr></thead>
-                        <tbody>
-                            <tr><td>api</td><td>Aapki API key (required)</td></tr>
-                            <tr><td>url</td><td>Jo URL short karna hai (required, URL-encoded)</td></tr>
-                            <tr><td>alias</td><td>Custom alias (optional). Agar already le liya ho to error milega.</td></tr>
-                            <tr><td>format</td><td><b>text</b> = sirf short link plain text me milega (default json)</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="step-box">
+                        <span class="step-num">4</span>
+                        <strong>"Shorten"</strong> button dabao. Short link turant ready!
+                        Copy karke use kar sakte ho.
+                    </div>
 
-                    <h4>Success Response</h4>
-                    <pre class="code-sample">{
-  "status": "success",
-  "shortened": "https://YOUR-SITE.github.io/#aB3xK9",
-}</pre>
-
-                    <h4>Error Response</h4>
-                    <pre class="code-sample">{
-  "status": "error",
-  "error": "Please enter a valid url",
-  "code": 0
-}</pre>
+                    <div class="callout callout-warning" style="margin-top:20px">
+                        <h4><i class="fa fa-info-circle"></i> Tip</h4>
+                        <p>Bookmarklet tab kaam karega jab aap Shortify pe logged in ho.
+                           Agar nahi ho to pehle login karo.</p>
+                    </div>
 
                 </div>
             </div>
 
-            <!-- ===== EXAMPLES ===== -->
-            <div class="box">
+            <!-- Bookmarklet code box -->
+            <div class="box box-default">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-code"></i> Example Code</h3>
+                    <h3 class="box-title"><i class="fa fa-code"></i> Bookmarklet Code</h3>
                 </div>
                 <div class="box-body">
-
-                    <h4>PHP (cURL)</h4>
-                    <pre class="code-sample">$api_url = file_get_contents("API-ENDPOINT?api=YOUR_KEY&amp;url=" . urlencode($long_url));
-$data = json_decode($api_url, TRUE);
-echo $data["shortened"];</pre>
-
-                    <h4>JavaScript (fetch)</h4>
-                    <pre class="code-sample">const res = await fetch("API-ENDPOINT?api=YOUR_KEY&amp;url=" +
-                         encodeURIComponent("https://example.com"));
-const data = await res.json();
-console.log(data.shortened);</pre>
-
-                    <div class="callout callout-info" style="margin-bottom:0">
-                        <i class="fa fa-info-circle"></i> Rate limit:
-                        har key se max <b>5 requests/second</b>.
+                    <p class="text-muted">Agar manual bookmark banana ho to ye code copy karo:</p>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="bookmarklet-code" readonly
+                               style="font-family:monospace;font-size:12px">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" id="copy-code-btn" title="Copy code">
+                                <i class="fa fa-clipboard"></i>
+                            </button>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -324,57 +328,47 @@ console.log(data.shortened);</pre>
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireLogin, fillUserHeader, wireLogout, initShortenModal,
-        showToast, SITE_URL
+        requireUser, fillUserHeader, wireLogout, initShortenModal,
+        showToast, escapeHtml, SITE_URL
     } from "./js/app.js";
-    import { ref, get, set }
-        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    const me = await requireLogin();
+    /* ---- Pehle check karo user logged in hai ya nahi ---- */
+    const me = await requireUser();
     await fillUserHeader(me);
     wireLogout();
     initShortenModal(me);
 
     /* ============================================================
-       API KEY - nahi hai to abhi generate karo
+       BOOKMARKLET CODE GENERATE KARO
+       Ye JavaScript code browser me chalta hai aur popup dikhata hai
        ============================================================ */
-    let apiKey = me.api_key;
-    if (!apiKey) {
-        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        apiKey = "";
-        for (let i = 0; i < 24; i++) {
-            apiKey += chars[Math.floor(Math.random() * chars.length)];
+    const bookmarkletCode = `javascript:void(function(){
+        var u="${SITE_URL}";
+        var w=500,h=450,left=(screen.width/2)-(w/2),top=(screen.height/2)-(h/2);
+        var p=window.open(u+'user/bookmarklet-popup.html?url='+encodeURIComponent(location.href),
+            'shortify_popup','width='+w+',height='+h+',top='+top+',left='+left+
+            ',scrollbars=yes,resizable=yes');
+        if(!p){alert('Popup blocked! Please allow popups for this site.');}
+    }())`;
+
+    /* ---- Bookmarklet link ka href set karo ---- */
+    document.getElementById("bookmarklet-link").href = bookmarkletCode;
+
+    /* ---- Code box me bhi dikhao ---- */
+    document.getElementById("bookmarklet-code").value = bookmarkletCode;
+
+    /* ---- Copy code button ---- */
+    document.getElementById("copy-code-btn").addEventListener("click", async () => {
+        try {
+            await navigator.clipboard.writeText(bookmarkletCode);
+            showToast("Code copy ho gaya!", "success");
+        } catch (err) {
+            /* ---- Fallback: select aur manual copy ---- */
+            const input = document.getElementById("bookmarklet-code");
+            input.select();
+            document.execCommand("copy");
+            showToast("Code copy ho gaya!", "success");
         }
-        await set(ref(db, `users/${me.uid}/api_key`), apiKey);
-    }
-    document.getElementById("api-key-input").value = apiKey;
-
-    /* ---------- Endpoint sample live bharna ---------- */
-    document.getElementById("endpoint-sample").textContent =
-        `GET ${SITE_URL}api?api=${apiKey}&url=LONG-URL`;
-    document.querySelectorAll(".code-sample").forEach(pre => {
-        pre.innerHTML = pre.innerHTML
-            .replaceAll("API-ENDPOINT", `${SITE_URL}api`)
-            .replaceAll("YOUR_KEY", apiKey);
-    });
-
-    /* ---------- Copy / Regenerate ---------- */
-    document.getElementById("copy-key-btn").addEventListener("click", async () => {
-        await navigator.clipboard.writeText(apiKey).catch(() => {});
-        showToast("API key copy ho gayi!", "success");
-    });
-
-    document.getElementById("regen-key-btn").addEventListener("click", async () => {
-        if (!confirm("Purani key band ho jayegi. Pakka nayi banau?")) return;
-
-        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        let nk = "";
-        for (let i = 0; i < 24; i++) {
-            nk += chars[Math.floor(Math.random() * chars.length)];
-        }
-        await set(ref(db, `users/${me.uid}/api_key`), nk);
-        document.getElementById("api-key-input").value = nk;
-        location.reload();
     });
 </script>
 

@@ -1,23 +1,22 @@
 ﻿<!DOCTYPE html>
 <!-- ============================================================
-     FILE   : user/tools-api.html
-     KAAM   : DEVELOPERS API - AdLinkFly ke Tools/api.ctp jaisa
-              documentation page:
-                - Personal API key dikhata hai (auto-generate)
-                - Endpoint/params/response docs
-                - PHP/cURL + JS example code
-     NOTE   : /api endpoint Cloudflare Worker se chalta hai
-              (README dekho) - Worker deploy hone tak examples
-              sirf reference hain.
+     FILE   : user/create-campaign-popup.html
+     KAAM   : CREATE POPUP CAMPAIGN - Naya popup advertise
+              campaign banane ka form:
+                - Campaign Name, Website Title, Website URL
+                - Country pricing table dikhai degi
+                - Terms checkbox zaroori hai
+                - Firebase "campaigns" mein save karo
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Developers API - Shortify</title>
+    <title>Create Popup Campaign - Shortify</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
@@ -47,15 +46,6 @@
     </style>
     <link rel="stylesheet" href="../theme/css/app.css">
     <link rel="icon" href="../favicon.ico">
-
-    <style>
-        pre.code-sample {
-            background:#1e282c; color:#a6e22e; padding:14px;
-            border-radius:4px; font-size:.82rem;
-            white-space:pre-wrap; word-break:break-all;
-        }
-        table.api-doc td:first-child { font-family:monospace; color:#c7254e; }
-    </style>
 </head>
 
 <body class="member-dashboard hold-transition skin-blue sidebar-mini">
@@ -71,17 +61,18 @@
         <nav class="navbar navbar-static-top" role="navigation">
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
                role="button"><span class="sr-only">Toggle navigation</span></a>
+
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <img src="" id="header-avatar" class="user-image" alt="User Image">
                             <span class="hidden-xs" id="header-name">...</span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="user-header">
-                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="User Image">
                                 <p><span id="dropdown-name">...</span><br>
                                     <small>Member since <span id="member-since">-</span></small></p>
                             </li>
@@ -106,6 +97,7 @@
                 <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
             </button>
             <br>
+
             <ul class="sidebar-menu">
                 <li>
                     <a><i class="fa fa-credit-card text-aqua"></i>
@@ -125,13 +117,13 @@
                     </ul>
                 </li>
 
-                <li>
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-bullhorn"></i>
                         <span>Campaigns</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
-                    <ul class="treeview-menu " style="">
+                    <ul class="treeview-menu menu-open" style="display:block">
                         <li><a href="campaigns.html">My Campaigns</a></li>
-                        <li><a href="create-campaign-popup.html">New Campaign</a></li>
+                        <li class="active"><a href="create-campaign-popup.html">New Campaign</a></li>
                     </ul>
                 </li>
 
@@ -153,16 +145,16 @@
                     </ul>
                 </li>
 
-                <li class="treeview active">
+                <li>
                     <a href="#"><i class="fa fa-wrench"></i>
                         <span>Tools</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
-                    <ul class="treeview-menu menu-open" style="display:block">
+                    <ul class="treeview-menu " style="">
                         <li><a href="tools-quick.html">Quick Link</a></li>
                         <li><a href="tools-mass.html">Mass Shrinker</a></li>
                         <li><a href="tools-fullpage.html">Full Page Script</a></li>
                         <li><a href="tools-bookmarklet.html">Bookmarklet</a></li>
-                        <li class="active"><a href="tools-api.html">Developers API</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
                     </ul>
                 </li>
 
@@ -177,95 +169,124 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Developers API <small>Apne apps se link banao</small></h1>
+            <h1>Create Popup Campaign <small>Naya popup advertise campaign banao</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li>Tools</li>
-                <li class="active">Developers API</li>
+                <li><a href="advertise.html">Advertise</a></li>
+                <li class="active">Create Popup Campaign</li>
             </ol>
         </section>
 
         <section class="content">
 
-            <!-- ===== API KEY ===== -->
+            <!-- Campaign Form Box -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-key"></i> Your API Key</h3>
-                </div>
-                <div class="box-body">
-                    <div class="input-group input-group-lg">
-                        <input type="text" class="form-control" id="api-key-input" readonly>
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-flat"
-                                    id="copy-key-btn"><i class="fa fa-clipboard"></i> Copy</button>
-                            <button type="button" class="btn btn-warning btn-flat"
-                                    id="regen-key-btn"><i class="fa fa-refresh"></i> Regenerate</button>
-                        </span>
+                    <h3 class="box-title"><i class="fa fa-plus-circle"></i> Campaign Details</h3>
+                    <div class="box-tools pull-right">
+                        <a href="campaigns.html" class="btn btn-default btn-sm">
+                            <i class="fa fa-arrow-left"></i> Back to Campaigns
+                        </a>
                     </div>
-                    <p class="help-block" style="margin-top:10px">
-                        Ye key apni API requests me use karo.
-                        Regenerate karne se purani key turant band ho jayegi.</p>
                 </div>
+                <form id="campaign-form">
+                    <div class="box-body">
+
+                        <!-- Campaign Name -->
+                        <div class="form-group">
+                            <label><i class="fa fa-tag"></i> Campaign Name <span class="text-red">*</span></label>
+                            <input type="text" class="form-control" id="camp-name"
+                                   placeholder="e.g. My Product Promotion" maxlength="100" required>
+                            <p class="help-block">Campaign ka naam - sirf tumhe dikhayega</p>
+                        </div>
+
+                        <!-- Website Title -->
+                        <div class="form-group">
+                            <label><i class="fa fa-header"></i> Website Title <span class="text-red">*</span></label>
+                            <input type="text" class="form-control" id="camp-title"
+                                   placeholder="e.g. Best Deals Online - Shop Now" maxlength="150" required>
+                            <p class="help-block">Popup mein dikhega ye title</p>
+                        </div>
+
+                        <!-- Website URL -->
+                        <div class="form-group">
+                            <label><i class="fa fa-globe"></i> Website URL <span class="text-red">*</span></label>
+                            <input type="url" class="form-control" id="camp-url"
+                                   placeholder="https://example.com" required>
+                            <p class="help-block">Jab user popup close karega to kahan jayega</p>
+                        </div>
+
+                        <!-- Campaign Type (hidden - always popup for this page) -->
+                        <input type="hidden" id="camp-type" value="popup">
+
+                    </div>
+                </form>
             </div>
 
-            <!-- ===== ENDPOINT DOC ===== -->
-            <div class="box">
+            <!-- Country Pricing Box -->
+            <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-plug"></i> Endpoint</h3>
+                    <h3 class="box-title"><i class="fa fa-globe"></i> Country Pricing (per 1000 views)</h3>
                 </div>
-                <div class="box-body">
-
-                    <pre class="code-sample" id="endpoint-sample">Loading...</pre>
-
-                    <table class="table api-doc table-striped">
-                        <thead><tr><th style="width:130px">Parameter</th><th>Description</th></tr></thead>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Country</th>
+                                <th>Rate</th>
+                                <th>Estimated Cost (1000 views)</th>
+                            </tr>
+                        </thead>
                         <tbody>
-                            <tr><td>api</td><td>Aapki API key (required)</td></tr>
-                            <tr><td>url</td><td>Jo URL short karna hai (required, URL-encoded)</td></tr>
-                            <tr><td>alias</td><td>Custom alias (optional). Agar already le liya ho to error milega.</td></tr>
-                            <tr><td>format</td><td><b>text</b> = sirf short link plain text me milega (default json)</td></tr>
+                            <tr><td><strong>India (IN)</strong></td><td>&#8377;8 / 1000</td><td>&#8377;8.00</td></tr>
+                            <tr><td><strong>United States (US)</strong></td><td>&#8377;15 / 1000</td><td>&#8377;15.00</td></tr>
+                            <tr><td><strong>United Kingdom (UK)</strong></td><td>&#8377;12 / 1000</td><td>&#8377;12.00</td></tr>
+                            <tr><td><strong>Canada (CA)</strong></td><td>&#8377;14 / 1000</td><td>&#8377;14.00</td></tr>
+                            <tr><td><strong>Australia (AU)</strong></td><td>&#8377;13 / 1000</td><td>&#8377;13.00</td></tr>
+                            <tr><td><strong>Germany (DE)</strong></td><td>&#8377;11 / 1000</td><td>&#8377;11.00</td></tr>
+                            <tr><td><strong>France (FR)</strong></td><td>&#8377;10 / 1000</td><td>&#8377;10.00</td></tr>
+                            <tr><td><strong>Brazil (BR)</strong></td><td>&#8377;7 / 1000</td><td>&#8377;7.00</td></tr>
+                            <tr><td><strong>Japan (JP)</strong></td><td>&#8377;16 / 1000</td><td>&#8377;16.00</td></tr>
+                            <tr><td><strong>Other Countries</strong></td><td>&#8377;5 / 1000</td><td>&#8377;5.00</td></tr>
                         </tbody>
                     </table>
-
-                    <h4>Success Response</h4>
-                    <pre class="code-sample">{
-  "status": "success",
-  "shortened": "https://YOUR-SITE.github.io/#aB3xK9",
-}</pre>
-
-                    <h4>Error Response</h4>
-                    <pre class="code-sample">{
-  "status": "error",
-  "error": "Please enter a valid url",
-  "code": 0
-}</pre>
-
                 </div>
             </div>
 
-            <!-- ===== EXAMPLES ===== -->
-            <div class="box">
+            <!-- Terms Box -->
+            <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-code"></i> Example Code</h3>
+                    <h3 class="box-title"><i class="fa fa-exclamation-triangle"></i> Terms & Conditions</h3>
                 </div>
                 <div class="box-body">
-
-                    <h4>PHP (cURL)</h4>
-                    <pre class="code-sample">$api_url = file_get_contents("API-ENDPOINT?api=YOUR_KEY&amp;url=" . urlencode($long_url));
-$data = json_decode($api_url, TRUE);
-echo $data["shortened"];</pre>
-
-                    <h4>JavaScript (fetch)</h4>
-                    <pre class="code-sample">const res = await fetch("API-ENDPOINT?api=YOUR_KEY&amp;url=" +
-                         encodeURIComponent("https://example.com"));
-const data = await res.json();
-console.log(data.shortened);</pre>
-
-                    <div class="callout callout-info" style="margin-bottom:0">
-                        <i class="fa fa-info-circle"></i> Rate limit:
-                        har key se max <b>5 requests/second</b>.
+                    <div class="callout callout-info">
+                        <p><strong>Campaign banane se pehle ye padho:</strong></p>
+                        <ul>
+                            <li>Sirf legal content promote karo - koi bhi illegal/NSFW content allowed nahi hai</li>
+                            <li>Popup ads sirf ek baar dikhega har visitor ko (24hr cookie)</li>
+                            <li>Minimum &#8377;100 ka budget hona chahiye campaign ke liye</li>
+                            <li>Clicks ya impressions ka guarantee nahi hai - real traffic pe depend karta hai</li>
+                            <li>Shortify ko kabhi bhi campaign reject karne ka haq hai agar terms toot rahe ho</li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="terms-check" required>
+                            Main <strong>Terms & Conditions</strong> padh chuka hoon aur agree karta hoon
+                            <span class="text-red">*</span>
+                        </label>
                     </div>
                 </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="box-footer">
+                <a href="campaigns.html" class="btn btn-default">
+                    <i class="fa fa-times"></i> Cancel
+                </a>
+                <button type="button" class="btn btn-success pull-right" id="create-btn">
+                    <i class="fa fa-check"></i> Create Campaign
+                </button>
             </div>
 
         </section>
@@ -325,56 +346,85 @@ console.log(data.shortened);</pre>
     import { db } from "./js/firebase-config.js";
     import {
         requireLogin, fillUserHeader, wireLogout, initShortenModal,
-        showToast, SITE_URL
+        showToast, escapeHtml, formatDate, formatNumber,
+        isValidUrl, SITE_URL
     } from "./js/app.js";
-    import { ref, get, set }
-        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import {
+        ref, set, push
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+    /* ---- User login check aur header fill ---- */
     const me = await requireLogin();
     await fillUserHeader(me);
     wireLogout();
     initShortenModal(me);
 
     /* ============================================================
-       API KEY - nahi hai to abhi generate karo
+       CAMPAIGN CREATE - Form submit hone pe Firebase mein save karo
        ============================================================ */
-    let apiKey = me.api_key;
-    if (!apiKey) {
-        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        apiKey = "";
-        for (let i = 0; i < 24; i++) {
-            apiKey += chars[Math.floor(Math.random() * chars.length)];
+    document.getElementById("create-btn").addEventListener("click", async () => {
+        const name = document.getElementById("camp-name").value.trim();
+        const title = document.getElementById("camp-title").value.trim();
+        const url = document.getElementById("camp-url").value.trim();
+        const termsChecked = document.getElementById("terms-check").checked;
+
+        /* Basic validation */
+        if (!name) {
+            showToast("Campaign name dalo!", "error");
+            return;
         }
-        await set(ref(db, `users/${me.uid}/api_key`), apiKey);
-    }
-    document.getElementById("api-key-input").value = apiKey;
-
-    /* ---------- Endpoint sample live bharna ---------- */
-    document.getElementById("endpoint-sample").textContent =
-        `GET ${SITE_URL}api?api=${apiKey}&url=LONG-URL`;
-    document.querySelectorAll(".code-sample").forEach(pre => {
-        pre.innerHTML = pre.innerHTML
-            .replaceAll("API-ENDPOINT", `${SITE_URL}api`)
-            .replaceAll("YOUR_KEY", apiKey);
-    });
-
-    /* ---------- Copy / Regenerate ---------- */
-    document.getElementById("copy-key-btn").addEventListener("click", async () => {
-        await navigator.clipboard.writeText(apiKey).catch(() => {});
-        showToast("API key copy ho gayi!", "success");
-    });
-
-    document.getElementById("regen-key-btn").addEventListener("click", async () => {
-        if (!confirm("Purani key band ho jayegi. Pakka nayi banau?")) return;
-
-        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        let nk = "";
-        for (let i = 0; i < 24; i++) {
-            nk += chars[Math.floor(Math.random() * chars.length)];
+        if (!title) {
+            showToast("Website title dalo!", "error");
+            return;
         }
-        await set(ref(db, `users/${me.uid}/api_key`), nk);
-        document.getElementById("api-key-input").value = nk;
-        location.reload();
+        if (!url || !isValidUrl(url)) {
+            showToast("Valid website URL dalo!", "error");
+            return;
+        }
+        if (!termsChecked) {
+            showToast("Terms accept karo pehle!", "error");
+            return;
+        }
+
+        /* Disable button - multiple clicks se bacho */
+        const btn = document.getElementById("create-btn");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Creating...';
+
+        try {
+            /* Firebase mein campaign push karo */
+            const newRef = push(ref(db, "campaigns"));
+            await set(newRef, {
+                uid: me.uid,
+                name: name,
+                type: "popup",
+                website_title: title,
+                url: url,
+                status: "pending",
+                visitors: 0,
+                clicks: 0,
+                impressions: 0,
+                price: 0,
+                country_pricing: {
+                    "IN": 8, "US": 15, "UK": 12, "CA": 14, "AU": 13,
+                    "DE": 11, "FR": 10, "BR": 7, "JP": 16, "Other": 5
+                },
+                created_at: Date.now()
+            });
+
+            showToast("Campaign ban gaya! Ab admin approve karega.", "success");
+
+            /* 2 second baad campaigns page pe redirect karo */
+            setTimeout(() => {
+                location.href = "campaigns.html";
+            }, 2000);
+
+        } catch (err) {
+            console.error("createCampaign error:", err);
+            showToast("Campaign create nahi ho paya: " + err.message, "error");
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-check"></i> Create Campaign';
+        }
     });
 </script>
 

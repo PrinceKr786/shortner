@@ -1,0 +1,528 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : user/view-campaign.html
+     KAAM   : CAMPAIGN DETAILS - Ek specific campaign ka full
+              details dikhata hai:
+                - URL hash se campaign ID padho (#id=xxx)
+                - Name, Type, Status, URL/Banner, Visitors/Total, Price, Created
+                - Pause/Resume button (status ke hisaab se)
+                - Stats: Clicks, Impressions, CTR
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Campaign Details - Shortify</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <!-- Inline skin-blue CSS (GitHub Pages fix) -->
+    <style>
+        .skin-blue .main-header .navbar{background-color:#3c8dbc}
+        .skin-blue .main-header .navbar .nav>li>a{color:#fff}
+        .skin-blue .main-header .navbar .nav>li>a:hover,.skin-blue .main-header .navbar .nav>li>a:active,.skin-blue .main-header .navbar .nav>li>a:focus,.skin-blue .main-header .navbar .nav .open>a,.skin-blue .main-header .navbar .nav .open>a:hover,.skin-blue .main-header .navbar .nav .open>a:focus,.skin-blue .main-header .navbar .nav>.active>a{background:rgba(0,0,0,0.1);color:#f6f6f6}
+        .skin-blue .main-header .navbar .nav>.active>a{border-bottom-color:#3c8dbc}
+        .skin-blue .main-header .logo{background-color:#367fa9;color:#fff}
+        .skin-blue .main-header .logo:hover{background-color:#357ca5}
+        .skin-blue .main-sidebar{background-color:#222d32}
+        .skin-blue .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-blue .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-blue .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-blue .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-blue .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-blue .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
+        .skin-blue .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-blue .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-blue .main-sidebar .sidebar .user-panel>.info,.skin-blue .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-blue .wrapper,.skin-blue .main-footer{background-color:#ecf0f5}
+        .skin-blue .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
+        .skin-blue .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+        .btn-social{position:relative;padding-left:44px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .btn-social>:first-child{position:absolute;left:0;top:0;bottom:0;width:42px;line-height:24px;font-size:1.6em;text-align:center;border-right:1px solid rgba(255,255,255,.15)}
+        .btn-github{color:#fff;background-color:#444;border-color:rgba(0,0,0,.2)}
+        .btn-github:hover,.btn-github:focus{color:#fff;background-color:#333;border-color:rgba(0,0,0,.2)}
+    </style>
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+
+<body class="member-dashboard hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- ==================== MAIN HEADER ==================== -->
+    <header class="main-header">
+        <a href="../index.html" class="logo">
+            <span class="logo-mini"><b>S</b></span>
+            <span class="logo-lg"><b>Shortify</b></span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="User Image">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="User Image">
+                                <p><span id="dropdown-name">...</span><br>
+                                    <small>Member since <span id="member-since">-</span></small></p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left"><a href="profile.html" class="btn btn-default btn-flat">Profile</a></div>
+                                <div class="pull-right"><a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN SIDEBAR ==================== -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <button type="button"
+                    class="btn btn-block btn-social btn-github btn-lg shorten-button"
+                    data-toggle="modal" data-target="#shorten-modal">
+                <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
+            </button>
+            <br>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a><i class="fa fa-credit-card text-aqua"></i>
+                        <span><b>Money Wallet</b><br>
+                            &#8377;<span id="wallet-balance">0.00</span></span></a>
+                </li>
+
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+
+                <li>
+                    <a href="#"><i class="fa fa-link"></i>
+                        <span>Manage Links</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu " style="">
+                        <li><a href="links.html">All Links</a></li>
+                        <li><a href="links-hidden.html">Hidden Links</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview active">
+                    <a href="#"><i class="fa fa-bullhorn"></i>
+                        <span>Campaigns</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu menu-open" style="display:block">
+                        <li class="active"><a href="campaigns.html">My Campaigns</a></li>
+                        <li><a href="create-campaign-popup.html">New Campaign</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+
+                <li><a href="withdraw.html"><i class="fa fa-dollar"></i> <span>Withdraw</span></a></li>
+
+                <li><a href="membership.html"><i class="fa fa-diamond text-yellow"></i> <span>Membership</span></a></li>
+
+                <li>
+                    <a href="#"><i class="fa fa-bullhorn"></i>
+                        <span>Advertise</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu " style="">
+                        <li><a href="advertise.html">Overview</a></li>
+                        <li><a href="advertise-banner.html">Banner Ads</a></li>
+                        <li><a href="advertise-interstitial.html">Interstitial Ads</a></li>
+                        <li><a href="advertise-social.html">Social/Video/Push</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#"><i class="fa fa-wrench"></i>
+                        <span>Tools</span>
+                        <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu " style="">
+                        <li><a href="tools-quick.html">Quick Link</a></li>
+                        <li><a href="tools-mass.html">Mass Shrinker</a></li>
+                        <li><a href="tools-fullpage.html">Full Page Script</a></li>
+                        <li><a href="tools-bookmarklet.html">Bookmarklet</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="referrals.html"><i class="fa fa-exchange"></i> <span>Referrals</span></a></li>
+                <li><a href="support.html"><i class="fa fa-life-ring"></i> <span>Support</span></a></li>
+                <li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Campaign Details <small id="camp-name-header">...</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="advertise.html">Advertise</a></li>
+                <li><a href="campaigns.html">My Campaigns</a></li>
+                <li class="active">Campaign Details</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
+            <!-- Loading message -->
+            <div id="loading-msg" class="text-center" style="padding:40px">
+                <i class="fa fa-spinner fa-spin fa-2x"></i>
+                <p>Campaign load ho raha hai...</p>
+            </div>
+
+            <!-- Error message -->
+            <div id="error-msg" class="callout callout-danger hidden">
+                <h4>Error!</h4>
+                <p id="error-text">Campaign nahi mila. <a href="campaigns.html">Wapas jao</a></p>
+            </div>
+
+            <!-- Campaign content - jab load ho jaye tab dikhega -->
+            <div id="campaign-content" class="hidden">
+
+                <!-- Stats boxes -->
+                <div class="row">
+                    <div class="col-lg-3 col-xs-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-aqua"><i class="fa fa-mouse-pointer"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Clicks</span>
+                                <span class="info-box-number" id="stat-clicks">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-green"><i class="fa fa-eye"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Impressions</span>
+                                <span class="info-box-number" id="stat-impressions">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-yellow"><i class="fa fa-percent"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">CTR</span>
+                                <span class="info-box-number" id="stat-ctr">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-red"><i class="fa fa-users"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Visitors</span>
+                                <span class="info-box-number" id="stat-visitors">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign Details Box -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-info-circle"></i> Campaign Information</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-sm" id="action-btn"
+                                    style="display:none">
+                                <i class="fa fa-play"></i> <span id="action-btn-text">Resume</span>
+                            </button>
+                            <a href="campaigns.html" class="btn btn-default btn-sm">
+                                <i class="fa fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body no-padding">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th style="width:200px"><i class="fa fa-tag"></i> Name</th>
+                                    <td id="detail-name">-</td>
+                                </tr>
+                                <tr>
+                                    <th><i class="fa fa-folder"></i> Type</th>
+                                    <td id="detail-type">-</td>
+                                </tr>
+                                <tr>
+                                    <th><i class="fa fa-flag"></i> Status</th>
+                                    <td id="detail-status">-</td>
+                                </tr>
+                                <tr>
+                                    <th><i class="fa fa-globe"></i> Website URL</th>
+                                    <td id="detail-url">-</td>
+                                </tr>
+                                <tr>
+                                    <th><i class="fa fa-image"></i> Banner / Title</th>
+                                    <td id="detail-banner">-</td>
+                                </tr>
+                                <tr>
+                                    <th><i class="fa fa-users"></i> Visitors / Total</th>
+                                    <td id="detail-visitors">-</td>
+                                </tr>
+                                <tr>
+                                    <th><i class="fa fa-inr"></i> Price</th>
+                                    <td id="detail-price">-</td>
+                                </tr>
+                                <tr>
+                                    <th><i class="fa fa-calendar"></i> Created</th>
+                                    <td id="detail-created">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Country Pricing Box -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-globe"></i> Country Pricing</h3>
+                    </div>
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Country</th>
+                                    <th>Rate (per 1000 views)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pricing-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+
+<!-- New Shorten Link Modal -->
+<div class="modal fade" id="shorten-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-paper-plane"></i> New Shorten Link</h4>
+            </div>
+            <form id="modal-shorten-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Destination URL</label>
+                        <input type="url" class="form-control" id="modal-url-input"
+                               placeholder="https://example.com/lambi-url" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Custom Alias <small>(optional)</small></label>
+                        <input type="text" class="form-control" id="modal-alias-input"
+                               maxlength="30" placeholder="sirf letters/numbers/dash">
+                    </div>
+                    <div class="alert alert-danger hidden" id="modal-error"></div>
+                    <div class="alert alert-success hidden" id="modal-result">
+                        Link ready! <a href="#" id="modal-result-link" target="_blank"
+                           style="word-break:break-all;font-weight:bold"></a>
+                        <button type="button" class="btn btn-default btn-xs pull-right"
+                                id="modal-copy"><i class="fa fa-clipboard"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="modal-submit">
+                        <i class="fa fa-paper-plane"></i> Shorten</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireLogin, fillUserHeader, wireLogout, initShortenModal,
+        showToast, escapeHtml, formatDate, formatNumber,
+        isValidUrl, SITE_URL
+    } from "./js/app.js";
+    import {
+        ref, get, update
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    /* ---- User login check aur header fill ---- */
+    const me = await requireLogin();
+    await fillUserHeader(me);
+    wireLogout();
+    initShortenModal(me);
+
+    /* ============================================================
+       CAMPAIGN ID - URL hash se padho (#id=xxx)
+       ============================================================ */
+    const hashParts = location.hash.substring(1).split("=");
+    const campaignId = hashParts[0] === "id" ? hashParts[1] : null;
+
+    if (!campaignId) {
+        document.getElementById("loading-msg").classList.add("hidden");
+        document.getElementById("error-msg").classList.remove("hidden");
+        document.getElementById("error-text").textContent = "Campaign ID nahi mila. Pehle campaigns page pe jao.";
+    } else {
+        await loadCampaign();
+    }
+
+    /* ---------- Campaign data fetch karo ---------- */
+    let campaignData = null;
+
+    async function loadCampaign() {
+        try {
+            const snap = await get(ref(db, `campaigns/${campaignId}`));
+            if (!snap.exists()) {
+                document.getElementById("loading-msg").classList.add("hidden");
+                document.getElementById("error-msg").classList.remove("hidden");
+                return;
+            }
+
+            campaignData = snap.val();
+            campaignData.id = campaignId;
+
+            /* Check karo ki ye campaign is user ka hai ya nahi */
+            if (campaignData.uid !== me.uid) {
+                document.getElementById("loading-msg").classList.add("hidden");
+                document.getElementById("error-msg").classList.remove("hidden");
+                document.getElementById("error-text").textContent = "Ye campaign tumhara nahi hai.";
+                return;
+            }
+
+            renderCampaign();
+        } catch (err) {
+            console.error("loadCampaign error:", err);
+            document.getElementById("loading-msg").classList.add("hidden");
+            document.getElementById("error-msg").classList.remove("hidden");
+            document.getElementById("error-text").textContent = "Campaign load nahi ho paya. Refresh karo.";
+        }
+    }
+
+    /* ---------- Campaign details render karo ---------- */
+    function renderCampaign() {
+        const c = campaignData;
+
+        /* Header update karo */
+        document.getElementById("camp-name-header").textContent = c.name || "Campaign";
+        document.getElementById("title").textContent = (c.name || "Campaign") + " - Shortify";
+
+        /* Loading chhupao, content dikhao */
+        document.getElementById("loading-msg").classList.add("hidden");
+        document.getElementById("campaign-content").classList.remove("hidden");
+
+        /* Type label */
+        let typeLabel = "Popup";
+        if (c.type === "interstitial") typeLabel = "Interstitial Ads";
+        else if (c.type === "banner") typeLabel = "Banner Ads";
+
+        /* Status badge */
+        let badgeClass = "label-success";
+        if (c.status === "paused") badgeClass = "label-warning";
+        else if (c.status === "cancelled") badgeClass = "label-danger";
+        else if (c.status === "finished") badgeClass = "label-default";
+        else if (c.status === "pending") badgeClass = "label-info";
+
+        /* Details fill karo */
+        document.getElementById("detail-name").textContent = c.name || "-";
+        document.getElementById("detail-type").innerHTML =
+            `<span class="label label-primary">${escapeHtml(typeLabel)}</span>`;
+        document.getElementById("detail-status").innerHTML =
+            `<span class="label ${badgeClass}">${escapeHtml(c.status || "active")}</span>`;
+        document.getElementById("detail-url").innerHTML =
+            c.url ? `<a href="${escapeHtml(c.url)}" target="_blank" rel="nofollow">${escapeHtml(c.url)}</a>` : "-";
+        document.getElementById("detail-banner").textContent =
+            c.banner_url || c.website_title || "-";
+        document.getElementById("detail-visitors").textContent =
+            `${formatNumber(c.visitors || 0)} / ${formatNumber(c.total_budget || 0)}`;
+        document.getElementById("detail-price").textContent =
+            c.price ? `\u20B9${formatNumber(c.price)}` : "-";
+        document.getElementById("detail-created").textContent = formatDate(c.created_at);
+
+        /* Stats update karo */
+        const clicks = Number(c.clicks) || 0;
+        const impressions = Number(c.impressions) || 0;
+        const ctr = impressions > 0 ? ((clicks / impressions) * 100).toFixed(2) : "0";
+        document.getElementById("stat-clicks").textContent = formatNumber(clicks);
+        document.getElementById("stat-impressions").textContent = formatNumber(impressions);
+        document.getElementById("stat-ctr").textContent = ctr + "%";
+        document.getElementById("stat-visitors").textContent = formatNumber(c.visitors || 0);
+
+        /* Action button - Pause/Resume */
+        const actionBtn = document.getElementById("action-btn");
+        const actionBtnText = document.getElementById("action-btn-text");
+        if (c.status === "active") {
+            actionBtn.style.display = "inline-block";
+            actionBtn.className = "btn btn-warning btn-sm";
+            actionBtnText.textContent = "Pause";
+            actionBtn.innerHTML = '<i class="fa fa-pause"></i> Pause';
+            actionBtn.onclick = () => updateStatus("paused");
+        } else if (c.status === "paused") {
+            actionBtn.style.display = "inline-block";
+            actionBtn.className = "btn btn-success btn-sm";
+            actionBtnText.textContent = "Resume";
+            actionBtn.innerHTML = '<i class="fa fa-play"></i> Resume';
+            actionBtn.onclick = () => updateStatus("active");
+        } else {
+            actionBtn.style.display = "none";
+        }
+
+        /* Country pricing table */
+        const pricingBody = document.getElementById("pricing-body");
+        const pricing = c.country_pricing || {};
+        const defaultPricing = {
+            "IN": 8, "US": 15, "UK": 12, "CA": 14, "AU": 13,
+            "DE": 11, "FR": 10, "BR": 7, "JP": 16, "Other": 5
+        };
+
+        const allPricing = { ...defaultPricing, ...pricing };
+        pricingBody.innerHTML = Object.entries(allPricing).map(([country, rate]) => `
+            <tr>
+                <td><strong>${escapeHtml(country)}</strong></td>
+                <td>&#8377;${formatNumber(rate)} / 1000 views</td>
+            </tr>
+        `).join("");
+    }
+
+    /* ---------- Status update karo (Pause/Resume) ---------- */
+    async function updateStatus(newStatus) {
+        try {
+            await update(ref(db, `campaigns/${campaignId}`), { status: newStatus });
+            campaignData.status = newStatus;
+            renderCampaign();
+            showToast(`Campaign ${newStatus === "active" ? "resume" : "pause"} ho gaya!`, "success");
+        } catch (err) {
+            showToast("Status update fail: " + err.message, "error");
+        }
+    }
+</script>
+
+</body>
+</html>

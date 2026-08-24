@@ -1,23 +1,22 @@
 ﻿<!DOCTYPE html>
 <!-- ============================================================
-     FILE   : user/tools-api.html
-     KAAM   : DEVELOPERS API - AdLinkFly ke Tools/api.ctp jaisa
-              documentation page:
-                - Personal API key dikhata hai (auto-generate)
-                - Endpoint/params/response docs
-                - PHP/cURL + JS example code
-     NOTE   : /api endpoint Cloudflare Worker se chalta hai
-              (README dekho) - Worker deploy hone tak examples
-              sirf reference hain.
+     FILE   : user/change-email.html
+     KAAM   : CHANGE EMAIL PAGE
+              - Current Email disable field me dikhta hai (pre-filled)
+              - New Email aur Re-enter New Email fields
+              - Firebase user email update hota hai
+              - Confirmation message dikhta hai
+              - Reauthentication zaroori hai email change ke liye
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Developers API - Shortify</title>
+    <title>Change Email - Shortify</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
@@ -47,15 +46,6 @@
     </style>
     <link rel="stylesheet" href="../theme/css/app.css">
     <link rel="icon" href="../favicon.ico">
-
-    <style>
-        pre.code-sample {
-            background:#1e282c; color:#a6e22e; padding:14px;
-            border-radius:4px; font-size:.82rem;
-            white-space:pre-wrap; word-break:break-all;
-        }
-        table.api-doc td:first-child { font-family:monospace; color:#c7254e; }
-    </style>
 </head>
 
 <body class="member-dashboard hold-transition skin-blue sidebar-mini">
@@ -71,17 +61,18 @@
         <nav class="navbar navbar-static-top" role="navigation">
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
                role="button"><span class="sr-only">Toggle navigation</span></a>
+
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <img src="" id="header-avatar" class="user-image" alt="User Image">
                             <span class="hidden-xs" id="header-name">...</span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="user-header">
-                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="User Image">
                                 <p><span id="dropdown-name">...</span><br>
                                     <small>Member since <span id="member-since">-</span></small></p>
                             </li>
@@ -106,6 +97,7 @@
                 <i class="fa fa-paper-plane"></i> <span>New Shorten Link</span>
             </button>
             <br>
+
             <ul class="sidebar-menu">
                 <li>
                     <a><i class="fa fa-credit-card text-aqua"></i>
@@ -153,22 +145,22 @@
                     </ul>
                 </li>
 
-                <li class="treeview active">
+                <li>
                     <a href="#"><i class="fa fa-wrench"></i>
                         <span>Tools</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
-                    <ul class="treeview-menu menu-open" style="display:block">
+                    <ul class="treeview-menu " style="">
                         <li><a href="tools-quick.html">Quick Link</a></li>
                         <li><a href="tools-mass.html">Mass Shrinker</a></li>
                         <li><a href="tools-fullpage.html">Full Page Script</a></li>
                         <li><a href="tools-bookmarklet.html">Bookmarklet</a></li>
-                        <li class="active"><a href="tools-api.html">Developers API</a></li>
+                        <li><a href="tools-api.html">Developers API</a></li>
                     </ul>
                 </li>
 
                 <li><a href="referrals.html"><i class="fa fa-exchange"></i> <span>Referrals</span></a></li>
                 <li><a href="support.html"><i class="fa fa-life-ring"></i> <span>Support</span></a></li>
-                <li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                <li class="active"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a></li>
                 <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
             </ul>
         </section>
@@ -177,94 +169,68 @@
     <!-- ==================== CONTENT ==================== -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Developers API <small>Apne apps se link banao</small></h1>
+            <h1>Change Email <small>Apna email address update karo</small></h1>
             <ol class="breadcrumb">
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li>Tools</li>
-                <li class="active">Developers API</li>
+                <li><a href="profile.html">Profile</a></li>
+                <li class="active">Change Email</li>
             </ol>
         </section>
 
         <section class="content">
 
-            <!-- ===== API KEY ===== -->
+            <!-- Success message - initially hidden -->
+            <div class="alert alert-success hidden" id="success-alert">
+                <i class="fa fa-check-circle"></i>
+                <strong>Email update ho gaya!</strong> Ab naye email se login karo.
+            </div>
+
+            <!-- Warning callout -->
+            <div class="callout callout-info">
+                <h4><i class="fa fa-info-circle"></i> Dhyan do!</h4>
+                <p>Email change karne ke liye aapko apna current password dalna hoga
+                   (reauthentication ke liye). Naya email verify karna padega.</p>
+            </div>
+
+            <!-- Change email form box -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-key"></i> Your API Key</h3>
+                    <h3 class="box-title"><i class="fa fa-envelope"></i> Email Address Badlo</h3>
                 </div>
                 <div class="box-body">
-                    <div class="input-group input-group-lg">
-                        <input type="text" class="form-control" id="api-key-input" readonly>
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary btn-flat"
-                                    id="copy-key-btn"><i class="fa fa-clipboard"></i> Copy</button>
-                            <button type="button" class="btn btn-warning btn-flat"
-                                    id="regen-key-btn"><i class="fa fa-refresh"></i> Regenerate</button>
-                        </span>
-                    </div>
-                    <p class="help-block" style="margin-top:10px">
-                        Ye key apni API requests me use karo.
-                        Regenerate karne se purani key turant band ho jayegi.</p>
-                </div>
-            </div>
+                    <form id="change-email-form">
+                        <div class="form-group">
+                            <label for="current-email">Current Email</label>
+                            <input type="email" class="form-control" id="current-email"
+                                   disabled style="background:#f5f5f5;font-weight:bold">
+                        </div>
 
-            <!-- ===== ENDPOINT DOC ===== -->
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-plug"></i> Endpoint</h3>
-                </div>
-                <div class="box-body">
+                        <div class="form-group">
+                            <label for="current-password">Current Password <span class="text-red">*</span></label>
+                            <input type="password" class="form-control" id="current-password"
+                                   placeholder="Apna current password dalo" required>
+                            <p class="help-block">Security ke liye password zaroori hai</p>
+                        </div>
 
-                    <pre class="code-sample" id="endpoint-sample">Loading...</pre>
+                        <div class="form-group">
+                            <label for="new-email">Naya Email <span class="text-red">*</span></label>
+                            <input type="email" class="form-control" id="new-email"
+                                   placeholder="new@email.com" required maxlength="200">
+                        </div>
 
-                    <table class="table api-doc table-striped">
-                        <thead><tr><th style="width:130px">Parameter</th><th>Description</th></tr></thead>
-                        <tbody>
-                            <tr><td>api</td><td>Aapki API key (required)</td></tr>
-                            <tr><td>url</td><td>Jo URL short karna hai (required, URL-encoded)</td></tr>
-                            <tr><td>alias</td><td>Custom alias (optional). Agar already le liya ho to error milega.</td></tr>
-                            <tr><td>format</td><td><b>text</b> = sirf short link plain text me milega (default json)</td></tr>
-                        </tbody>
-                    </table>
+                        <div class="form-group">
+                            <label for="confirm-email">Naya Email Dobara <span class="text-red">*</span></label>
+                            <input type="email" class="form-control" id="confirm-email"
+                                   placeholder="new@email.com" required maxlength="200">
+                        </div>
 
-                    <h4>Success Response</h4>
-                    <pre class="code-sample">{
-  "status": "success",
-  "shortened": "https://YOUR-SITE.github.io/#aB3xK9",
-}</pre>
-
-                    <h4>Error Response</h4>
-                    <pre class="code-sample">{
-  "status": "error",
-  "error": "Please enter a valid url",
-  "code": 0
-}</pre>
-
-                </div>
-            </div>
-
-            <!-- ===== EXAMPLES ===== -->
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-code"></i> Example Code</h3>
-                </div>
-                <div class="box-body">
-
-                    <h4>PHP (cURL)</h4>
-                    <pre class="code-sample">$api_url = file_get_contents("API-ENDPOINT?api=YOUR_KEY&amp;url=" . urlencode($long_url));
-$data = json_decode($api_url, TRUE);
-echo $data["shortened"];</pre>
-
-                    <h4>JavaScript (fetch)</h4>
-                    <pre class="code-sample">const res = await fetch("API-ENDPOINT?api=YOUR_KEY&amp;url=" +
-                         encodeURIComponent("https://example.com"));
-const data = await res.json();
-console.log(data.shortened);</pre>
-
-                    <div class="callout callout-info" style="margin-bottom:0">
-                        <i class="fa fa-info-circle"></i> Rate limit:
-                        har key se max <b>5 requests/second</b>.
-                    </div>
+                        <div class="text-center">
+                            <a href="profile.html" class="btn btn-default btn-lg">
+                                <i class="fa fa-times"></i> Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-lg" id="change-email-btn">
+                                <i class="fa fa-save"></i> Update Email</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -324,57 +290,91 @@ console.log(data.shortened);</pre>
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireLogin, fillUserHeader, wireLogout, initShortenModal,
-        showToast, SITE_URL
+        auth, requireUser, fillUserHeader, wireLogout, initShortenModal,
+        showToast, escapeHtml
     } from "./js/app.js";
-    import { ref, get, set }
-        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import {
+        updateEmail, reauthenticateWithCredential, EmailAuthProvider
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    const me = await requireLogin();
+    /* ---- Pehle check karo user logged in hai ya nahi ---- */
+    const me = await requireUser();
     await fillUserHeader(me);
     wireLogout();
     initShortenModal(me);
 
-    /* ============================================================
-       API KEY - nahi hai to abhi generate karo
-       ============================================================ */
-    let apiKey = me.api_key;
-    if (!apiKey) {
-        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        apiKey = "";
-        for (let i = 0; i < 24; i++) {
-            apiKey += chars[Math.floor(Math.random() * chars.length)];
+    /* ---- Current email field me user ka email dikhao ---- */
+    document.getElementById("current-email").value = me.email || "";
+
+    /* ---- Change email form handler ---- */
+    document.getElementById("change-email-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const currentPassword = document.getElementById("current-password").value;
+        const newEmail = document.getElementById("new-email").value.trim();
+        const confirmEmail = document.getElementById("confirm-email").value.trim();
+
+        /* ---- Validation ---- */
+        if (!currentPassword) {
+            showToast("Current password dalo!", "error");
+            return;
         }
-        await set(ref(db, `users/${me.uid}/api_key`), apiKey);
-    }
-    document.getElementById("api-key-input").value = apiKey;
-
-    /* ---------- Endpoint sample live bharna ---------- */
-    document.getElementById("endpoint-sample").textContent =
-        `GET ${SITE_URL}api?api=${apiKey}&url=LONG-URL`;
-    document.querySelectorAll(".code-sample").forEach(pre => {
-        pre.innerHTML = pre.innerHTML
-            .replaceAll("API-ENDPOINT", `${SITE_URL}api`)
-            .replaceAll("YOUR_KEY", apiKey);
-    });
-
-    /* ---------- Copy / Regenerate ---------- */
-    document.getElementById("copy-key-btn").addEventListener("click", async () => {
-        await navigator.clipboard.writeText(apiKey).catch(() => {});
-        showToast("API key copy ho gayi!", "success");
-    });
-
-    document.getElementById("regen-key-btn").addEventListener("click", async () => {
-        if (!confirm("Purani key band ho jayegi. Pakka nayi banau?")) return;
-
-        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        let nk = "";
-        for (let i = 0; i < 24; i++) {
-            nk += chars[Math.floor(Math.random() * chars.length)];
+        if (!newEmail || !confirmEmail) {
+            showToast("Saare fields bharo!", "error");
+            return;
         }
-        await set(ref(db, `users/${me.uid}/api_key`), nk);
-        document.getElementById("api-key-input").value = nk;
-        location.reload();
+        if (newEmail !== confirmEmail) {
+            showToast("Dono emails match nahi kar rahi!", "error");
+            return;
+        }
+        if (newEmail === me.email) {
+            showToast("Naya email same hai current se!", "error");
+            return;
+        }
+
+        /* ---- Button disable karo ---- */
+        const btn = document.getElementById("change-email-btn");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Updating...';
+
+        try {
+            /* ---- Pehle reauthenticate karo ---- */
+            const credential = EmailAuthProvider.credential(me.email, currentPassword);
+            await reauthenticateWithCredential(auth.currentUser, credential);
+
+            /* ---- Email update karo ---- */
+            await updateEmail(auth.currentUser, newEmail);
+
+            /* ---- Success message dikhao ---- */
+            document.getElementById("success-alert").classList.remove("hidden");
+            document.getElementById("change-email-form").reset();
+            document.getElementById("current-email").value = newEmail;
+            showToast("Email update ho gaya!", "success");
+
+            /* ---- 5 second baad success alert hide karo ---- */
+            setTimeout(() => {
+                document.getElementById("success-alert").classList.add("hidden");
+            }, 5000);
+
+        } catch (err) {
+            console.error("Email update error:", err);
+
+            /* ---- Specific error messages ---- */
+            if (err.code === "auth/wrong-password") {
+                showToast("Galat password! Dobara try karo.", "error");
+            } else if (err.code === "auth/email-already-in-use") {
+                showToast("Ye email pehle se kisi aur ka hai!", "error");
+            } else if (err.code === "auth/invalid-email") {
+                showToast("Invalid email format!", "error");
+            } else if (err.code === "auth/requires-recent-login") {
+                showToast("Security ke liye pehle logout phir login karo.", "error");
+            } else {
+                showToast("Email update fail: " + err.message, "error");
+            }
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-save"></i> Update Email';
+        }
     });
 </script>
 
