@@ -295,7 +295,7 @@
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireUser, fillUserHeader, wireLogout, initShortenModal,
+        requireLogin, fillUserHeader, wireLogout, initShortenModal,
         showToast, escapeHtml
     } from "./js/app.js";
     import {
@@ -303,7 +303,7 @@
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     /* ---- Pehle check karo user logged in hai ya nahi ---- */
-    const me = await requireUser();
+    const me = await requireLogin();
     await fillUserHeader(me);
     wireLogout();
     initShortenModal(me);

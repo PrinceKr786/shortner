@@ -107,12 +107,12 @@
 
                 <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
 
-                <li>
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-link"></i>
                         <span>Manage Links</span>
                         <i class="fa fa-angle-left pull-right"></i></a>
-                    <ul class="treeview-menu " style="">
-                        <li><a href="links.html">All Links</a></li>
+                    <ul class="treeview-menu menu-open" style="display:block">
+                        <li class="active"><a href="links.html">All Links</a></li>
                         <li><a href="links-hidden.html">Hidden Links</a></li>
                     </ul>
                 </li>
@@ -336,7 +336,7 @@
 <script type="module">
     import { db } from "./js/firebase-config.js";
     import {
-        requireUser, fillUserHeader, wireLogout, initShortenModal,
+        requireLogin, fillUserHeader, wireLogout, initShortenModal,
         showToast, escapeHtml, formatDate, formatNumber, isValidUrl, SITE_URL
     } from "./js/app.js";
     import {
@@ -344,7 +344,7 @@
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
     /* ---- Pehle check karo user logged in hai ya nahi ---- */
-    const me = await requireUser();
+    const me = await requireLogin();
     await fillUserHeader(me);
     wireLogout();
     initShortenModal(me);
