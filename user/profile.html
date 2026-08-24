@@ -471,10 +471,21 @@
 
         try {
             // Saari meri links delete karo
-            const q = query(ref(db, "aliases"), orderByChild("uid"), equalTo(me.uid));
-            const snap = await get(q);
+            let linkKeys = [];
+            try {
+                const q = query(ref(db, "aliases"), orderByChild("uid"), equalTo(me.uid));
+                const snap = await get(q);
+                snap.forEach((c) => { linkKeys.push(c.key); });
+            } catch (err) {
+                console.warn("Index query failed, using fallback:", err.message);
+                const snap = await get(ref(db, "aliases"));
+                snap.forEach((c) => {
+                    const l = c.val();
+                    if (l.uid === me.uid) linkKeys.push(c.key);
+                });
+            }
             const updates = {};
-            snap.forEach((c) => { updates[c.key] = null; });
+            linkKeys.forEach((k) => { updates[k] = null; });
             if (Object.keys(updates).length > 0) {
                 const { update: updMulti } = await import(
                     "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");

@@ -370,17 +370,29 @@
     let allLinks = [];
 
     async function loadLinks() {
-        const q = query(ref(db, "aliases"), orderByChild("uid"), equalTo(me.uid));
-        const snap = await get(q);
-
         allLinks = [];
-        snap.forEach((c) => {
-            const l = c.val();
-            l.alias = c.key;
-            allLinks.push(l);
-        });
-        allLinks.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
 
+        try {
+            const q = query(ref(db, "aliases"), orderByChild("uid"), equalTo(me.uid));
+            const snap = await get(q);
+            snap.forEach((c) => {
+                const l = c.val();
+                l.alias = c.key;
+                allLinks.push(l);
+            });
+        } catch (err) {
+            console.warn("Index query failed, using fallback:", err.message);
+            const snap = await get(ref(db, "aliases"));
+            snap.forEach((c) => {
+                const l = c.val();
+                if (l.uid === me.uid) {
+                    l.alias = c.key;
+                    allLinks.push(l);
+                }
+            });
+        }
+
+        allLinks.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
         renderStats();
         renderTable();
     }
@@ -466,7 +478,14 @@
         }).join("");
     }
 
-    await loadLinks();
+    try {
+        await loadLinks();
+    } catch (err) {
+        console.error("loadLinks error:", err);
+        document.getElementById("links-body").innerHTML =
+            '<tr><td colspan="6" class="text-center text-red">Links load nahi ho paye. Refresh karo.</td></tr>';
+        document.getElementById("empty-msg").classList.add("hidden");
+    }
 
     /* ---------- Search ---------- */
     document.getElementById("search-input").addEventListener("input", (e) => {

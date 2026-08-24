@@ -389,23 +389,35 @@
     /* ============================================================
        LOAD MY LINKS (stats ke liye)
        ============================================================ */
-    const linksQuery = query(
-        ref(db, "aliases"),
-        orderByChild("uid"),
-        equalTo(me.uid)
-    );
-    const snap = await get(linksQuery);
-
+    let linksArr = [];
     let totalViews = 0;
     let totalEarnedFromLinks = 0;
-    const linksArr = [];
 
-    snap.forEach((c) => {
-        const l = c.val();
-        l.alias = c.key;
-        linksArr.push(l);
-        totalViews += Number(l.clicks) || 0;
-    });
+    try {
+        const linksQuery = query(
+            ref(db, "aliases"),
+            orderByChild("uid"),
+            equalTo(me.uid)
+        );
+        const snap = await get(linksQuery);
+        snap.forEach((c) => {
+            const l = c.val();
+            l.alias = c.key;
+            linksArr.push(l);
+            totalViews += Number(l.clicks) || 0;
+        });
+    } catch (err) {
+        console.warn("Index query failed, using fallback:", err.message);
+        const snap = await get(ref(db, "aliases"));
+        snap.forEach((c) => {
+            const l = c.val();
+            if (l.uid === me.uid) {
+                l.alias = c.key;
+                linksArr.push(l);
+                totalViews += Number(l.clicks) || 0;
+            }
+        });
+    }
 
     let rates = { interstitial: 8, banner: 3, none: 1 };
     try {

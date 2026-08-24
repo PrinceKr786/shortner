@@ -355,13 +355,28 @@
     /* ============================================================
        HISTORY LOAD (live onValue)
        ============================================================ */
-    const historyQuery = query(
-        ref(db, "withdrawals"),
-        orderByChild("uid"),
-        equalTo(me.uid)
-    );
+    async function loadHistory() {
+        try {
+            const historyQuery = query(
+                ref(db, "withdrawals"),
+                orderByChild("uid"),
+                equalTo(me.uid)
+            );
+            onValue(historyQuery, renderHistory);
+        } catch (err) {
+            console.warn("Index query failed, using fallback:", err.message);
+            onValue(ref(db, "withdrawals"), (snapshot) => {
+                const filtered = [];
+                snapshot.forEach((c) => {
+                    const w = c.val();
+                    if (w.uid === me.uid) filtered.push({ key: c.key, ...w });
+                });
+                renderHistory({ forEach: (fn) => filtered.forEach(fn) });
+            });
+        }
+    }
 
-    onValue(historyQuery, (snapshot) => {
+    function renderHistory(snapshot) {
         const rows = [];
         const list = [];
         snapshot.forEach((c) => list.push(c.val()));
@@ -389,7 +404,9 @@
                 </tr>`);
         }
         document.getElementById("history-body").innerHTML = rows.join("");
-    });
+    }
+
+    loadHistory();
 
     /* ============================================================
        REQUEST SUBMIT - ATOMIC WALLET DEDUCTION
