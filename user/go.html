@@ -300,12 +300,21 @@
         let AD_TIMER = 5;
         let RECAPTCHA_KEY = "";
         try {
-            const sSnap = await get(child(ref(db), "settings"));
-            const s = sSnap.val() || {};
-            AD_TIMER = parseInt(s.ad_timer_seconds) || 5;
-            RECAPTCHA_KEY = s.recaptcha_site_key || "";
+            const gpSnap = await get(ref(db, "settings/go_page"));
+            const gp = gpSnap.exists() ? gpSnap.val() : {};
+            AD_TIMER = parseInt(gp.countdown_seconds) || 5;
+            RECAPTCHA_KEY = gp.recaptcha_site_key || "";
             totalSeconds = AD_TIMER;
         } catch {}
+        if (AD_TIMER <= 0) {
+            try {
+                const sSnap = await get(child(ref(db), "settings"));
+                const s = sSnap.val() || {};
+                AD_TIMER = parseInt(s.ad_timer_seconds) || 5;
+                RECAPTCHA_KEY = RECAPTCHA_KEY || s.recaptcha_site_key || "";
+                totalSeconds = AD_TIMER;
+            } catch {}
+        }
 
         /* ===== GEO DETECT ===== */
         let myCountry = "";
@@ -337,86 +346,107 @@
         }
 
         /* ===== LOAD ADS FROM FIREBASE ===== */
-        async function loadAllAds() {
-            try {
-                const adsSnap = await get(ref(db, "ads"));
-                const pool = [];
-                adsSnap.forEach(c => {
-                    const a = c.val();
-                    if (a.status === "active" && safeUrl(a.target_url) &&
-                        (Number(a.served_views) || 0) < (Number(a.package_views) || 0)) {
-                        pool.push({ id: c.key, ...a });
-                    }
-                });
+        let GO_PAGE = {};
+        try {
+            const gpSnap = await get(ref(db, "settings/go_page"));
+            if (gpSnap.exists()) GO_PAGE = gpSnap.val() || {};
+        } catch {}
 
-                if (pool.length === 0) {
-                    try {
-                        const s = await get(child(ref(db), "settings/banner_ad_code"));
-                        if (s.exists()) {
-                            document.getElementById("top-banner-ad").innerHTML = s.val();
-                            document.getElementById("bottom-banner-ad").innerHTML = s.val();
+        async function loadAllAds() {
+            const gp = GO_PAGE;
+            const hasAny = gp.top_banner_enabled || gp.bottom_banner_enabled || gp.sidebar_1_enabled || gp.video_enabled || gp.social_bar_enabled || gp.floating_left_enabled || gp.floating_right_enabled;
+
+            if (!hasAny) {
+                try {
+                    const adsSnap = await get(ref(db, "ads"));
+                    const pool = [];
+                    adsSnap.forEach(c => {
+                        const a = c.val();
+                        if (a.status === "active" && safeUrl(a.target_url) &&
+                            (Number(a.served_views) || 0) < (Number(a.package_views) || 0)) {
+                            pool.push({ id: c.key, ...a });
                         }
-                    } catch {}
+                    });
+
+                    if (pool.length === 0) {
+                        showDefaultSidebarAds();
+                        showSocialBar("Shortify se paisa kamao!", "Free URL shortener");
+                        return;
+                    }
+
+                    const bannerAds = pool.filter(a => a.ad_type === "banner" || a.image_url);
+                    if (bannerAds.length > 0) {
+                        renderImageAd("top-banner-ad", bannerAds[0], 90);
+                        renderImageAd("bottom-banner-ad", bannerAds[bannerAds.length > 1 ? 1 : 0], 90);
+                        bannerAds.slice(0, 3).forEach((a, i) => {
+                            renderImageAd("sidebar-ad-" + (i + 1), a, 250);
+                        });
+                    }
+
+                    if (pool.length > 0) {
+                        const vidAd = pool.find(a => a.image_url);
+                        if (vidAd) renderVideoAd(vidAd.image_url, vidAd.target_url, vidAd.id);
+                    }
+
+                    if (pool.length > 0) {
+                        const socialAd = pool[Math.floor(Math.random() * pool.length)];
+                        showSocialBar(socialAd.title || "Special Offer!", socialAd.target_url);
+                        trackImpression(socialAd.id);
+                    }
+
+                    if (pool.length > 0) {
+                        const floatAd = pool[Math.floor(Math.random() * pool.length)];
+                        if (floatAd.image_url) renderFloatAd("float-ad-left", floatAd);
+                    }
+
+                } catch (err) {
+                    console.error("Ad load error:", err);
                     showDefaultSidebarAds();
                     showSocialBar("Shortify se paisa kamao!", "Free URL shortener");
-                    return;
                 }
+                return;
+            }
 
-                const bannerAds = pool.filter(a => a.ad_type === "banner" || a.image_url);
-                const interstitialAds = pool.filter(a => a.ad_type === "interstitial" || !a.image_url);
-
-                if (bannerAds.length > 0) {
-                    const topAd = bannerAds[Math.floor(Math.random() * bannerAds.length)];
-                    renderImageAd("top-banner-ad", topAd, 90);
-                    const botAd = bannerAds[Math.floor(Math.random() * bannerAds.length)];
-                    renderImageAd("bottom-banner-ad", botAd, 90);
-                    if (bannerAds.length > 1) {
-                        const sideAd = bannerAds.find(a => a._id !== topAd._id) || bannerAds[0];
-                        renderImageAd("sidebar-ad-1", sideAd, 250);
-                    }
-                    if (bannerAds.length > 2) {
-                        renderImageAd("sidebar-ad-2", bannerAds[2 % bannerAds.length], 250);
-                    }
-                    if (bannerAds.length > 3) {
-                        renderImageAd("sidebar-ad-3", bannerAds[3 % bannerAds.length], 250);
-                    }
-                } else {
-                    showDefaultSidebarAds();
-                }
-
-                if (interstitialAds.length > 0) {
-                    const vidAd = interstitialAds[0];
-                    if (vidAd.image_url) {
-                        const vp = document.getElementById("video-player");
-                        vp.style.backgroundImage = "url(" + vidAd.image_url + ")";
-                        vp.style.backgroundSize = "cover";
-                        vp.style.backgroundPosition = "center";
-                        document.getElementById("video-cta").href = vidAd.target_url;
-                        document.getElementById("video-cta").target = "_blank";
-                        trackImpression(vidAd.id);
-                    }
-                }
-
-                if (pool.length > 0) {
-                    const socialAd = pool[Math.floor(Math.random() * pool.length)];
-                    showSocialBar(socialAd.title || "Special Offer!", socialAd.target_url);
-                    trackImpression(socialAd.id);
-                }
-
-                if (pool.length > 2) {
-                    const floatAd = pool[Math.floor(Math.random() * pool.length)];
-                    if (floatAd.image_url) {
-                        const fl = document.getElementById("float-ad-left");
-                        fl.innerHTML = '<a href="' + floatAd.target_url + '" target="_blank"><img src="' + floatAd.image_url + '" style="width:100%;border-radius:12px"></a>';
-                        fl.style.display = "block";
-                        trackImpression(floatAd.id);
-                    }
-                }
-
-            } catch (err) {
-                console.error("Ad load error:", err);
-                showDefaultSidebarAds();
-                showSocialBar("Shortify se paisa kamao!", "Free URL shortener");
+            if (gp.top_banner_enabled && gp.top_banner_html) {
+                document.getElementById("top-banner-ad").innerHTML = gp.top_banner_html;
+            }
+            if (gp.bottom_banner_enabled && gp.bottom_banner_html) {
+                document.getElementById("bottom-banner-ad").innerHTML = gp.bottom_banner_html;
+            }
+            if (gp.sidebar_1_enabled && gp.sidebar_1_html) {
+                document.getElementById("sidebar-ad-1").innerHTML = gp.sidebar_1_html;
+            } else {
+                renderDefaultSidebar("sidebar-ad-1");
+            }
+            if (gp.sidebar_2_enabled && gp.sidebar_2_html) {
+                document.getElementById("sidebar-ad-2").innerHTML = gp.sidebar_2_html;
+            } else {
+                renderDefaultSidebar("sidebar-ad-2");
+            }
+            if (gp.sidebar_3_enabled && gp.sidebar_3_html) {
+                document.getElementById("sidebar-ad-3").innerHTML = gp.sidebar_3_html;
+            } else {
+                renderDefaultSidebar("sidebar-ad-3");
+            }
+            if (gp.video_enabled && gp.video_image_url) {
+                renderVideoAd(gp.video_image_url, gp.video_cta_url || "#", null);
+                document.getElementById("video-cta").textContent = gp.video_cta_text || "Learn More";
+            } else {
+                document.getElementById("video-ad-section").style.display = "none";
+            }
+            if (gp.social_bar_enabled && gp.social_bar_url) {
+                showSocialBar(gp.social_bar_title || "Special Offer!", gp.social_bar_url);
+                document.getElementById("social-bar-cta").textContent = gp.social_bar_cta || "Check Now";
+            }
+            if (gp.floating_left_enabled && gp.floating_left_html) {
+                const fl = document.getElementById("float-ad-left");
+                fl.innerHTML = gp.floating_left_html;
+                fl.style.display = "block";
+            }
+            if (gp.floating_right_enabled && gp.floating_right_html) {
+                const fr = document.getElementById("float-ad-right");
+                fr.innerHTML = gp.floating_right_html;
+                fr.style.display = "block";
             }
         }
 
@@ -429,11 +459,30 @@
             trackImpression(ad.id);
         }
 
+        function renderVideoAd(imgUrl, ctaUrl, adId) {
+            const vp = document.getElementById("video-player");
+            vp.style.backgroundImage = "url(" + imgUrl + ")";
+            vp.style.backgroundSize = "cover";
+            vp.style.backgroundPosition = "center";
+            document.getElementById("video-cta").href = ctaUrl;
+            document.getElementById("video-cta").target = "_blank";
+            if (adId) trackImpression(adId);
+        }
+
+        function renderFloatAd(elId, ad) {
+            const el = document.getElementById(elId);
+            el.innerHTML = '<a href="' + ad.target_url + '" target="_blank"><img src="' + ad.image_url + '" style="width:100%;border-radius:12px"></a>';
+            el.style.display = "block";
+            trackImpression(ad.id);
+        }
+
+        function renderDefaultSidebar(elId) {
+            const el = document.getElementById(elId);
+            if (el) el.innerHTML = '<div style="padding:20px;text-align:center"><i class="fa fa-bullhorn" style="font-size:2rem;color:#667eea;margin-bottom:10px;display:block"></i><div style="color:#667eea;font-weight:700;font-size:.85rem">Advertise Here</div><div style="color:#555;font-size:.7rem;margin-top:5px">300x250 space available</div></div>';
+        }
+
         function showDefaultSidebarAds() {
-            ["sidebar-ad-1","sidebar-ad-2","sidebar-ad-3"].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.innerHTML = '<div style="padding:20px;text-align:center"><i class="fa fa-bullhorn" style="font-size:2rem;color:#667eea;margin-bottom:10px;display:block"></i><div style="color:#667eea;font-weight:700;font-size:.85rem">Advertise Here</div><div style="color:#555;font-size:.7rem;margin-top:5px">300x250 space available</div></div>';
-            });
+            ["sidebar-ad-1","sidebar-ad-2","sidebar-ad-3"].forEach(renderDefaultSidebar);
         }
 
         function showSocialBar(title, url) {
