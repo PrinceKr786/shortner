@@ -80,6 +80,12 @@
 
         .fine{font-size:.7rem;color:#3f3f46;margin-top:18px;line-height:1.5}
 
+        .step-indicator{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+        .step-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.1);transition:all .4s}
+        .step-dot.active{background:#6366f1;border-color:#6366f1;box-shadow:0 0 12px rgba(99,102,241,.5)}
+        .step-dot.done{background:#34d399;border-color:#34d399}
+        .step-label{font-size:.7rem;color:#52525b;text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:14px}
+
         /* native + smartlink slots */
         .native-slot{width:100%;max-width:480px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.04);background:#0c0c1d}
         .smartlink-slot{width:100%;max-width:480px;text-align:center}
@@ -171,10 +177,17 @@
 
             <!-- COUNTDOWN -->
             <div class="card hide" id="state-countdown">
+                <div class="step-indicator" id="step-indicator">
+                    <span class="step-dot active" id="step-dot-1"></span>
+                    <span class="step-dot" id="step-dot-2"></span>
+                    <span class="step-dot" id="step-dot-3"></span>
+                    <span class="step-dot" id="step-dot-4"></span>
+                </div>
+                <div class="step-label" id="step-label">Step 1 of 4</div>
                 <div class="ico"><i class="fa fa-link"></i></div>
-                <div class="cd-num" id="count-num">5</div>
-                <div class="cd-title">Aapki link ready ho rahi hai</div>
-                <div class="cd-sub">Niche button <span id="wait-text">5 seconds</span> me enable hoga</div>
+                <div class="cd-num" id="count-num">15</div>
+                <div class="cd-title" id="cd-title">Aapki link ready ho rahi hai</div>
+                <div class="cd-sub">Niche button <span id="wait-text">15 seconds</span> me enable hoga</div>
                 <div class="prog"><div class="prog-bar" id="progress-bar"></div></div>
                 <div class="dest">
                     <div class="dest-label"><i class="fa fa-external-link"></i>Destination</div>
@@ -271,6 +284,8 @@
 
         var AD_TIMER = 5;
         var RECAPTCHA_KEY = "";
+        var STEP_COUNT = 4;
+        var STEP_SECONDS = 15;
         try {
             var sSnap = await get(child(ref(db), "settings"));
             var s = sSnap.val() || {};
@@ -310,6 +325,9 @@
             var gpSnap = await get(ref(db, "settings/go_page"));
             if (gpSnap.exists()) GO_PAGE = gpSnap.val() || {};
         } catch(e) {}
+
+        STEP_COUNT = parseInt(GO_PAGE.step_count) || 4;
+        STEP_SECONDS = parseInt(GO_PAGE.step_seconds) || 15;
 
         function injectCode(container, code) {
             if (!code || !code.trim()) return false;
@@ -459,6 +477,17 @@
         }
 
         var remaining = AD_TIMER;
+        var currentStep = 1;
+        var stepTitles = [
+            "Aapki link ready ho rahi hai",
+            "Ad dekho — link ban rahi hai",
+            "Thoda aur wait karo...",
+            "Last step — almost done!"
+        ];
+
+        var $stepIndicator = document.getElementById("step-indicator");
+        var $stepLabel = document.getElementById("step-label");
+        var $cdTitle = document.getElementById("cd-title");
 
         if (mode === "alias") {
             try {
@@ -494,30 +523,61 @@
             try { $destUrl.textContent = new URL(targetUrl).hostname; }
             catch(e) { $destUrl.textContent = targetUrl; }
 
-            if (adType === "banner" || adType === "none") remaining = 0;
-
             $loading.classList.add("hide");
             $count.classList.remove("hide");
 
-            if (remaining > 0) {
-                tickCountdown();
-                var cdTimer = setInterval(function() {
-                    if (tickCountdown()) clearInterval(cdTimer);
-                }, 1000);
+            if (adType === "banner" || adType === "none") {
+                STEP_COUNT = 0;
+            }
+
+            if (STEP_COUNT > 0) {
+                startStep();
             } else {
                 enableSkip();
             }
         }
 
-        function tickCountdown() {
+        function startStep() {
+            remaining = STEP_SECONDS;
+            totalSeconds = STEP_SECONDS;
+            progressBar.style.width = "0%";
+
+            $stepLabel.textContent = "Step " + currentStep + " of " + STEP_COUNT;
+            $cdTitle.textContent = stepTitles[currentStep - 1] || "Loading ad...";
+
+            for (var i = 1; i <= STEP_COUNT; i++) {
+                var dot = document.getElementById("step-dot-" + i);
+                dot.className = "step-dot";
+                if (i < currentStep) dot.className = "step-dot done";
+                if (i === currentStep) dot.className = "step-dot active";
+            }
+
+            $skip.style.display = "none";
+            $skip.disabled = true;
+            $skip.className = "skip waiting";
             $num.style.display = "block";
+
+            tickCountdown();
+            var cdTimer = setInterval(function() {
+                if (tickCountdown()) {
+                    clearInterval(cdTimer);
+                    if (currentStep < STEP_COUNT) {
+                        currentStep++;
+                        startStep();
+                    } else {
+                        enableSkip();
+                    }
+                }
+            }, 1000);
+        }
+
+        function tickCountdown() {
             $num.textContent = remaining;
             document.getElementById("timer-num").textContent = remaining;
             document.getElementById("wait-text").textContent = remaining + " second" + (remaining !== 1 ? "s" : "");
             if (progressBar) progressBar.style.width = ((totalSeconds - remaining) / totalSeconds * 100) + "%";
             if (remaining <= 0) {
                 if (progressBar) progressBar.style.width = "100%";
-                enableSkip();
                 return true;
             }
             remaining--;
@@ -529,9 +589,14 @@
         function enableSkip() {
             $num.style.display = "none";
             document.getElementById("wait-text").textContent = "";
+            $stepLabel.textContent = "Ready!";
+            for (var i = 1; i <= STEP_COUNT; i++) {
+                document.getElementById("step-dot-" + i).className = "step-dot done";
+            }
             document.querySelector(".hdr-pill").style.background = "rgba(52,211,153,.15)";
             document.querySelector(".hdr-pill").style.borderColor = "rgba(52,211,153,.2)";
             document.querySelector(".hdr-pill").style.color = "#34d399";
+            document.getElementById("timer-num").textContent = "0";
 
             if (RECAPTCHA_KEY && !captchaRendered) {
                 $skip.disabled = true;

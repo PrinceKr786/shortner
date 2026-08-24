@@ -127,17 +127,29 @@
                 <!-- TIMER -->
                 <div class="box box-warning">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-clock-o"></i> Timer Settings</h3>
+                        <h3 class="box-title"><i class="fa fa-clock-o"></i> Timer & Steps Settings</h3>
                     </div>
                     <div class="box-body">
+                        <div class="callout callout-warning">
+                            <h4>Multi-Step Ad Flow</h4>
+                            <p>Visitor ko <b>4 steps</b> se guzarna padega. Har step me alag ads dikhte hain. Total time = steps x seconds.</p>
+                            <p><b>Example:</b> 4 steps x 15 sec = 60 sec total wait</p>
+                        </div>
                         <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Countdown Seconds</label>
-                                <input type="number" min="1" max="60" class="form-control" id="countdown_seconds" value="5">
+                            <div class="col-sm-4 form-group">
+                                <label>Kitne Steps (Pages)</label>
+                                <input type="number" min="1" max="10" class="form-control" id="step_count" value="4">
+                                <p class="help-block">Kitne ad pages dikhane hain. Default: 4</p>
                             </div>
-                            <div class="col-sm-6 form-group" style="margin-bottom:0">
-                                <label>reCAPTCHA Site Key (optional)</label>
-                                <input type="text" class="form-control" id="recaptcha_site_key" placeholder="Optional">
+                            <div class="col-sm-4 form-group">
+                                <label>Har Step me Seconds</label>
+                                <input type="number" min="5" max="60" class="form-control" id="step_seconds" value="15">
+                                <p class="help-block">Har page pe kitne second wait. Default: 15</p>
+                            </div>
+                            <div class="col-sm-4 form-group" style="margin-bottom:0">
+                                <label>Total Time (auto)</label>
+                                <input type="text" class="form-control" id="total_time_display" readonly value="60 sec" style="background:#f5f5f5;font-weight:700">
+                                <p class="help-block">Auto-calculate: steps x seconds</p>
                             </div>
                         </div>
                     </div>
@@ -387,7 +399,7 @@
     const SETTINGS_PATH = "settings/go_page";
 
     const FIELDS = [
-        "countdown_seconds","recaptcha_site_key",
+        "step_count","step_seconds","recaptcha_site_key",
         "popunder_enabled","popunder_code",
         "top_banner_enabled","top_banner_code",
         "bottom_banner_enabled","bottom_banner_code",
@@ -426,6 +438,15 @@
         }
     }
     await loadSettings();
+
+    function updateTotalTime() {
+        var steps = parseInt(document.getElementById("step_count").value) || 4;
+        var secs = parseInt(document.getElementById("step_seconds").value) || 15;
+        document.getElementById("total_time_display").value = (steps * secs) + " sec";
+    }
+    document.getElementById("step_count").addEventListener("input", updateTotalTime);
+    document.getElementById("step_seconds").addEventListener("input", updateTotalTime);
+    updateTotalTime();
 
     async function saveAll(e) {
         if (e) e.preventDefault();
