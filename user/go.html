@@ -307,7 +307,7 @@
 
         var GO_PAGE = {};
         try {
-            var gpSnap = await get(ref(db), "settings/go_page"));
+            var gpSnap = await get(ref(db, "settings/go_page"));
             if (gpSnap.exists()) GO_PAGE = gpSnap.val() || {};
         } catch(e) {}
 
