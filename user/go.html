@@ -252,6 +252,17 @@
 
     </div>
 
+    <!-- ===== MOBILE BANNER (hidden on desktop) ===== -->
+    <div class="bottom-banner-wrap" id="mobile-banner-wrap" style="display:none">
+        <div class="bottom-banner-slot" id="mobile-banner-ad"></div>
+    </div>
+
+    <!-- ===== NATIVE AD SLOT ===== -->
+    <div id="native-ad-slot" style="max-width:900px;margin:20px auto;padding:0 20px"></div>
+
+    <!-- ===== SMARTLINK SLOT ===== -->
+    <div id="smartlink-slot" style="text-align:center;padding:10px"></div>
+
     <!-- ===== BOTTOM BANNER AD ===== -->
     <div class="bottom-banner-wrap">
         <div class="bottom-banner-slot" id="bottom-banner-ad"></div>
@@ -352,9 +363,54 @@
             if (gpSnap.exists()) GO_PAGE = gpSnap.val() || {};
         } catch {}
 
+        function renderAdsterra(containerId, key, width, height) {
+            if (!key) return;
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const uid = "adsterra_" + containerId + "_" + Math.random().toString(36).slice(2,8);
+            const html = '<div id="' + uid + '"></div>' +
+                '<script>window.atOptions = { "key": "' + key + '", "format": "iframe", "height": ' + height + ', "width": ' + width + ', "params": {} };<\/script>' +
+                '<script src="https://www.highrevenueformat.com/' + key + '/invoke.js"><\/script>';
+            container.innerHTML = html;
+        }
+
+        function renderAdsterraScript(key) {
+            if (!key) return "";
+            return '<script>window.atOptions = { "key": "' + key + '", "format": "iframe", "height": 250, "width": 300, "params": {} };<\/script>' +
+                   '<script src="https://www.highrevenueformat.com/' + key + '/invoke.js"><\/script>';
+        }
+
+        function renderPopunder(key) {
+            if (!key) return;
+            const s = document.createElement("script");
+            s.src = "https://www.highrevenueformat.com/" + key + "/invoke.js";
+            window.atOptions = { key: key, format: "iframe", height: 0, width: 0, params: {} };
+            document.head.appendChild(s);
+        }
+
+        function renderNative(key, containerId) {
+            if (!key) return;
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '<script>window.atOptions = { "key": "' + key + '", "format": "native", "height": 250, "width": 300, "params": {} };<\/script>' +
+                '<script src="https://www.highrevenueformat.com/' + key + '/invoke.js"><\/script>';
+        }
+
+        function renderSmartlink(key, containerId) {
+            if (!key) return;
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '<script>window.atOptions = { "key": "' + key + '", "format": "redirect", "height": 1, "width": 1, "params": {} };<\/script>' +
+                '<script src="https://www.highrevenueformat.com/' + key + '/invoke.js"><\/script>';
+        }
+
         async function loadAllAds() {
             const gp = GO_PAGE;
-            const hasAny = gp.top_banner_enabled || gp.bottom_banner_enabled || gp.sidebar_1_enabled || gp.video_enabled || gp.social_bar_enabled || gp.floating_left_enabled || gp.floating_right_enabled;
+            const hasAny = gp.top_banner_enabled || gp.bottom_banner_enabled || gp.sidebar_1_enabled || gp.social_bar_enabled || gp.floating_left_enabled || gp.floating_right_enabled || gp.native_enabled || gp.smartlink_enabled || gp.mobile_banner_enabled;
+
+            if (gp.popunder_key) {
+                renderPopunder(gp.popunder_key);
+            }
 
             if (!hasAny) {
                 try {
@@ -384,11 +440,6 @@
                     }
 
                     if (pool.length > 0) {
-                        const vidAd = pool.find(a => a.image_url);
-                        if (vidAd) renderVideoAd(vidAd.image_url, vidAd.target_url, vidAd.id);
-                    }
-
-                    if (pool.length > 0) {
                         const socialAd = pool[Math.floor(Math.random() * pool.length)];
                         showSocialBar(socialAd.title || "Special Offer!", socialAd.target_url);
                         trackImpression(socialAd.id);
@@ -407,46 +458,104 @@
                 return;
             }
 
-            if (gp.top_banner_enabled && gp.top_banner_html) {
-                document.getElementById("top-banner-ad").innerHTML = gp.top_banner_html;
+            if (gp.top_banner_enabled) {
+                if (gp.top_banner_key) {
+                    renderAdsterra("top-banner-ad", gp.top_banner_key, 728, 90);
+                } else if (gp.top_banner_html) {
+                    document.getElementById("top-banner-ad").innerHTML = gp.top_banner_html;
+                }
             }
-            if (gp.bottom_banner_enabled && gp.bottom_banner_html) {
-                document.getElementById("bottom-banner-ad").innerHTML = gp.bottom_banner_html;
+            if (gp.bottom_banner_enabled) {
+                if (gp.bottom_banner_key) {
+                    renderAdsterra("bottom-banner-ad", gp.bottom_banner_key, 728, 90);
+                } else if (gp.bottom_banner_html) {
+                    document.getElementById("bottom-banner-ad").innerHTML = gp.bottom_banner_html;
+                }
             }
-            if (gp.sidebar_1_enabled && gp.sidebar_1_html) {
-                document.getElementById("sidebar-ad-1").innerHTML = gp.sidebar_1_html;
+            if (gp.sidebar_1_enabled) {
+                if (gp.sidebar_1_key) {
+                    renderAdsterra("sidebar-ad-1", gp.sidebar_1_key, 300, 250);
+                } else if (gp.sidebar_1_html) {
+                    document.getElementById("sidebar-ad-1").innerHTML = gp.sidebar_1_html;
+                } else {
+                    renderDefaultSidebar("sidebar-ad-1");
+                }
             } else {
                 renderDefaultSidebar("sidebar-ad-1");
             }
-            if (gp.sidebar_2_enabled && gp.sidebar_2_html) {
-                document.getElementById("sidebar-ad-2").innerHTML = gp.sidebar_2_html;
+            if (gp.sidebar_2_enabled) {
+                if (gp.sidebar_2_key) {
+                    renderAdsterra("sidebar-ad-2", gp.sidebar_2_key, 300, 250);
+                } else if (gp.sidebar_2_html) {
+                    document.getElementById("sidebar-ad-2").innerHTML = gp.sidebar_2_html;
+                } else {
+                    renderDefaultSidebar("sidebar-ad-2");
+                }
             } else {
                 renderDefaultSidebar("sidebar-ad-2");
             }
-            if (gp.sidebar_3_enabled && gp.sidebar_3_html) {
-                document.getElementById("sidebar-ad-3").innerHTML = gp.sidebar_3_html;
+            if (gp.sidebar_3_enabled) {
+                if (gp.sidebar_3_key) {
+                    renderAdsterra("sidebar-ad-3", gp.sidebar_3_key, 160, 600);
+                } else if (gp.sidebar_3_html) {
+                    document.getElementById("sidebar-ad-3").innerHTML = gp.sidebar_3_html;
+                } else {
+                    renderDefaultSidebar("sidebar-ad-3");
+                }
             } else {
                 renderDefaultSidebar("sidebar-ad-3");
             }
-            if (gp.video_enabled && gp.video_image_url) {
-                renderVideoAd(gp.video_image_url, gp.video_cta_url || "#", null);
-                document.getElementById("video-cta").textContent = gp.video_cta_text || "Learn More";
-            } else {
-                document.getElementById("video-ad-section").style.display = "none";
+            if (gp.social_bar_enabled) {
+                if (gp.social_bar_key) {
+                    const sb = document.getElementById("social-bar");
+                    sb.innerHTML = '<div id="adsterra-socialbar"></div>';
+                    const s = document.createElement("script");
+                    s.src = "https://www.highrevenueformat.com/" + gp.social_bar_key + "/invoke.js";
+                    document.body.appendChild(s);
+                    setTimeout(() => { sb.style.display = "flex"; }, 2000);
+                } else if (gp.social_bar_html) {
+                    showCustomSocialBar(gp.social_bar_html);
+                } else if (gp.social_bar_title) {
+                    showSocialBar(gp.social_bar_title, gp.social_bar_url || "#");
+                }
             }
-            if (gp.social_bar_enabled && gp.social_bar_url) {
-                showSocialBar(gp.social_bar_title || "Special Offer!", gp.social_bar_url);
-                document.getElementById("social-bar-cta").textContent = gp.social_bar_cta || "Check Now";
+            if (gp.floating_left_enabled) {
+                if (gp.floating_left_key) {
+                    renderAdsterra("float-ad-left", gp.floating_left_key, 160, 300);
+                    document.getElementById("float-ad-left").style.display = "block";
+                } else if (gp.floating_left_html) {
+                    const fl = document.getElementById("float-ad-left");
+                    fl.innerHTML = gp.floating_left_html;
+                    fl.style.display = "block";
+                }
             }
-            if (gp.floating_left_enabled && gp.floating_left_html) {
-                const fl = document.getElementById("float-ad-left");
-                fl.innerHTML = gp.floating_left_html;
-                fl.style.display = "block";
+            if (gp.floating_right_enabled) {
+                if (gp.floating_right_key) {
+                    renderAdsterra("float-ad-right", gp.floating_right_key, 160, 600);
+                    document.getElementById("float-ad-right").style.display = "block";
+                } else if (gp.floating_right_html) {
+                    const fr = document.getElementById("float-ad-right");
+                    fr.innerHTML = gp.floating_right_html;
+                    fr.style.display = "block";
+                }
             }
-            if (gp.floating_right_enabled && gp.floating_right_html) {
-                const fr = document.getElementById("float-ad-right");
-                fr.innerHTML = gp.floating_right_html;
-                fr.style.display = "block";
+            if (gp.native_enabled && gp.native_key) {
+                renderNative(gp.native_key, "native-ad-slot");
+            }
+            if (gp.smartlink_enabled && gp.smartlink_key) {
+                renderSmartlink(gp.smartlink_key, "smartlink-slot");
+            }
+            if (gp.mobile_banner_enabled) {
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMobile) {
+                    if (gp.mobile_banner_key) {
+                        renderAdsterra("mobile-banner-ad", gp.mobile_banner_key, 320, 50);
+                        document.getElementById("mobile-banner-wrap").style.display = "block";
+                    } else if (gp.mobile_banner_html) {
+                        document.getElementById("mobile-banner-ad").innerHTML = gp.mobile_banner_html;
+                        document.getElementById("mobile-banner-wrap").style.display = "block";
+                    }
+                }
             }
         }
 
@@ -459,16 +568,6 @@
             trackImpression(ad.id);
         }
 
-        function renderVideoAd(imgUrl, ctaUrl, adId) {
-            const vp = document.getElementById("video-player");
-            vp.style.backgroundImage = "url(" + imgUrl + ")";
-            vp.style.backgroundSize = "cover";
-            vp.style.backgroundPosition = "center";
-            document.getElementById("video-cta").href = ctaUrl;
-            document.getElementById("video-cta").target = "_blank";
-            if (adId) trackImpression(adId);
-        }
-
         function renderFloatAd(elId, ad) {
             const el = document.getElementById(elId);
             el.innerHTML = '<a href="' + ad.target_url + '" target="_blank"><img src="' + ad.image_url + '" style="width:100%;border-radius:12px"></a>';
@@ -478,11 +577,18 @@
 
         function renderDefaultSidebar(elId) {
             const el = document.getElementById(elId);
-            if (el) el.innerHTML = '<div style="padding:20px;text-align:center"><i class="fa fa-bullhorn" style="font-size:2rem;color:#667eea;margin-bottom:10px;display:block"></i><div style="color:#667eea;font-weight:700;font-size:.85rem">Advertise Here</div><div style="color:#555;font-size:.7rem;margin-top:5px">300x250 space available</div></div>';
+            if (el) el.innerHTML = '<div style="padding:20px;text-align:center"><i class="fa fa-bullhorn" style="font-size:2rem;color:#667eea;margin-bottom:10px;display:block"></div>';
         }
 
         function showDefaultSidebarAds() {
             ["sidebar-ad-1","sidebar-ad-2","sidebar-ad-3"].forEach(renderDefaultSidebar);
+        }
+
+        function showCustomSocialBar(html) {
+            const bar = document.getElementById("social-bar");
+            bar.innerHTML = html + '<span class="bar-close" id="social-bar-close"><i class="fa fa-times"></i></span>';
+            setTimeout(() => { bar.style.display = "flex"; }, 2000);
+            document.getElementById("social-bar-close").onclick = () => { bar.style.display = "none"; };
         }
 
         function showSocialBar(title, url) {
