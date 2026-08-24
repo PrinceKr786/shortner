@@ -33,8 +33,12 @@ import {
    SECTION 1: CONSTANTS
    ============================================================ */
 export const SITE_NAME = "Shortify";
-export const SITE_URL = window.location.origin +
-    window.location.pathname.replace(/(user\/|admin\/)[^\/]*$/, "/");
+export const SITE_URL = (() => {
+    const origin = window.location.origin;
+    let path = window.location.pathname.replace(/(user\/|admin\/)[^\/]*$/, "/");
+    path = path.replace(/\/+$/, "") + "/";
+    return origin + path;
+})();
 
 /* -------- CURRENCY (admin settings se load hota hai) -------- */
 let CURRENCY = "\u20B9";   // default ₹

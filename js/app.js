@@ -40,10 +40,22 @@ export function getCurrency() { return CURRENCY; }
 export const SITE_NAME = "Shortify";
 
 /* Site ka base URL (short links isi se banenge).
-   GitHub Pages pe deploy karne ke baad apna URL dalo,
-   e.g. "https://username.github.io/shortner"
-   NOTE: Custom domain lene ke baad usko yahan dalna. */
-export const SITE_URL = window.location.origin + "/";
+   GitHub Pages pe auto-detect karta hai, custom domain ke liye override kar sakte hain. */
+export const SITE_URL = (() => {
+    const origin = window.location.origin;
+    let path = window.location.pathname;
+    if (path !== "/") {
+        const parts = path.split("/").filter(Boolean);
+        if (parts.length > 0) {
+            path = "/" + parts[0] + "/";
+        } else {
+            path = "/";
+        }
+    } else {
+        path = "/";
+    }
+    return origin + path;
+})();
 
 
 /* ============================================================
