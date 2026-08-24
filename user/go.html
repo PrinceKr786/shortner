@@ -313,7 +313,7 @@
         import { db } from "./js/firebase-config.js";
         import { SITE_URL } from "./js/app.js";
         import {
-            ref, get, child, runTransaction
+            ref, get, child, runTransaction, update
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         (async function() {
@@ -644,11 +644,15 @@
             try {
                 // (a) CLICKS + STATS
                 if (mode === "alias") {
-                    await runTransaction(ref(db, `aliases/${alias}/clicks`),
-                        (cur) => (cur || 0) + 1);
+                    try {
+                        await runTransaction(ref(db, `aliases/${alias}/clicks`),
+                            (cur) => (cur || 0) + 1);
+                    } catch (e) { console.error("Clicks transaction failed:", e); }
                 }
-                runTransaction(ref(db, "stats/total_clicks"),
-                    (cur) => (cur || 0) + 1);
+                try {
+                    await runTransaction(ref(db, "stats/total_clicks"),
+                        (cur) => (cur || 0) + 1);
+                } catch (e) { console.error("Stats transaction failed:", e); }
 
                 // (c) OWNER EARNINGS
                 let credited = 0;   // kitna owner ko mila (stats ke liye)

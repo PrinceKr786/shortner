@@ -2,44 +2,65 @@
   "rules": {
     "users": {
       "$uid": {
-        ".read": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'",
-        ".write": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+        ".read": true,
+        ".write": true
       }
     },
     "aliases": {
       ".read": true,
-      ".write": "auth.uid != null",
-      ".indexOn": ["uid"]
+      ".write": true,
+      ".indexOn": ["uid"],
+      "$alias": {
+        "clicks": {
+          ".write": true
+        }
+      }
     },
     "clicks": {
       "$alias": {
         ".read": true,
-        ".write": "auth.uid != null"
+        ".write": true
       }
     },
     "transactions": {
       "$uid": {
-        ".read": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'",
-        ".write": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+        ".read": true,
+        ".write": true
       }
     },
     "campaigns": {
       "$uid": {
-        ".read": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'",
-        ".write": "$uid === auth.uid || uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+        ".read": true,
+        ".write": true
       }
     },
     "settings": {
       ".read": true,
-      ".write": "auth.uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+      ".write": true
     },
     "plans": {
       ".read": true,
-      ".write": "auth.uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+      ".write": true
     },
     "ads": {
       ".read": true,
-      ".write": "auth.uid === 'KG5Bs1j7NLW7GpPlG5ObKPyPEer1'"
+      ".write": true
+    },
+    "earning_rates": {
+      ".read": true,
+      ".write": true
+    },
+    "stats": {
+      ".read": true,
+      ".write": true
+    },
+    "refcodes": {
+      ".read": true,
+      ".write": true
+    },
+    "withdrawals": {
+      ".read": true,
+      ".write": true
     }
   }
 }
