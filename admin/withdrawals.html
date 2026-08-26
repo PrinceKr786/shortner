@@ -385,11 +385,13 @@
 
         // Sidebar badge
         const badge = document.getElementById("menu-pending-badge");
-        if (pendCount > 0) {
-            badge.style.display = "";
-            badge.textContent = pendCount;
-        } else {
-            badge.style.display = "none";
+        if (badge) {
+            if (pendCount > 0) {
+                badge.style.display = "";
+                badge.textContent = pendCount;
+            } else {
+                badge.style.display = "none";
+            }
         }
     }
 
