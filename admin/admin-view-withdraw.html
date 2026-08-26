@@ -1,0 +1,466 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/admin-view-withdraw.html
+     KAAM   : Withdrawal Details PAGE
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Withdrawal Details - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <style>
+        .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
+        .skin-black .main-header .navbar .nav>li>a{color:#333}
+        .skin-black .main-header .navbar .nav>li>a:hover,.skin-black .main-header .navbar .nav>li>a:active,.skin-black .main-header .navbar .nav>li>a:focus,.skin-black .main-header .navbar .nav .open>a,.skin-black .main-header .navbar .nav .open>a:hover,.skin-black .main-header .navbar .nav .open>a:focus,.skin-black .main-header .navbar .nav>.active>a{background:#f9f9f9;color:#333}
+        .skin-black .main-header .navbar .nav>.active>a{border-bottom-color:#fff}
+        .skin-black .main-header .logo{background-color:#3c8dbc;color:#fff}
+        .skin-black .main-header .logo:hover{background-color:#367fa9}
+        .skin-black .main-sidebar{background-color:#222d32}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
+        .skin-black .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
+        .skin-black .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+    </style>
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+                <li><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+                <li><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+                <li><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+                <li class="treeview"><a href="#"><i class="fa fa-link"></i> <span>Manage Links</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Interstitial</a></li>
+                        <li><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Banner</a></li>
+                        <li><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Popup</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-money"></i> <span>Withdraws</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu"><li><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-edit-withdraw.html"><i class="fa fa-circle-o"></i> Edit</a></li>
+                        <li><a href="admin-export-withdraws.html"><i class="fa fa-circle-o"></i> Export</a></li></ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-users"></i> <span>Users</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                        <li><a href="admin-delete-user.html"><i class="fa fa-circle-o"></i> Delete</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-diamond"></i> <span>Plans</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu"><li><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-delete-plan.html"><i class="fa fa-circle-o"></i> Delete</a></li></ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-pencil"></i> <span>Blog</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-file-text"></i> <span>Pages</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-star"></i> <span>Testimonials</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                        <li><a href="admin-upgrade.html"><i class="fa fa-circle-o"></i> Upgrade</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-gears"></i> <span>Settings</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Withdrawal Details <small>Withdrawal ki details dekho</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="withdrawals.html">Withdraws</a></li>
+                <li class="active">Withdrawal Details</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="text-center" id="w-loading">
+                        <i class="fa fa-spinner fa-spin fa-2x"></i>
+                        <p>Withdrawal details load ho rahe hain...</p>
+                    </div>
+
+                    <div id="w-content" style="display:none;">
+                        <!-- MAIN DETAILS BOX -->
+                        <div class="box box-info">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><i class="fa fa-money"></i>
+                                    Withdrawal #<span id="w-id-display"></span></h3>
+                                <div class="pull-right" id="w-action-btns"></div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table table-bordered">
+                                            <tr><th style="width:150px">ID</th><td id="w-id2"></td></tr>
+                                            <tr><th>Amount</th><td id="w-amount"></td></tr>
+                                            <tr><th>Status</th><td id="w-status"></td></tr>
+                                            <tr><th>Method</th><td id="w-method"></td></tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table table-bordered">
+                                            <tr><th style="width:150px">User</th><td id="w-user"></td></tr>
+                                            <tr><th>Account</th><td id="w-account"></td></tr>
+                                            <tr><th>Date</th><td id="w-date"></td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STATS BREAKDOWN BOX -->
+                        <div class="box box-success">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><i class="fa fa-bar-chart"></i>
+                                    Stats Breakdown</h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-aqua">
+                                            <div class="inner"><h3 id="stat-countries">0</h3><p>Countries</p></div>
+                                            <div class="icon"><i class="fa fa-globe"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-green">
+                                            <div class="inner"><h3 id="stat-ips">0</h3><p>Unique IPs</p></div>
+                                            <div class="icon"><i class="fa fa-server"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-yellow">
+                                            <div class="inner"><h3 id="stat-referrers">0</h3><p>Referrers</p></div>
+                                            <div class="icon"><i class="fa fa-external-link"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-red">
+                                            <div class="inner"><h3 id="stat-total-links">0</h3><p>Total Links</p></div>
+                                            <div class="icon"><i class="fa fa-link"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4><i class="fa fa-globe"></i> Top Countries</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead><tr><th>Country</th><th>Clicks</th></tr></thead>
+                                        <tbody id="countries-body"><tr><td colspan="2">Loading...</td></tr></tbody>
+                                    </table>
+                                </div>
+
+                                <h4><i class="fa fa-server"></i> Top IPs</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead><tr><th>IP</th><th>Clicks</th></tr></thead>
+                                        <tbody id="ips-body"><tr><td colspan="2">Loading...</td></tr></tbody>
+                                    </table>
+                                </div>
+
+                                <h4><i class="fa fa-external-link"></i> Top Referrers</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead><tr><th>Referrer</th><th>Clicks</th></tr></thead>
+                                        <tbody id="referrers-body"><tr><td colspan="2">Loading...</td></tr></tbody>
+                                    </table>
+                                </div>
+
+                                <h4><i class="fa fa-link"></i> User Links</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead><tr><th>Alias</th><th>URL</th><th>Clicks</th></tr></thead>
+                                        <tbody id="links-body"><tr><td colspan="3">Loading...</td></tr></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="w-error" style="display:none;">
+                        <div class="alert alert-warning">
+                            <i class="fa fa-exclamation-circle"></i>
+                            Withdrawal nahi mili. <a href="withdrawals.html">List pe wapas jao.</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout, wirePendingBadge,
+        escapeHtml, formatMoney, formatDate, showToast
+    } from "./js/app.js";
+    import { ref, get, update }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+    wirePendingBadge();
+
+    /* WITHDRAWAL ID READ KARO */
+    const hash = window.location.hash;
+    const match = hash.match(/id=(.+)/);
+    if (!match) {
+        document.getElementById("w-loading").style.display = "none";
+        document.getElementById("w-error").style.display = "block";
+        showToast("Withdrawal ID URL mein nahi mila!", "error");
+        throw new Error("Withdrawal ID missing");
+    }
+    const wId = match[1];
+
+    /* WITHDRAWAL DATA */
+    const wSnap = await get(ref(db, "withdrawals/" + wId));
+    if (!wSnap.exists()) {
+        document.getElementById("w-loading").style.display = "none";
+        document.getElementById("w-error").style.display = "block";
+        showToast("Withdrawal nahi mili!", "error");
+        throw new Error("Withdrawal not found");
+    }
+    const wData = wSnap.val();
+    const wUid = wData.uid || wId.split("_")[1] || "";
+
+    /* STATUS LABEL FUNCTION */
+    function statusLabel(s) {
+        if (!s || s === "pending") return '<span class="label label-warning">Pending</span>';
+        if (s === "approved") return '<span class="label label-info">Approved</span>';
+        if (s === "completed") return '<span class="label label-success">Completed</span>';
+        if (s === "cancelled") return '<span class="label label-danger">Cancelled</span>';
+        if (s === "returned") return '<span class="label label-default">Returned</span>';
+        return '<span class="label label-default">' + escapeHtml(s) + '</span>';
+    }
+
+    /* DETAILS DIKHAO */
+    document.getElementById("w-id-display").textContent = wId;
+    document.getElementById("w-id2").textContent = wId;
+    document.getElementById("w-amount").textContent = formatMoney(wData.amount || 0);
+    document.getElementById("w-status").innerHTML = statusLabel(wData.status);
+    document.getElementById("w-method").textContent = escapeHtml(wData.method || "N/A");
+    document.getElementById("w-user").textContent = escapeHtml(wUid);
+    document.getElementById("w-account").textContent = escapeHtml(wData.account || wData.email || "N/A");
+    document.getElementById("w-date").textContent = formatDate(wData.created_at);
+
+    /* ACTION BUTTONS BASED ON STATUS */
+    const btnsDiv = document.getElementById("w-action-btns");
+    const status = wData.status || "pending";
+
+    function makeBtn(cls, icon, text) {
+        return '<button class="btn ' + cls + ' btn-sm action-btn" data-action="' + text.toLowerCase() + '">' +
+               '<i class="fa ' + icon + '"></i> ' + text + '</button> ';
+    }
+
+    if (status === "pending") {
+        btnsDiv.innerHTML = makeBtn("btn-success", "fa-check", "Approve") +
+                           makeBtn("btn-info", "fa-check-circle", "Complete") +
+                           makeBtn("btn-danger", "fa-times", "Cancel");
+    } else if (status === "approved") {
+        btnsDiv.innerHTML = makeBtn("btn-info", "fa-check-circle", "Complete") +
+                           makeBtn("btn-danger", "fa-times", "Cancel");
+    }
+
+    document.querySelectorAll(".action-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+            const action = btn.dataset.action;
+            let newStatus = "";
+            if (action === "approve") newStatus = "approved";
+            else if (action === "complete") newStatus = "completed";
+            else if (action === "cancel") newStatus = "cancelled";
+
+            if (!confirm("Kya aap withdrawal ko " + newStatus + " karna chahte ho?")) return;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Processing...';
+
+            try {
+                await update(ref(db, "withdrawals/" + wId), {
+                    status: newStatus, updated_at: Date.now(), updated_by: me.uid
+                });
+                showToast("Withdrawal " + newStatus + " ho gaya!", "success");
+                setTimeout(() => { location.reload(); }, 1000);
+            } catch (e) {
+                showToast("Error: " + e.message, "error");
+                btn.disabled = false;
+            }
+        });
+    });
+
+    /* USER KI LINKS LOAD KARO */
+    const linksSnap = await get(ref(db, "aliases"));
+    let userLinks = [];
+    if (linksSnap.exists()) {
+        linksSnap.forEach(c => {
+            const l = c.val();
+            if (l.uid === wUid) { l._alias = c.key; userLinks.push(l); }
+        });
+    }
+    document.getElementById("stat-total-links").textContent = userLinks.length;
+
+    /* STATS BREAKDOWN */
+    let countries = {}, ips = {}, referrers = {};
+    try {
+        const statsSnap = await get(ref(db, "stats/links/" + wUid));
+        if (statsSnap.exists()) {
+            const sd = statsSnap.val();
+            countries = sd.countries || {};
+            ips = sd.ips || {};
+            referrers = sd.referrers || {};
+        }
+    } catch(e) {}
+
+    const cKeys = Object.keys(countries);
+    const iKeys = Object.keys(ips);
+    const rKeys = Object.keys(referrers);
+    document.getElementById("stat-countries").textContent = cKeys.length;
+    document.getElementById("stat-ips").textContent = iKeys.length;
+    document.getElementById("stat-referrers").textContent = rKeys.length;
+
+    const countriesBody = document.getElementById("countries-body");
+    if (cKeys.length === 0) {
+        countriesBody.innerHTML = '<tr><td colspan="2" class="text-muted">Data nahi hai</td></tr>';
+    } else {
+        const sorted = cKeys.sort((a,b) => (countries[b].clicks||0) - (countries[a].clicks||0)).slice(0, 10);
+        countriesBody.innerHTML = sorted.map(k =>
+            '<tr><td>' + escapeHtml(k) + '</td><td>' + (countries[k].clicks||0) + '</td></tr>'
+        ).join("");
+    }
+
+    const ipsBody = document.getElementById("ips-body");
+    if (iKeys.length === 0) {
+        ipsBody.innerHTML = '<tr><td colspan="2" class="text-muted">Data nahi hai</td></tr>';
+    } else {
+        const sortedI = iKeys.sort((a,b) => (ips[b].clicks||0) - (ips[a].clicks||0)).slice(0, 10);
+        ipsBody.innerHTML = sortedI.map(k =>
+            '<tr><td>' + escapeHtml(k) + '</td><td>' + (ips[k].clicks||0) + '</td></tr>'
+        ).join("");
+    }
+
+    const refBody = document.getElementById("referrers-body");
+    if (rKeys.length === 0) {
+        refBody.innerHTML = '<tr><td colspan="2" class="text-muted">Data nahi hai</td></tr>';
+    } else {
+        const sortedR = rKeys.sort((a,b) => (referrers[b].clicks||0) - (referrers[a].clicks||0)).slice(0, 10);
+        refBody.innerHTML = sortedR.map(k =>
+            '<tr><td>' + escapeHtml(k || "Direct") + '</td><td>' + (referrers[k].clicks||0) + '</td></tr>'
+        ).join("");
+    }
+
+    const linksBody = document.getElementById("links-body");
+    if (userLinks.length === 0) {
+        linksBody.innerHTML = '<tr><td colspan="3" class="text-muted">User ke paas koi link nahi hai</td></tr>';
+    } else {
+        linksBody.innerHTML = userLinks.slice(0, 20).map(l =>
+            '<tr><td><code>' + escapeHtml(l._alias) + '</code></td>' +
+            '<td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' +
+            escapeHtml(l.url || "-") + '</td>' +
+            '<td><b>' + (Number(l.clicks) || 0) + '</b></td></tr>'
+        ).join("");
+    }
+
+    document.getElementById("w-loading").style.display = "none";
+    document.getElementById("w-content").style.display = "block";
+</script>
+</body>
+</html>

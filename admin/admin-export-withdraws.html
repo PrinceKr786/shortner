@@ -1,0 +1,389 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/admin-export-withdraws.html
+     KAAM   : Withdraws Export PAGE
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Withdraws Export - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <style>
+        .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
+        .skin-black .main-header .navbar .nav>li>a{color:#333}
+        .skin-black .main-header .navbar .nav>li>a:hover,.skin-black .main-header .navbar .nav>li>a:active,.skin-black .main-header .navbar .nav>li>a:focus,.skin-black .main-header .navbar .nav .open>a,.skin-black .main-header .navbar .nav .open>a:hover,.skin-black .main-header .navbar .nav .open>a:focus,.skin-black .main-header .navbar .nav>.active>a{background:#f9f9f9;color:#333}
+        .skin-black .main-header .navbar .nav>.active>a{border-bottom-color:#fff}
+        .skin-black .main-header .logo{background-color:#3c8dbc;color:#fff}
+        .skin-black .main-header .logo:hover{background-color:#367fa9}
+        .skin-black .main-sidebar{background-color:#222d32}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
+        .skin-black .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
+        .skin-black .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+    </style>
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+                <li><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+                <li><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+                <li><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+                <li class="treeview"><a href="#"><i class="fa fa-link"></i> <span>Manage Links</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Interstitial</a></li>
+                        <li><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Banner</a></li>
+                        <li><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Popup</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-money"></i> <span>Withdraws</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu"><li><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-edit-withdraw.html"><i class="fa fa-circle-o"></i> Edit</a></li>
+                        <li><a href="admin-export-withdraws.html"><i class="fa fa-circle-o"></i> Export</a></li></ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-users"></i> <span>Users</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                        <li><a href="admin-delete-user.html"><i class="fa fa-circle-o"></i> Delete</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-diamond"></i> <span>Plans</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu"><li><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-delete-plan.html"><i class="fa fa-circle-o"></i> Delete</a></li></ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-pencil"></i> <span>Blog</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-file-text"></i> <span>Pages</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-star"></i> <span>Testimonials</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                        <li><a href="admin-upgrade.html"><i class="fa fa-circle-o"></i> Upgrade</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-gears"></i> <span>Settings</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Withdraws Export <small>Withdrawals data export karo</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="withdrawals.html">Withdraws</a></li>
+                <li class="active">Withdraws Export</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-download"></i>
+                                Withdraws Export</h3>
+                        </div>
+                        <div class="box-body">
+                            <h4><i class="fa fa-columns"></i> Columns Select Karo:</h4>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="checkbox"><label>
+                                        <input type="checkbox" class="export-col" value="id" checked>
+                                        <b>ID</b></label></div>
+                                    <div class="checkbox"><label>
+                                        <input type="checkbox" class="export-col" value="status" checked>
+                                        <b>Status</b></label></div>
+                                    <div class="checkbox"><label>
+                                        <input type="checkbox" class="export-col" value="user_id" checked>
+                                        <b>User ID</b></label></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="checkbox"><label>
+                                        <input type="checkbox" class="export-col" value="amount" checked>
+                                        <b>Amount</b></label></div>
+                                    <div class="checkbox"><label>
+                                        <input type="checkbox" class="export-col" value="method" checked>
+                                        <b>Method</b></label></div>
+                                    <div class="checkbox"><label>
+                                        <input type="checkbox" class="export-col" value="account" checked>
+                                        <b>Account</b></label></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="checkbox"><label>
+                                        <input type="checkbox" class="export-col" value="date" checked>
+                                        <b>Date</b></label></div>
+                                </div>
+                            </div>
+                            <hr>
+                            <h4><i class="fa fa-filter"></i> Filters (Optional):</h4>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>User ID:</label>
+                                        <input type="text" class="form-control" id="filter-userid"
+                                               placeholder="User ID daalo...">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Status:</label>
+                                        <select class="form-control" id="filter-status">
+                                            <option value="">All Status</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="approved">Approved</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="cancelled">Cancelled</option>
+                                            <option value="returned">Returned</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Method:</label>
+                                        <select class="form-control" id="filter-method">
+                                            <option value="">All Methods</option>
+                                            <option value="paypal">PayPal</option>
+                                            <option value="bank">Bank Transfer</option>
+                                            <option value="paytm">Paytm</option>
+                                            <option value="upi">UPI</option>
+                                            <option value="bitcoin">Bitcoin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center" style="margin-top:20px;">
+                                <button class="btn btn-primary btn-lg" id="export-csv-btn">
+                                    <i class="fa fa-download"></i> Export CSV
+                                </button>
+                                <span id="export-count" class="label label-info" style="margin-left:10px;"></span>
+                            </div>
+                            <div id="export-preview" style="margin-top:15px;display:none;">
+                                <h4><i class="fa fa-eye"></i> Preview (<span id="preview-count">0</span> rows):</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped" id="preview-table">
+                                        <thead id="preview-head"></thead>
+                                        <tbody id="preview-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        escapeHtml, formatMoney, formatDate, showToast
+    } from "./js/app.js";
+    import { ref, get }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* SAARI WITHDRAWALS LOAD KARO */
+    const wSnap = await get(ref(db, "withdrawals"));
+    let allWithdraws = [];
+    if (wSnap.exists()) {
+        wSnap.forEach(c => {
+            const w = c.val();
+            w._id = c.key;
+            w._uid = c.key.split("_")[1] || w.uid || "";
+            allWithdraws.push(w);
+        });
+    }
+
+    function getFilteredData() {
+        const uidFilter = document.getElementById("filter-userid").value.trim().toLowerCase();
+        const statusFilter = document.getElementById("filter-status").value;
+        const methodFilter = document.getElementById("filter-method").value;
+
+        return allWithdraws.filter(w => {
+            if (uidFilter && !(w._uid || "").toLowerCase().includes(uidFilter)) return false;
+            if (statusFilter && w.status !== statusFilter) return false;
+            if (methodFilter && (w.method || "").toLowerCase() !== methodFilter.toLowerCase()) return false;
+            return true;
+        });
+    }
+
+    function getSelectedCols() {
+        const cols = [];
+        document.querySelectorAll(".export-col:checked").forEach(cb => { cols.push(cb.value); });
+        return cols;
+    }
+
+    const headerMap = {
+        id: "ID", status: "Status", user_id: "User ID",
+        amount: "Amount", method: "Method", account: "Account", date: "Date"
+    };
+
+    function renderPreview() {
+        const data = getFilteredData();
+        const cols = getSelectedCols();
+        if (cols.length === 0) { showToast("Koi column select nahi kiya!", "error"); return; }
+
+        document.getElementById("preview-count").textContent = data.length;
+        document.getElementById("export-count").textContent = data.length + " rows found";
+
+        const thead = document.getElementById("preview-head");
+        thead.innerHTML = "<tr>" + cols.map(c => "<th>" + headerMap[c] + "</th>").join("") + "</tr>";
+
+        const tbody = document.getElementById("preview-body");
+        tbody.innerHTML = data.slice(0, 50).map(w => {
+            return "<tr>" + cols.map(c => {
+                if (c === "id") return "<td>" + escapeHtml(w._id) + "</td>";
+                if (c === "status") return "<td>" + escapeHtml(w.status || "pending") + "</td>";
+                if (c === "user_id") return "<td>" + escapeHtml(w._uid) + "</td>";
+                if (c === "amount") return "<td>" + formatMoney(w.amount || 0) + "</td>";
+                if (c === "method") return "<td>" + escapeHtml(w.method || "N/A") + "</td>";
+                if (c === "account") return "<td>" + escapeHtml(w.account || w.email || "N/A") + "</td>";
+                if (c === "date") return "<td>" + formatDate(w.created_at) + "</td>";
+                return "<td>-</td>";
+            }).join("") + "</tr>";
+        }).join("");
+
+        document.getElementById("export-preview").style.display = "block";
+    }
+
+    document.getElementById("filter-userid").addEventListener("input", renderPreview);
+    document.getElementById("filter-status").addEventListener("change", renderPreview);
+    document.getElementById("filter-method").addEventListener("change", renderPreview);
+    document.querySelectorAll(".export-col").forEach(cb => { cb.addEventListener("change", renderPreview); });
+
+    /* CSV EXPORT */
+    document.getElementById("export-csv-btn").addEventListener("click", () => {
+        const data = getFilteredData();
+        const cols = getSelectedCols();
+        if (cols.length === 0) { showToast("Koi column select nahi kiya!", "error"); return; }
+        if (data.length === 0) { showToast("Export karne ke liye koi data nahi hai!", "error"); return; }
+
+        let csv = cols.map(c => '"' + headerMap[c] + '"').join(",") + "\n";
+        data.forEach(w => {
+            const row = cols.map(c => {
+                let val = "";
+                if (c === "id") val = w._id || "";
+                else if (c === "status") val = w.status || "pending";
+                else if (c === "user_id") val = w._uid || "";
+                else if (c === "amount") val = String(w.amount || 0);
+                else if (c === "method") val = w.method || "N/A";
+                else if (c === "account") val = w.account || w.email || "N/A";
+                else if (c === "date") val = new Date(w.created_at || 0).toISOString();
+                return '"' + String(val).replace(/"/g, '""') + '"';
+            });
+            csv += row.join(",") + "\n";
+        });
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "withdrawals_export_" + Date.now() + ".csv";
+        link.click();
+        URL.revokeObjectURL(link.href);
+        showToast(data.length + " rows export ho gaye!", "success");
+    });
+
+    renderPreview();
+</script>
+</body>
+</html>

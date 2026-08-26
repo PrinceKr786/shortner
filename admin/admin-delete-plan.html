@@ -1,0 +1,337 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/admin-delete-plan.html
+     KAAM   : Delete Plan PAGE
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Plan - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <style>
+        .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
+        .skin-black .main-header .navbar .nav>li>a{color:#333}
+        .skin-black .main-header .navbar .nav>li>a:hover,.skin-black .main-header .navbar .nav>li>a:active,.skin-black .main-header .navbar .nav>li>a:focus,.skin-black .main-header .navbar .nav .open>a,.skin-black .main-header .navbar .nav .open>a:hover,.skin-black .main-header .navbar .nav .open>a:focus,.skin-black .main-header .navbar .nav>.active>a{background:#f9f9f9;color:#333}
+        .skin-black .main-header .navbar .nav>.active>a{border-bottom-color:#fff}
+        .skin-black .main-header .logo{background-color:#3c8dbc;color:#fff}
+        .skin-black .main-header .logo:hover{background-color:#367fa9}
+        .skin-black .main-sidebar{background-color:#222d32}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
+        .skin-black .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
+        .skin-black .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+    </style>
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+                <li><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+                <li><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+                <li><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+                <li class="treeview"><a href="#"><i class="fa fa-link"></i> <span>Manage Links</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Interstitial</a></li>
+                        <li><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Banner</a></li>
+                        <li><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Popup</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-money"></i> <span>Withdraws</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu"><li><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-edit-withdraw.html"><i class="fa fa-circle-o"></i> Edit</a></li>
+                        <li><a href="admin-export-withdraws.html"><i class="fa fa-circle-o"></i> Export</a></li></ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-users"></i> <span>Users</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                        <li><a href="admin-delete-user.html"><i class="fa fa-circle-o"></i> Delete</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-diamond"></i> <span>Plans</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu"><li><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-delete-plan.html"><i class="fa fa-circle-o"></i> Delete</a></li></ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-pencil"></i> <span>Blog</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-file-text"></i> <span>Pages</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-star"></i> <span>Testimonials</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                        <li><a href="admin-upgrade.html"><i class="fa fa-circle-o"></i> Upgrade</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-gears"></i> <span>Settings</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Delete Plan <small>Plan delete karo</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="plans.html">Plans</a></li>
+                <li class="active">Delete Plan</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="box box-danger">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-exclamation-triangle text-danger"></i>
+                                Delete Plan</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="text-center" id="plan-loading">
+                                <i class="fa fa-spinner fa-spin fa-2x"></i>
+                                <p>Plan details load ho rahe hain...</p>
+                            </div>
+                            <div id="plan-content" style="display:none;">
+                                <div class="alert alert-danger">
+                                    <i class="fa fa-warning"></i>
+                                    <b>Warning!</b> Aap ek plan delete kar rahe ho.
+                                    Yeh action undo nahi ho sakta. Is plan ke saare users
+                                    ko doosre plan pe migrate kar diya jayega.
+                                </div>
+                                <table class="table table-bordered">
+                                    <tr><th style="width:180px">Plan ID</th><td id="plan-id-display"></td></tr>
+                                    <tr><th>Plan Name</th><td id="plan-name-display"></td></tr>
+                                    <tr><th>Price</th><td id="plan-price-display"></td></tr>
+                                    <tr><th>Users on this Plan</th><td id="plan-users-count"></td></tr>
+                                </table>
+                                <div class="form-group" id="migrate-section" style="display:none;">
+                                    <label><b>Replace users with plan:</b></label>
+                                    <select class="form-control" id="replace-plan-select">
+                                        <option value="">-- Select Plan --</option>
+                                    </select>
+                                </div>
+                                <div class="text-center" style="margin-top:20px;">
+                                    <button class="btn btn-danger btn-lg" id="delete-plan-btn">
+                                        <i class="fa fa-trash"></i> Delete Plan
+                                    </button>
+                                    <a href="plans.html" class="btn btn-default btn-lg" style="margin-left:10px;">
+                                        <i class="fa fa-times"></i> Cancel
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="plan-error" style="display:none;">
+                                <div class="alert alert-warning">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Plan nahi mili. <a href="plans.html">Plans list pe wapas jao.</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        escapeHtml, formatMoney, showToast
+    } from "./js/app.js";
+    import { ref, get, set, remove, update }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* PLAN ID READ KARO URL HASH SE */
+    const hash = window.location.hash;
+    const match = hash.match(/id=(\w+)/);
+    if (!match) {
+        document.getElementById("plan-loading").style.display = "none";
+        document.getElementById("plan-error").style.display = "block";
+        showToast("Plan ID URL mein nahi mila!", "error");
+        throw new Error("Plan ID missing");
+    }
+    const planId = match[1];
+
+    /* SAARI PLANS LOAD KARO */
+    const plansSnap = await get(ref(db, "plans"));
+    const otherPlans = [];
+    if (plansSnap.exists()) {
+        plansSnap.forEach(c => {
+            if (c.key !== planId) {
+                const p = c.val(); p._id = c.key;
+                otherPlans.push(p);
+            }
+        });
+    }
+
+    /* DELETE WALA PLAN LOAD KARO */
+    const planSnap = await get(ref(db, "plans/" + planId));
+    if (!planSnap.exists()) {
+        document.getElementById("plan-loading").style.display = "none";
+        document.getElementById("plan-error").style.display = "block";
+        showToast("Plan nahi mili!", "error");
+        throw new Error("Plan not found");
+    }
+    const planData = planSnap.val();
+
+    /* USERS GINTI KARO */
+    let usersOnPlan = 0;
+    let userSnaps = [];
+    const usersSnap = await get(ref(db, "users"));
+    if (usersSnap.exists()) {
+        usersSnap.forEach(c => {
+            const u = c.val();
+            if (u.plan === planId || u.plan_id === planId) {
+                usersOnPlan++;
+                userSnaps.push(c);
+            }
+        });
+    }
+
+    /* DETAILS DIKHAO */
+    document.getElementById("plan-id-display").textContent = planId;
+    document.getElementById("plan-name-display").textContent = escapeHtml(planData.name || "Unnamed");
+    document.getElementById("plan-price-display").textContent = formatMoney(planData.price || 0);
+    document.getElementById("plan-users-count").textContent = usersOnPlan;
+
+    /* DROPDOWN BHARO */
+    const sel = document.getElementById("replace-plan-select");
+    otherPlans.forEach(p => {
+        const o = document.createElement("option");
+        o.value = p._id;
+        o.textContent = escapeHtml(p.name) + " (" + formatMoney(p.price || 0) + ")";
+        sel.appendChild(o);
+    });
+    if (usersOnPlan > 0) document.getElementById("migrate-section").style.display = "block";
+
+    document.getElementById("plan-loading").style.display = "none";
+    document.getElementById("plan-content").style.display = "block";
+
+    /* DELETE BUTTON */
+    document.getElementById("delete-plan-btn").addEventListener("click", async () => {
+        if (usersOnPlan > 0 && !sel.value) {
+            showToast("Pehle replace plan select karo!", "error"); return;
+        }
+        if (!confirm("Kya aap sach mein yeh plan delete karna chahte ho?")) return;
+
+        const btn = document.getElementById("delete-plan-btn");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Deleting...';
+
+        try {
+            if (usersOnPlan > 0) {
+                userSnaps.forEach(async (c) => {
+                    await update(ref(db, "users/" + c.key), {
+                        plan: sel.value, plan_id: sel.value
+                    });
+                });
+            }
+            await remove(ref(db, "plans/" + planId));
+            showToast("Plan delete ho gayi!", "success");
+            setTimeout(() => { window.location.href = "plans.html"; }, 1500);
+        } catch (e) {
+            showToast("Delete mein error: " + e.message, "error");
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-trash"></i> Delete Plan';
+        }
+    });
+</script>
+</body>
+</html>

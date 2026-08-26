@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/admin-edit-withdraw.html
+     KAAM   : Edit Withdrawal PAGE
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Withdrawal - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <style>
+        .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
+        .skin-black .main-header .navbar .nav>li>a{color:#333}
+        .skin-black .main-header .navbar .nav>li>a:hover,.skin-black .main-header .navbar .nav>li>a:active,.skin-black .main-header .navbar .nav>li>a:focus,.skin-black .main-header .navbar .nav .open>a,.skin-black .main-header .navbar .nav .open>a:hover,.skin-black .main-header .navbar .nav .open>a:focus,.skin-black .main-header .navbar .nav>.active>a{background:#f9f9f9;color:#333}
+        .skin-black .main-header .navbar .nav>.active>a{border-bottom-color:#fff}
+        .skin-black .main-header .logo{background-color:#3c8dbc;color:#fff}
+        .skin-black .main-header .logo:hover{background-color:#367fa9}
+        .skin-black .main-sidebar{background-color:#222d32}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
+        .skin-black .sidebar .shorten-button{background:#3c8dbc;border-color:#367fa9;color:#fff}
+        .skin-black .sidebar .shorten-button:hover{background:#367fa9;border-color:#2e6da4}
+    </style>
+    <link rel="stylesheet" href="../theme/css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+               role="button"><span class="sr-only">Toggle navigation</span></a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank">
+                        <i class="fa fa-globe"></i> View Site</a></li>
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="" id="dropdown-avatar" class="img-circle" alt="">
+                                <p id="dropdown-email">...</p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="#" id="logout-btn"
+                                       class="btn btn-default btn-flat">Log out</a></div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+                <li><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+                <li><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+                <li><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+                <li class="treeview"><a href="#"><i class="fa fa-link"></i> <span>Manage Links</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Interstitial</a></li>
+                        <li><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Banner</a></li>
+                        <li><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices &gt; Popup</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-money"></i> <span>Withdraws</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu"><li><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-edit-withdraw.html"><i class="fa fa-circle-o"></i> Edit</a></li>
+                        <li><a href="admin-export-withdraws.html"><i class="fa fa-circle-o"></i> Export</a></li></ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-users"></i> <span>Users</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                        <li><a href="admin-delete-user.html"><i class="fa fa-circle-o"></i> Delete</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-diamond"></i> <span>Plans</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu"><li><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-delete-plan.html"><i class="fa fa-circle-o"></i> Delete</a></li></ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-pencil"></i> <span>Blog</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-file-text"></i> <span>Pages</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-star"></i> <span>Testimonials</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                        <li><a href="admin-upgrade.html"><i class="fa fa-circle-o"></i> Upgrade</a></li>
+                    </ul></li>
+                <li class="treeview"><a href="#"><i class="fa fa-gears"></i> <span>Settings</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul></li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Edit Withdrawal <small>Withdrawal edit karo</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="withdrawals.html">Withdraws</a></li>
+                <li class="active">Edit Withdrawal</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="box box-warning">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><i class="fa fa-pencil-square-o"></i>
+                                Edit Withdrawal</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="text-center" id="withdraw-loading">
+                                <i class="fa fa-spinner fa-spin fa-2x"></i>
+                                <p>Withdrawal details load ho rahe hain...</p>
+                            </div>
+                            <div id="withdraw-content" style="display:none;">
+                                <table class="table table-bordered">
+                                    <tr><th style="width:180px">Withdrawal ID</th><td id="w-id-display"></td></tr>
+                                    <tr><th>Amount</th><td id="w-amount-display"></td></tr>
+                                    <tr><th>User ID</th><td id="w-user-display"></td></tr>
+                                    <tr><th>Method</th><td id="w-method-display"></td></tr>
+                                    <tr><th>Account</th><td id="w-account-display"></td></tr>
+                                    <tr><th>Date</th><td id="w-date-display"></td></tr>
+                                    <tr><th>Current Status</th><td id="w-status-display"></td></tr>
+                                </table>
+                                <div class="form-group">
+                                    <label><b>Change Status:</b></label>
+                                    <select class="form-control" id="status-select">
+                                        <option value="pending">Pending</option>
+                                        <option value="approved">Approved</option>
+                                        <option value="completed">Complete</option>
+                                        <option value="cancelled">Cancelled</option>
+                                        <option value="returned">Returned</option>
+                                    </select>
+                                </div>
+                                <div class="text-center" style="margin-top:20px;">
+                                    <button class="btn btn-warning btn-lg" id="save-status-btn">
+                                        <i class="fa fa-save"></i> Save Changes
+                                    </button>
+                                    <a href="withdrawals.html" class="btn btn-default btn-lg" style="margin-left:10px;">
+                                        <i class="fa fa-times"></i> Cancel
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="withdraw-error" style="display:none;">
+                                <div class="alert alert-warning">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Withdrawal nahi mili. <a href="withdrawals.html">List pe wapas jao.</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+    <div class="control-sidebar-bg"></div>
+</div>
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import {
+        requireAdmin, fillAdminHeader, wireLogout,
+        escapeHtml, formatMoney, formatDate, showToast
+    } from "./js/app.js";
+    import { ref, get, update }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    /* WITHDRAWAL ID READ KARO */
+    const hash = window.location.hash;
+    const match = hash.match(/id=(.+)/);
+    if (!match) {
+        document.getElementById("withdraw-loading").style.display = "none";
+        document.getElementById("withdraw-error").style.display = "block";
+        showToast("Withdrawal ID URL mein nahi mila!", "error");
+        throw new Error("Withdrawal ID missing");
+    }
+    const wId = match[1];
+
+    /* WITHDRAWAL DATA LOAD KARO */
+    const wSnap = await get(ref(db, "withdrawals/" + wId));
+    if (!wSnap.exists()) {
+        document.getElementById("withdraw-loading").style.display = "none";
+        document.getElementById("withdraw-error").style.display = "block";
+        showToast("Withdrawal nahi mili!", "error");
+        throw new Error("Withdrawal not found");
+    }
+    const wData = wSnap.val();
+
+    /* STATUS BADGE FUNCTION */
+    function statusLabel(s) {
+        if (!s || s === "pending") return '<span class="label label-warning">Pending</span>';
+        if (s === "approved") return '<span class="label label-info">Approved</span>';
+        if (s === "completed") return '<span class="label label-success">Completed</span>';
+        if (s === "cancelled") return '<span class="label label-danger">Cancelled</span>';
+        if (s === "returned") return '<span class="label label-default">Returned</span>';
+        return '<span class="label label-default">' + escapeHtml(s) + '</span>';
+    }
+
+    /* DETAILS DIKHAO */
+    document.getElementById("w-id-display").textContent = wId;
+    document.getElementById("w-amount-display").textContent = formatMoney(wData.amount || 0);
+    document.getElementById("w-user-display").textContent = wData.uid || wId.split("_")[1] || "N/A";
+    document.getElementById("w-method-display").textContent = escapeHtml(wData.method || "N/A");
+    document.getElementById("w-account-display").textContent = escapeHtml(wData.account || wData.email || "N/A");
+    document.getElementById("w-date-display").textContent = formatDate(wData.created_at);
+    document.getElementById("w-status-display").innerHTML = statusLabel(wData.status);
+
+    /* Current status select mein set karo */
+    document.getElementById("status-select").value = wData.status || "pending";
+
+    document.getElementById("withdraw-loading").style.display = "none";
+    document.getElementById("withdraw-content").style.display = "block";
+
+    /* SAVE BUTTON */
+    document.getElementById("save-status-btn").addEventListener("click", async () => {
+        const newStatus = document.getElementById("status-select").value;
+        if (newStatus === wData.status) {
+            showToast("Koi change nahi kiya!", "error"); return;
+        }
+
+        const btn = document.getElementById("save-status-btn");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+
+        try {
+            await update(ref(db, "withdrawals/" + wId), {
+                status: newStatus,
+                updated_at: Date.now(),
+                updated_by: me.uid
+            });
+            showToast("Withdrawal status update ho gaya!", "success");
+            document.getElementById("w-status-display").innerHTML = statusLabel(newStatus);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-save"></i> Save Changes';
+        } catch (e) {
+            showToast("Update mein error: " + e.message, "error");
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-save"></i> Save Changes';
+        }
+    });
+</script>
+</body>
+</html>
