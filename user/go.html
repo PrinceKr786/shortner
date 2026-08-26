@@ -25,12 +25,6 @@
     <link rel="stylesheet" href="../css/app.css">
 
     <style>
-        .interstitial-page.frame.layout-top-nav .wrapper { padding-top: 50px; }
-        .interstitial-page .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; background: #3c8dbc; }
-        .interstitial-page .navbar .navbar-brand { color: #fff; font-weight: 700; }
-        .interstitial-page .skip-ad { color: #fff; text-align: center; }
-        .interstitial-page .skip-ad .counter { font-size: 20px; font-weight: 700; }
-        .interstitial-page iframe { width: 100%; border: none; }
         .banner-page .box-success { border-top: 3px solid #00a65a; }
         .banner { text-align: center; margin: 10px auto; }
         .banner-728x90 { max-width: 728px; }
@@ -40,48 +34,18 @@
         .countdown .timer { font-size: 60px; color: #00a65a; }
         .get-link { font-size: 18px; padding: 12px 40px; }
         .get-link.disabled { opacity: 0.5; cursor: not-allowed; }
-        .myTestAd { height: 5px; width: 5px; position: absolute; top: 0; }
+        .myTestAd { height: 5px; width: 5px; position: absolute; }
         .blog-item { margin: 15px 0; text-align: left; }
         .blog-item .page-header { margin-top: 0; }
+        .interstitial-page iframe { width: 100%; border: none; min-height: 100vh; }
     </style>
 </head>
 
-<body class="banner-page frame layout-top-nav skin-blue">
+<body class="skin-blue layout-top-nav">
 
 <div class="wrapper">
 
-    <header class="main-header">
-        <nav class="navbar">
-            <div class="container">
-                <div class="row is-table-row">
-                    <div class="col-xs-6 col-sm-3">
-                        <div class="navbar-header pull-left">
-                            <a class="navbar-brand" href="../index.html"><b>Shortify</b></a>
-                        </div>
-                    </div>
-                    <div class="hidden-xs col-sm-6">
-                        <div class="banner banner-468x60" id="header-banner">
-                            <div class="banner-inner" id="ad-header-banner"></div>
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col-sm-3">
-                        <div class="pull-right">
-                            <div class="skip-ad">
-                                <div class="text-center">
-                                    <span>Please Wait</span><br>
-                                    <span class="counter" id="header-counter"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <div class="myTestAd" id="ad-banner"></div>
-
-    <!-- ======== MAIN CONTENT (BANNER PAGE) ======== -->
+    <!-- ======== MAIN CONTENT (BANNER PAGE - original view_banner.ctp jaisa) ======== -->
     <div class="row" id="banner-page">
         <div class="col-md-10 col-md-offset-1">
             <div class="box box-success">
@@ -236,9 +200,6 @@
         if (gp.bottom_banner_code) {
             injectAd("ad-bottom-banner", gp.bottom_banner_code);
         }
-        if (gp.header_banner_code) {
-            injectAd("ad-header-banner", gp.header_banner_code);
-        }
     }
 
     function renderInterstitialPage() {
@@ -326,9 +287,6 @@
         var secs = Math.ceil(time / 1000);
 
         if (timerEl) timerEl.textContent = secs;
-        if (document.getElementById("header-counter")) {
-            document.getElementById("header-counter").textContent = secs + " s";
-        }
 
         if (time <= 0) {
             clearInterval(tid);
