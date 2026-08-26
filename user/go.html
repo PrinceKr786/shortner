@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
-    <link rel="stylesheet" href="../vendor/dashboard/css/skins/skin-blue.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="../css/app.css">
 </head>
 
@@ -96,6 +96,8 @@
     import { SITE_URL } from "./js/app.js";
     import { ref, get, runTransaction }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+(async function() {
 
     var mode = "alias", alias = "", targetUrl = "", ownerUid = null, adType = "interstitial";
     var hash = location.hash;
@@ -228,6 +230,7 @@
         try { runTransaction(ref(db, "aliases/" + alias + "/clicks"), function(c) { return (c || 0) + 1; }); } catch(e) {}
     }
 
+})();
 </script>
 </body>
 </html>
