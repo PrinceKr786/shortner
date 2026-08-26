@@ -365,13 +365,15 @@
         document.getElementById("stat-sold").textContent =
             formatNumber(sold);
 
-        // Sidebar pending badge
+        // Sidebar pending badge (agar element hai to)
         const badge = document.getElementById("menu-pending-badge");
-        if (pend > 0) {
-            badge.style.display = "";
-            badge.textContent = pend;
-        } else {
-            badge.style.display = "none";
+        if (badge) {
+            if (pend > 0) {
+                badge.style.display = "";
+                badge.textContent = pend;
+            } else {
+                badge.style.display = "none";
+            }
         }
 
         renderTable(list);
