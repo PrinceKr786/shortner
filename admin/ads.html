@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FILE   : admin/ads.html
+     KAAM   : 100% AdLinkFly v6.5.3 Options/ads.ctp jaisa
+              Admin yahan go page ke ad codes paste karta hai:
+                - Member Area Ad
+                - Captcha Ads (Above/Below)
+                - Interstitial Ads (Code + URL)
+                - Popup Ads (URL)
+                - Banner Ads (728x90, 468x60, 336x280)
+     DB: settings/go_page
+     ============================================================ -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ads - Shortify CP</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
+    <style>
+        .skin-black .main-header .navbar{background-color:#fff;border-bottom:1px solid #eee}
+        .skin-black .main-header .navbar .nav>li>a{color:#333}
+        .skin-black .main-header .navbar .nav>li>a:hover,.skin-black .main-header .navbar .nav>li>a:active,.skin-black .main-header .navbar .nav>li>a:focus,.skin-black .main-header .navbar .nav .open>a,.skin-black .main-header .navbar .nav .open>a:hover,.skin-black .main-header .navbar .nav .open>a:focus,.skin-black .main-header .navbar .nav>.active>a{background:#f9f9f9;color:#333}
+        .skin-black .main-header .navbar .nav>.active>a{border-bottom-color:#fff}
+        .skin-black .main-header .logo{background-color:#367fa9;color:#fff}
+        .skin-black .main-header .logo:hover{background-color:#357ca5}
+        .skin-black .main-sidebar{background-color:#222d32}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li.active>a{border-left-color:#3c8dbc;background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>a:hover{background:#1a252f}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li.active>a,.skin-black .main-sidebar .sidebar>.sidebar-menu>li>.treeview-menu>li>a:hover{background:#1a252f;color:#fff}
+        .skin-black .main-sidebar .sidebar>.sidebar-menu>.treeview.active>a,.skin-black .main-sidebar .sidebar>.treeview>li>a:hover{color:#fff}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>a{color:#b8c7ce}
+        .skin-black .main-sidebar .sidebar .sidebar-menu>li>.treeview-menu>li>a{color:#8091a0}
+        .skin-black .main-sidebar .sidebar .user-panel>.info,.skin-black .main-sidebar .sidebar .user-panel>.info>a{color:#fff}
+        .skin-black .wrapper,.skin-black .main-footer{background-color:#ecf0f5}
+    </style>
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="icon" href="../favicon.ico">
+</head>
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <header class="main-header">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-mini"><b>S</b>CP</span>
+            <span class="logo-lg"><b>Shortify</b> CP</span>
+        </a>
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"><span class="sr-only">Toggle navigation</span></a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html" target="_blank"><i class="fa fa-globe"></i> View Site</a></li>
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="" id="header-avatar" class="user-image" alt="">
+                            <span class="hidden-xs" id="header-name">...</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header"><img src="" id="dropdown-avatar" class="img-circle" alt=""><p id="dropdown-email">...</p></li>
+                            <li class="user-footer"><div class="pull-right"><a href="#" id="logout-btn" class="btn btn-default btn-flat">Log out</a></div></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <br>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Statistics</span></a></li>
+                <li><a href="reports.html"><i class="fa fa-bar-chart"></i> <span>Reports</span></a></li>
+                <li><a href="invoices.html"><i class="fa fa-file-text-o"></i> <span>Invoices</span></a></li>
+                <li><a href="menu-manager.html"><i class="fa fa-bars"></i> <span>Menu Manager</span></a></li>
+                <li class="treeview"><a href="#"><i class="fa fa-link"></i> <span>Manage Links</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="links.html"><i class="fa fa-circle-o"></i> All Links</a></li>
+                        <li><a href="hidden-links.html"><i class="fa fa-circle-o"></i> Hidden Links</a></li>
+                        <li><a href="inactive-links.html"><i class="fa fa-circle-o"></i> Inactive Links</a></li>
+                    </ul>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-bullhorn"></i> <span>Campaigns</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="admin-campaigns.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-create-campaign-interstitial.html"><i class="fa fa-circle-o"></i> Create Interstitial</a></li>
+                        <li><a href="admin-create-campaign-banner.html"><i class="fa fa-circle-o"></i> Create Banner</a></li>
+                        <li><a href="admin-create-campaign-popup.html"><i class="fa fa-circle-o"></i> Create Popup</a></li>
+                        <li><a href="interstitial-pricing.html"><i class="fa fa-circle-o"></i> Prices > Interstitial</a></li>
+                        <li><a href="banner-pricing.html"><i class="fa fa-circle-o"></i> Prices > Banner</a></li>
+                        <li><a href="popup-pricing.html"><i class="fa fa-circle-o"></i> Prices > Popup</a></li>
+                    </ul>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-line-chart"></i> <span>Payout Rates</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Interstitial</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Banner</a></li>
+                        <li><a href="rates.html"><i class="fa fa-circle-o"></i> Popup</a></li>
+                    </ul>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-money"></i> <span>Withdraws</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="withdrawals.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-edit-withdraw.html"><i class="fa fa-circle-o"></i> Edit</a></li>
+                        <li><a href="admin-export-withdraws.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                    </ul>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-users"></i> <span>Users</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="users.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="user-referrals.html"><i class="fa fa-circle-o"></i> Referrals</a></li>
+                        <li><a href="users-export.html"><i class="fa fa-circle-o"></i> Export</a></li>
+                        <li><a href="admin-delete-user.html"><i class="fa fa-circle-o"></i> Delete</a></li>
+                    </ul>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-diamond"></i> <span>Plans</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="plans.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="admin-delete-plan.html"><i class="fa fa-circle-o"></i> Delete</a></li>
+                    </ul>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-pencil"></i> <span>Blog</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="blog-posts.html"><i class="fa fa-circle-o"></i> Posts List</a></li>
+                        <li><a href="add-post.html"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                    </ul>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-file-text"></i> <span>Pages</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="pages.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-page.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-star"></i> <span>Testimonials</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="testimonials.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-testimonial.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-bullhorn"></i> <span>Announcements</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="announcements.html"><i class="fa fa-circle-o"></i> List</a></li>
+                        <li><a href="add-announcement.html"><i class="fa fa-circle-o"></i> Add</a></li>
+                    </ul>
+                </li>
+                <li class="treeview"><a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="admin-statistics.html"><i class="fa fa-circle-o"></i> Statistics Table</a></li>
+                        <li><a href="system-info.html"><i class="fa fa-circle-o"></i> System Info</a></li>
+                        <li><a href="admin-upgrade.html"><i class="fa fa-circle-o"></i> Upgrade</a></li>
+                    </ul>
+                </li>
+                <li class="treeview active"><a href="#"><i class="fa fa-gears"></i> <span>Settings</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li><a href="settings.html"><i class="fa fa-circle-o"></i> Settings</a></li>
+                        <li class="active"><a href="ads.html"><i class="fa fa-circle-o"></i> Ads</a></li>
+                        <li><a href="social-login.html"><i class="fa fa-circle-o"></i> Social Login</a></li>
+                        <li><a href="email-settings.html"><i class="fa fa-circle-o"></i> Email</a></li>
+                        <li><a href="payment-methods.html"><i class="fa fa-circle-o"></i> Payment Methods</a></li>
+                        <li><a href="admin-activation.html"><i class="fa fa-circle-o"></i> Activation</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" id="sidebar-logout"><i class="fa fa-sign-out text-red"></i> <span>Logout</span></a></li>
+            </ul>
+        </section>
+    </aside>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Ads <small>Go page ad codes configure karo</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Settings</a></li>
+                <li class="active">Ads</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <form id="form-settings">
+                <div class="box box-primary">
+                    <div class="box-body">
+
+                        <div class="row">
+                            <div class="col-sm-2"><label>Member Area Ad</label></div>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="ad_member" rows="3" placeholder="Ad code paste karo"></textarea>
+                            </div>
+                        </div>
+
+                        <h3 class="page-header">Captcha Ads</h3>
+
+                        <div class="row">
+                            <div class="col-sm-2"><label>Above Captcha Ad</label></div>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="ad_captcha_above" rows="3" placeholder="Ad code paste karo"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-2"><label>Below Captcha Ad</label></div>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="ad_captcha_below" rows="3" placeholder="Ad code paste karo"></textarea>
+                            </div>
+                        </div>
+
+                        <h3 class="page-header">Interstitial Ads</h3>
+
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <label>Interstitial Page Ad Code</label><br>
+                                <small class="help-block">Recommended: 468x60 responsive banner</small>
+                            </div>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="interstitial_banner_ad" rows="3" placeholder="Interstital ad code paste karo"></textarea>
+                                <span class="help-block">Ye ad logo aur counter ke beech me dikhega.</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-2"><label>Interstitial Ad URL</label></div>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="interstitial_ad_url" placeholder="https://example.com/interstitial.html">
+                            </div>
+                        </div>
+
+                        <h3 class="page-header">Popup Ads</h3>
+
+                        <div class="row">
+                            <div class="col-sm-2"><label>Popup Ad URL</label></div>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="popup_ad_url" placeholder="https://example.com/popup.html">
+                            </div>
+                        </div>
+
+                        <h3 class="page-header">Banner Ads</h3>
+
+                        <div class="row">
+                            <div class="col-sm-2"><label>Banner 728x90</label></div>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="banner_728x90" rows="3" placeholder="728x90 ad code paste karo"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-2"><label>Banner 468x60</label></div>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="banner_468x60" rows="3" placeholder="468x60 ad code paste karo"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-2"><label>Banner 336x280</label></div>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="banner_336x280" rows="3" placeholder="336x280 ad code paste karo"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary" id="save_settings">
+                            <i class="fa fa-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs"></div>
+        Copyright &copy; <b>Shortify</b> CP 2026
+    </footer>
+</div>
+
+<script src="../vendor/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../vendor/dashboard/js/app.min.js"></script>
+
+<script type="module">
+    import { db } from "./js/firebase-config.js";
+    import { requireAdmin, fillAdminHeader, wireLogout, showToast } from "./js/app.js";
+    import { ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const me = await requireAdmin();
+    await fillAdminHeader(me);
+    wireLogout();
+
+    try {
+        const snap = await get(ref(db, "settings/go_page"));
+        const gp = snap.val() || {};
+        document.getElementById("ad_member").value = gp.ad_member || "";
+        document.getElementById("ad_captcha_above").value = gp.ad_captcha_above || "";
+        document.getElementById("ad_captcha_below").value = gp.ad_captcha_below || "";
+        document.getElementById("interstitial_banner_ad").value = gp.interstitial_banner_ad || "";
+        document.getElementById("interstitial_ad_url").value = gp.interstitial_ad_url || "";
+        document.getElementById("popup_ad_url").value = gp.popup_ad_url || "";
+        document.getElementById("banner_728x90").value = gp.banner_728x90 || "";
+        document.getElementById("banner_468x60").value = gp.banner_468x60 || "";
+        document.getElementById("banner_336x280").value = gp.banner_336x280 || "";
+    } catch(e) {}
+
+    document.getElementById("form-settings").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById("save_settings");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+
+        const data = {
+            ad_member: document.getElementById("ad_member").value,
+            ad_captcha_above: document.getElementById("ad_captcha_above").value,
+            ad_captcha_below: document.getElementById("ad_captcha_below").value,
+            interstitial_banner_ad: document.getElementById("interstitial_banner_ad").value,
+            interstitial_ad_url: document.getElementById("interstitial_ad_url").value,
+            popup_ad_url: document.getElementById("popup_ad_url").value,
+            banner_728x90: document.getElementById("banner_728x90").value,
+            banner_468x60: document.getElementById("banner_468x60").value,
+            banner_336x280: document.getElementById("banner_336x280").value
+        };
+
+        try {
+            await set(ref(db, "settings/go_page"), data);
+            showToast("Ad codes save ho gaye!", "success");
+        } catch(err) {
+            showToast("Error: " + err.message, "error");
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa fa-save"></i> Save';
+    });
+</script>
+
+</body>
+</html>
