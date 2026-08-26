@@ -1,240 +1,83 @@
 <!DOCTYPE html>
 <!-- ============================================================
      FILE   : user/go.html
-     KAAM   : Go page - jab koi short link click kare to ye dikhta hai
-              Header + Banner Ads + Countdown + Get Link Button
+     KAAM   : 100% AdLinkFly v6.5.3 view_banner.ctp jaisa
      ============================================================ -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Shortify - Link Ready</title>
+    <title>Shortify</title>
     <meta name="robots" content="noindex, nofollow">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
     <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/AdminLTE.min.css">
     <link rel="stylesheet" href="../vendor/dashboard/css/skins/skin-blue.min.css">
     <link rel="stylesheet" href="../css/app.css">
-    <link rel="icon" href="../favicon.ico">
-    <style>
-        body { background: #ecf0f5; margin: 0; padding: 0; }
-
-        /* HEADER */
-        .go-header {
-            background: linear-gradient(135deg, #3c8dbc 0%, #367fa9 100%);
-            padding: 12px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,.15);
-        }
-        .go-header .logo { color: #fff; font-size: 22px; font-weight: 700; text-decoration: none; }
-        .go-header .logo:hover { text-decoration: none; color: #fff; }
-        .go-header .timer-badge {
-            background: rgba(255,255,255,.2);
-            color: #fff;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 15px;
-            font-weight: 600;
-        }
-        .go-header .timer-badge .counter-num {
-            background: #fff;
-            color: #3c8dbc;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            margin-left: 6px;
-        }
-
-        /* MAIN BOX */
-        .go-main {
-            max-width: 750px;
-            margin: 30px auto;
-            padding: 0 15px;
-        }
-        .go-box {
-            background: #fff;
-            border-radius: 6px;
-            box-shadow: 0 2px 12px rgba(0,0,0,.08);
-            overflow: hidden;
-        }
-        .go-box-header {
-            background: #00a65a;
-            color: #fff;
-            text-align: center;
-            padding: 14px 20px;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        /* BANNERS */
-        .banner { text-align: center; margin: 15px auto; }
-        .banner-728x90 { max-width: 728px; }
-        .banner-468x60 { max-width: 468px; }
-        .banner-336x280 { max-width: 336px; }
-
-        /* TIMER */
-        .timer-section { padding: 25px 20px; text-align: center; }
-        .timer-section h4 { color: #555; font-size: 16px; margin-bottom: 15px; }
-        .timer-circle {
-            width: 110px; height: 110px;
-            border: 4px solid #00a65a;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            margin: 10px 0;
-        }
-        .timer-circle .timer-num {
-            font-size: 42px;
-            font-weight: 700;
-            color: #00a65a;
-            line-height: 1;
-        }
-        .timer-circle .timer-label {
-            font-size: 12px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* GET LINK BUTTON */
-        .get-link-btn {
-            display: inline-block;
-            background: #00a65a;
-            color: #fff;
-            border: none;
-            padding: 14px 50px;
-            font-size: 17px;
-            font-weight: 600;
-            border-radius: 4px;
-            text-decoration: none;
-            margin: 10px 0 20px;
-            transition: all .2s;
-        }
-        .get-link-btn:hover { background: #008d4c; color: #fff; text-decoration: none; }
-        .get-link-btn.disabled {
-            background: #ccc;
-            color: #999;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        /* BLOG */
-        .blog-item { margin: 15px 20px; text-align: left; }
-        .blog-item .page-header { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-
-        /* FOOTER */
-        .go-footer {
-            text-align: center;
-            padding: 15px;
-            color: #999;
-            font-size: 12px;
-        }
-        .go-footer a { color: #3c8dbc; }
-
-        .myTestAd { height: 5px; width: 5px; position: absolute; top: 0; }
-
-        /* INTERSTITIAL */
-        .interstitial-page iframe { width: 100%; border: none; min-height: 100vh; }
-    </style>
 </head>
 
 <body class="skin-blue layout-top-nav">
 
 <div class="wrapper">
 
-    <!-- HEADER -->
-    <div class="go-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-6">
-                    <a href="../index.html" class="logo"><i class="fa fa-link"></i> Shortify</a>
-                </div>
-                <div class="col-xs-6 text-right">
-                    <span class="timer-badge">
-                        <i class="fa fa-clock-o"></i> Please Wait
-                        <span class="counter-num" id="header-counter">...</span>
+    <!-- MAIN CONTENT (original view_banner.ctp exact) -->
+    <div class="row" id="banner-page">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="box box-success">
+                <div class="box-body text-center">
+
+                    <!-- 728x90 Banner -->
+                    <div class="banner banner-728x90" id="top-banner">
+                        <div class="banner-inner" id="ad-top-banner"></div>
+                    </div>
+
+                    <!-- Blog Post (optional) -->
+                    <div class="blog-item text-left" id="blog-section" style="display:none">
+                        <div class="page-header">
+                            <h3><small><a href="#">From Our Blog:</a></small> <span id="blog-title"></span></h3>
+                        </div>
+                        <div class="blog-content" id="blog-content"></div>
+                    </div>
+
+                    <h4>Your link is almost ready.</h4>
+
+                    <!-- Countdown Timer -->
+                    <span id="countdown" class="countdown">
+                        <span id="timer" class="timer">5</span><br>Seconds
                     </span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MAIN CONTENT - BANNER PAGE -->
-    <div id="banner-page">
-        <div class="go-main">
-            <div class="go-box">
-
-                <!-- HEADER BANNER 468x60 -->
-                <div class="banner banner-468x60" id="header-banner-wrap" style="padding-top:15px;display:none">
-                    <div class="banner-inner" id="ad-header-banner"></div>
-                </div>
-
-                <!-- 728x90 Banner -->
-                <div class="banner banner-728x90" id="top-banner">
-                    <div class="banner-inner" id="ad-top-banner"></div>
-                </div>
-
-                <!-- GREEN HEADER BAR -->
-                <div class="go-box-header">
-                    <i class="fa fa-link"></i> Your link is almost ready
-                </div>
-
-                <!-- BLOG POST (optional) -->
-                <div class="blog-item" id="blog-section" style="display:none">
-                    <div class="page-header">
-                        <h3><small><i class="fa fa-pencil"></i> From Our Blog:</small> <span id="blog-title"></span></h3>
-                    </div>
-                    <div class="blog-content" id="blog-content"></div>
-                </div>
-
-                <!-- TIMER SECTION -->
-                <div class="timer-section">
-                    <h4>Please wait while we prepare your link</h4>
-
-                    <div class="timer-circle">
-                        <span class="timer-num" id="timer">5</span>
-                        <span class="timer-label">Seconds</span>
-                    </div>
-
-                    <br>
 
                     <!-- 468x60 Banner -->
                     <div class="banner banner-468x60" id="mid-banner">
                         <div class="banner-inner" id="ad-mid-banner"></div>
                     </div>
 
-                    <!-- GET LINK BUTTON -->
-                    <a href="javascript:void(0)" class="get-link-btn disabled" id="get-link-btn">
-                        <i class="fa fa-spinner fa-spin"></i> Please wait...
-                    </a>
-                </div>
+                    <!-- Please wait button -->
+                    <div style="margin-bottom: 10px;">
+                        <a href="javascript: void(0)" class="btn btn-success btn-lg get-link disabled" id="get-link-btn">
+                            Please wait...
+                        </a>
+                    </div>
 
-                <!-- 336x280 Banner -->
-                <div class="banner banner-336x280" id="bottom-banner" style="padding-bottom:15px">
-                    <div class="banner-inner" id="ad-bottom-banner"></div>
-                </div>
+                    <!-- 336x280 Banner -->
+                    <div class="banner banner-336x280" id="bottom-banner">
+                        <div class="banner-inner" id="ad-bottom-banner"></div>
+                    </div>
 
+                    <div class="myTestAd" style="height:5px;width:5px;position:absolute;"></div>
+
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- INTERSTITIAL PAGE (hidden by default) -->
+    <!-- INTERSTITIAL PAGE (hidden) -->
     <div id="interstitial-page" style="display:none">
         <iframe id="interstitial-frame" src="about:blank"></iframe>
     </div>
 
-    <!-- FOOTER -->
-    <div class="go-footer">
-        Powered by <a href="../index.html">Shortify</a> &copy; 2026
-    </div>
-
 </div>
-
-<div class="myTestAd" id="ad-banner"></div>
 
 <!-- HIDDEN FORMS -->
 <form id="go-link" class="hidden" method="POST">
@@ -254,7 +97,6 @@
     import { ref, get, runTransaction }
         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    /* 1. ALIAS / PASS MODE READ */
     var mode = "alias", alias = "", targetUrl = "", ownerUid = null, adType = "interstitial";
     var hash = location.hash;
 
@@ -265,14 +107,13 @@
         adType = ["interstitial","banner","none"].indexOf(p.get("t")) >= 0 ? p.get("t") : "interstitial";
         var okUrl = false;
         try { okUrl = !!new URL(targetUrl); } catch(e) {}
-        if (!okUrl) { document.body.innerHTML = '<div class="container text-center" style="margin-top:60px"><h3><i class="fa fa-exclamation-triangle text-yellow"></i> Invalid Link</h3><p>Ye link valid nahi hai.</p></div>'; return; }
+        if (!okUrl) { document.body.innerHTML = '<div class="container text-center" style="margin-top:50px"><h3>Invalid link!</h3></div>'; return; }
         mode = "pass";
     } else {
         alias = hash.replace("#", "").trim() || new URLSearchParams(location.search).get("u") || "";
-        if (!alias) { document.body.innerHTML = '<div class="container text-center" style="margin-top:60px"><h3><i class="fa fa-exclamation-triangle text-yellow"></i> No Link</h3><p>Short link missing hai.</p></div>'; return; }
+        if (!alias) { document.body.innerHTML = '<div class="container text-center" style="margin-top:50px"><h3>No link!</h3></div>'; return; }
     }
 
-    /* 2. LOAD GO_PAGE SETTINGS */
     let GP = {};
     try {
         const gpSnap = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")
@@ -282,16 +123,12 @@
 
     const COUNTER_VALUE = parseInt(GP.step_seconds) || 5;
     const ENABLE_POPUP = GP.enable_popup !== false;
-    const INTERSTITIAL_AD_URL = GP.interstitial_ad_url || "";
     const POPUNDER_CODE = GP.popunder_code || "";
 
-    /* 3. DETERMINE AD TYPE & RENDER */
     let linkData = null;
     let displayTimer = COUNTER_VALUE;
 
-    if (mode === "pass") {
-        adType = adType;
-    } else {
+    if (mode !== "pass") {
         try {
             const linkSnap = await get(ref(db, "aliases/" + alias));
             if (linkSnap.exists()) {
@@ -300,49 +137,31 @@
                 ownerUid = linkData.uid;
                 adType = linkData.ad_type || "interstitial";
             } else {
-                document.body.innerHTML = '<div class="container text-center" style="margin-top:60px"><h3><i class="fa fa-unlink text-red"></i> Link Not Found</h3><p>Ye link exist nahi karta.</p></div>';
+                document.body.innerHTML = '<div class="container text-center" style="margin-top:50px"><h3>Link not found!</h3></div>';
                 return;
             }
         } catch(e) {
-            document.body.innerHTML = '<div class="container text-center" style="margin-top:60px"><h3><i class="fa fa-exclamation-circle text-red"></i> Error</h3><p>Link load nahi ho raha.</p></div>';
+            document.body.innerHTML = '<div class="container text-center" style="margin-top:50px"><h3>Error!</h3></div>';
             return;
         }
     }
 
-    /* 4. RENDER PAGE BASED ON AD TYPE */
     function renderBannerPage() {
         document.getElementById("banner-page").style.display = "";
         document.getElementById("interstitial-page").style.display = "none";
-
         const gp = GP;
-        if (gp.banner_728x90 || gp.top_banner_code) {
-            injectAd("ad-top-banner", gp.banner_728x90 || gp.top_banner_code);
-        }
-        if (gp.banner_468x60 || gp.mid_banner_code) {
-            injectAd("ad-mid-banner", gp.banner_468x60 || gp.mid_banner_code);
-        }
-        if (gp.banner_336x280 || gp.bottom_banner_code) {
-            injectAd("ad-bottom-banner", gp.banner_336x280 || gp.bottom_banner_code);
-        }
-        if (gp.banner_468x60 || gp.header_banner_code) {
-            var hdrWrap = document.getElementById("header-banner-wrap");
-            if (hdrWrap) hdrWrap.style.display = "";
-            injectAd("ad-header-banner", gp.banner_468x60 || gp.header_banner_code);
-        }
+        if (gp.banner_728x90 || gp.top_banner_code) injectAd("ad-top-banner", gp.banner_728x90 || gp.top_banner_code);
+        if (gp.banner_468x60 || gp.mid_banner_code) injectAd("ad-mid-banner", gp.banner_468x60 || gp.mid_banner_code);
+        if (gp.banner_336x280 || gp.bottom_banner_code) injectAd("ad-bottom-banner", gp.banner_336x280 || gp.bottom_banner_code);
     }
 
     function renderInterstitialPage() {
         document.getElementById("banner-page").style.display = "none";
         document.getElementById("interstitial-page").style.display = "";
-
-        const gp = GP;
         const iframe = document.getElementById("interstitial-frame");
-        if (gp.interstitial_ad_url) {
-            iframe.src = gp.interstitial_ad_url;
-        }
+        if (GP.interstitial_ad_url) iframe.src = GP.interstitial_ad_url;
     }
 
-    /* 5. AD INJECTION HELPER */
     function injectAd(elId, code) {
         const el = document.getElementById(elId);
         if (!el || !code) return;
@@ -359,17 +178,12 @@
         });
     }
 
-    /* 6. POPUNDER / POPUP AD */
-    if (ENABLE_POPUP && POPUNDER_CODE) {
-        injectAd("popunder-slot", POPUNDER_CODE);
-    }
+    if (ENABLE_POPUP && POPUNDER_CODE) injectAd("popunder-slot", POPUNDER_CODE);
     const goPopup = document.getElementById("go-popup");
     if (goPopup && ENABLE_POPUP) {
         document.addEventListener("click", function handler(e) {
             if (goPopup.querySelector('input[name="pop_ad"]').value) {
-                var w = window.open("about:blank", "Popup_Window",
-                    "toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0," +
-                    "width=" + (screen.width - 150) + ",height=" + (screen.height - 150));
+                var w = window.open("about:blank", "Popup_Window", "toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=" + (screen.width - 150) + ",height=" + (screen.height - 150));
                 goPopup.target = "Popup_Window";
                 goPopup.submit();
             }
@@ -377,63 +191,41 @@
         });
     }
 
-    /* 7. RENDER PAGE */
-    if (adType === "banner") {
-        renderBannerPage();
-    } else {
-        renderInterstitialPage();
-    }
+    if (adType === "banner") renderBannerPage();
+    else renderInterstitialPage();
 
-    /* 8. COUNTDOWN TIMER */
     var time = displayTimer * 1000;
     var delta = 1000;
     var blurred = false;
-
     window.onblur = function() { blurred = true; };
     window.onfocus = function() { blurred = false; };
 
     var timerEl = document.getElementById("timer");
-    var headerCounter = document.getElementById("header-counter");
     var getLinkBtn = document.getElementById("get-link-btn");
 
     var tid = setInterval(function() {
         if (blurred) return;
         time -= delta;
         var secs = Math.ceil(time / 1000);
-
         if (timerEl) timerEl.textContent = secs;
-        if (headerCounter) headerCounter.textContent = secs + "s";
-
         if (time <= 0) {
             clearInterval(tid);
-
-            if (timerEl) timerEl.textContent = "0";
-            if (headerCounter) headerCounter.textContent = "Done!";
-
             if (adType === "banner") {
                 if (getLinkBtn) {
                     getLinkBtn.classList.remove("disabled");
-                    getLinkBtn.innerHTML = '<i class="fa fa-external-link"></i> Get Link';
+                    getLinkBtn.textContent = "Get Link";
                     getLinkBtn.href = "#";
-                    getLinkBtn.onclick = function(e) {
-                        e.preventDefault();
-                        window.location.href = targetUrl;
-                    };
+                    getLinkBtn.onclick = function(e) { e.preventDefault(); window.location.href = targetUrl; };
                 }
             } else {
-                document.querySelector(".timer-section").innerHTML =
-                    '<a href="' + targetUrl + '" class="get-link-btn"><i class="fa fa-external-link"></i> Get Link</a>';
+                var skipAd = document.querySelector(".skip-ad");
+                if (skipAd) skipAd.innerHTML = '<a href="' + targetUrl + '" class="btn" style="color:#fff;font-weight:700">Get Link</a>';
             }
         }
     }, delta);
 
-    /* 9. CLICK COUNT */
     if (mode === "alias" && alias) {
-        try {
-            runTransaction(ref(db, "aliases/" + alias + "/clicks"), function(c) {
-                return (c || 0) + 1;
-            });
-        } catch(e) {}
+        try { runTransaction(ref(db, "aliases/" + alias + "/clicks"), function(c) { return (c || 0) + 1; }); } catch(e) {}
     }
 
 </script>
